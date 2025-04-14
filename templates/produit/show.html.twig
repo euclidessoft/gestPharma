@@ -1,0 +1,40 @@
+{% extends 'client.html.twig' %}
+{% block title %} {{ "Commande"|trans }} - GNT Pharma {% endblock %}
+{% block produit %}active{% endblock %}
+{% block new_produit %}active{% endblock %}
+
+{% block body %}
+<div class="container mt-4 fond-7">
+    <h3 class="mt-4 mb-5 text-bold">
+        <i class="fa-brands fa-product-hunt mr-2"></i>
+        {{ "Détails Produit"|trans }}
+    </h3>
+
+    <table class="table table-success-light table-bordered table-hover table-striped w-100">
+        <tbody>
+
+            <tr>
+                <th>{{ 'Code Produit'|trans }}</th>
+                <td>{{ produit.reference }}</td>
+            </tr>
+            <tr>
+                <th>{{ 'Désignation'|trans }}</th>
+                <td>{{ produit.desigantion }}</td>
+            </tr>
+            <tr>
+                <th>{{ 'Prix'|trans }}</th>
+                <td>{{ produit.prix }}</td>
+            </tr>
+            <tr>
+                <th>{{ 'Commande minimum'|trans }}</th>
+                <td>{{ produit.mincommande }}</td>
+            </tr>
+            <tr>
+                <th>{{ 'Fabricant'|trans }}</th>
+                <td>{{ produit.fabriquant }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}

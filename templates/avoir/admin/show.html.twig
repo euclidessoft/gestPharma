@@ -1,0 +1,82 @@
+{% extends
+    is_granted('ROLE_ADMIN') ? 'admin.html.twig' :
+    is_granted('ROLE_RH') ? 'rh.html.twig' :
+    is_granted('ROLE_FINANCE') ? 'finance.html.twig' :
+    is_granted('ROLE_STOCK') ? 'stock.html.twig' :
+    is_granted('ROLE_LIVREUR') ? 'livreur.html.twig' :
+    is_granted('ROLE_EMPLOYER') ? 'employe.html.twig' :
+    'layout.html.twig'
+%}
+{% block title %} {{ "Avoir"|trans }} - GNT Pharma {% endblock %}
+{% block officine %}active{% endblock %}
+{% block all_avoir %}active{% endblock %}
+
+{% block body %}
+    <div class="container mt-4 fond-7">
+        <h3 class="mt-4 mb-5 text-bold">
+            <i class="fa fa-money-bill mr-2"></i>
+            {{ "Avoir"|trans }}
+        </h3>
+        <div class="row justify-content-end">
+            <div class="col-lg-5">
+                <table class="table table-success table-bordered">
+                    <tbody>
+
+                    <tr>
+                        <th>{{ 'Créer par'|trans }}</th>
+                        <th>{{ 'Date Création'|trans }}</th>
+                        <th>{{ 'Client'|trans }}</th>
+                        <th>{{'N° Commande'|trans}}</th>
+                        <th>{{'Montant'|trans}}</th>
+                    </tr>
+                    <tr>
+
+                        <td>{{ avoir.admin.nom }}</td>
+                        <td>{{ avoir.date ? avoir.date|date('d/m/Y') : '' }}</td>
+                        <td>{{ avoir.client.nom }}</td>
+                        <td>{{ avoir.commande.id }}</td>
+                        <td>{{ avoir.Montant|number_format(0, '' , ' ') }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <table class="table table-success-light table-bordered table-hover table-striped w-100">
+            <thead>
+            <tr>
+                <th>{{ 'référence'|trans }}</th>
+                <th>{{ 'désignation'|trans }}</th>
+                <th>{{ 'prix cession'|trans }}</th>
+                <th>{{ 'Quantité Commande'|trans }}</th>
+                <th>{{'Reste à livrer'|trans}}</th>
+                <th>{{'Montant avoir'|trans}}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% set total = 0 %}
+            {% for commande in details %}
+                <tr>
+                    <td>{{ commande.produit.reference }}</td>
+                    <td>{{ commande.produit.desigantion }}</td>
+                    <td>{{ commande.produit.prix|number_format(0, '' , ' ') }}</td>
+                    <td>
+                        {{ commande.quantite }}
+                    </td>
+
+                    <td class="text-center">{{ commande.quantite - commande.quantitelivre }}</td>
+                    <td>
+                        {{ (commande.produit.prix * (commande.quantite - commande.quantitelivre))|number_format(0, '' , ' ') }}
+                        {% set total = total + (commande.produit.prix * (commande.quantite - commande.quantitelivre)) %}
+                    </td>
+                </tr>
+            {% else %}
+            {% endfor %}
+            <tr>
+                <td colspan="5" class="text-right">
+                    {{ 'Total Avoir'|trans }}
+                </td>
+                <td>{{ total|number_format(0, '' , ' ') }}</td>
+            </tr>
+        </table>
+    </div>
+{% endblock %}

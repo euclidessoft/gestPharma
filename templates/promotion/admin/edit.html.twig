@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+
+<title>{{ 'Editer Promotion'|trans }}</title>
+
+{% block body %}
+    <h1>{{ 'Editer Promotion'|trans }}</h1>
+
+    {{ include('promotion/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('promotion_index') }}">back to list</a>
+
+    {{ include('promotion/_delete_form.html.twig') }}
+{% endblock %}

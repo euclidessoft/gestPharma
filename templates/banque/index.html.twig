@@ -1,0 +1,48 @@
+{% extends
+    is_granted('ROLE_ADMIN') ? 'admin.html.twig' :
+    is_granted('ROLE_RH') ? 'rh.html.twig' :
+    is_granted('ROLE_FINANCE') ? 'finance.html.twig' :
+    is_granted('ROLE_STOCK') ? 'stock.html.twig' :
+    is_granted('ROLE_LIVREUR') ? 'livreur.html.twig' :
+    is_granted('ROLE_EMPLOYER') ? 'employe.html.twig' :
+    'layout.html.twig'
+%}
+{% block title %} {{ "Banques"|trans }} - GNT Pharma {% endblock %}
+{% block finance %}active{% endblock %}
+{% block banque %}active{% endblock %}
+{% block all_banque %}active{% endblock %}
+{% block body %}
+<div class="col-lg-6 mt-4 fond-7">
+    <h3 class="mt-4 mb-5 text-bold">
+        <i class="fa fa-money-bill mr-2"></i>
+        {{ "Liste des banques"|trans }}
+    </h3>
+    <a href="{{ path('banque_new') }}" class="btn btn-success mb-4"><i class="fas fa-plus"></i> Ajouter banque</a>
+    <table class="table table-success-light table-bordered table-hover table-striped w-100" id="liste">
+        <thead>
+            <tr>
+                <th>{{('Nº Compte'|trans)}}</th>
+                <th>{{('Nom'|trans)}}</th>
+                <th>{{('Actions'|trans)}}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for banque in banques %}
+            <tr>
+                <td data-label="{{('Nº Compte'|trans)}}">{{ banque.compte }}</td>
+                <td data-label="{{('Nom'|trans)}}">{{ banque.nom }}</td>
+                <td data-label="{{('Actions'|trans)}}">
+                    <a id="{{ banque.id }}" onclick="load({{banque.id}})" href="{{ path('finance_journal_banque', { banque : banque.id })}}" class="btn btn-success"><i class="fas fa-eye"></i></a>
+                    <a href="{{ path('banque_edit', {'id': banque.id}) }}" class="btn btn-success-light"><i class="fas fa-edit"></i></a>
+                    {{ include('banque/_delete_form.html.twig') }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">Aucune banque enregistrée</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends
+    is_granted('ROLE_ADMIN') ? 'admin.html.twig' :
+    is_granted('ROLE_RH') ? 'rh.html.twig' :
+    is_granted('ROLE_FINANCE') ? 'finance.html.twig' :
+    is_granted('ROLE_STOCK') ? 'stock.html.twig' :
+    is_granted('ROLE_LIVREUR') ? 'livreur.html.twig' :
+    is_granted('ROLE_EMPLOYER') ? 'employe.html.twig' :
+    'layout.html.twig'
+%}
+    {% block title %} {{ "Commande"|trans }} - GNT Pharma {% endblock %}
+    {% block promotion %}active{% endblock %}
+    {% block current_promotion %}active{% endblock %}
+
+    {% block body %}
+<div class="container mt-4 fond-7">
+    <h3 class="mt-4 mb-5 text-bold">
+        <i class="fa fa-shop mr-2"></i>
+        {{ "Promotion"|trans }}
+    </h3>
+    <table class="table table-success-light table-bordered table-hover table-striped w-100">
+        <thead>
+        <tr>
+            <th>{{'Désignation'|trans}}</th>
+            <th>{{'Date de début'|trans}}</th>
+            <th>{{'Date de fin'|trans}}</th>
+            <th>{{ 'Type'|trans }}</th>
+            <th>{{ 'Avantages'|trans }}</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ promotion.designation }}</td>
+                <td>{{ promotion.debut ? promotion.debut|date('Y-m-d') : '' }}</td>
+                <td>{{ promotion.fin ? promotion.fin|date('Y-m-d') : '' }}</td>
+                <td>{{ promotion.type }}</td>
+                <td>
+                    {% if promotion.premier is null %}
+                        {{ promotion.reduction }} % {{'de réduction'|trans}}
+
+                    {% else %}
+                        {{ promotion.premier }} {{ "pour"|trans }} {{ promotion.ugpremier }} {{ "gratuits"|trans }}<br>
+                        {{ promotion.deuxieme }} {{ "pour"|trans }} {{ promotion.ugdeuxieme }} {{ "gratuits"|trans }}<br>
+                        {{ promotion.troisieme }} {{ "pour"|trans }} {{ promotion.ugtroisieme }} {{ "gratuits"|trans }} <br>
+                        {{ promotion.quatrieme }} {{ "pour"|trans }} {{ promotion.ugquatrieme }} {{ "gratuits"|trans }}<br>
+                        {{ promotion.cinquieme }} {{ "pour"|trans }} {{ promotion.ugcinquieme }} {{ "gratuits"|trans }}<br>
+                    {% endif %}
+                </td>
+
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+        <div class="container mt-4 fond-7">
+            <h3 class="mt-4 mb-5 text-bold">
+                <i class="fa-brands fa-product-hunt mr-2"></i>
+                {{ "Produits"|trans }}
+            </h3>
+
+            <table class="table table-success-light table-bordered table-hover table-striped w-100" id="liste">
+                <thead>
+                <tr>
+                    <th>{{ 'Référence'|trans }}</th>
+                    <th>{{ 'Désignation'|trans }}</th>
+                    <th>{{ 'Cession'|trans }}</th>
+                    <th>{{ 'Public'|trans }}</th>
+                    <th>{{ 'Commande'|trans }}<br> {{ 'Minimum'|trans }}</th>
+                    <th>{{ 'Fabricant'|trans }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for promotionproduit in produitspromotion %}
+                    <tr>
+                        <td>{{ promotionproduit.produit.reference }}</td>
+                        <td>{{ promotionproduit.produit.desigantion }}</td>
+                        <td>{{ promotionproduit.produit.prix }}</td>
+                        <td>{{ promotionproduit.produit.prixpublic }}</td>
+                        <td>{{ promotionproduit.produit.mincommande }}</td>
+                        <td>{{ promotionproduit.produit.fabriquant }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+</div>>
+{% endblock %}

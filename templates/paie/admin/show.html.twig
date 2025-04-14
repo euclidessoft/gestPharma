@@ -1,0 +1,439 @@
+{% extends
+    is_granted('ROLE_ADMIN') ? 'admin.html.twig' :
+    is_granted('ROLE_RH') ? 'rh.html.twig' :
+    is_granted('ROLE_FINANCE') ? 'finance.html.twig' :
+    is_granted('ROLE_STOCK') ? 'stock.html.twig' :
+    is_granted('ROLE_LIVREUR') ? 'livreur.html.twig' :
+    is_granted('ROLE_EMPLOYER') ? 'employe.html.twig' :
+    'layout.html.twig' %}
+{% block paie %}active{% endblock %}
+{% block body %}
+
+    <div class="container fond-7 mb-5">
+        <div class="row" style="border-bottom: 2px solid #039c4f;padding-bottom: 10px;">
+            <div class="col-2 p-0">
+                <img src="{{ asset('images/gnt.png') }}" alt="Logo" class="w-100">
+            </div>
+            <div class="col-10 text-center mt-2">
+                <div class="row">
+                    <div class="col-12 titre text-center text-green">
+                        GNT PHARMA
+                    </div>
+                    <div class="col-12 text">
+                        Montée Éleveur Immeuble Sainte Marie
+                        <br>
+                        BP : 3582 Yaoundé – Cameroun, NGOUSSO
+                    </div>
+                    <div class="col-12 text">
+                        +237 69 71 49 4 12 / +237 67 52 47 865
+                    </div>
+                    <div class="col-12 text">
+                        info@gntpharma-cameroun.com / www.gnt-pharma.com
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h3 class="text-center text-uppercase font-weight-bold mt-5">
+            Bulletin de Paie
+        </h3>
+        <p class="text-center mb-5">
+            {{ mois.nom|trans }} {{ 'now'|date('Y') }}
+        </p>
+        <p class="mt-5">&nbsp;</p>
+        <div class="row my-5">
+            <div class="col-7">
+                <div class="row">
+                    <div class="col-4 text-right text-bold">
+                        {{ "Matricule : "|trans }}
+                    </div>
+                    <div class="col-8">
+                        {{ employe.matricule }}
+                    </div>
+                    <div class="col-4 text-right text-bold">
+                        {{ "Poste : "|trans }}
+                    </div>
+                    <div class="col-8">
+                        {{ employe.poste.nom }}
+                    </div>
+                    <div class="col-4 text-right text-bold">
+                        {{ "Département : "|trans }}
+                    </div>
+                    <div class="col-8">
+                        {{ employe.poste.departement.nom }}
+                    </div>
+                    <div class="col-4 text-right text-bold">
+                        {{ "Date d'embauche : "|trans }}
+                    </div>
+                    <div class="col-8">
+                        {{ employe.hireDate|date('d/m/Y') }}
+                    </div>
+                    <div class="col-4 text-right text-bold">
+                        {{ "Ancienneté : "|trans }}
+                    </div>
+                    <div class="col-8">
+                        {% set yearDiff = 'now'|date('Y') - employe.hireDate|date('Y') %}
+                        {% set monthDiff = 'now'|date('m') - employe.hireDate|date('m') + 1 %}
+                        {% if yearDiff <= 0 %}
+
+                        {% elseif yearDiff > 0  and yearDiff < 2 %}
+                            {{ yearDiff }} {{ "an"|trans }}
+                        {% else %}
+                            {{ yearDiff }} {{ "ans"|trans }}
+                        {% endif %}
+                        {{ monthDiff }} {{ "mois"|trans }}
+                    </div>
+                    <div class="col-4 text-right text-bold">
+                        {{ "Période : "|trans }}
+                    </div>
+                    <div class="col-8">
+                        01/04/2025 au 30/04/2025
+                    </div>
+                </div>
+            </div>
+            <div class="col-5 px-5">
+                <div class="col-12 border-green border-2 radius-10 p-4">
+                    <h4 class="text-bold text-dark">
+                        {{ employe.nom }} {{ employe.prenom }}
+                    </h4>
+                    <p class="">
+                        {{ employe.adresse }}
+                    </p>
+                </div>
+            </div>
+            <div class="col-12 mt-5">
+                <table class="table table-success-light table-bordered w-100 bulletin">
+                    <thead>
+                    <tr class="text-center">
+                        <th class="text-left"  rowspan="2">ELEMENTS DE PAIE</th>
+                        <th  rowspan="2">NOMBRE</th>
+                        <th  rowspan="2">BASE</th>
+                        <th colspan="3">PART SALARIALE</th>
+                        <th colspan="2">PART PATRONALE</th>
+                    </tr>
+                    <tr>
+                        <th>TAUX</th>
+                        <th>GAINS</th>
+                        <th>RETENUES</th>
+                        <th>TAUX</th>
+                        <th>RETENUES</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="text-right">
+                        {% set ponction= 0 %}
+                        {% set brut= 0 %}
+                        {% set net= 0 %}
+                        <td class="text-left">SALAIRES DE BASE</td>
+                        <td>{% set nombre = nbrjoursmois %} {{ nombre }}</td>
+{#                        <td>{% set nombre = nbrjoursmois - nombreJours %} {{ nombre }}</td>#}
+                        <td>{% set base = employe.poste.salaire / 30 %}{{ base|number_format(0, '' , ' ') }}</td>
+                        {% set ponction= ponction + base %}
+{#                        <td>{% set base = employe.poste.salaire / 30 %}{{ base|number_format(0, '' , ' ') }}</td>#}
+                        <td></td>
+                        <td>{{ employe.poste.salaire|number_format(0, '' , ' ') }}</td>
+{#                        <td>{{ (nombre * base)|number_format(0, '' , ' ') }}</td>#}
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    {% set totalprime = 0 %}
+                    {% for prime in primes %}
+                        {% if prime.base == true %}{# true si prime journalier #}
+                            {% set ponction = ponction + prime.montant / nombre %}
+                            <tr class="text-right">
+                                <td class="text-left">{{ prime.description }}</td>
+                                <td>{{ nombre }}</td>
+                                <td>{{ (prime.montant / nombre)|number_format(0, '' , ' ') }}</td>
+                                <td></td>
+                                <td>{{ prime.montant|number_format(0, '' , ' ') }}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            {% set totalprime = totalprime + (prime.montant * nombre) %}
+                        {% else %}
+                            <tr class="text-right">
+                                <td class="text-left">{{ prime.description }}</td>
+                                <td></td>
+                                <td>{{ prime.montant|number_format(0, '' , ' ') }}</td>
+                                <td></td>
+                                <td>{{ prime.montant|number_format(0, '' , ' ') }}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            {% set totalprime = totalprime + prime.montant %}
+                        {% endif %}
+                    {% else %}
+                    {% endfor %}
+
+{#                    {% set totalheuresup = 0 %}#}
+                    {% if totalPrimePerf != 0 %}
+                        <tr class="text-right">
+                            <td class="text-left">Prime de Performence</td>
+                            <td></td>
+                            <td>{{ totalPrimePerf|number_format(0, '' , ' ') }}</td>
+                            <td> </td>
+                            <td>{{ totalPrimePerf|number_format(0, '' , ' ') }}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    {% endif %}
+
+                    {% set totalheuresup = 0 %}
+                    {% if heureSups != 0 %}
+                        <tr class="text-right">
+                            <td class="text-left">Heures Suplementaires</td>
+                            <td></td>
+                            <td>{{ employe.poste.heureSup|number_format(0, '' , ' ') }}</td>
+                            <td> {{ heureSups }}</td>
+                            <td>{{ ( employe.poste.heureSup * heureSups )|number_format(0, '' , ' ') }}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        {% set totalheuresup = employe.poste.heureSup * heureSups %}
+                    {% endif %}
+                    {% set totalretenue = 0 %}
+                    {% if nombreJours != 0 %}
+                        <tr class="text-right">
+                            <td class="text-left">Ponction Salariale</td>
+                            <td></td>
+                            <td>{{ ponction|number_format(0, '' , ' ') }}</td>
+                            <td>{{ nombreJours }}</td>
+                            <td></td>
+                            <td>
+                                {{ (ponction * nombreJours)|number_format(0, '' , ' ') }}
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        {% set totalretenue = ponction * nombreJours %}
+                    {% endif %}
+                    <tr class="text-bold text-right">
+                        <td class="text-left">TOTAL DES GAINS(Brut)</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            {% set  brut = employe.poste.salaire + totalprime + totalheuresup + totalPrimePerf - totalretenue %}
+                            {{ brut|number_format(0, '' , ' ') }}
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+{#                    {% set totalretenue = 0 %}#}
+{#                    {% for retenue in retenues %}#}
+{#                        <tr class="text-right">#}
+{#                            <td class="text-left">Ponction Salariale</td>#}
+{#                            <td></td>#}
+{#                            <td>{{ retenue.montant|number_format(0, '' , ' ') }}</td>#}
+{#                            <td>{{ retenue.jours }}</td>#}
+{#                            <td></td>#}
+{#                            <td>#}
+{#                                {{ (retenue.montant * retenue.jours)|number_format(0, '' , ' ') }}#}
+{#                            </td>#}
+{#                            <td></td>#}
+{#                            <td></td>#}
+{#                        </tr>#}
+{#                        {% set totalretenue = totalretenue + retenue.montant * retenue.jours %}#}
+{#                    {% else %}#}
+{#                    {% endfor %}#}
+                    <tr class="text-right">
+                        <td class="text-left">IRPP</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>52 873</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="text-right">
+                        <td class="text-left">CAC / IRPP</td>
+                        <td></td>
+                        <td>52 873</td>
+                        <td>10,0</td>
+                        <td></td>
+                        <td>5 287</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="text-right">
+                        <td class="text-left">RAV / Salaires</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>7 150</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="text-right">
+                        <td class="text-left">TAXE COMMUNALE</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>2 520</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="text-right">
+                        <td class="text-left">CFC Part salarial</td>
+                        <td></td>
+                        <td>566 484</td>
+                        <td>1,0</td>
+                        <td></td>
+                        <td>5 665</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="text-right">
+                        <td class="text-left">CFC Part Patronale</td>
+                        <td></td>
+                        <td>800 284</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>1,50</td>
+                        <td>12 004</td>
+                    </tr>
+                    <tr class="text-right">
+                        <td class="text-left">FNE</td>
+                        <td></td>
+                        <td>800 284</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>1,0</td>
+                        <td>8 003</td>
+                    </tr>
+                    <tr class="text-right">
+                        <td class="text-left">Pension Vieillesse</td>
+                        <td></td>
+                        <td>566 484</td>
+                        <td>4,20</td>
+                        <td></td>
+                        <td>23 792</td>
+                        <td>4,20</td>
+                        <td>23 792</td>
+                    </tr>
+                    <tr class="text-right">
+                        <td class="text-left">Allocation familiale</td>
+                        <td></td>
+                        <td>566 484</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>7,00</td>
+                        <td>39 654</td>
+                    </tr>
+{#                    <tr class="text-right">#}
+{#                        <td class="text-left">Pension Vieillesse / Patronal</td>#}
+{#                        <td></td>#}
+{#                        <td>566 484</td>#}
+{#                        <td></td>#}
+{#                        <td></td>#}
+{#                        <td></td>#}
+{#                        <td>4,20</td>#}
+{#                        <td>23 792</td>#}
+{#                    </tr>#}
+                    <tr class="text-right">
+                        <td class="text-left">Accident de Travail</td>
+                        <td></td>
+                        <td>566 484</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>1,75</td>
+                        <td>9 913</td>
+                    </tr>
+                    <tr class="text-bold text-right">
+                        <td class="text-left">TOTAL DES COTISATIONS</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>97 287</td>
+                        <td></td>
+                        <td>93 366</td>
+                    </tr>
+                    <tr class="text-bold">
+                        <td colspan="3">
+                            NET IMPOSABLE
+                        </td>
+                        <td></td>
+                        <td class="text-right">
+                            {%  set net = brut - 14000 %}
+                            {{ net|number_format(0, '' , ' ') }}
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-12 mt-4">
+                <table class="table table-success-light table-bordered w-100 bulletin">
+                    <thead>
+                    <tr class="text-center">
+                        <th colspan="2" class="text-left">Impôt sur le revenu</th>
+                        <th>Base</th>
+                        <th>Taux</th>
+                        <th>Montant</th>
+                        <th>Cumul annuel</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="text-right">
+                        <td colspan="2" class="text-left">Impôt sur le revenu prélevé à la source</td>
+                        <td>{{ net|number_format(0, '' , ' ') }}</td>
+                        <td></td>
+                        <td>8 000</td>
+                        <td>24 000</td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-7">&nbsp;</div>
+            <div class="col-5 p-4">
+                <div class="row bg-success-light p-3">
+                    <div class="col-6">
+                        <h3 class="text-dark text-bold">
+                            Net à payer
+                        </h3>
+                        {#                        <p class="mb-0"> Validé le : 29/03/2025</p>#}
+                    </div>
+                    <div class="col-6">
+                        <h3 class="text-dark text-right text-bold">
+                            {{ (net-8000)|number_format(0, '' , ' ') }}
+
+                        </h3>
+                        {#                        <p class="text-right mb-0"> Payé le : 31/03/2025</p>#}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br><br><br><br><br>
+    </div>
+    <div class="container fond-7 mb-5 p-3">
+        <div class="centrer">
+            {% if paieExistante == null %}
+                <a href="{{ path('paie_valider', {'id': employe.id }) }}"
+                   class="btn btn-success btn-lg"><i class="fa fa-save"></i> Valider</a>
+            {% else %}
+                <a href="{{ path('paie_index') }}" class="btn btn-secondary btn-lg mr-2">Retour</a>
+                <a href="#" class="btn btn-primary btn-lg"><i class="fa fa-print"></i> Imprimer</a>
+            {% endif %}
+        </div>
+    </div>
+
+
+
+{% endblock %}

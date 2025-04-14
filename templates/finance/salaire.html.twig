@@ -1,0 +1,228 @@
+{% extends
+    is_granted('ROLE_ADMIN') ? 'admin.html.twig' :
+    is_granted('ROLE_RH') ? 'rh.html.twig' :
+    is_granted('ROLE_FINANCE') ? 'finance.html.twig' :
+    is_granted('ROLE_STOCK') ? 'stock.html.twig' :
+    is_granted('ROLE_LIVREUR') ? 'livreur.html.twig' :
+    is_granted('ROLE_EMPLOYER') ? 'employe.html.twig' :
+    'layout.html.twig'
+%}
+{% block title %} {{ "Liste des bulletins"|trans }} - GNT Pharma {% endblock %}
+{% block paie %}active{% endblock %}
+{% block paie_historique %}active{% endblock %}
+
+{% block body %}
+    <div class="col-lg-10 mt-4 fond-7">
+        <h3 class="mt-4 mb-5 text-bold">
+            <i class="fa fa-money-bill mr-2"></i>
+            {{ "En attente de paiement"|trans }}
+        </h3>
+        {% for message in app.flashes('notice') %}
+            <div class="alert alert-success alert-dismissible fade show radius-10 shadow-black">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                    &times;
+                </button>
+                {{ message|trans }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('danger') %}
+            <div class="alert alert-danger alert-dismissible fade show radius-10 shadow-black">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                    &times;
+                </button>
+                {{ message|trans }}
+            </div>
+        {% endfor %}
+        <div id="flash"></div>
+
+        <table class="table table-success-light table-bordered table-hover table-striped w-100" id="liste">
+            <thead>
+            <tr>
+                <th>{{ 'Matricule'|trans }}</th>
+                <th>{{ 'Employé'|trans }}</th>
+                <th>{{ 'Date de validation'|trans }}</th>
+                <th>{{ 'Salaire Brut'|trans }}</th>
+                <th>{{ 'Net à Payer'|trans }}</th>
+                <th>{{ 'Charge patronale'|trans }}</th>
+                <th>{{ 'Action'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% set montant = 0 %}
+            {% for paie in paies %}
+                <tr id="tr{{ paie.id }}">
+                    <td>{{ paie.employe.matricule }}</td>
+                    <td>{{ paie.employe.nom }} {{ paie.employe.prenom }}</td>
+                    <td>{{ paie.date|date('d/m/Y') }}</td>
+                    <td>{{ paie.salaireBrut|number_format(0, '' , ' ') }} FCFA</td>
+                    <td>{{ paie.salaireNet|number_format(0, '' , ' ') }} FCFA</td>
+                    <td>{{ paie.totalchargepatronal|number_format(0, '' , ' ') }} FCFA</td>
+                    <td>
+                        <button type="button" class="btn btn-green" data-toggle="modal" data-target="#modal{{ paie.id }}" id="btn{{ paie.id }}">
+                            <i class="fa fa-plus"></i>
+                            {{ 'Payer'|trans }}
+                        </button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="modal{{ paie.id }}" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog text-center">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title fs-5" id="exampleModalLabel">
+                                            {{ 'Paiement salaire'|trans }}
+                                        </h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body px-5">
+                                        <div class="mt-4">
+                                            <label for="{#mois{{ mois.id }}#}"></label>
+                                            <select class="form-control" id="banque{{ paie.id }}">
+                                                <option value="0">Selectionnez une banque</option>
+                                                {% for banque in banques  %}
+                                                <option value="{{ banque.id }}">{{ banque.nom }}</option>
+                                                {% else %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer px-5 py-4">
+                                        <button type="button" class="btn btn-green mr-3"  id="valider{{ paie.id }}"
+                                                onclick="payerOne({{ paie.id }})">
+                                            <i class="fa fa-save"></i>
+                                            {{ 'Valider'|trans }}
+                                        </button>
+                                        <button type="button" class="btn btn-success-light" data-dismiss="modal"
+                                                id="annuler{{ paie.id }}">
+                                            <i class="fa-solid fa-rotate-left"></i>
+                                            {{ 'Annuler'|trans }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </td>
+                    {% set montant = montant + paie.salaireBrut + paie.totalchargepatronal %}
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="8" class="text-center">Aucun paiement enregistré</td>
+                </tr>
+            {% endfor %}
+            {% if paies|length > 1 %}
+            <tr>
+                <th colspan="8" class="text-center">
+                    {{ 'Montant total dû'|trans }} : {{ montant|number_format(0, '' , ' ') }} FCFA
+                    <input type="hidden" value="{{ montant }}" id="montant"/>
+
+                    <button type="button" class="btn btn-green" data-toggle="modal" data-target="#modal_tous" id="tous">
+                        <i class="fa fa-plus"></i>
+                        {{ 'Payer tous'|trans }}
+                    </button>
+                    <!-- Modal -->
+
+
+                </th>
+            </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <div class="modal fade" id="modal_tous" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog text-center">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title fs-5" id="exampleModalLabel">
+                        {{ 'Paiement de tous les salaires'|trans }}
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body px-5">
+                    <div class="mt-4">
+                        <label for="{#mois{{ mois.id }}#}"></label>
+                        <select class="form-control" id="banquetous">
+                            <option value="0">Selectionnez une banque</option>
+                            {% for banque in banques  %}
+                                <option value="{{ banque.id }}">{{ banque.nom }}</option>
+                            {% else %}
+                            {% endfor %}
+
+                        </select>
+                    </div>
+
+                </div>
+                <div class="modal-footer px-5 py-4">
+                    <button type="button" class="btn btn-green mr-3"  id="validertous"
+                            onclick="payerTous()">
+                        <i class="fa fa-save"></i>
+                        {{ 'Valider'|trans }}
+                    </button>
+                    <button type="button" class="btn btn-success-light" data-dismiss="modal" id="annulertous">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        {{ 'Annuler'|trans }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block scripts %}
+        <script>
+            function payerOne(id) {
+                var banque = $("#banque"+id+" option:selected");
+                if(banque.val() != "0") {
+                    if (confirm("{{ 'Voulez-vous vraiement effetuer le paiement' }}")) {
+                        $("#btn" + id).html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
+                        $("#valider" + id).html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ path('finance_payer') }}",
+                            data: { paie : id, banque : banque.val() },
+                            success: function (data) {
+                                if (data['id'] == 'ok') {
+                                    $("#annuler" + id).trigger('click');
+                                    document.location.href = "{{ path('finance_salaire') }}";
+
+                                }
+                            },
+                            error: function () {
+                                alert('{{ "La requête n'a pas abouti"|trans }}');
+                            }
+                        });
+                    }
+                }else alert("{{ 'Selectionnez une banque'|trans }}");
+
+            }
+
+            function payerTous() {
+                var banque = $("#banquetous option:selected");
+                var montant = $("#montant");
+                if(banque.val() != "0") {
+                    if (confirm("{{ 'Voulez-vous vraiement effetuer le paiement' }}")) {
+                        $("button").html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ path('finance_payerTous') }}",
+                            data: { banque : banque.val(), montant : montant.val() },
+                            success: function (data) {
+                                if (data['id'] == 'ok') {
+                                    $("#annulertous").trigger('click');
+                                    document.location.href = "{{ path('finance_salaire') }}";
+
+                                }
+                            },
+                            error: function () {
+                                alert('{{ "La requête n'a pas abouti"|trans }}');
+                            }
+                        });
+                    }
+                }else alert("{{ 'Selectionnez une banque'|trans }}");
+            }
+        </script>
+    {% endblock %}
+{% endblock %}
