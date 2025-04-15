@@ -1,0 +1,94 @@
+<?php //0ba3f965e57eb43dcb6eecf71963d626
+
+return [PHP_INT_MAX, static fn () => \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
+    $o = [
+        clone (($p = &\Symfony\Component\VarExporter\Internal\Registry::$prototypes)['Doctrine\\ORM\\Query\\ParserResult'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Doctrine\\ORM\\Query\\ParserResult')),
+        clone ($p['Doctrine\\ORM\\Query\\Exec\\SingleSelectSqlFinalizer'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Doctrine\\ORM\\Query\\Exec\\SingleSelectSqlFinalizer')),
+        clone ($p['Doctrine\\ORM\\Query\\ResultSetMapping'] ?? \Symfony\Component\VarExporter\Internal\Registry::p('Doctrine\\ORM\\Query\\ResultSetMapping')),
+    ],
+    null,
+    [
+        'Doctrine\\ORM\\Query\\ParserResult' => [
+            'sqlFinalizer' => [
+                $o[1],
+            ],
+            'resultSetMapping' => [
+                $o[2],
+            ],
+        ],
+        'Doctrine\\ORM\\Query\\Exec\\SingleSelectSqlFinalizer' => [
+            'sql' => [
+                1 => 'SELECT p0_.id AS id_0, p0_.nom AS nom_1, p0_.description AS description_2, p0_.salaire AS salaire_3, p0_.type AS type_4, p0_.heure_sup AS heure_sup_5, p0_.departement_id AS departement_id_6 FROM poste p0_',
+            ],
+        ],
+        'stdClass' => [
+            'aliasMap' => [
+                2 => [
+                    'e' => 'App\\Entity\\Poste',
+                ],
+            ],
+            'fieldMappings' => [
+                2 => [
+                    'id_0' => 'id',
+                    'nom_1' => 'nom',
+                    'description_2' => 'description',
+                    'salaire_3' => 'salaire',
+                    'type_4' => 'type',
+                    'heure_sup_5' => 'heureSup',
+                ],
+            ],
+            'columnAliasMappings' => [
+                2 => [
+                    'App\\Entity\\Poste' => [
+                        'e' => [
+                            'id' => 'id_0',
+                            'nom' => 'nom_1',
+                            'description' => 'description_2',
+                            'salaire' => 'salaire_3',
+                            'type' => 'type_4',
+                            'heureSup' => 'heure_sup_5',
+                        ],
+                    ],
+                ],
+            ],
+            'typeMappings' => [
+                2 => [
+                    'departement_id_6' => 'integer',
+                ],
+            ],
+            'entityMappings' => [
+                2 => [
+                    'e' => null,
+                ],
+            ],
+            'metaMappings' => [
+                2 => [
+                    'departement_id_6' => 'departement_id',
+                ],
+            ],
+            'columnOwnerMap' => [
+                2 => [
+                    'id_0' => 'e',
+                    'nom_1' => 'e',
+                    'description_2' => 'e',
+                    'salaire_3' => 'e',
+                    'type_4' => 'e',
+                    'heure_sup_5' => 'e',
+                    'departement_id_6' => 'e',
+                ],
+            ],
+            'declaringClasses' => [
+                2 => [
+                    'id_0' => 'App\\Entity\\Poste',
+                    'nom_1' => 'App\\Entity\\Poste',
+                    'description_2' => 'App\\Entity\\Poste',
+                    'salaire_3' => 'App\\Entity\\Poste',
+                    'type_4' => 'App\\Entity\\Poste',
+                    'heure_sup_5' => 'App\\Entity\\Poste',
+                ],
+            ],
+        ],
+    ],
+    $o[0],
+    []
+)];
