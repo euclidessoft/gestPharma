@@ -21,7 +21,6 @@
     --vert-clair: #c5fbae;
     --gris-hover: #444;
     --vert-hover: #036f38;
-    --blanc: #fff;
 }
 
 html,
@@ -46,7 +45,7 @@ body:after {
     right: 0;
     top: 0;
     z-index: -1;
-    background-image: linear-gradient(rgba(255, 255, 255, 0.7), rgba(246, 236, 236, 0.7)), url(../images/pharmacy.avif);
+    background-image: linear-gradient(rgba(255, 255, 255, 0.7), rgba(246, 236, 236, 0.7)), url(../images/background.avif);
     background-position: center;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -54,12 +53,16 @@ body:after {
     background-size: cover;
 }
 
+a {
+    text-decoration: none;
+}
+
 .fond {
     background-color: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(10px);
     border: 1px solid transparent;
     border-radius: 10px;
-    box-shadow: 0 0 20px 10px rgba(0 0 0 0.4);
+    box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0.4);
     text-align: center;
     display: block;
     margin: 0 auto;
@@ -76,10 +79,14 @@ body:after {
     z-index: 2;
 }
 
-.input-group,
-.form-control {
+.input-group:has(.input-group-text) {
     border-radius: 10px;
     border: 1px solid #039c4f;
+}
+
+.input-group:has(.input-group-text) .form-control {
+    border-radius: 10px;
+    border: 1px solid transparent;
 }
 
 .input-group > .form-control:not(:last-child),
@@ -93,7 +100,7 @@ body:after {
 }
 
 .input-group-text {
-    border-radius: 9px;
+    border-radius: 10px;
 }
 
 .form-control {
@@ -124,16 +131,20 @@ a:hover {
     background: transparent;
     border: none;
 }
-.bg-secondaire{
+
+.bg-secondaire {
     background-color: var(--secondaire);
 }
-.text-primaire{
+
+.text-primaire {
     color: var(--primaire);
 }
-.fwb{
+
+.fwb {
     font-weight: bold;
 }
-footer{
+
+footer {
     position: fixed;
     background-color: var(--vert) !important;
     bottom: 0;
@@ -160,6 +171,100 @@ footer{
     transform: skew(40deg);
 }
 
+.btn-green {
+    color: #fff;
+    background-color: #039c4f;
+    border-color: #039c4f;
+}
+
+.btn-green:hover {
+    color: #fff;
+    background-color: #027e40;
+    border-color: #1e7e34;
+}
+
+.btn-green:focus,
+.btn-green.focus {
+    box-shadow: 0 0 0 0.2rem rgba(72, 180, 97, 0.5);
+}
+
+.btn-green.disabled,
+.btn-green:disabled {
+    color: #fff;
+    background-color: #039c4f;
+    border-color: #039c4f;
+}
+
+.btn-green:not(:disabled):not(.disabled):active,
+.btn-green:not(:disabled):not(.disabled).active,
+.show > .btn-green.dropdown-toggle {
+    color: #fff;
+    background-color: #027e40;
+    border-color: #1c7430;
+}
+
+.btn-green:not(:disabled):not(.disabled):active:focus,
+.btn-green:not(:disabled):not(.disabled).active:focus,
+.show > .btn-green.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgba(72, 180, 97, 0.5);
+}
+
+.shadow-black {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5) !important;
+}
+
+.shadow-5 {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5) !important;
+}
+
+.form-control:not(:-ms-input-placeholder) + label {
+    left: 10px !important;
+    top: -10px;
+    background: linear-gradient(180deg, #f0eff3, #fff);
+    padding: 5px 10px;
+    height: auto !important;
+}
+
+.form-control:focus + label,
+.form-control:not(:placeholder-shown) + label {
+    left: 10px !important;
+    top: -5px;
+    background: linear-gradient(180deg, #faf9f9 60%, transparent 50%);
+    padding: 0 10px;
+    height: auto !important;
+}
+
+.form-floating > .form-control,
+.form-floating > .form-control-plaintext,
+.form-floating > .form-select {
+    height: calc(1.5rem + calc(var(--bs-border-width) * 2));
+    min-height: calc(1.5rem + calc(var(--bs-border-width) * 2));
+    line-height: 1.25;
+    padding: 1.2rem .75rem;
+}
+
+.form-floating > .form-control-plaintext:-webkit-autofill,
+.form-floating > .form-control:-webkit-autofill {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.form-floating > .form-control-plaintext:focus,
+.form-floating > .form-control-plaintext:not(:placeholder-shown),
+.form-floating > .form-control:focus,
+.form-floating > .form-control:not(:placeholder-shown) {
+    padding-top: 1.3rem;
+    padding-bottom: 1.3rem;
+}
+
+.form-floating>label {
+    padding: 0.5rem .75rem;
+}
+
+.mt-n7 {
+    margin-top: -72px !important;
+}
+
 @media screen and (max-width: 768px) {
 
     body {
@@ -168,7 +273,7 @@ footer{
     }
 
     body:after {
-        background-image: url(../images/background-small.jpg);
+        background-image: url(../images/background-small.avif);
     }
 
     .form-signin {

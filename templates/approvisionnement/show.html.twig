@@ -15,7 +15,7 @@
 {% block body %}
     <div class="container mt-4 fond-7">
         <h3 class="mt-4 mb-5 text-bold">
-            <i class="fa fa-shop mr-2"></i>
+            <i class="fa fa-shop me-2"></i>
             {{ "Détails Approvisionnement"|trans }}
         </h3>
 
@@ -44,7 +44,7 @@
             <thead>
             <tr>
                 <th>{{ 'Code Produit'|trans }}</th>
-                <th class="text-left">{{ 'Désignation'|trans }}</th>
+                <th class="text-start">{{ 'Désignation'|trans }}</th>
                 <th>{{'Fournisseur'|trans}}</th>
                 <th>{{'N° Lot'|trans}}</th>
                 <th>{{'Péremption'|trans}}</th>
@@ -56,7 +56,7 @@
             {% for approvisionnement in approvisionnements %}
                 <tr>
                     <td> {{ approvisionnement.produit.id }} </td>
-                    <td class="text-left">{{ approvisionnement.produit.desigantion }} </td>
+                    <td class="text-start">{{ approvisionnement.produit.desigantion }} </td>
                     <td>{{ approvisionnement.fournisseur.designation }} </td>
                     <td>{{ approvisionnement.lot }} </td>
                     <td>{{ approvisionnement.peremption|date('d/m/Y') }} </td>

@@ -7,12 +7,12 @@
 
     <div class="container mt-4  mb-5 fond-7">
         <h3 class="mt-4 mb-5 text-bold">
-            <i class="fa fa-shopping-cart mr-2"></i>
+            <i class="fa fa-shopping-cart me-2"></i>
             {{ "Commande à crédit"|trans }}
         </h3>
         {% for message in app.flashes('danger') %}
             <div class="alert alert-danger alert-dismissible fade show radius-10 shadow-black">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">
                     &times;
                 </button>
                 {{ message|trans }}
@@ -113,7 +113,7 @@
                 </tr>
             {% endfor %}
             <tr class="text-bold">
-                <td colspan="7" class="text-right">
+                <td colspan="7" class="text-end">
                     {{ "Total HT"|trans }}
                 </td>
                 <td>
@@ -122,7 +122,7 @@
             </tr>
             {% if reduction != 0 %}
                 <tr>
-                    <td colspan="7" class="text-right">
+                    <td colspan="7" class="text-end">
                         {{ "Total Réduction"|trans }}
                     </td>
                     <td>
@@ -131,7 +131,7 @@
                 </tr>
             {% endif %}
             <tr>
-                <td colspan="7" class="text-right">
+                <td colspan="7" class="text-end">
                     {{ "Total TVA"|trans }}
                 </td>
                 <td>
@@ -140,7 +140,7 @@
             </tr>
 
             <tr class="text-bold">
-                <td colspan="7" class="text-right">
+                <td colspan="7" class="text-end">
                     {{ "Net à payer"|trans }}
                 </td>
                 <td>
@@ -152,7 +152,7 @@
     </div>
     <div class="container mt-4 fond-7">
         <h3 class="mt-4 mb-5 text-bold">
-            <i class="fa fa-money-bill mr-2"></i>
+            <i class="fa fa-money-bill me-2"></i>
             {{ "Historiques des versements"|trans }}
         </h3>
         <table class="table table-success-light table-bordered table-hover table-striped">

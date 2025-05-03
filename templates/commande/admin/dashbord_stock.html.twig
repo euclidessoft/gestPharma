@@ -13,7 +13,7 @@
     {% for message in app.session.flashbag.get('notice') %}
         <div class="container mt-5 mb-5">
             <div class="alert alert-danger alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">&times;</button>
                 {{ message|trans }}
             </div>
         </div>
@@ -29,7 +29,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-12 text-right">
+                            <div class="col-12 text-end">
                                 <div class="text-bold">{{ produit_stock|length }}</div>
                                 <div>
                                     {{ 'Produit en stock'|trans }}
@@ -61,7 +61,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-12 text-right">
+                            <div class="col-12 text-end">
                                 <div class="text-bold">{{ produit|length }}</div>
                                 <div>
                                     {{ 'Produit en rupture'|trans }}
@@ -94,7 +94,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-12 text-right">
+                            <div class="col-12 text-end">
                                 <div class="text-bold">{{ stock|length }}</div>
                                 <div>
                                     {{ 'stock a surveille'|trans }}
@@ -127,7 +127,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-12 text-right">
+                            <div class="col-12 text-end">
                                 <div class="text-bold">{{ livraison|length }}</div>
                                 <div>
                                     {{ 'Attente de livraison'|trans }}
@@ -159,7 +159,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-12 text-right">
+                            <div class="col-12 text-end">
                                 <div class="text-bold">{{ peremption |length }}</div>
                                 <div>
                                     {{'Péremption imminente'|trans}}
@@ -190,7 +190,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-12 text-right">
+                            <div class="col-12 text-end">
                                 <div class="text-bold">{{ promotion|length }}</div>
                                 <div>
                                     {{ 'Promotion en cour'|trans }}
@@ -223,7 +223,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-12 text-right">
+                            <div class="col-12 text-end">
                                 <div class="text-bold">{{ reclamation|length }}</div>
                                 <div>
                                     {{ 'Réclamation'|trans }}
@@ -256,7 +256,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-12 text-right">
+                            <div class="col-12 text-end">
                                 <div class="text-bold">{{ reste|length }}</div>
                                 <div>
                                     {{' Reste à livrer'|trans }}

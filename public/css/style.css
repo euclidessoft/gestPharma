@@ -486,6 +486,7 @@
     background-color: rgba(3, 156, 79, 0.2);
     box-shadow: 1rem 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
     border-bottom: 1px solid var(--secondaire);
+    backdrop-filter: blur(10px);
 }
 
 .logo {

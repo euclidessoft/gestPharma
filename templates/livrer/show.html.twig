@@ -14,12 +14,12 @@
 {% block body %}
     <div class="container mt-4 fond-7">
         <h3 class="mt-4 mb-5 text-bold">
-            <i class="fa fa-shopping-cart mr-2"></i>
+            <i class="fa fa-shopping-cart me-2"></i>
             {{ "Traitement commande pour Livraison"|trans }}
         </h3>
         {% for message in app.flashes('echec') %}
             <div class="alert alert-danger alert-dismissible fade show radius-10 shadow-black">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">
                     &times;
                 </button>
                 {{ message|trans }}
@@ -27,7 +27,7 @@
         {% endfor %}
         {% for message in app.flashes('notice') %}
             <div class="alert alert-danger alert-dismissible fade show radius-10 shadow-black">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">
                     &times;
                 </button>
                 {{ message|trans }}
@@ -138,20 +138,20 @@
                 <td class="text-center">
                     <button type="button"
                             class="btn btn-success"
-                            data-toggle="modal" data-target="#modal{{ commande.produit.id }}"
+                            data-bs-toggle="modal" data-bs-target="#modal{{ commande.produit.id }}"
                             id="btn{{ commande.produit.id }}" onclick="detaillivraison({{ commande.produit.id }})">
                         <i class="fa fa-edit"></i>
                         {{ 'Détails'|trans }}
                     </button>
-                    <div class="modal fade" id="modal{{ commande.produit.id }}" tabindex="-1" role="dialog"
+                    <div class="modal fade" id="modal{{ commande.produit.id }}" tabindex="-1" tabindex="-1" aria-labelledby="" aria-hidden="true"
                          aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg text-center">
+                        <div class="modal-dialog modal-dialog-centered modal-lg text-center">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title fs-5" id="exampleModalLabel">
                                         {{ commande.produit.reference }} {{ commande.produit.desigantion }} {{ commande.produit.fabriquant }}
                                     </h5>
-                                    <button type="button" class="close" data-dismiss="modal"
+                                    <button type="button" class="close" data-bs-dismiss="modal"
                                             aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -179,7 +179,7 @@
                                 </div>
                                 <div class="modal-footer px-5 py-4">
                                     <span class="float-left"> {{ commande.quantite + ug }} {{"à livrer"|trans}}</span>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                                             id="annuler{{ commande.produit.id }}">
                                         {{ 'Annuler'|trans }}
                                     </button>
@@ -196,28 +196,28 @@
                 {% else %}
                 {% endfor %}
         </table>
-{#        <a class="btn btn-success mb-4" href="{{ path('livraison_valider', {'id': commandereference.id}) }}" data-toggle="modal" data-target="#livreur">#}
+{#        <a class="btn btn-success mb-4" href="{{ path('livraison_valider', {'id': commandereference.id}) }}" data-bs-toggle="modal" data-bs-target="#livreur">#}
 {#            <i class="fa fa-check"></i> Valider </a>#}
 
 
 
-        <button type="button" class="btn btn-success mb-4" data-toggle="modal" data-target="#livreur">
+        <button type="button" class="btn btn-success mb-4" data-bs-toggle="modal" data-bs-target="#livreur">
             <i class="fa fa-check"></i>
             {{ 'Valider'|trans }}
         </button>
 
 
         <!-- Modal -->
-        <div class="modal fade" id="livreur" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        <div class="modal fade" id="livreur" tabindex="-1" tabindex="-1" aria-labelledby="" aria-hidden="true" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
-            <div class="modal-dialog text-center">
+            <div class="modal-dialog modal-dialog-centered text-center">
                 <div class="modal-content ">
                     <div class="modal-header">
                         <h4 class="modal-title fs-5" id="exampleModalLabel">
                             <i class="fa-solid fa-truck-fast"></i>
                             {{ 'Livraison'|trans }}
                         </h4>
-                        <button type="button" class="close" data-dismiss="modal"
+                        <button type="button" class="close" data-bs-dismiss="modal"
                                 aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>

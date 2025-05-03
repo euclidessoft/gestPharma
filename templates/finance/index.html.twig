@@ -23,7 +23,7 @@
         </h3>
         {% for message in app.session.flashbag.get('notice') %}
             <div class="alert alert-danger alert-dismissible fade show radius-10 shadow-black mt-5 mb-5">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">&times;</button>
                 {{ message|trans }}
             </div>
         {% endfor %}
@@ -121,11 +121,11 @@
                                                                                 {{ ecriture.credit ? ecriture.libelle : '' }}
 
                                     </td>
-                                    <td data-label="{{ 'Crédit'|trans }}" class="text-right">
+                                    <td data-label="{{ 'Crédit'|trans }}" class="text-end">
                                         {#                                    {{ ecriture.debit ? ecriture.montant|number_format(0, '', ' ') : '' }}#}
                                         {{ ecriture.credit ? ecriture.montant|number_format(0, '', ' ') : '' }}
                                     </td>
-                                    <td data-label="{{ 'Débit'|trans }}" class="text-right">
+                                    <td data-label="{{ 'Débit'|trans }}" class="text-end">
                                         {#                                    {{ ecriture.debit ? ecriture.montant|number_format(0, '', ' ') : '' }}#}
                                         {#                                    {{ ecriture.credit ? ecriture.montant|number_format(0, '', ' ') : '' }}#}
 
@@ -159,11 +159,11 @@
                                         {{ ecriture.credit ? ecriture.libelle : '' }}
 
                                     </td>
-                                    <td data-label="{{ 'Crédit'|trans }}" class="text-right">
+                                    <td data-label="{{ 'Crédit'|trans }}" class="text-end">
                                         {#                                                                        {{ ecriture.debit ? ecriture.montant|number_format(0, '', ' ') : '' }}#}
                                         {#                                    {{ ecriture.credit ? ecriture.montant|number_format(0, '', ' ') : '' }}#}
                                     </td>
-                                    <td data-label="{{ 'Débit'|trans }}" class="text-right">
+                                    <td data-label="{{ 'Débit'|trans }}" class="text-end">
                                         {#                                    {{ ecriture.debit ? ecriture.montant|number_format(0, '', ' ') : '' }}#}
                                         {{ ecriture.credit ? ecriture.montant|number_format(0, '', ' ') : '' }}
 
@@ -202,11 +202,11 @@
                                         {#                                    {{ ecriture.credit ? ecriture.libelle : '' }}#}
 
                                     </td>
-                                    <td data-label="{{ 'Crédit'|trans }}" class="text-right">
+                                    <td data-label="{{ 'Crédit'|trans }}" class="text-end">
                                         {{ ecriture.debit ? ecriture.montant|number_format(0, '', ' ') : '' }}
                                         {#                                    {{ ecriture.credit ? ecriture.montant|number_format(0, '', ' ') : '' }}#}
                                     </td>
-                                    <td data-label="{{ 'Débit'|trans }}" class="text-right">
+                                    <td data-label="{{ 'Débit'|trans }}" class="text-end">
                                         {#                                    {{ ecriture.debit ? ecriture.montant|number_format(0, '', ' ') : '' }}#}
                                         {#                                    {{ ecriture.credit ? ecriture.montant|number_format(0, '', ' ') : '' }}#}
 
@@ -241,11 +241,11 @@
                                         {#                                    {{ ecriture.credit ? ecriture.libelle : '' }}#}
 
                                     </td>
-                                    <td data-label="{{ 'Crédit'|trans }}" class="text-right">
+                                    <td data-label="{{ 'Crédit'|trans }}" class="text-end">
                                         {#                                                                        {{ ecriture.debit ? ecriture.montant|number_format(0, '', ' ') : '' }}#}
                                         {#                                    {{ ecriture.credit ? ecriture.montant|number_format(0, '', ' ') : '' }}#}
                                     </td>
-                                    <td data-label="{{ 'Débit'|trans }}" class="text-right">
+                                    <td data-label="{{ 'Débit'|trans }}" class="text-end">
                                         {{ ecriture.debit ? ecriture.montant|number_format(0, '', ' ') : '' }}
                                         {#                                    {{ ecriture.credit ? ecriture.montant|number_format(0, '', ' ') : '' }}#}
 

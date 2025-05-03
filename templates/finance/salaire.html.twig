@@ -14,12 +14,12 @@
 {% block body %}
     <div class="col-lg-10 mt-4 fond-7">
         <h3 class="mt-4 mb-5 text-bold">
-            <i class="fa fa-money-bill mr-2"></i>
+            <i class="fa fa-money-bill me-2"></i>
             {{ "En attente de paiement"|trans }}
         </h3>
         {% for message in app.flashes('notice') %}
             <div class="alert alert-success alert-dismissible fade show radius-10 shadow-black">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">
                     &times;
                 </button>
                 {{ message|trans }}
@@ -27,7 +27,7 @@
         {% endfor %}
         {% for message in app.flashes('danger') %}
             <div class="alert alert-danger alert-dismissible fade show radius-10 shadow-black">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">
                     &times;
                 </button>
                 {{ message|trans }}
@@ -58,22 +58,20 @@
                     <td>{{ paie.salaireNet|number_format(0, '' , ' ') }} FCFA</td>
                     <td>{{ paie.totalchargepatronal|number_format(0, '' , ' ') }} FCFA</td>
                     <td>
-                        <button type="button" class="btn btn-green" data-toggle="modal" data-target="#modal{{ paie.id }}" id="btn{{ paie.id }}">
+                        <button type="button" class="btn btn-green" data-bs-toggle="modal" data-bs-target="#modal{{ paie.id }}" id="btn{{ paie.id }}">
                             <i class="fa fa-plus"></i>
                             {{ 'Payer'|trans }}
                         </button>
                         <!-- Modal -->
-                        <div class="modal fade" id="modal{{ paie.id }}" tabindex="-1" role="dialog"
+                        <div class="modal fade" id="modal{{ paie.id }}" tabindex="-1" tabindex="-1" aria-labelledby="" aria-hidden="true"
                              aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog text-center">
+                            <div class="modal-dialog modal-dialog-centered text-center">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h4 class="modal-title fs-5" id="exampleModalLabel">
                                             {{ 'Paiement salaire'|trans }}
                                         </h4>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body px-5">
                                         <div class="mt-4">
@@ -89,12 +87,12 @@
 
                                     </div>
                                     <div class="modal-footer px-5 py-4">
-                                        <button type="button" class="btn btn-green mr-3"  id="valider{{ paie.id }}"
+                                        <button type="button" class="btn btn-green me-3"  id="valider{{ paie.id }}"
                                                 onclick="payerOne({{ paie.id }})">
                                             <i class="fa fa-save"></i>
                                             {{ 'Valider'|trans }}
                                         </button>
-                                        <button type="button" class="btn btn-success-light" data-dismiss="modal"
+                                        <button type="button" class="btn btn-success-light" data-bs-dismiss="modal"
                                                 id="annuler{{ paie.id }}">
                                             <i class="fa-solid fa-rotate-left"></i>
                                             {{ 'Annuler'|trans }}
@@ -118,7 +116,7 @@
                     {{ 'Montant total dû'|trans }} : {{ montant|number_format(0, '' , ' ') }} FCFA
                     <input type="hidden" value="{{ montant }}" id="montant"/>
 
-                    <button type="button" class="btn btn-green" data-toggle="modal" data-target="#modal_tous" id="tous">
+                    <button type="button" class="btn btn-green" data-bs-toggle="modal" data-bs-target="#modal_tous" id="tous">
                         <i class="fa fa-plus"></i>
                         {{ 'Payer tous'|trans }}
                     </button>
@@ -131,17 +129,15 @@
             </tbody>
         </table>
     </div>
-    <div class="modal fade" id="modal_tous" tabindex="-1" role="dialog"
+    <div class="modal fade" id="modal_tous" tabindex="-1" tabindex="-1" aria-labelledby="" aria-hidden="true"
          aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog text-center">
+        <div class="modal-dialog modal-dialog-centered text-center">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title fs-5" id="exampleModalLabel">
                         {{ 'Paiement de tous les salaires'|trans }}
                     </h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body px-5">
                     <div class="mt-4">
@@ -158,12 +154,12 @@
 
                 </div>
                 <div class="modal-footer px-5 py-4">
-                    <button type="button" class="btn btn-green mr-3"  id="validertous"
+                    <button type="button" class="btn btn-green me-3"  id="validertous"
                             onclick="payerTous()">
                         <i class="fa fa-save"></i>
                         {{ 'Valider'|trans }}
                     </button>
-                    <button type="button" class="btn btn-success-light" data-dismiss="modal" id="annulertous">
+                    <button type="button" class="btn btn-success-light" data-bs-dismiss="modal" id="annulertous">
                         <i class="fa-solid fa-rotate-left"></i>
                         {{ 'Annuler'|trans }}
                     </button>

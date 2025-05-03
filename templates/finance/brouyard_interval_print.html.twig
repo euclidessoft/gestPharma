@@ -148,12 +148,12 @@
                             {{ ecriture.credit ? ecriture.libelle : '' }}
 
                         </td>
-                        <td data-label="{{ 'Crédit'|trans }}" class="text-right">
+                        <td data-label="{{ 'Crédit'|trans }}" class="text-end">
                             {#                                        {% if ecriture.comptecredit != compte %}#}
                             {#                                            {{ ecriture.montant|number_format(0, '', ' ') }}#}
                             {#                                        {% endif %}#}
                         </td>
-                        <td data-label="{{ 'Débit'|trans }}" class="text-right">
+                        <td data-label="{{ 'Débit'|trans }}" class="text-end">
                             {#                                        {% if ecriture.comptedebit != compte %}#}
                             {{ ecriture.montant|number_format(0, '', ' ') }}
                             {#                                        {% endif %}#}
@@ -197,12 +197,12 @@
                             {#                                    {{ ecriture.credit ? ecriture.libelle : '' }}#}
 
                         </td>
-                        <td data-label="{{ 'Crédit'|trans }}" class="text-right">
+                        <td data-label="{{ 'Crédit'|trans }}" class="text-end">
                             {#                                        {% if ecriture.comptecredit != compte %}#}
                             {{ ecriture.montant|number_format(0, '', ' ') }}
                             {#                                        {% endif %}#}
                         </td>
-                        <td data-label="{{ 'Débit'|trans }}" class="text-right">
+                        <td data-label="{{ 'Débit'|trans }}" class="text-end">
                             {#                                        {% if ecriture.comptedebit != compte %}#}
                             {#                                            {{ ecriture.montant|number_format(0, '', ' ') }}#}
                             {#                                        {% endif %}#}

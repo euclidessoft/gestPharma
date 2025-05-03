@@ -43,31 +43,31 @@
         <div class="row my-5">
             <div class="col-7">
                 <div class="row">
-                    <div class="col-4 text-right text-bold">
+                    <div class="col-4 text-end text-bold">
                         {{ "Matricule : "|trans }}
                     </div>
                     <div class="col-8">
                         {{ employe.matricule }}
                     </div>
-                    <div class="col-4 text-right text-bold">
+                    <div class="col-4 text-end text-bold">
                         {{ "Poste : "|trans }}
                     </div>
                     <div class="col-8">
                         {{ employe.poste.nom }}
                     </div>
-                    <div class="col-4 text-right text-bold">
+                    <div class="col-4 text-end text-bold">
                         {{ "Département : "|trans }}
                     </div>
                     <div class="col-8">
                         {{ employe.poste.departement.nom }}
                     </div>
-                    <div class="col-4 text-right text-bold">
+                    <div class="col-4 text-end text-bold">
                         {{ "Date d'embauche : "|trans }}
                     </div>
                     <div class="col-8">
                         {{ employe.hireDate|date('d/m/Y') }}
                     </div>
-                    <div class="col-4 text-right text-bold">
+                    <div class="col-4 text-end text-bold">
                         {{ "Ancienneté : "|trans }}
                     </div>
                     <div class="col-8">
@@ -82,7 +82,7 @@
                         {% endif %}
                         {{ monthDiff }} {{ "mois"|trans }}
                     </div>
-                    <div class="col-4 text-right text-bold">
+                    <div class="col-4 text-end text-bold">
                         {{ "Période : "|trans }}
                     </div>
                     <div class="col-8">
@@ -104,7 +104,7 @@
                 <table class="table table-success-light table-bordered w-100 bulletin">
                     <thead>
                     <tr class="text-center">
-                        <th class="text-left"  rowspan="2">ELEMENTS DE PAIE</th>
+                        <th class="text-start"  rowspan="2">ELEMENTS DE PAIE</th>
                         <th  rowspan="2">NOMBRE</th>
                         <th  rowspan="2">BASE</th>
                         <th colspan="3">PART SALARIALE</th>
@@ -119,11 +119,11 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr class="text-right">
+                    <tr class="text-end">
                         {% set ponction= 0 %}
                         {% set brut= 0 %}
                         {% set net= 0 %}
-                        <td class="text-left">SALAIRES DE BASE</td>
+                        <td class="text-start">SALAIRES DE BASE</td>
                         <td>{% set nombre = nbrjoursmois %} {{ nombre }}</td>
 {#                        <td>{% set nombre = nbrjoursmois - nombreJours %} {{ nombre }}</td>#}
                         <td>{% set base = employe.poste.salaire / 30 %}{{ base|number_format(0, '' , ' ') }}</td>
@@ -141,8 +141,8 @@
                     {% for prime in primes %}
                         {% if prime.base == true %}{# true si prime journalier #}
                             {% set ponction = ponction + prime.montant / nombre %}
-                            <tr class="text-right">
-                                <td class="text-left">{{ prime.description }}</td>
+                            <tr class="text-end">
+                                <td class="text-start">{{ prime.description }}</td>
                                 <td>{{ nombre }}</td>
                                 <td>{{ (prime.montant / nombre)|number_format(0, '' , ' ') }}</td>
                                 <td></td>
@@ -153,8 +153,8 @@
                             </tr>
                             {% set totalprime = totalprime + (prime.montant * nombre) %}
                         {% else %}
-                            <tr class="text-right">
-                                <td class="text-left">{{ prime.description }}</td>
+                            <tr class="text-end">
+                                <td class="text-start">{{ prime.description }}</td>
                                 <td></td>
                                 <td>{{ prime.montant|number_format(0, '' , ' ') }}</td>
                                 <td></td>
@@ -170,8 +170,8 @@
 
 {#                    {% set totalheuresup = 0 %}#}
                     {% if totalPrimePerf != 0 %}
-                        <tr class="text-right">
-                            <td class="text-left">Prime de Performence</td>
+                        <tr class="text-end">
+                            <td class="text-start">Prime de Performence</td>
                             <td></td>
                             <td>{{ totalPrimePerf|number_format(0, '' , ' ') }}</td>
                             <td> </td>
@@ -184,8 +184,8 @@
 
                     {% set totalheuresup = 0 %}
                     {% if heureSups != 0 %}
-                        <tr class="text-right">
-                            <td class="text-left">Heures Suplementaires</td>
+                        <tr class="text-end">
+                            <td class="text-start">Heures Suplementaires</td>
                             <td></td>
                             <td>{{ employe.poste.heureSup|number_format(0, '' , ' ') }}</td>
                             <td> {{ heureSups }}</td>
@@ -198,8 +198,8 @@
                     {% endif %}
                     {% set totalretenue = 0 %}
                     {% if nombreJours != 0 %}
-                        <tr class="text-right">
-                            <td class="text-left">Ponction Salariale</td>
+                        <tr class="text-end">
+                            <td class="text-start">Ponction Salariale</td>
                             <td></td>
                             <td>{{ ponction|number_format(0, '' , ' ') }}</td>
                             <td>{{ nombreJours }}</td>
@@ -212,8 +212,8 @@
                         </tr>
                         {% set totalretenue = ponction * nombreJours %}
                     {% endif %}
-                    <tr class="text-bold text-right">
-                        <td class="text-left">TOTAL DES GAINS(Brut)</td>
+                    <tr class="text-bold text-end">
+                        <td class="text-start">TOTAL DES GAINS(Brut)</td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -227,8 +227,8 @@
                     </tr>
 {#                    {% set totalretenue = 0 %}#}
 {#                    {% for retenue in retenues %}#}
-{#                        <tr class="text-right">#}
-{#                            <td class="text-left">Ponction Salariale</td>#}
+{#                        <tr class="text-end">#}
+{#                            <td class="text-start">Ponction Salariale</td>#}
 {#                            <td></td>#}
 {#                            <td>{{ retenue.montant|number_format(0, '' , ' ') }}</td>#}
 {#                            <td>{{ retenue.jours }}</td>#}
@@ -242,8 +242,8 @@
 {#                        {% set totalretenue = totalretenue + retenue.montant * retenue.jours %}#}
 {#                    {% else %}#}
 {#                    {% endfor %}#}
-                    <tr class="text-right">
-                        <td class="text-left">IRPP</td>
+                    <tr class="text-end">
+                        <td class="text-start">IRPP</td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -252,8 +252,8 @@
                         <td></td>
                         <td></td>
                     </tr>
-                    <tr class="text-right">
-                        <td class="text-left">CAC / IRPP</td>
+                    <tr class="text-end">
+                        <td class="text-start">CAC / IRPP</td>
                         <td></td>
                         <td>52 873</td>
                         <td>10,0</td>
@@ -262,8 +262,8 @@
                         <td></td>
                         <td></td>
                     </tr>
-                    <tr class="text-right">
-                        <td class="text-left">RAV / Salaires</td>
+                    <tr class="text-end">
+                        <td class="text-start">RAV / Salaires</td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -272,8 +272,8 @@
                         <td></td>
                         <td></td>
                     </tr>
-                    <tr class="text-right">
-                        <td class="text-left">TAXE COMMUNALE</td>
+                    <tr class="text-end">
+                        <td class="text-start">TAXE COMMUNALE</td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -282,8 +282,8 @@
                         <td></td>
                         <td></td>
                     </tr>
-                    <tr class="text-right">
-                        <td class="text-left">CFC Part salarial</td>
+                    <tr class="text-end">
+                        <td class="text-start">CFC Part salarial</td>
                         <td></td>
                         <td>566 484</td>
                         <td>1,0</td>
@@ -292,8 +292,8 @@
                         <td></td>
                         <td></td>
                     </tr>
-                    <tr class="text-right">
-                        <td class="text-left">CFC Part Patronale</td>
+                    <tr class="text-end">
+                        <td class="text-start">CFC Part Patronale</td>
                         <td></td>
                         <td>800 284</td>
                         <td></td>
@@ -302,8 +302,8 @@
                         <td>1,50</td>
                         <td>12 004</td>
                     </tr>
-                    <tr class="text-right">
-                        <td class="text-left">FNE</td>
+                    <tr class="text-end">
+                        <td class="text-start">FNE</td>
                         <td></td>
                         <td>800 284</td>
                         <td></td>
@@ -312,8 +312,8 @@
                         <td>1,0</td>
                         <td>8 003</td>
                     </tr>
-                    <tr class="text-right">
-                        <td class="text-left">Pension Vieillesse</td>
+                    <tr class="text-end">
+                        <td class="text-start">Pension Vieillesse</td>
                         <td></td>
                         <td>566 484</td>
                         <td>4,20</td>
@@ -322,8 +322,8 @@
                         <td>4,20</td>
                         <td>23 792</td>
                     </tr>
-                    <tr class="text-right">
-                        <td class="text-left">Allocation familiale</td>
+                    <tr class="text-end">
+                        <td class="text-start">Allocation familiale</td>
                         <td></td>
                         <td>566 484</td>
                         <td></td>
@@ -332,8 +332,8 @@
                         <td>7,00</td>
                         <td>39 654</td>
                     </tr>
-{#                    <tr class="text-right">#}
-{#                        <td class="text-left">Pension Vieillesse / Patronal</td>#}
+{#                    <tr class="text-end">#}
+{#                        <td class="text-start">Pension Vieillesse / Patronal</td>#}
 {#                        <td></td>#}
 {#                        <td>566 484</td>#}
 {#                        <td></td>#}
@@ -342,8 +342,8 @@
 {#                        <td>4,20</td>#}
 {#                        <td>23 792</td>#}
 {#                    </tr>#}
-                    <tr class="text-right">
-                        <td class="text-left">Accident de Travail</td>
+                    <tr class="text-end">
+                        <td class="text-start">Accident de Travail</td>
                         <td></td>
                         <td>566 484</td>
                         <td></td>
@@ -352,8 +352,8 @@
                         <td>1,75</td>
                         <td>9 913</td>
                     </tr>
-                    <tr class="text-bold text-right">
-                        <td class="text-left">TOTAL DES COTISATIONS</td>
+                    <tr class="text-bold text-end">
+                        <td class="text-start">TOTAL DES COTISATIONS</td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -367,7 +367,7 @@
                             NET IMPOSABLE
                         </td>
                         <td></td>
-                        <td class="text-right">
+                        <td class="text-end">
                             {%  set net = brut - 14000 %}
                             {{ net|number_format(0, '' , ' ') }}
                         </td>
@@ -382,7 +382,7 @@
                 <table class="table table-success-light table-bordered w-100 bulletin">
                     <thead>
                     <tr class="text-center">
-                        <th colspan="2" class="text-left">Impôt sur le revenu</th>
+                        <th colspan="2" class="text-start">Impôt sur le revenu</th>
                         <th>Base</th>
                         <th>Taux</th>
                         <th>Montant</th>
@@ -390,8 +390,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr class="text-right">
-                        <td colspan="2" class="text-left">Impôt sur le revenu prélevé à la source</td>
+                    <tr class="text-end">
+                        <td colspan="2" class="text-start">Impôt sur le revenu prélevé à la source</td>
                         <td>{{ net|number_format(0, '' , ' ') }}</td>
                         <td></td>
                         <td>8 000</td>
@@ -411,11 +411,11 @@
                         {#                        <p class="mb-0"> Validé le : 29/03/2025</p>#}
                     </div>
                     <div class="col-6">
-                        <h3 class="text-dark text-right text-bold">
+                        <h3 class="text-dark text-end text-bold">
                             {{ (net-8000)|number_format(0, '' , ' ') }}
 
                         </h3>
-                        {#                        <p class="text-right mb-0"> Payé le : 31/03/2025</p>#}
+                        {#                        <p class="text-end mb-0"> Payé le : 31/03/2025</p>#}
                     </div>
                 </div>
             </div>
@@ -428,7 +428,7 @@
                 <a href="{{ path('paie_valider', {'id': employe.id }) }}"
                    class="btn btn-success btn-lg"><i class="fa fa-save"></i> Valider</a>
             {% else %}
-                <a href="{{ path('paie_index') }}" class="btn btn-secondary btn-lg mr-2">Retour</a>
+                <a href="{{ path('paie_index') }}" class="btn btn-secondary btn-lg me-2">Retour</a>
                 <a href="#" class="btn btn-primary btn-lg"><i class="fa fa-print"></i> Imprimer</a>
             {% endif %}
         </div>

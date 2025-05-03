@@ -13,7 +13,7 @@
 {% block body %}
     <div class="container mt-4 fond-7">
         <h3 class="mt-4 mb-5 text-bold">
-            <i class="fa fa-shopping-cart mr-2"></i>
+            <i class="fa fa-shopping-cart me-2"></i>
             {{ "Validation de la commande"|trans }}
         </h3>
 
@@ -98,7 +98,7 @@
                 </tr>
             {% endfor %}
             <tr class="text-bold">
-                <td colspan="7" class="text-right">
+                <td colspan="7" class="text-end">
                     {{ "Total"|trans }}
                 </td>
                 <td class="text-center">
@@ -107,7 +107,7 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="7" class="text-right">
+                <td colspan="7" class="text-end">
                     {{ "Total Réduction"|trans }}
                 </td>
                 <td class="text-center">
@@ -116,7 +116,7 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="7" class="text-right">
+                <td colspan="7" class="text-end">
                     {{ "Total TVA"|trans }}
                 </td>
                 <td class="text-center">
@@ -125,7 +125,7 @@
                 </td>
             </tr>
             <tr class="text-bold">
-                <td colspan="7" class="text-right text-bold">
+                <td colspan="7" class="text-end text-bold">
                     {{ "Net à payer"|trans }}
                 </td>
                 <td class="text-center">
@@ -135,7 +135,7 @@
             </tr>       
                  {#        /***Conversion prix en lettre **/#}
             <tr>
-                <td colspan="8" class="text-right">
+                <td colspan="8" class="text-end">
                     <span id="total" class="text-bold"></span>
                     {{'Arrêtée la présente à la somme de '|trans}} <b id="conversion"> </b> <b>francs CFA TTC</b>
                 </td>
@@ -151,7 +151,7 @@
             <div class="row">
 
                 <a id="valider" onclick="load('valider')" href="{{ path('commande_panier_valider_extranet') }}"
-                   class="ml-3 btn btn-success float-end">
+                   class="ms-3 btn btn-success float-end">
                     <i class="fa fa-money-bill">
 
                     </i> {{ "Valider"|trans }}

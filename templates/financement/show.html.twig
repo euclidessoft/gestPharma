@@ -31,14 +31,14 @@
 
 <div class="container mt-4 fond-7">
     <h3 class="mt-4 mb-3 text-bold">
-        <i class="fa fa-money-bill mr-2"></i>
+        <i class="fa fa-money-bill me-2"></i>
         {{ "Listes des Remboursements"|trans }}
     </h3>
-    <a href="{{ path('financement_index') }}" class="btn btn-success mb-4"><i class="fas fa-arrow-left mr-2"></i>Retour</a>
+    <a href="{{ path('financement_index') }}" class="btn btn-success mb-4"><i class="fas fa-arrow-left me-2"></i>Retour</a>
     <table class="table table-success-light table-bordered table-hover table-striped w-100 text-center" id="liste">
         <thead>
             <tr>
-                <th class="text-left">Date</th>
+                <th class="text-start">Date</th>
                 <th>Compte</th>
                 <th>Montant</th>
             </tr>
@@ -47,7 +47,7 @@
             {% set somme = 0 %}
         {% for remboursement in financement.remboursements %}
             <tr>
-                <td class="text-left">{{ remboursement.date ? remboursement.date|date('Y-m-d H:i:s') : '' }}</td> 
+                <td class="text-start">{{ remboursement.date ? remboursement.date|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ remboursement.compte }}</td>
                 <td>{{ remboursement.montant|number_format(0, '' , ' ')}}</td>
                 {% set somme = somme + remboursement.montant %}
@@ -58,7 +58,7 @@
             </tr>
         {% endfor %}
         <tr>
-            <td colspan="2" class="text-right text-bold">Total :</td>
+            <td colspan="2" class="text-end text-bold">Total :</td>
             <td class="text-bold"> {{somme|number_format(0, '' , ' ')}}</td>
         </tr>
         </tbody>

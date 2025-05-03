@@ -1,13 +1,11 @@
-<div class="modal fade mt-5" id="rapport" role="dialog">
+<div class="modal fade mt-5" id="rapport" tabindex="-1" aria-labelledby="" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content radius-10">
                 <div class="modal-header bb-green">
                     <h5 class="mt-3 text-center text-bold">
                         {{ 'Rapport journalière'|trans }}
                     </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 <div class="modal-body">
@@ -19,7 +17,7 @@
                             <div class="row">
                                 <a href="{{ path('finance_brouyard_caisse') }}"{# target="_blank"#}>
                                     <button type="button"
-                                            class="btn btn-shadow btn-normal btn-green mr-3" {#onclick="window.location.reload();"#}>
+                                            class="btn btn-shadow btn-normal btn-green me-3" {#onclick="window.location.reload();"#}>
                                         &emsp;
                                         <i class="fa fa-cash-register fa-lg"></i>
                                         {{ 'Caisse'|trans }}
@@ -28,7 +26,7 @@
                                 </a>
                                 <a href="{{ path('finance_brouyard_banque') }}"{# target="_blank"#}>
                                     <button type="button"
-                                            class="btn btn-shadow btn-normal btn-primary mr-3"{# onclick="window.location.reload();"#}>
+                                            class="btn btn-shadow btn-normal btn-primary me-3"{# onclick="window.location.reload();"#}>
                                         &emsp;
                                         <i class="fa fa-university fa-lg"></i>
                                         {{ 'Banque'|trans }}

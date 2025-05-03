@@ -15,13 +15,13 @@
     <div class="col-lg-8 mt-4 fond-7">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h3 class="mt-2 text-bold">
-                <i class="fa fa-money-bill mr-2"></i>
+                <i class="fa fa-money-bill me-2"></i>
                 {{ "Liste des transactions de la banque"|trans }} - {{ banque.nom }} {{ banque.compte }}
             </h3>
         </div>
         <a id="{{ banque.id }}" onclick="load({{ banque.id }})" href="{{ path('banque_index') }}"
            class="btn btn-success">
-            <i class="fas fa-arrow-left mr-2"></i>{{ "Retour"|trans }}
+            <i class="fas fa-arrow-left me-2"></i>{{ "Retour"|trans }}
         </a>
         <div class="d-flex justify-content-end">
             <div class="alert alert-success font-weight-bold">
@@ -175,7 +175,7 @@
 
             {% endfor %}
             <!-- <tr>
-                <td data-label="colspan" colspan="5" class="text-bold text-right">
+                <td data-label="colspan" colspan="5" class="text-bold text-end">
                     {{ 'Total'|trans }}
                 </td>
                 <td class="text-center text-bold">

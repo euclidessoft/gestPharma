@@ -5,30 +5,30 @@
 
     {{ include('includes/head.html.twig') }}
 
-    <title> {% block title %} GNT Pharma {% endblock %} </title>
+    {# <title> {% block title %} GNT Pharma {% endblock %} </title>
 
-    {% block stylesheets %}
-    <link href="{{ asset('DataTables/datatables.css') }}" rel="stylesheet">
-    <link href="{{ asset('fontawesome/css/all.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/bootstrap-4plus.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/accueil.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/gntpharma.css') }}" rel="stylesheet">
-    <link rel="shortcut icon" href="{{ asset('images/gntpharma.jpeg') }}" type="image/x-icon">
+     {% block stylesheets %}
+     <link href="{{ asset('DataTables/datatables.css') }}" rel="stylesheet">
+     <link href="{{ asset('fontawesome/css/all.css') }}" rel="stylesheet">
+     <link href="{{ asset('css/bootstrap-4plus.css') }}" rel="stylesheet">
+     <link href="{{ asset('css/accueil.css') }}" rel="stylesheet">
+     <link href="{{ asset('css/gntpharma.css') }}" rel="stylesheet">
+     <link rel="shortcut icon" href="{{ asset('images/gntpharma.jpeg') }}" type="image/x-icon">
 
-    {% endblock %}
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+     {% endblock %}
+     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 
-    <!--[if lt IE 9]>
-    <script src="{{ asset('js/html5shiv.js') }}"></script>
-    <script src="{{ asset('js/respond.min.js') }}"></script>
-    <![endif]-->
-
+     <!--[if lt IE 9]>
+     <script src="{{ asset('js/html5shiv.js') }}"></script>
+     <script src="{{ asset('js/respond.min.js') }}"></script>
+     <![endif]-->
+ #}
 </head>
 
 <body {% block facture %} {% endblock %}>
 
-    {% block nav %}
+{% block nav %}
     <nav id="navmenu" class="navmenu">
         <div class="session">
             <a id="session" class="navbar-brand text-white m-2" href="{{ path('Accueil') }}">
@@ -50,9 +50,9 @@
                         </div>
                     </a>
                 </li>
-                <li class="nav-item dropright" title="{{ 'Administration'|trans }}">
+                <li class="nav-item dropend" title="{{ 'Administration'|trans }}">
                     <a class="nav-link dropdown-toggle {% block administration %} {% endblock %}" href="#"
-                        id="administration" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                       id="administration" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div class="icone">
                             <i class="fas fa-users fa-lg"></i>
                         </div>
@@ -63,23 +63,23 @@
                     <ul class=" dropdown-menu" aria-labelledby="administration">
                         <li class="dropdown-item" title="{{ 'Contrat'|trans }}">
                             <a class="nav-link {% block contrat %}{% endblock %}"
-                                href="{{ path('contrat_index_suivi') }}">
+                               href="{{ path('contrat_index_suivi') }}">
                                 <i class="fa-solid fa-address-card"></i>
                                 {{ 'Contrat'|trans }}
                             </a>
                         </li>
                         <li class="dropdown-item" title="{{ 'Planning des congés'|trans }}">
                             <a class="nav-link {% block planning %}{% endblock %}"
-                                href="{{ path('calendrier_index_suivi') }}">
+                               href="{{ path('calendrier_index_suivi') }}">
                                 <i class="fa-solid fa-calendar-days"></i>
                                 {{ 'Planning des congés'|trans }}
                             </a>
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item dropright" title="{{ 'Discipline'|trans }}">
+                <li class="nav-item dropend" title="{{ 'Discipline'|trans }}">
                     <a class="nav-link dropdown-toggle {% block discipline %}{% endblock %}" href="#" id="discipline"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div class="icone">
                             <i class="fa-solid fa-users-slash fa-lg"></i>
                         </div>
@@ -89,19 +89,22 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="discipline">
                         <li class="dropdown-item" title="{{ 'Permissions'|trans }}">
-                            <a class="nav-link {% block permissions %}{% endblock %}" href="{{ path('conges_employe_index') }}">
+                            <a class="nav-link {% block permissions %}{% endblock %}"
+                               href="{{ path('conges_employe_index') }}">
                                 <i class="fa-solid fa-user-check"></i>
                                 {{ "Permissions"|trans }}
                             </a>
                         </li>
                         <li class="dropdown-item" title="{{ 'Absences'|trans }}">
-                            <a class="nav-link {% block absence %}{% endblock %}" href="{{ path('absence_employe_attente') }}">
+                            <a class="nav-link {% block absence %}{% endblock %}"
+                               href="{{ path('absence_employe_attente') }}">
                                 <i class="fa fa-user-slash"></i>
                                 {{ "Absences"|trans }}
                             </a>
                         </li>
                         <li class="dropdown-item" title="{{ 'Demande d\'explication'|trans }}">
-                            <a class="nav-link {% block explication %}{% endblock %}" href="{{ path('demande_explication_index') }}">
+                            <a class="nav-link {% block explication %}{% endblock %}"
+                               href="{{ path('demande_explication_index') }}">
                                 <i class="fa-solid fa-user-pen"></i>
                                 {{ "Demande d'explication"|trans }}
                             </a>
@@ -125,10 +128,10 @@
                         </div>
                     </a>
                 </li>
-                <li class="nav-item dropright" title="{{ 'Paie et Avantages'|trans }}">
+                <li class="nav-item dropend" title="{{ 'Paie et Avantages'|trans }}">
                     <a class="nav-link dropdown-toggle {% block paie %} {% endblock %}" href="#" id="paie"
-                        data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
+                       data-bs-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
                         <div class="icone">
                             <i class="fa-solid fa-money-bill-wave fa-lg"></i>
                         </div>
@@ -140,7 +143,7 @@
 
                         <li class="dropdown-item" title="{{ 'Fiche de paie'|trans }}">
                             <a class="nav-link {% block bulletin %}{% endblock %}"
-                                href="{{ path('mes_bulletins') }}">
+                               href="{{ path('mes_bulletins') }}">
                                 <i class="fa-solid fa-money-check-dollar"></i>
                                 {{ 'Bulletins de salaire'|trans }}
                             </a>
@@ -148,24 +151,24 @@
 
                         <li class="dropdown-item" title="{{ 'Fiche de paie'|trans }}">
                             <a class="nav-link {% block heure_supplementaire %}{% endblock %}"
-                                href="{{ path('heure_suivi') }}">
+                               href="{{ path('heure_suivi') }}">
                                 <i class="fa-solid fa-money-check-dollar"></i>
                                 {{ 'Heure supplementaire'|trans }}
                             </a>
                         </li>
                         <li class="dropdown-item" title="{{ 'Primes et avantages'|trans }}">
                             <a class="nav-link {% block prime %}{% endblock %}"
-                                href="{{ path('prime_suivi') }}">
+                               href="{{ path('prime_suivi') }}">
                                 <i class="fa-solid fa-money-bill-wheat"></i>
                                 {{ 'Primes et avantages'|trans }}
                             </a>
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item dropright" title="{{ 'Communication'|trans }}">
+                <li class="nav-item dropend" title="{{ 'Communication'|trans }}">
                     <a class="nav-link dropdown-toggle {% block communication %}{% endblock %}" href="#"
                        id="communication"
-                       data-toggle="dropdown"
+                       data-bs-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
                         <div class="icone">
                             <i class="fa-regular fa-message fa-lg"></i>
@@ -197,10 +200,10 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item dropright" title="{{ 'Formations'|trans }}">
+                <li class="nav-item dropend" title="{{ 'Formations'|trans }}">
                     <a class="nav-link dropdown-toggle {% block formations %} {% endblock %}" href="#" id="formations"
-                        data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
+                       data-bs-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
                         <div class="icone">
                             <i class="fa-solid fa-book-open-reader fa-lg"></i>
                         </div>
@@ -212,7 +215,7 @@
 
                         <li class="dropdown-item" title="{{ 'Catalogue des formations'|trans }}">
                             <a class="nav-link {% block catalogue %}{% endblock %}"
-                                href="{{ path('formation_index') }}">
+                               href="{{ path('formation_index') }}">
                                 <i class="fa-solid fa-book"></i>
                                 {{ 'Catalogue des formations'|trans }}
                             </a>
@@ -225,17 +228,17 @@
                         </li>
                         <li class="dropdown-item" title="{{ 'Compétences acquises'|trans }}">
                             <a class="nav-link {% block competences %}{% endblock %}"
-                                href="{{ path('formation_index') }}">
+                               href="{{ path('formation_index') }}">
                                 <i class="fa-solid fa-graduation-cap"></i>
                                 {{ 'Compétences acquises'|trans }}
                             </a>
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item dropright" title="{{ 'Aide'|trans }}">
+                <li class="nav-item dropend" title="{{ 'Aide'|trans }}">
                     <a class="nav-link dropdown-toggle {% block aide %}{% endblock %}" href="#" id="Aide"
-                        data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false">
+                       data-bs-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
                         <div class="icone">
                             <i class="fas fa-question-circle fa-lg"></i>
                         </div>
@@ -252,7 +255,7 @@
                         </li>
                         <li class="dropdown-item" title="{{ 'Suggestions à l’entreprise'|trans }}">
                             <a class="nav-link {% block suggestion %}{% endblock %}"
-                                href="{{ path('feedback_index') }}">
+                               href="{{ path('feedback_index') }}">
                                 <i class="fas fa-comments"></i>
                                 {{ "Suggestions à l'entreprise"|trans }}
                             </a>
@@ -264,7 +267,7 @@
                             </a>
                         </li>
                         <li class="dropdown-item" title="{{ 'A propos de l\'application'|trans }}">
-                            <a href="#" class="nav-link" data-toggle="modal" data-target="#about">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#about">
                                 <i class="fas fa-check-circle"></i>
                                 {{ "A propos de l'application"|trans }}
                             </a>
@@ -276,30 +279,30 @@
 
         <div class="copyright">
             <span>
-                <a href="#" class="text-green" data-toggle="modal" data-target="#about">
-                    <img class="mr-1" src="{{ asset('images/gnt.png') }}" alt="by Euclides" width="45">
+                <a href="#" class="text-green" data-bs-toggle="modal" data-bs-target="#about">
+                    <img class="me-1" src="{{ asset('images/gnt.png') }}" alt="by Euclides" width="45">
                     <span class="version text-green">GNT PHARMA v{{ include('includes/version.html.twig') }} <br> &copy; {{ 'now'|date('Y') }}</span>
                 </a>
             </span>
         </div>
     </nav>
-    {% endblock %}
+{% endblock %}
 
-    {% block topbar %}
+{% block topbar %}
     {{ include('includes/topbar.html.twig') }}
-    {% endblock %}
+{% endblock %}
 
 
-    <div id="main" class="container-fluid main pt-5">
-        {% block body %}
-
-        {% endblock %}
-    </div>
-
-    {{ include('includes/javascript.html.twig') }}
-    {% block scripts %}
+<div id="main" class="container-fluid main pt-5">
+    {% block body %}
 
     {% endblock %}
+</div>
+
+{{ include('includes/javascript.html.twig') }}
+{% block scripts %}
+
+{% endblock %}
 </body>
 
 </html>

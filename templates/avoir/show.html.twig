@@ -6,7 +6,7 @@
 {% block body %}
     <div class="container mt-4 fond-7">
         <h3 class="mt-4 mb-5 text-bold">
-            <i class="fa fa-money-bill mr-2"></i>
+            <i class="fa fa-money-bill me-2"></i>
             {{ "Avoir"|trans }}
         </h3>
         <div class="row justify-content-end">
@@ -59,7 +59,7 @@
             {% else %}
             {% endfor %}
             <tr>
-                <td colspan="5" class="text-right text-bold">
+                <td colspan="5" class="text-end text-bold">
                     {{ 'Total Avoir'|trans }}
                 </td>
                 <td class="text-bold">{{ total|number_format(0, '' , ' ') }}</td>

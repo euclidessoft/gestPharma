@@ -15,7 +15,7 @@
 {% block body %}
     <div class="col-lg-8 mt-4 pb-4 fond-7">
         <h3 class="mt-4 mb-5 text-bold">
-            <i class="fa-brands fa-product-hunt mr-2"></i>
+            <i class="fa-brands fa-product-hunt me-2"></i>
             {{ "Détails Produit"|trans }}
         </h3>
 
@@ -88,12 +88,12 @@
         <div class="col-md-4 offset-md-3 mt-4 py-3 fond-7">
             <div class="centrer">
 
-                <a id="retour" onclick="load('retour')" class="btn btn-success ml-3" href="{{ path('stock_index') }}">
+                <a id="retour" onclick="load('retour')" class="btn btn-success ms-3" href="{{ path('stock_index') }}">
                     <i class="fa fa-undo"></i>
                     {{ 'Retour'|trans }}
                 </a>
 
-                <a id="print" onclick="load('print')" class="btn btn-success ml-3" href="{{ path('stock_produit_show_print', {'id': produit.id}) }}">
+                <a id="print" onclick="load('print')" class="btn btn-success ms-3" href="{{ path('stock_produit_show_print', {'id': produit.id}) }}">
                     <i class="fa fa-print"></i>
                     {{ 'Imprimer'|trans }}
                 </a>

@@ -36,16 +36,7 @@
             $('.back-to-top').fadeOut('slow');
         }
     });
-    /*$('.back-to-top').click(function () {
-        $('html, body').animate({scrollTop: 0}, 150, 'easeInOutExpo');
-        return false;
-    });*/
 
-    // loader
-    /* $('.compteur').counterUp({
-         // delay: 0,
-         sstime: 2000
-     });*/
 
     var url = $(location).attr("href");
     var fr = url.indexOf("/fr/");

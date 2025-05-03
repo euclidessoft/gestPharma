@@ -14,14 +14,14 @@
 {% block body %}
     <div class="container-fluid mt-4 fond-7">
         <h3 class="mt-4 mb-5 text-bold">
-            <i class="fa fa-shop mr-2"></i>
+            <i class="fa fa-shop me-2"></i>
             {{ "Approvisionnement"|trans }}
         </h3>
         <div class="row">
             <div class="col-lg-5 mt-5">
                 {% for message in app.flashes('notice') %}
                     <div class="alert alert-primaire alert-dismissible fade show radius-10 shadow-black">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                        <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">
                             &times;
                         </button>
                         {{ message|trans }}
@@ -53,19 +53,19 @@
                                 <!-- Button trigger modal -->
                                 <button type="button"
                                         class="btn btn-success" {# {% if produit.id in inlist %} disabled {% endif %}" #}
-                                        data-toggle="modal" data-target="#modal{{ produit.id }}"
+                                        data-bs-toggle="modal" data-bs-target="#modal{{ produit.id }}"
                                        id="btn{{ produit.id }}" {# onclick="fournisseur({{ produit.id }})"#}>
                                     <i class="fa fa-plus"></i> {{ 'Ajouter'|trans }}
                                 </button>
                                 <!-- Modal -->
-                                <div class="modal fade" id="modal{{ produit.id }}" tabindex="-1" role="dialog"
+                                <div class="modal fade" id="modal{{ produit.id }}" tabindex="-1" tabindex="-1" aria-labelledby="" aria-hidden="true"
                                      aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog text-center">
+                                    <div class="modal-dialog modal-dialog-centered text-center">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h4 class="modal-title fs-5" id="exampleModalLabel">
                                                     {{ produit.reference }} {{ produit.desigantion }} {{ produit.fabriquant }}</h4>
-                                                <button type="button" class="close" data-dismiss="modal"
+                                                <button type="button" class="close" data-bs-dismiss="modal"
                                                         aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
@@ -106,7 +106,7 @@
 
                                             </div>
                                             <div class="modal-footer px-5 py-4">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                                                         id="annuler{{ produit.id }}">
                                                     {{ 'Annuler'|trans }}
                                                 </button>
@@ -144,8 +144,8 @@
                     <thead class="text-center">
                     <tr>
                         <th>{{ 'Ref'|trans }}</th>
-                        <th class="text-left">{{ 'Fournisseur'|trans }}</th>
-                        <th class="text-left">{{ 'Designation'|trans }}</th>
+                        <th class="text-start">{{ 'Fournisseur'|trans }}</th>
+                        <th class="text-start">{{ 'Designation'|trans }}</th>
                         <th class="text-nowrap">{{'N° Lot'|trans}}</th>
                         <th>{{'Péremption'|trans}}</th>
                         <th>{{ 'Quantite'|trans }}</th>
@@ -157,7 +157,7 @@
                         <tr id="tr{{ produit['id']}}{{ produit['lot'] }}">
                             <td>{{ produit['reference'] }}</td>
                             <td>{{ produit['fournisseur'] }}</td>
-                            <td class="text-left">{{ produit['designation'] }}</td>
+                            <td class="text-start">{{ produit['designation'] }}</td>
                             <td>{{ produit['lot'] }} </td>
                             <td> {{ produit['peremption'] }}</td>
 
@@ -178,13 +178,13 @@
     {#                                    <i class="fa fa-edit"></i>#}
     {#                                </button>#}
 </span>
-                                <button class="btn btn-danger mr-2 mb-2"
+                                <button class="btn btn-danger me-2 mb-2"
                                         title="{{ 'Supprimer cet article'|trans }}" onclick="supprim({{ produit['id'] }}, {{ produit['lot'] }})">
                                     <i class="fa fa-trash"></i>
                                 </button>
 
 {#                                <button type="button" class="btn btn-success mb-2"#}
-{#                                        data-toggle="modal" data-target="#modal{{ produit['id'] }}"#}
+{#                                        data-bs-toggle="modal" data-bs-target="#modal{{ produit['id'] }}"#}
 {#                                        id="btn{{ produit['id'] }}">#}
 {#                                    <i class="fa fa-plus"></i> Lot#}
 {#                                </button>#}
@@ -241,11 +241,11 @@
                                 // "                                   title='Supprimer cet article' onclick='modif(" + produit + "," + quant.val() + ")'>\n" +
                                 // "                                    <i class='fa fa-edit'></i>\n" +
                                 // "                                </button></span>\n" +
-                                "                                <button class='btn btn-danger mr-2 mb-2'\n" +
+                                "                                <button class='btn btn-danger me-2 mb-2'\n" +
                                 "                                   title=\"{{ 'Supprimer cet article'|trans}}\" onclick='supprim(" + produit + ","+ numero.val() +")'>\n" +
                                 "                                    <i class='fa fa-trash'></i>\n" +
                                 "                                </button>\n");
-                               // "<button type='button' class='btn btn-success mb-2' data-toggle='modal' data-target='#modal" + produit + "'  id='btn" + produit + "'> <i class='fa fa-plus'></i> Lot </button></td></tr>"
+                               // "<button type='button' class='btn btn-success mb-2' data-bs-toggle='modal' data-bs-target='#modal" + produit + "'  id='btn" + produit + "'> <i class='fa fa-plus'></i> Lot </button></td></tr>"
 
                             //$('#btn' + produit).addClass('disabled');
                             $('#valider1').removeClass('disabled');

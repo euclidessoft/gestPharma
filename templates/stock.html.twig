@@ -5,7 +5,7 @@
 
     {{ include('includes/head.html.twig') }}
 
-    <title> {% block title %} GNT Pharma {% endblock %} </title>
+    {#<title> {% block title %} GNT Pharma {% endblock %} </title>
 
     {% block stylesheets %}
         <link href="{{ asset('DataTables/datatables.css') }}" rel="stylesheet">
@@ -14,7 +14,7 @@
         <link href="{{ asset('css/accueil.css') }}" rel="stylesheet">
         <link href="{{ asset('css/gntpharma.css') }}" rel="stylesheet">
         <link rel="shortcut icon" href="{{ asset('images/gntpharma.jpeg') }}" type="image/x-icon">
-
+#}
     {% endblock %}
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -51,9 +51,9 @@
                     </a>
                 </li>
 
-                <li class="nav-item dropright" title="{{ 'Produits'|trans }}">
+                <li class="nav-item dropend" title="{{ 'Produits'|trans }}">
                     <a class="nav-link dropdown-toggle {% block produit %} {% endblock %}" href="#" id="produits"
-                       data-toggle="dropdown"
+                       data-bs-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
                         <div class="icone">
                             <i class="fa-brands fa-product-hunt fa-lg"></i>
@@ -89,7 +89,7 @@
                         </li>
                         {# <li class="dropdown-item">
                              <a class="nav-link" href="#">
-                                 <i class="fas fa-user-clock mr-1"></i>
+                                 <i class="fas fa-user-clock me-1"></i>
                                  {{ 'Pré-arrivages'|trans }}
                              </a>
                          </li>#}
@@ -102,9 +102,9 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item dropright" title="{{ 'Promotion'|trans }}">
+                <li class="nav-item dropend" title="{{ 'Promotion'|trans }}">
                     <a class="nav-link dropdown-toggle {% block promotion %}{% endblock %}" href="#" id="promotion"
-                       data-toggle="dropdown"
+                       data-bs-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
                         <div class="icone">
                             <i class="fas fa-tags fa-lg"></i>
@@ -118,7 +118,7 @@
                             <li class="dropdown-item">
                                 <a class="nav-link {% block new_promotion %}{% endblock %}"
                                    href="{{ path('promotion_new') }}">
-                                    <i class="fa fa-plus mr-2"></i>
+                                    <i class="fa fa-plus me-2"></i>
                                     {{ 'Créer une promotion'|trans }}
                                 </a>
                             </li>
@@ -126,22 +126,22 @@
                         <li class="dropdown-item">
                             <a class="nav-link {% block current_promotion %}{% endblock %}"
                                href="{{ path('promotion_courante') }}">
-                                <i class="fas fa-tag mr-2"></i>
+                                <i class="fas fa-tag me-2"></i>
                                 {{ 'Promotions en cours'|trans }}
                             </a>
                         </li>
                         <li class="dropdown-item">
                             <a class="nav-link {% block all_promotion %}{% endblock %}"
                                href="{{ path('promotion_index') }}">
-                                <i class="fas fa-tags mr-2"></i>
+                                <i class="fas fa-tags me-2"></i>
                                 {{ 'Toutes les promotions'|trans }}
                             </a>
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item dropright" title="{{ 'Stock'|trans }}">
+                <li class="nav-item dropend" title="{{ 'Stock'|trans }}">
                     <a class="nav-link dropdown-toggle {% block stock %}{% endblock %}" href="#" id="stock"
-                       data-toggle="dropdown"
+                       data-bs-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
                         <div class="icone">
                             <i class="fas fa-warehouse fa-lg"></i>
@@ -182,9 +182,9 @@
                         </div>
                     </a>
                 </li>
-                <li class="nav-item dropright" title="{{ 'Employés'|trans }}">
+                <li class="nav-item dropend" title="{{ 'Employés'|trans }}">
                     <a class="nav-link dropdown-toggle {% block employe %} {% endblock %}" href="#"
-                       id="administration" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                       id="administration" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div class="icone">
                             <i class="fas fa-users fa-lg"></i>
                         </div>
@@ -193,7 +193,7 @@
                         </div>
                     </a>
                     <ul class=" dropdown-menu" aria-labelledby="administration">
-                        <h6 class="menu-title">Administration</h6>
+                        <li class="menu-title">Administration</li>
                         <li class="dropdown-item" title="{{ 'Contrat'|trans }}">
                             <a class="nav-link {% block contrat %}{% endblock %}"
                                href="{{ path('contrat_index') }}">
@@ -208,7 +208,7 @@
                                 {{ 'Planning des congés'|trans }}
                             </a>
                         </li>
-                        <h6 class="menu-title">Discipline</h6>
+                        <li class="menu-title">Discipline</li>
                         <li class="dropdown-item" title="{{ 'Permissions'|trans }}">
                             <a class="nav-link {% block permissions %}{% endblock %}"
                                href="{{ path('conges_employe_index') }}">
@@ -237,7 +237,7 @@
                                 {{ 'Sanctions'|trans }}
                             </a>
                         </li>
-                        <h6 class="menu-title">Evaluation</h6>
+                        <li class="menu-title">Evaluation</li>
                         <li class="dropdown-item" title="{{ 'Performance'|trans }}">
                             <a class="nav-link {% block performance %}{% endblock %}"
                                href="{{ path('evaluation_index') }}">
@@ -245,7 +245,7 @@
                                 {{ 'Performance'|trans }}
                             </a>
                         </li>
-                        <h6 class="menu-title">Paie</h6>
+                        <li class="menu-title">Paie</li>
                         <li class="dropdown-item" title="{{ 'Fiche de paie'|trans }}">
                             <a class="nav-link {% block bulletin %}{% endblock %}" href="{{ path('mes_bulletins') }}">
                                 <i class="fa-solid fa-money-check-dollar"></i>
@@ -268,9 +268,9 @@
                         </li>
                     </ul>
                 </li>
-                <li class="nav-item dropright" title="{{ 'Communication'|trans }}">
+                <li class="nav-item dropend" title="{{ 'Communication'|trans }}">
                     <a class="nav-link dropdown-toggle {% block communication %}{% endblock %}" href="#"
-                       id="communication" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                       id="communication" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div class="icone">
                             <i class="fa-regular fa-message fa-lg"></i>
                         </div>
@@ -279,7 +279,7 @@
                         </div>
                     </a>
                     <ul class=" dropdown-menu" aria-labelledby="communication">
-                        <h6 class="menu-title">Communication</h6>
+                        <li class="menu-title">Communication</li>
                         <li class="dropdown-item" title="{{ 'Messagerie interne'|trans }}">
                             <a class="nav-link {% block messagerie %}{% endblock %}"
                                href="{{ path('received') }}">
@@ -301,7 +301,7 @@
                                 {{ 'Événements'|trans }}
                             </a>
                         </li>
-                        <h6 class="menu-title">Formations</h6>
+                        <li class="menu-title">Formations</li>
                         <li class="dropdown-item" title="{{ 'Catalogue des formations'|trans }}">
                             <a class="nav-link {% block catalogue %}{% endblock %}"
                                href="{{ path('formation_index') }}">
@@ -365,9 +365,9 @@
                         </div>
                     </a>
                 </li>
-                <li class="nav-item dropright" title="{{ 'Aide'|trans }}">
+                <li class="nav-item dropend" title="{{ 'Aide'|trans }}">
                     <a class="nav-link dropdown-toggle {% block aide %}{% endblock %}" href="#" id="Aide"
-                       data-toggle="dropdown" aria-haspopup="true"
+                       data-bs-toggle="dropdown" aria-haspopup="true"
                        aria-expanded="false">
                         <div class="icone">
                             <i class="fas fa-question-circle fa-lg"></i>
@@ -403,7 +403,7 @@
                             </a>
                         </li>
                         <li class="dropdown-item">
-                            <a href="#" class="nav-link" data-toggle="modal" data-target="#about">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#about">
                                 <i class="fas fa-check-circle"></i>
                                 {{ 'A propos de l\'application'|trans }}
                             </a>
@@ -415,8 +415,8 @@
 
         <div class="copyright">
             <span>
-                <a href="#" class="text-green" data-toggle="modal" data-target="#about">
-                    <img class="mr-1" src="{{ asset('images/gnt.png') }}" alt="by Euclides" width="45">
+                <a href="#" class="text-green" data-bs-toggle="modal" data-bs-target="#about">
+                    <img class="me-1" src="{{ asset('images/gnt.png') }}" alt="by Euclides" width="45">
                     <span class="version text-green">GNT PHARMA v{{ include('includes/version.html.twig') }} <br> &copy; {{ 'now'|date('Y') }}</span>
                 </a>
             </span>

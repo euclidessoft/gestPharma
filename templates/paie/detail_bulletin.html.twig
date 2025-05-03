@@ -47,31 +47,31 @@
         <div class="row my-5">
             <div class="col-7">
                 <div class="row">
-                    <div class="col-4 text-right text-bold">
+                    <div class="col-4 text-end text-bold">
                         {{ "Matricule : "|trans }}
                     </div>
                     <div class="col-8">
                         {{ employe.matricule }}
                     </div>
-                    <div class="col-4 text-right text-bold">
+                    <div class="col-4 text-end text-bold">
                         {{ "Poste : "|trans }}
                     </div>
                     <div class="col-8">
                         {{ employe.poste.nom }}
                     </div>
-                    <div class="col-4 text-right text-bold">
+                    <div class="col-4 text-end text-bold">
                         {{ "Département : "|trans }}
                     </div>
                     <div class="col-8">
                         {{ employe.poste.departement.nom }}
                     </div>
-                    <div class="col-4 text-right text-bold">
+                    <div class="col-4 text-end text-bold">
                         {{ "Date d'embauche : "|trans }}
                     </div>
                     <div class="col-8">
                         {{ employe.hireDate|date('d/m/Y') }}
                     </div>
-                    <div class="col-4 text-right text-bold">
+                    <div class="col-4 text-end text-bold">
                         {{ "Ancienneté : "|trans }}
                     </div>
                     <div class="col-8">
@@ -102,7 +102,7 @@
                 <table class="table table-success-light table-bordered w-100 bulletin">
                     <thead>
                     <tr class="text-center">
-                        <th class="text-left">ELEMENTS DE PAIE</th>
+                        <th class="text-start">ELEMENTS DE PAIE</th>
                         <th>BASE</th>
                         <th>TAUX</th>
                         <th>GAINS</th>
@@ -111,48 +111,48 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr class="text-right">
-                        <td class="text-left">SALAIRES DE BASE</td>
+                    <tr class="text-end">
+                        <td class="text-start">SALAIRES DE BASE</td>
                         <td>{{ employe.poste.salaire|number_format(0, '' , ' ') }}</td>
                         <td></td>
                         <td>{{ employe.poste.salaire|number_format(0, '' , ' ') }}</td>
                         <td></td>
                         <td></td>
                     </tr>
-                    <tr class="text-right">
-                        <td class="text-left">SURSALAIRES</td>
+                    <tr class="text-end">
+                        <td class="text-start">SURSALAIRES</td>
                         <td>{{ employe.sursalaire|number_format(0, '' , ' ') }}</td>
                         <td></td>
                         <td>{{ employe.sursalaire|number_format(0, '' , ' ') }}</td>
                         <td></td>
                         <td></td>
                     </tr>
-                    <tr class="text-bold text-right">
-                        <td class="text-left">TOTAL DES GAINS(Brut)</td>
+                    <tr class="text-bold text-end">
+                        <td class="text-start">TOTAL DES GAINS(Brut)</td>
                         <td></td>
                         <td></td>
                         <td>{{ (employe.sursalaire + employe.poste.salaire)|number_format(0, '' , ' ') }}</td>
                         <td></td>
                         <td></td>
                     </tr>
-                    <tr class="text-right">
-                        <td class="text-left">TOTAL COTISATIONS SOCIALES</td>
+                    <tr class="text-end">
+                        <td class="text-start">TOTAL COTISATIONS SOCIALES</td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td>14 000</td>
                         <td></td>
                     </tr>
-                    <tr class="text-right">
-                        <td class="text-left">TOTAL CHARGES PATRIONALES</td>
+                    <tr class="text-end">
+                        <td class="text-start">TOTAL CHARGES PATRIONALES</td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td>7 000</td>
                     </tr>
-                    <tr class="text-bold text-right">
-                        <td class="text-left">TOTAL DES COTISATIONS ET CONTRIBUTIONS</td>
+                    <tr class="text-bold text-end">
+                        <td class="text-start">TOTAL DES COTISATIONS ET CONTRIBUTIONS</td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -163,7 +163,7 @@
                         <td colspan="3">
                             NET IMPOSABLE
                         </td>
-                        <td class="text-right">{{ (employe.sursalaire + employe.poste.salaire- 14000)|number_format(0, '' , ' ') }}</td>
+                        <td class="text-end">{{ (employe.sursalaire + employe.poste.salaire- 14000)|number_format(0, '' , ' ') }}</td>
                         <td></td>
                         <td></td>
                     </tr>
@@ -174,7 +174,7 @@
                 <table class="table table-success-light table-bordered w-100 bulletin">
                     <thead>
                     <tr class="text-center">
-                        <th colspan="2" class="text-left">Impôt sur le revenu</th>
+                        <th colspan="2" class="text-start">Impôt sur le revenu</th>
                         <th>Base</th>
                         <th>Taux</th>
                         <th>Montant</th>
@@ -182,8 +182,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr class="text-right">
-                        <td colspan="2" class="text-left">Impôt sur le revenu prélevé à la source</td>
+                    <tr class="text-end">
+                        <td colspan="2" class="text-start">Impôt sur le revenu prélevé à la source</td>
                         <td>{{ (employe.sursalaire + employe.poste.salaire- 14000)|number_format(0, '' , ' ') }}</td>
                         <td></td>
                         <td>8 000</td>
@@ -203,10 +203,10 @@
                         <p class="mb-0"> Validé le : {{ paie.date|date('d/m/Y') }}</p>
                     </div>
                     <div class="col-6">
-                        <h3 class="text-dark text-right text-bold">
+                        <h3 class="text-dark text-end text-bold">
                             {{ (employe.sursalaire + employe.poste.salaire- 14000-8000)|number_format(0, '' , ' ') }}
                         </h3>
-                        <p class="text-right mb-0"> Payé le :  {{ paie.datepaye|date('d/m/Y') }}</p>
+                        <p class="text-end mb-0"> Payé le :  {{ paie.datepaye|date('d/m/Y') }}</p>
                     </div>
                 </div>
             </div>

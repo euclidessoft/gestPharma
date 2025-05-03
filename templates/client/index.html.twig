@@ -18,7 +18,7 @@
         </h4>
         {% for message in app.flashes('notice') %}
             <div class="alert alert-success alert-dismissible fade show radius-10 shadow-black mb-5">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">
                     &times;
                 </button>
                 {{ message|trans }}
@@ -52,7 +52,7 @@
                 <td data-label="Email">{{ client.email }}</td>
                 <td data-label="Adresse">{{ client.adresse }}</td>
                 <td data-label="Actions" class="text-center">
-                    <a href="#" class="btn btn-success-light mr-2" title="{{ "Modifier"|trans }}">
+                    <a href="#" class="btn btn-success-light me-2" title="{{ "Modifier"|trans }}">
                         <i class="fa fa-edit"></i>
                     </a>
                 </td>

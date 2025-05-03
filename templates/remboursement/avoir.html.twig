@@ -14,7 +14,7 @@
 {% block body %}
     <div class="container mt-4 fond-7">
         <h3 class="mt-4 mb-5 text-bold">
-            <i class="fa fa-money-bill mr-2"></i>
+            <i class="fa fa-money-bill me-2"></i>
             {{ "Avoir"|trans }}
         </h3>
         <div class="row justify-content-end">
@@ -67,7 +67,7 @@
             {% else %}
             {% endfor %}
             <tr>
-                <td colspan="5" class="text-right text-bold">
+                <td colspan="5" class="text-end text-bold">
                     {{ 'Total Avoir'|trans }}
                 </td>
                 <td class="text-bold">{{ total|number_format(0, '' , ' ') }}</td>
@@ -82,20 +82,20 @@
 
             <button type="button"
                     class="btn btn-success"
-                    data-toggle="modal" data-target="#modal"
+                    data-bs-toggle="modal" data-bs-target="#modal"
                     id="btn">
                 <i class="fa fa-money-bill"></i>
                 {{ 'Rembourser'|trans }}
             </button>
-            <div class="modal fade" id="modal" tabindex="-1" role="dialog"
+            <div class="modal fade" id="modal" tabindex="-1" tabindex="-1" aria-labelledby="" aria-hidden="true"
                  aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog text-center">
+                <div class="modal-dialog modal-dialog-centered text-center">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="exampleModalLabel">
                                 {{ 'Remboursement'|trans }}
                             </h1>
-                            <button type="button" class="close" data-dismiss="modal"
+                            <button type="button" class="close" data-bs-dismiss="modal"
                                     aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -120,7 +120,7 @@
                             {# fin paiement#}
                         </div>
                         <div class="modal-footer px-5 py-4">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                                     id="annuler"><i class="fa fa-undo"></i>
                                 {{ 'Annuler'|trans }}
                             </button>

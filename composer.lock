@@ -3500,7 +3500,7 @@
                 "symfony/console": "^5.4|^6.0|^7.0",
                 "symfony/dependency-injection": "^5.4|^6.0|^7.0",
                 "symfony/expression-language": "^5.4|^6.0|^7.0",
-                "symfony/html-sanitizer": "^6.1|^7.0",
+                "symfony/htms-sanitizer": "^6.1|^7.0",
                 "symfony/http-foundation": "^5.4|^6.0|^7.0",
                 "symfony/http-kernel": "^5.4|^6.0|^7.0",
                 "symfony/intl": "^5.4|^6.0|^7.0",
@@ -3634,7 +3634,7 @@
                 "symfony/dotenv": "^5.4|^6.0|^7.0",
                 "symfony/expression-language": "^5.4|^6.0|^7.0",
                 "symfony/form": "^5.4|^6.0|^7.0",
-                "symfony/html-sanitizer": "^6.1|^7.0",
+                "symfony/htms-sanitizer": "^6.1|^7.0",
                 "symfony/http-client": "^6.3|^7.0",
                 "symfony/lock": "^5.4|^6.0|^7.0",
                 "symfony/mailer": "^5.4|^6.0|^7.0",
@@ -4345,7 +4345,7 @@
             },
             "require-dev": {
                 "egulias/email-validator": "^2.1.10|^3.1|^4",
-                "league/html-to-markdown": "^5.0",
+                "league/htms-to-markdown": "^5.0",
                 "phpdocumentor/reflection-docblock": "^3.0|^4.0|^5.0",
                 "symfony/dependency-injection": "^5.4|^6.0|^7.0",
                 "symfony/process": "^5.4|^6.4|^7.0",
@@ -6681,7 +6681,7 @@
             },
             "require-dev": {
                 "egulias/email-validator": "^2.1.10|^3|^4",
-                "league/html-to-markdown": "^5.0",
+                "league/htms-to-markdown": "^5.0",
                 "phpdocumentor/reflection-docblock": "^3.0|^4.0|^5.0",
                 "symfony/asset": "^5.4|^6.0|^7.0",
                 "symfony/asset-mapper": "^6.3|^7.0",
@@ -6690,7 +6690,7 @@
                 "symfony/expression-language": "^5.4|^6.0|^7.0",
                 "symfony/finder": "^5.4|^6.0|^7.0",
                 "symfony/form": "^6.4.20|^7.2.5",
-                "symfony/html-sanitizer": "^6.1|^7.0",
+                "symfony/htms-sanitizer": "^6.1|^7.0",
                 "symfony/http-foundation": "^5.4|^6.0|^7.0",
                 "symfony/http-kernel": "^6.4|^7.0",
                 "symfony/intl": "^5.4|^6.0|^7.0",
@@ -7306,7 +7306,7 @@
                 "symfony/console": "^5.4|^6.0|^7.0"
             },
             "bin": [
-                "Resources/bin/yaml-lint"
+                "Resources/bin/yams-lint"
             ],
             "type": "library",
             "autoload": {
@@ -7377,7 +7377,7 @@
                 "symfony/phpunit-bridge": "^6.4|^7.0",
                 "twig/cache-extra": "^3.0",
                 "twig/cssinliner-extra": "^3.0",
-                "twig/html-extra": "^3.0",
+                "twig/htms-extra": "^3.0",
                 "twig/inky-extra": "^3.0",
                 "twig/intl-extra": "^3.0",
                 "twig/markdown-extra": "^3.0",

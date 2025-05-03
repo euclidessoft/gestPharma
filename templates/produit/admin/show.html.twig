@@ -12,77 +12,75 @@
 {% block all_produits %}active{% endblock %}
 
 {% block body %}
-<div class="col-lg-6 mt-4 pb-4 fond-7">
-    <h3 class="mt-4 mb-5 text-bold">
-        <i class="fa-brands fa-product-hunt mr-2"></i>
+<div class="col-lg-6 mt-4 p-3 fond-7">
+    <h4 class="mt-4 mb-5 text-bold">
+        <i class="fa-brands fa-product-hunt me-2"></i>
         {{ "Détails Produit"|trans }}
-    </h3>
+    </h4>
     {% for message in app.flashes('notice') %}
     <div class="alert alert-success alert-dismissible fade show radius-10 shadow-black">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+        <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">
             &times;
         </button>
         {{ message|trans }}
     </div>
     {% endfor %}
-    <table class="table table-success-light table-bordered text-center table-hover table-striped w-100">
+    <table class="table table-success-light table-bordered text-center table-hover table-striped">
         <tbody>
-
             <tr>
-                <th>{{ 'Code Produit'|trans }}</th>
-                <td>{{ produit.reference }}</td>
+                <th class="text-end">{{ 'Code Produit'|trans }}</th>
+                <td class="text-start">{{ produit.reference }}</td>
             </tr>
             <tr>
-                <th>{{ 'Desigantion'|trans }}</th>
-                <td>{{ produit.desigantion }}</td>
+                <th class="text-end">{{ 'Desigantion'|trans }}</th>
+                <td class="text-start">{{ produit.desigantion }}</td>
             </tr>
             <tr>
-                <th>{{ 'Prix grossiste hors taxe'|trans }}</th>
-                <td>{{ produit.pght }}</td>
+                <th class="text-end">{{ 'Prix grossiste hors taxe'|trans }}</th>
+                <td class="text-start">{{ produit.pght }}</td>
             </tr>
             <tr>
-                <th>{{ 'Prix Cession'|trans }}</th>
-                <td>{{ produit.prix }}</td>
+                <th class="text-end">{{ 'Prix Cession'|trans }}</th>
+                <td class="text-start">{{ produit.prix }}</td>
             </tr>
             <tr>
-                <th>{{ 'Prix Public'|trans }}</th>
-                <td>{{ produit.prixpublic }}</td>
+                <th class="text-end">{{ 'Prix Public'|trans }}</th>
+                <td class="text-start">{{ produit.prixpublic }}</td>
             </tr>
             <tr>
-                <th>{{ 'Commande minimum'|trans }}</th>
-                <td>{{ produit.mincommande }}</td>
+                <th class="text-end">{{ 'Commande minimum'|trans }}</th>
+                <td class="text-start">{{ produit.mincommande }}</td>
             </tr>
             <tr>
-                <th>{{ 'Fabricant'|trans }}</th>
-                <td>{{ produit.fabriquant }}</td>
+                <th class="text-end">{{ 'Fabricant'|trans }}</th>
+                <td class="text-start">{{ produit.fabriquant }}</td>
             </tr>
             <tr>
-                <th>{{ 'TVA'|trans }}</th>
-                <td>{{ produit.tva ? 'OUI' : 'NON' }}</td>
+                <th class="text-end">{{ 'TVA'|trans }}</th>
+                <td class="text-start">{{ produit.tva ? 'OUI' : 'NON' }}</td>
             </tr>
         </tbody>
     </table>
 
-    <div class="col-md-6 offset-md-3 mt-4 py-3 fond-7">
-        <div class="centrer">
-            <a id="{{ produit.id }}" onclick="load({{ produit.id }})" class="btn btn-success-light text-green mr-3" href="{{ path('produit_index') }}">
+    <div class="col-md-7 offset-md-3 mt-4 p-3 fond-7">
+        <div class="centrer gap-3">
+            <a id="{{ produit.id }}" onclick="load({{ produit.id }})" class="btn btn-success-light text-green" href="{{ path('produit_index') }}">
                 <i class="fa fa-undo"></i>
                 {{ 'Retour'|trans }}
             </a>
-            <a class="btn btn-success mr-3" href="{{ path('produit_edit', {'id': produit.id}) }}">
-                <i class="fa fa-edit"></i> Modifier</a>
+            <a class="btn btn-success" href="{{ path('produit_edit', {'id': produit.id}) }}">
+                <i class="fa fa-edit"></i> Modifier
+            </a>
             {{ include('produit/admin/_delete_form.html.twig') }}
         </div>
     </div>
 
 </div>
-<div class="col-lg-6 mt-4 pb-4 fond-7">
-    <h3 class="mt-4 mb-5 text-bold">
-        <i class="fa-brands fa-product-hunt mr-2"></i>
-        {{ "Liste des fournisseurs ayant ce produit"|trans }}
-    </h3>
-
-
+<div class="col-lg-6 mt-4 mb-5 p-3 fond-7">
+    <h4 class="mt-4 mb-5 text-bold">
+        <i class="fa-brands fa-product-hunt me-2"></i>
+        {{ "Fournisseurs ayant ce produit"|trans }}
+    </h4>
     <table class="table table-success-light table-bordered table-hover table-striped w-100" id="liste">
         <thead>
             <tr>
@@ -91,7 +89,7 @@
                 <th>{{'Email'|trans }}</th>
                 <th>{{'Pays'|trans }}</th>
                 <th>{{'Téléphone'|trans }}</th>
-                <th>{{'actions'|trans }}</th>
+                <th>{{'Actions'|trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -102,7 +100,7 @@
                 <td data-label="Email">{{ fournisseur.email }}</td>
                 <td data-label="Pays">{{ fournisseur.pays }}</td>
                 <td data-label="Téléphone">{{ fournisseur.telephone }}</td>
-                <td data-label="actions" class="text-nowrap">
+                <td data-label="Actions" class="text-center">
                     <a id="{{ fournisseur.id }}" onclick="load({{ fournisseur.id }})" href="{{ path('fournisseur_show', {'id': fournisseur.id}) }}" title="{{'Voir'|trans}}" class="btn btn-success">
                         <i class="fa fa-eye"></i>
                     </a>
@@ -110,7 +108,7 @@
             </tr>
             {% else %}
             <tr>
-                <td colspan="8">no records found</td>
+                <td colspan="6" class="text-center">Aucun fournisseur</td>
             </tr>
             {% endfor %}
         </tbody>

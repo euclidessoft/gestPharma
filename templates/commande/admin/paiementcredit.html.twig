@@ -15,12 +15,12 @@
 
     <div class="container mt-4  mb-5 fond-7">
     <h3 class="mt-4 mb-5 text-bold">
-        <i class="fa fa-shopping-cart mr-2"></i>
+        <i class="fa fa-shopping-cart me-2"></i>
         {{ "Traitement commande à credit"|trans }}
     </h3>
     {% for message in app.flashes('danger') %}
         <div class="alert alert-danger alert-dismissible fade show radius-10 shadow-black">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+            <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">
                 &times;
             </button>
             {{ message|trans }}
@@ -121,7 +121,7 @@
             </tr>
         {% endfor %}
         <tr class="text-bold">
-            <td colspan="7" class="text-right">
+            <td colspan="7" class="text-end">
                 {{ "Total HT"|trans }}
             </td>
             <td>
@@ -130,7 +130,7 @@
         </tr>
         {% if reduction != 0 %}
             <tr>
-                <td colspan="7" class="text-right">
+                <td colspan="7" class="text-end">
                     {{ "Total Réduction"|trans }}
                 </td>
                 <td>
@@ -139,7 +139,7 @@
             </tr>
         {% endif %}
         <tr>
-            <td colspan="7" class="text-right">
+            <td colspan="7" class="text-end">
                 {{ "Total TVA"|trans }}
             </td>
             <td>
@@ -148,7 +148,7 @@
         </tr>
 
         <tr class="text-bold">
-            <td colspan="7" class="text-right">
+            <td colspan="7" class="text-end">
                 {{ "Net à payer"|trans }}
             </td>
             <td>
@@ -164,7 +164,7 @@
                 {% if commande.suivi == 1 %}
 
                 <button type="button" class="btn btn-success"
-                        data-toggle="modal" data-target="#modal"
+                        data-bs-toggle="modal" data-bs-target="#modal"
                         id="btn">
                     <i class="fa fa-money-bill"></i>
                     {{' Règlement'|trans}}
@@ -178,15 +178,15 @@
                 {% endif %}
 
 
-                <div class="modal fade" id="modal" tabindex="-1" role="dialog"
+                <div class="modal fade" id="modal" tabindex="-1" tabindex="-1" aria-labelledby="" aria-hidden="true"
                      aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog text-center">
+                    <div class="modal-dialog modal-dialog-centered text-center">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h1 class="modal-title fs-5" id="exampleModalLabel">
                                     {{'Règlement'|trans}}
                                 </h1>
-                                <button type="button" class="close" data-dismiss="modal"
+                                <button type="button" class="close" data-bs-dismiss="modal"
                                         aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -222,7 +222,7 @@
                                 {# fin paiement#}
                             </div>
                             <div class="modal-footer px-5 py-4">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                                         id="annuler"><i class="fa fa-undo"></i>
                                     {{ 'Annuler'|trans }}
                                 </button>
@@ -245,7 +245,7 @@
     </div>
     <div class="container mt-4 fond-7">
         <h3 class="mt-4 mb-5 text-bold">
-            <i class="fa fa-shopping-cart mr-2"></i>
+            <i class="fa fa-shopping-cart me-2"></i>
             {{ "Historiques des règlements"|trans }}
         </h3>
         <table class="table table-success-light table-bordered table-hover table-striped">
@@ -267,11 +267,11 @@
             {% else %}
             {% endfor %}
 <tr>
-    <td colspan="2" class="text-right text-nowrap">{{'Total règlement'|trans}}</td>
+    <td colspan="2" class="text-end text-nowrap">{{'Total règlement'|trans}}</td>
     <td>{{ commande.versement|number_format(0, '' , ' ') }}</td>
 </tr>
             <tr>
-    <td colspan="2" class="text-right">{{ 'Montant Restant'|trans }}</td>
+    <td colspan="2" class="text-end">{{ 'Montant Restant'|trans }}</td>
     <td>{{ (commande.montant - commande.versement)|number_format(0, '' , ' ') }}</td>
 </tr>
             </tbody>

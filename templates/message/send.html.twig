@@ -36,15 +36,13 @@
 {#                        {{ form_row(form.recipients, {'label': 'Choisir destinataire(s)'}) }}#}
                         
                         <div class="modal fade" id="destinataire" tabindex="-1" aria-labelledby="destinataireLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="destinataireLabel">
                                             {{ "Selectionner le(s) destinataire(s)"|trans }}
                                         </h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         {{ form_row(form.recipients, {'label': 'Choisir destinataire(s)'}) }}
@@ -225,11 +223,11 @@
 
                                     </div>
                                     <div class="modal-footer centrer">
-                                        <button type="submit" class="btn btn-green btn-normal mr-3" id="send" {#onclick="envoie()"#}>
+                                        <button type="submit" class="btn btn-green btn-normal me-3" id="send" {#onclick="envoie()"#}>
                                             <i class="fa-solid fa-paper-plane"></i>
                                             {{ 'Envoyer'|trans }}
                                         </button>
-                                        <button type="button" class="btn btn-success-light" data-dismiss="modal">
+                                        <button type="button" class="btn btn-success-light" data-bs-dismiss="modal">
                                             <i class="fa fa-undo"></i>
                                             {{ 'Annuler'|trans }}
                                         </button>
@@ -240,7 +238,7 @@
                     </div>
                     <div class="col-md-3 offset-md-3 mt-4 pt-3 fond-7 d-table">
                         <div class="centrer">
-                            <button type="button" class="btn btn-green mb-3 mr-3" data-toggle="modal" data-target="#destinataire">
+                            <button type="button" class="btn btn-green mb-3 me-3" data-bs-toggle="modal" data-bs-target="#destinataire">
                                 <i class="fa fa-user"></i>
                                 {{ "Destinataire"|trans }}
                             </button>

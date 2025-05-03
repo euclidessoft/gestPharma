@@ -49,9 +49,8 @@ class DepartementController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($departement);
-                $entityManager->flush();
+                $this->entityManager->persist($departement);
+                $this->entityManager->flush();
 
                 return $this->redirectToRoute('departement_index', [], Response::HTTP_SEE_OTHER);
             }
@@ -103,7 +102,7 @@ class DepartementController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $this->getDoctrine()->getManager()->flush();
+                $this->entityManager->flush();
 
                 return $this->redirectToRoute('departement_index', [], Response::HTTP_SEE_OTHER);
             }
@@ -131,8 +130,7 @@ class DepartementController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_RH')) {
             if ($this->isCsrfTokenValid('delete' . $departement->getId(), $request->request->get('_token'))) {
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->remove($departement);
+                $this->entityManager->remove($departement);
                 $entityManager->flush();
             }
 

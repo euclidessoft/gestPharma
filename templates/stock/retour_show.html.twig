@@ -14,7 +14,7 @@
 {% block body %}
     <div class="container-fluid mt-4 pb-4 fond-7">
         <h3 class="mt-4 mb-5 text-bold">
-            <i class="fa fa-shop mr-2"></i>
+            <i class="fa fa-shop me-2"></i>
             {{ "Retour Stock"|trans }}
         </h3>
         <div class="col-6 fond-7">
@@ -43,7 +43,7 @@
             <div class="col-lg-6 mt-5">
                 {% for message in app.flashes('notice') %}
                     <div class="alert alert-primaire alert-dismissible fade show radius-10 shadow-black">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                        <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">
                             &times;
                         </button>
                         {{ message|trans }}
@@ -80,21 +80,21 @@
                                 <!-- Button trigger modal -->
                                 <button type="button"
                                         class="btn btn-success {% if  commandeproduit.produit.id ~ commandeproduit.lot  in inlist %} disabled {% endif %}"
-                                        data-toggle="modal" data-target="#modal{{ commandeproduit.produit.id }}{{ commandeproduit.lot }}"
+                                        data-bs-toggle="modal" data-bs-target="#modal{{ commandeproduit.produit.id }}{{ commandeproduit.lot }}"
                                         id="btn{{ commandeproduit.produit.id }}{{ commandeproduit.lot }}">
                                     <i class="fa fa-plus"></i> {{ "Ajouter"|trans }}
                                 </button>
 
                                 <!-- Modal -->
                                 <div class="modal fade" id="modal{{ commandeproduit.produit.id }}{{ commandeproduit.lot }}" tabindex="-1"
-                                     role="dialog"
+                                     tabindex="-1" aria-labelledby="" aria-hidden="true"
                                      aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog text-center">
+                                    <div class="modal-dialog modal-dialog-centered text-center">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h4 class="modal-title fs-5" id="exampleModalLabel">
                                                     {{ commandeproduit.produit.reference }} {{ commandeproduit.produit.desigantion }} {{ commandeproduit.produit.fabriquant }}</h4>
-                                                <button type="button" class="close" data-dismiss="modal"
+                                                <button type="button" class="close" data-bs-dismiss="modal"
                                                         aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
@@ -118,7 +118,7 @@
                                             </div>
                                             <div class="modal-footer px-5 py-4">
                                                 <b>Lot n°: {{ commandeproduit.lot }}</b>
-                                                <button type="button" class="btn btn-secondary ml-5" data-dismiss="modal"
+                                                <button type="button" class="btn btn-secondary ms-5" data-bs-dismiss="modal"
                                                         id="annuler{{ commandeproduit.produit.id }}{{ commandeproduit.lot }}">Annuler
                                                 </button>
 
@@ -148,7 +148,7 @@
                 <table class="table table-success-light table-bordered table-hover table-striped w-100">
                     <thead class="text-center">
                     <tr>
-                        <th class="text-left">{{ 'Désignation'|trans }}</th>
+                        <th class="text-start">{{ 'Désignation'|trans }}</th>
                         <th>{{'N° Lot'|trans}}</th>
                         <th>{{'Péremption'|trans}}</th>
                         <th>{{'Qté retournée'|trans}}</th>
@@ -158,7 +158,7 @@
                     <tbody id="selectprod" class="text-center">
 {#                    {% for produit in retour %}#}
 {#                        <tr id="tr{{ produit['id'] }}{{ produit['lot'] }}">#}
-{#                            <td class="text-left">{{ produit['designation'] }}</td>#}
+{#                            <td class="text-start">{{ produit['designation'] }}</td>#}
 {#                            <td>{{ produit['lot'] }}</td>#}
 
 {#                            <td>#}
@@ -169,13 +169,13 @@
 {#                            <td rowspan="2">#}
 
 
-{#                                <button class="btn btn-danger mr-2 mb-2"#}
+{#                                <button class="btn btn-danger me-2 mb-2"#}
 {#                                        title="Supprimer cet article" onclick="retour_supprim({{ produit['id'] }},{{ produit['lot'] }})">#}
 {#                                    <i class="fa fa-trash"></i>#}
 {#                                </button>#}
 
 {#                                #}{#                                <button type="button" class="btn btn-success mb-2"#}
-{#                                #}{#                                        data-toggle="modal" data-target="#modal{{ produit['id'] }}"#}
+{#                                #}{#                                        data-bs-toggle="modal" data-bs-target="#modal{{ produit['id'] }}"#}
 {#                                #}{#                                        id="btn{{ produit['id'] }}">#}
 {#                                #}{#                                    <i class="fa fa-plus"></i> Lot#}
 {#                                #}{#                                </button>#}
@@ -225,7 +225,7 @@
                                     "                        <td>" + data['lot'] + "</td>\n" +
                                     "                        <td>" + peremption + "</td>\n" +
                                     "                        <td class='text-center'><span id='changequantite" + produit + "'>" + data['quantite'] + "</span></td>" +
-                                    "<td rowspan='2'><button class='btn btn-danger mr-2 mb-2'\n" +
+                                    "<td rowspan='2'><button class='btn btn-danger me-2 mb-2'\n" +
                                     "                                   title='Supprimer cet article' onclick='retour_supprim(" + produit +  lot + ")'>\n" +
                                     "                                    <i class='fa fa-trash'></i>\n" +
                                     "                                </button></td></tr>" +

@@ -6,7 +6,7 @@
 {% block body %}
     <div class="container mt-4 fond-7">
         <h3 class="mt-4 mb-5 text-bold">
-            <i class="fa fa-shopping-cart mr-2"></i>
+            <i class="fa fa-shopping-cart me-2"></i>
             {{ "Détails commande"|trans }}
         </h3>
 
@@ -236,7 +236,7 @@
                 </tr>
             {% endfor %}
             <tr>
-                <td colspan="7" class="text-right">
+                <td colspan="7" class="text-end">
                     {{ "Total HT"|trans }}
                 </td>
                 <td>
@@ -245,7 +245,7 @@
             </tr>
             {% if reduction != 0 %}
                 <tr>
-                    <td colspan="7" class="text-right">
+                    <td colspan="7" class="text-end">
                         {{ "Total Réduction"|trans }}
                     </td>
                     <td>
@@ -254,7 +254,7 @@
                 </tr>
             {% endif %}
             <tr>
-                <td colspan="7" class="text-right">
+                <td colspan="7" class="text-end">
                     {{ "Total TVA"|trans }}
                 </td>
                 <td>
@@ -263,7 +263,7 @@
             </tr>
 
             <tr>
-                <td colspan="7" class="text-right">
+                <td colspan="7" class="text-end">
                     {{ "Net à payer"|trans }}
                 </td>
                 <td>

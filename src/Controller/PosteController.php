@@ -52,9 +52,9 @@ class PosteController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($poste);
-                $entityManager->flush();
+                //$entityManager = $this->getDoctrine()->getManager();
+                $this->entityManager->persist($poste);
+                $this->entityManager->flush();
 
                 return $this->redirectToRoute('poste_index', [], Response::HTTP_SEE_OTHER);
             }

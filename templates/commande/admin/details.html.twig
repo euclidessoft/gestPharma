@@ -14,7 +14,7 @@
 {% block body %}
     <div class="container mt-4 fond-7">
         <h3 class="mt-4 mb-5 text-bold">
-            <i class="fa fa-money-bill mr-2"></i>
+            <i class="fa fa-money-bill me-2"></i>
             {{ "Détails commande"|trans }}
         </h3>
 
@@ -133,7 +133,7 @@
                 </tr>
             {% endfor %}
             <tr>
-                <td colspan="7" class="text-right text-bold">
+                <td colspan="7" class="text-end text-bold">
                     {{ "Total HT"|trans }}
                 </td>
                 <td class=" text-bold">
@@ -142,7 +142,7 @@
             </tr>
             {% if reduction != 0 %}
                 <tr>
-                    <td colspan="7" class="text-right">
+                    <td colspan="7" class="text-end">
                         {{ "Total Réduction"|trans }}
                     </td>
                     <td>
@@ -151,7 +151,7 @@
                 </tr>
             {% endif %}
             <tr>
-                <td colspan="7" class="text-right">
+                <td colspan="7" class="text-end">
                     {{ "Total TVA"|trans }}
                 </td>
                 <td>
@@ -160,7 +160,7 @@
             </tr>
 
             <tr>
-                <td colspan="7" class="text-right text-bold">
+                <td colspan="7" class="text-end text-bold">
                     {{ "Net à payer"|trans }}
                 </td>
                 <td class="text-bold">
@@ -169,7 +169,7 @@
             </tr>
             {#        /***Conversion prix en lettre **/#}
             <tr>
-                <td colspan="10" class="text-right">
+                <td colspan="10" class="text-end">
                     <span id="total" class="text-bold"></span>
                     {{'Arrêtée la présente à la somme de '|trans}} <b id="conversion"></b> <b>francs CFA TTC</b>
                 </td>
@@ -182,7 +182,7 @@
     {% if commande.versements|length != 0 %}
         <div class="container mt-4 fond-7">
             <h3 class="mt-4 mb-5 text-bold">
-                <i class="fa fa-shopping-cart mr-2"></i>
+                <i class="fa fa-shopping-cart me-2"></i>
                 {{ "Historiques des versements"|trans }}
             </h3>
             <table class="table table-success-light table-bordered table-hover table-striped">
@@ -204,11 +204,11 @@
                 {% else %}
                 {% endfor %}
                 <tr>
-                    <td colspan="2" class="text-right text-nowrap">{{ 'Total versement'|trans }}</td>
+                    <td colspan="2" class="text-end text-nowrap">{{ 'Total versement'|trans }}</td>
                     <td>{{ commande.versement|number_format(0, '' , ' ') }}</td>
                 </tr>
                 <tr>
-                    <td colspan="2" class="text-right">{{ 'Montant Restant'|trans }}</td>
+                    <td colspan="2" class="text-end">{{ 'Montant Restant'|trans }}</td>
                     <td>{{ (commande.montant - commande.versement)|number_format(0, '' , ' ') }}</td>
                 </tr>
                 </tbody>

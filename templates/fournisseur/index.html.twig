@@ -44,11 +44,11 @@
                     <td data-label="Actions" class="text-nowrap">
                         <a id="{{ fournisseur.id }}" onclick="load({{ fournisseur.id }})"
                            href="{{ path('fournisseur_show', {'id': fournisseur.id}) }}" title="{{ 'Voir details'|trans }}"
-                           class="btn btn-green mr-2">
+                           class="btn btn-green me-2">
                             <i class="fa fa-eye"></i>
                         </a>
                         <a href="{{ path('fournisseur_edit', {'id': fournisseur.id}) }}" title="{{ 'Modifier'|trans }}"
-                           class="btn btn-success-light mr-2">
+                           class="btn btn-success-light me-2">
                             <i class="fa fa-edit"></i>
                         </a>
                         {{ include('fournisseur/_delete_form.html.twig') }}

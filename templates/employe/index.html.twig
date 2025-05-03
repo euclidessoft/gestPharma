@@ -11,14 +11,14 @@
 {% block employe %}active{% endblock %}
 {% block all_employe %}active{% endblock %}
 {% block body %}
-    <div class="container-fluid mt-4 fond-7">
+    <div class="container-fluid mt-4 fond-7 mb-5">
         <h3 class="mt-4 mb-5 text-bold">
-            <i class="fa fa-users mr-2"></i>
+            <i class="fa fa-users me-2"></i>
             {{ "Tous les employes"|trans }}
         </h3>
         {% for message in app.flashes('notice') %}
             <div class="alert alert-success alert-dismissible fade show radius-10 shadow-black mb-5">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">
                     &times;
                 </button>
                 {{ message|trans }}
@@ -42,7 +42,7 @@
                 <th>{{ 'Adresse'|trans }}</th>
                 <th>{{ 'Poste'|trans }}</th>
                 <th>{{ 'Département'|trans }}</th>
-                <th class="text-center">{{ 'Action'|trans }}</th>
+                <th class="text-center noExport">{{ 'Action'|trans }}</th>
             </tr>
             </thead>
             <tbody>
@@ -76,8 +76,8 @@
                 <td data-label="{{ 'Département'|trans }}">
                     {{ employe.poste ? employe.poste.departement.nom: '' }}
                 </td>
-                <td data-label="{{ 'Action'|trans }}" class="text-center">
-                    <a href="{{ path('employe_show', {'id': employe.id}) }}" class="btn btn-green mb-1 mr-2"
+                <td data-label="{{ 'Action'|trans }}" class="text-center noExport">
+                    <a href="{{ path('employe_show', {'id': employe.id}) }}" class="btn btn-green mb-1 me-2"
                        title="{{ "Voir"|trans }}">
                         <i class="fa fa-eye"></i>
                     </a>
@@ -93,5 +93,43 @@
             {% endfor %}
             </tbody>
         </table>
+
+    </div>
+    <div class="container-fluid mt-4 fond-7 mb-5 p-3">
+        <div class="centrer gap-3">
+            <button id="exportExcel" class="btn btn-green">
+                <i class="fa fa-file-excel"></i> Exporter Excel
+            </button>
+            <button id="exportPdf" class="btn btn-danger">
+                <i class="fa fa-file-pdf"></i> Exporter PDF
+            </button>
+            <a href="#" class="btn btn-success-light me-2">
+                <i class="fa fa-print"></i> Imprimer
+            </a>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Launch demo modal
+            </button>
+
+
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered">
+            <div class="modal-content">
+{#                <div class="modal-header">#}
+{#                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>#}
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+{#                </div>#}
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

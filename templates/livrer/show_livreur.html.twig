@@ -14,12 +14,12 @@
 {% block body %}
     <div class="container mt-4 fond-7 mb-5">
         <h3 class="mt-4 mb-5 text-bold">
-            <i class="fa fa-shopping-cart mr-2"></i>
+            <i class="fa fa-shopping-cart me-2"></i>
             {{ "Commande déjà Livrée"|trans }}
         </h3>
         {% for message in app.flashes('echec') %}
             <div class="alert alert-danger alert-dismissible fade show radius-10 shadow-black">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">
                     &times;
                 </button>
                 {{ message|trans }}
@@ -153,14 +153,14 @@
         </table>
         <div class="col-md-3 offset-md-4 mt-5 mb-5 p-3 fond-7">
             <div class="centrer">
-                <a id="valider" onclick="load('valider')" href="" class="btn btn-success float-end" data-toggle="modal" data-target="#livreurshow">
+                <a id="valider" onclick="load('valider')" href="" class="btn btn-success float-end" data-bs-toggle="modal" data-bs-target="#livreurshow">
                     <i class="fa fa-check"></i>
                     {{ "Valider"|trans }}
                 </a>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="livreurshow" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="livreurshow" tabindex="-1" tabindex="-1" aria-labelledby="" aria-hidden="true" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content text-center">
@@ -169,7 +169,7 @@
                         <i class="fa-solid fa-signature"></i>
                         {{ 'Signature client'|trans }}
                     </h4>
-                    <button type="button" class="close" data-dismiss="modal"
+                    <button type="button" class="close" data-bs-dismiss="modal"
                             aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -182,7 +182,7 @@
                 </div>
                 <div id="source"></div>
                 <div class="modal-footer centrer">
-                    <button id="clear" class="btn btn-success-light mr-3">
+                    <button id="clear" class="btn btn-success-light me-3">
                         {{ 'Recommencer'|trans }}
                     </button>
                     <button type="button" class="btn btn-success" onclick="image({{ livrer.id }})" id="valider">
