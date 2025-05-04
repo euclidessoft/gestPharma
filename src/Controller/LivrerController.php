@@ -1186,7 +1186,7 @@ class LivrerController extends AbstractController
     public function delete(Request $request, Livrer $livrer): Response
     {
         if ($this->isCsrfTokenValid('delete' . $livrer->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $entityManager->remove($livrer);
             $entityManager->flush();
         }

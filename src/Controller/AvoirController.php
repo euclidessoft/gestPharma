@@ -171,7 +171,7 @@ class AvoirController extends AbstractController
     {// traitement livraison
         if ($this->security->isGranted('ROLE_FINANCE')) {
             $commande = $reclamation->getCommande();
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->entityManager;
             $avoir = new Avoir($commande->getUser(),$this->getUser(), $commande);
             $avoir->setReclamation($reclamation);
             $form = $this->createForm(AvoirType::class, $avoir);
@@ -235,7 +235,7 @@ class AvoirController extends AbstractController
         // On récupère le panier actuel
 
         if ($request->isXmlHttpRequest()) {// traitement de la requete ajax
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->entityManager;
             $produits = explode(";", $request->get('prod'));// recuperation des produit
             $com = $request->get('commande');// recuperation de la commamde
             $commande = $em->getRepository(Commande::class)->find($com);
@@ -382,7 +382,7 @@ class AvoirController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('avoir_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -397,7 +397,7 @@ class AvoirController extends AbstractController
     public function delete(Request $request, Avoir $avoir): Response
     {
         if ($this->isCsrfTokenValid('delete' . $avoir->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $entityManager->remove($avoir);
             $entityManager->flush();
         }

@@ -35,7 +35,7 @@ class DocumentController extends AbstractController
     #[Route("/Suivi", name :"document_suivi", methods : ["GET"]) ]
     public function suivi(Security $security,EmployeRepository $employeRepository): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager = $this->entityManager;
         $employe = $security->getUser();
         $employeDocument = $employeRepository->findByEmployeWithForUser($employe);
         return $this->render('document/index.html.twig', [
@@ -56,7 +56,7 @@ class DocumentController extends AbstractController
             $fileName = $form->get('fileName')->getData();
             $files = $form->get('filePath')->getData();
             if ($files) {
-                $entityManager = $this->getDoctrine()->getManager();
+//                $entityManager = $this->getDoctrine()->getManager();
                 foreach ($files as $file) {
                     $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
                     $newFilename = uniqid() . '.' . $file->guessExtension();
@@ -76,11 +76,11 @@ class DocumentController extends AbstractController
                     $document->setCreatedAt(new \DateTime());
                     $document->setFileName($fileName);
 
-                    $entityManager->persist($document);
+                    $this->entityManager->persist($document);
                 }
             }
 
-            $entityManager->flush();
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('document_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -117,7 +117,7 @@ class DocumentController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('document_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -132,9 +132,9 @@ class DocumentController extends AbstractController
     public function delete(Request $request, Document $document): Response
     {
         if ($this->isCsrfTokenValid('delete' . $document->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($document);
-            $entityManager->flush();
+//            $this->entityManager = $this->getDoctrine()->getManager();
+            $this->entityManager->remove($document);
+            $this->entityManager->flush();
         }
 
         return $this->redirectToRoute('document_index', [], Response::HTTP_SEE_OTHER);

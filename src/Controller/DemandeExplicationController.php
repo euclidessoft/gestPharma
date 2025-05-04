@@ -55,7 +55,7 @@ class DemandeExplicationController extends AbstractController
 
             $employes = $this->getDoctrine()->getRepository(Employe::class)->findAll();
             if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
                 $demande->setDate(new \DateTime());
                 $demande->setResponsable($security->getUser());
                 $selectEmployes = $request->get('demande')['employes'];
@@ -185,7 +185,7 @@ class DemandeExplicationController extends AbstractController
     public function suivi(Security $security, DemandeExplicationRepository $demandeExplicationRepository): Response
     {
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $employe = $security->getUser();
             $demandes = $demandeExplicationRepository->findByEmploye($employe);
 
@@ -233,7 +233,7 @@ class DemandeExplicationController extends AbstractController
             $form = $this->createForm(ReponseExplicationType::class);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
                 $reponse->setReponse($form->get('reponse')->getData());
                 $reponse->setObjet($demandeExplication->getObjet());
                 $reponse->setDateReponse(new \DateTime());

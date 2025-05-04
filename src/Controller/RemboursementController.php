@@ -70,7 +70,7 @@ class RemboursementController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
 
             $remboursement->setCompte($remboursement->getFinancement()->getCompte());
 
@@ -153,7 +153,7 @@ class RemboursementController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
 
             $remboursement->setCompte($remboursement->getFinancement()->getCompte());
 
@@ -241,7 +241,7 @@ class RemboursementController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $remboursement->setCompte($avoir->getClient()->getCompte());
             $remboursement->setMontant($avoir->getMontant());
             $remboursement->setLibele('Remboursement avoir');
@@ -345,7 +345,7 @@ class RemboursementController extends AbstractController
     public function delete(Request $request, Remboursement $remboursement): Response
     {
         if ($this->isCsrfTokenValid('delete'.$remboursement->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $entityManager->remove($remboursement);
             $entityManager->flush();
         }

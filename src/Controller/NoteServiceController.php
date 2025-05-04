@@ -36,7 +36,7 @@ class NoteServiceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $responsable = $security->getUser();
             $noteService->setResponsable($responsable);
             //Recuperation de tous les employé
@@ -102,7 +102,7 @@ class NoteServiceController extends AbstractController
     public function delete(Request $request, NoteService $noteService): Response
     {
         if ($this->isCsrfTokenValid('delete' . $noteService->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $entityManager->remove($noteService);
             $entityManager->flush();
         }

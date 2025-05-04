@@ -49,7 +49,7 @@ class CritereEvaluationController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
                 $entityManager->persist($critereEvaluation);
                 $entityManager->flush();
 
@@ -131,7 +131,7 @@ class CritereEvaluationController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_RH')) {
             if ($this->isCsrfTokenValid('delete' . $critereEvaluation->getId(), $request->request->get('_token'))) {
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
                 $entityManager->remove($critereEvaluation);
                 $entityManager->flush();
             }

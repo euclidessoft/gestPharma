@@ -1624,7 +1624,7 @@ class FinanceController extends AbstractController
             $ecriture = new Ecriture();
             $ecriturecharge = new Ecriture();
             $ecritureimpot = new Ecriture();
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $paie = $paieRepository->find($request->get('paie'));
             $banque = $entityManager->getRepository(Banque::class)->find($request->get('banque'));
             $montant = 0;
@@ -1734,7 +1734,7 @@ class FinanceController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
 
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $montant = $request->get('montant');
             $banque = $entityManager->getRepository(Banque::class)->find($request->get('banque'));
 

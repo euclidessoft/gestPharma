@@ -76,7 +76,7 @@ class AchatController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $achat->setUser($this->getUser());
             $montant = 0;
             if($achat->getType() == 'Espece'){
@@ -208,7 +208,7 @@ class AchatController extends AbstractController
     public function delete(Request $request, Achat $achat): Response
     {
         if ($this->isCsrfTokenValid('delete'.$achat->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $entityManager->remove($achat);
             $entityManager->flush();
         }

@@ -44,7 +44,7 @@ class ContratController extends AbstractController
     public function suivi(Security $security): Response
     {
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $employe = $security->getUser();
             $contrat = $entityManager->getRepository(Contrat::class)->findBy(['employe' => $employe]);
             return $this->render('contrat/index.html.twig', [
@@ -79,7 +79,7 @@ class ContratController extends AbstractController
             }
             
             if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
 
                 $contrat->setCreatedAt(new \DateTime());
                 $employe = $contrat->getEmploye();
@@ -192,7 +192,7 @@ class ContratController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_RH')) {
             if ($this->isCsrfTokenValid('delete' . $contrat->getId(), $request->request->get('_token'))) {
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
                 $entityManager->remove($contrat);
                 $entityManager->flush();
             }

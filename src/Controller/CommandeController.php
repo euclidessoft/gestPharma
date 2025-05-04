@@ -159,7 +159,7 @@ class CommandeController extends AbstractController
 
             $panier = $session->get("panier", []);
             $dataPanier = [];
-            $em = $this->getDoctrine()->getManager();
+//            $em = $this->getDoctrine()->getManager();
             $commande = new Commande();
 
             if (count($panier) >= 1) {
@@ -193,14 +193,14 @@ class CommandeController extends AbstractController
 
                         $commandeproduit->setPromotion($produit->getPromotion());
                     }
-                    $em->persist($commandeproduit);
+                    $this->entityManager->persist($commandeproduit);
                 }
                 $montant = $montant + $tva - $reduction;
                 $commande->setMontant(ceil($montant));
                 $commande->setTva($tva);
                 $commande->setReduction($reduction);
-                $em->persist($commande);
-                $em->flush();
+                $this->entityManager->persist($commande);
+                $this->entityManager->flush();
                 $session->remove("panier");
                 $response = $this->redirectToRoute('commande_panier_imprimer', [
                     'commande' => $commande->getId(),
@@ -945,7 +945,7 @@ class CommandeController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
 
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
                 if (($paiement->getMontant() == $commande->getMontant()) || $commande->getCredit()) {
                     $paiement->setUser($this->getUser());
                     $paiement->setCommande($commande);
@@ -1063,7 +1063,7 @@ class CommandeController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
 
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
                 if ($versement->getMontant() <= ($commande->getMontant() - $commande->getVersement())) {
                     $commande->setVersement($commande->getVersement() + $versement->getMontant());// MAJ versement
                     if ($commande->getVersement() == $commande->getMontant()) {

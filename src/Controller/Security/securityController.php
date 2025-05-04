@@ -346,7 +346,7 @@ class securityController extends AbstractController
     }
 
     #[Route("/forgottenPassword", name :"security_forgotten_password") ]
-    public function forgotten(Request $request, TokenGeneratorInterface $tokenGenerator, \Swift_Mailer $mail)
+    public function forgotten(Request $request, TokenGeneratorInterface $tokenGenerator)
     {
         if ($request->isMethod('POST')) {
 
@@ -364,14 +364,14 @@ class securityController extends AbstractController
             $this->entityManager->flush();
             $url = $this->generateUrl('security_reset_password', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
 
-            $message = (new \Swift_Message('Réinitialisation mot de passe'))
-                ->setFrom('support@gntpharma-cameroun.com')
-                ->setTo($user->getEmail())
-                ->setBody($this->renderView('security/security/mail/forget.html.twig', ['url' => $url]), 'text/html');
-            //                ->setBody("Cliquez sur le lien suivant pour réinitialiser votre mot de passe " . $url, 'text/html');
-
-            $mail->send($message);
-            $this->addFlash('change', 'Un message a été envoyé à votre adresse email, veuillez consulter votre boite de réception');
+//            $message = (new \Swift_Message('Réinitialisation mot de passe'))
+//                ->setFrom('support@gntpharma-cameroun.com')
+//                ->setTo($user->getEmail())
+//                ->setBody($this->renderView('security/security/mail/forget.html.twig', ['url' => $url]), 'text/html');
+//            //                ->setBody("Cliquez sur le lien suivant pour réinitialiser votre mot de passe " . $url, 'text/html');
+//
+//            $mail->send($message);
+//            $this->addFlash('change', 'Un message a été envoyé à votre adresse email, veuillez consulter votre boite de réception');
         }
 
 

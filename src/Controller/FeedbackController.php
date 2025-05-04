@@ -50,13 +50,13 @@ class FeedbackController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
+//                $entityManager = $this->getDoctrine()->getManager();
                 $employe = $security->getUser();
                 $feedback->setCreatedAt(new \DateTime());
                 $feedback->setEmploye($employe);
 
-                $entityManager->persist($feedback);
-                $entityManager->flush();
+                $this->entityManager->persist($feedback);
+                $this->entityManager->flush();
 
                 return $this->redirectToRoute('feedback_index', [], Response::HTTP_SEE_OTHER);
             }
@@ -85,7 +85,7 @@ class FeedbackController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
             $employe = $security->getUser();
-            $feedback = $this->getDoctrine()->getRepository(Feedback::class)->findBy(['employe' => $employe]);
+            $feedback = $this->entityManager->getRepository(Feedback::class)->findBy(['employe' => $employe]);
 
             return $this->render("feedback/index.html.twig", [
                 'feedback' => $feedback,
@@ -155,7 +155,7 @@ class FeedbackController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $this->getDoctrine()->getManager()->flush();
+                $this->entityManager->flush();
 
                 return $this->redirectToRoute('feedback_index', [], Response::HTTP_SEE_OTHER);
             }
@@ -183,9 +183,9 @@ class FeedbackController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
             if ($this->isCsrfTokenValid('delete' . $feedback->getId(), $request->request->get('_token'))) {
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->remove($feedback);
-                $entityManager->flush();
+//                $entityManager = $this->getDoctrine()->getManager();
+                $this->entityManager->remove($feedback);
+                $this->entityManager->flush();
             }
 
             return $this->redirectToRoute('feedback_index', [], Response::HTTP_SEE_OTHER);

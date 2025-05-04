@@ -35,7 +35,7 @@ class TypeContratController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $entityManager->persist($typeContrat);
             $entityManager->flush();
 
@@ -78,7 +78,7 @@ class TypeContratController extends AbstractController
     public function delete(Request $request, TypeContrat $typeContrat): Response
     {
         if ($this->isCsrfTokenValid('delete'.$typeContrat->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $entityManager->remove($typeContrat);
             $entityManager->flush();
         }

@@ -39,7 +39,7 @@ class ReponseController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
                 $entityManager->persist($reponse);
                 $entityManager->flush();
 
@@ -69,7 +69,7 @@ class ReponseController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
                 $entityManager->persist($reponse);
                 $entityManager->flush();
 
@@ -126,7 +126,7 @@ class ReponseController extends AbstractController
     public function delete(Request $request, Reponse $reponse): Response
     {
         if ($this->isCsrfTokenValid('delete'.$reponse->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $entityManager->remove($reponse);
             $entityManager->flush();
         }

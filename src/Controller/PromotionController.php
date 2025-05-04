@@ -454,7 +454,7 @@ class PromotionController extends AbstractController
     public function cancel(Request $request, Promotion $promotion): Response
     {
         if ($this->isCsrfTokenValid('delete' . $promotion->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $promotionproduits = $entityManager->getRepository(PromotionProduit::class)->findBy(['promotion' => $promotion]);
             foreach ($promotionproduits as $promotionproduit) {
                 $entityManager->remove($promotionproduit);

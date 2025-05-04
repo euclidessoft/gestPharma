@@ -52,7 +52,7 @@ class ClientController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
 
                 $hashpass = $encoder->encodePassword($client, "Passer2023");
 

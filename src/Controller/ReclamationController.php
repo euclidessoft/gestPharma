@@ -138,7 +138,7 @@ class ReclamationController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
                 $entityManager->persist($reclamation);
                 $entityManager->flush();
 
@@ -286,7 +286,7 @@ class ReclamationController extends AbstractController
     public function delete(Request $request, Reclamation $reclamation): Response
     {
         if ($this->isCsrfTokenValid('delete' . $reclamation->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $entityManager->remove($reclamation);
             $entityManager->flush();
         }

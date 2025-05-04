@@ -29,11 +29,9 @@ class PrimeRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('p')
             ->where('p.employe = :id')
             ->andWhere('p.createdAt BETWEEN :start AND :end')
-            ->setParameters([
-                'id' => $id,
-                'start' => $startOfMonth,
-                'end' => $endOfDate,
-            ])
+            ->setParameter('id' , $id)
+            ->setParameter('start' , $startOfMonth)
+            ->setParameter('end' , $endOfDate)
             ->getQuery()
             ->getResult();
     }

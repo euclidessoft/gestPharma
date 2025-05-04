@@ -69,7 +69,7 @@ class CalendrierController extends AbstractController
             $form = $this->createForm(CalendrierType::class, $calendrier);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
                 $entityManager->persist($calendrier);
                 $entityManager->flush();
 
@@ -151,7 +151,7 @@ class CalendrierController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_RH')) {
             if ($this->isCsrfTokenValid('delete' . $calendrier->getId(), $request->request->get('_token'))) {
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
                 $entityManager->remove($calendrier);
                 $entityManager->flush();
             }
