@@ -232,10 +232,7 @@
                         {% set totalretenue = ponction * nombreJours %}
                     {% endif %}
                     <tr class="text-bold text-end">
-                        <td class="text-start">SALAIRE BRUT</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="text-start" colspan="4">SALAIRE BRUT</td>
                         <td>
                             {% set  brut = employe.poste.salaire + prenciennete + totalprime + totalheuresup + totalPrimePerf - totalretenue %}
                             {% set  brutinter = brut - totalprime %}
@@ -245,10 +242,7 @@
                         <td></td>
                     </tr>
                     <tr class="text-bold text-end">
-                        <td class="text-start">Logement</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="text-start" colspan="4">Logement</td>
                         <td>
                                                      
                             {% set logement = brutinter * 0.15 %}
@@ -258,10 +252,7 @@
                         <td></td>
                     </tr>
                     <tr class="text-bold text-end">
-                        <td class="text-start">Vehicule</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="text-start"  colspan="4">Vehicule</td>
                         <td>
                             {% set vehicule = brutinter * 0.1 %}
                             {{ vehicule|number_format(0, '' , ' ') }}
@@ -270,10 +261,7 @@
                         <td></td>
                     </tr>
                     <tr class="text-bold text-end">
-                        <td class="text-start">SALAIRE Brut Taxable inter</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="text-start"  colspan="4">SALAIRE Brut Taxable inter</td>
                         <td>
                            
                             {{ brutinter|number_format(0, '' , ' ') }}
@@ -282,10 +270,7 @@
                         <td></td>
                     </tr>
                     <tr class="text-bold text-end">
-                        <td class="text-start">SALAIRE Brut Taxable</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="text-start"  colspan="4">SALAIRE Brut Taxable</td>
                         <td>
                             {% set  bruttaxe = brutinter + transport + logement %} 
                             {{ bruttaxe|number_format(0, '' , ' ') }}
@@ -294,10 +279,7 @@
                         <td></td>
                     </tr>
                     <tr class="text-bold text-end">
-                        <td class="text-start">Salaire Cotisable Inter</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="text-start"  colspan="4">Salaire Cotisable Inter</td>
                         <td>
                            à deter.
                         </td>
