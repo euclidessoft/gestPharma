@@ -61,7 +61,7 @@ class AbsenceController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->entityManager();
+                $entityManager = $this->entityManager;
                 $employe = $absence->getEmploye();
 
                 // Définir la date du jour pour la date de début et de fin (journée entière)
@@ -162,7 +162,7 @@ class AbsenceController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
             $employe = $this->getUser();
-            $absences = $this->getDoctrine()->getRepository(Absence::class)->findAbsenceAll($employe);
+            $absences = $this->entityManager->getRepository(Absence::class)->findAbsenceAll($employe);
             return $this->render('absence/absence.html.twig', [
                 'absences' => $absences,
             ]);
@@ -189,7 +189,7 @@ class AbsenceController extends AbstractController
             $form = $this->createForm(ReponseAbsenceType::class, $justificatif);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->entityManager();
+                $entityManager = $this->entityManager;
                 $file = $form->get('file')->getData();
                 if ($file) {
                     $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
