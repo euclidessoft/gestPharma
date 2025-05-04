@@ -447,9 +447,7 @@
     <div class="modal fade about" id="about" tabindex="-1" aria-labelledby="" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content radius-10">
-                <div class="float-right me-4 mt-4">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-lg-6">
@@ -460,10 +458,12 @@
                             <h3 class="text-center text-bold">GNT PHARMA
                                 v{{ include('includes/version.html.twig') }}</h3>
                             <p class="text-center mt-3">
-                                Copyright &copy; 2023-{{ 'now'|date('Y') }} <b><a class="text-green"
-                                                                                  href="http://euclideservices.com"
-                                                                                  target="_blank">EUCLIDES</a></b>
-                                <br>{{ 'Tous droits réservés'|trans }}
+                                Copyright &copy; 2023-{{ 'now'|date('Y') }}
+                                <b>
+                                    <a class="text-green" href="http://euclideservices.com" target="_blank">EUCLIDES</a>
+                                </b>
+                                <br>
+                                {{ 'Tous droits réservés'|trans }}
                             </p>
                             <p class="text-center mt-n2">
                                 {{ 'Protégée par'|trans }} :
@@ -472,14 +472,14 @@
                             </p>
                             <span class="row mt-n2">
                             <span class="col-5 text-end">Contact :</span>
-                            <span class="col-7 ms-n4"><a class="text-green"
-                                                         href="tel:+221754443384">(+221) 75 444 33 84</a></span>
+                            <span class="col-7 ms-n4">
+                                <a class="text-green" href="tel:+221754443384">(+221) 75 444 33 84</a></span>
                             <span class="col-5 text-end"></span>
-                            <span class="col-7 ms-n4"><a class="text-green"
-                                                         href="tel:+221775423500">(+221) 77 542 35 00</a></span>
+                            <span class="col-7 ms-n4">
+                                <a class="text-green" href="tel:+221775423500">(+221) 77 542 35 00</a></span>
                             <span class="col-5 text-end"></span>
-                            <span class="col-7 ms-n4"><a class="text-green"
-                                                         href="tel:+221787333434">(+221) 78 733 34 34</a></span>
+                            <span class="col-7 ms-n4">
+                                <a class="text-green" href="tel:+221787333434">(+221) 78 733 34 34</a></span>
                             <span class="col-12 text-center">Email :
                                 <a class="text-green" href="mailto:hajjalbayt@euclideservices.com">infos@euclideservices.com</a>
                             </span>

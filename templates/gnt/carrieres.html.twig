@@ -30,7 +30,7 @@
     <div class="container-fluid">
         <div class="container fs-5 mb-5">
             {% for message in app.flashes('notice') %}
-                <div class="alert alert-success  mb-2 alert-dismissible fade show radius-10">
+                <div role="alert" class="alert alert-success  mb-2 alert-dismissible fade show radius-10">
 
                     {{ message|trans }}
                 </div>

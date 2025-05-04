@@ -11,7 +11,7 @@
 {% block body %}
 
     {% if bulletins is empty %}
-        <div class="alert alert-info">Aucun bulletin en attente de validation pour ce mois.</div>
+        <div role="alert" class="alert alert-info">Aucun bulletin en attente de validation pour ce mois.</div>
     {% else %}
         {% if bulletins|length > 0 %}
         <div class="container fond-7 mb-5 p-4 mt-5">

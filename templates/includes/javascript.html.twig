@@ -17,8 +17,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- DataTables Core + Extensions -->
-    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.0/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.0/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.0.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.html5.min.js"></script>
@@ -388,9 +388,10 @@
 
     //selection de tous les pelerins
     function selectAll() {
+        let cocher = $("input[type=checkbox]");
         if ($("#tous").is(':checked')) {
-            $("input[type=checkbox]").attr('checked', true);
-            $("input[type=checkbox]").each(
+            cocher.attr('checked', true);
+            cocher.each(
                 function () {
                     if ($(this).is(':checked')) {
 
@@ -400,8 +401,8 @@
                     trselect($(this).attr("id"));
                 });
         } else {
-            $("input[type=checkbox]").attr('checked', false);
-            $("input[type=checkbox]").each(
+            cocher.attr('checked', false);
+            cocher.each(
                 function () {
                     if ($(this).is(':checked')) {
                         $(this).trigger('click')
@@ -410,8 +411,9 @@
                 });
         }
     }
-    {#
-    let table = $('#liste').DataTable({
+
+    let table = new DataTable('#liste', {
+    // let table = $('#liste').DataTable({
         responsive: true,
         pageLength: 100,
         // dom: 'lrtip', // Configuration du positionnement des éléments
@@ -455,7 +457,7 @@
         }
 
     });
-#}
+
     document.getElementById('exportExcel').addEventListener('click', function () {
         table.button(0).trigger();
     });
@@ -464,52 +466,7 @@
         table.button(1).trigger();
     });
 
-    let table = $('#liste').DataTable({
-
-        responsive: true,
-        "pageLength": 100,
-        buttons: [
-            {
-                extend: 'excelHtml5',
-                exportOptions: {
-                    columns: ':not(.noExport)' // exclut toutes les colonnes avec .noExport
-                }
-            },
-            {
-                extend: 'pdfHtml5',
-                orientation: 'landscape',
-                pageSize: 'A4',
-                exportOptions: {
-                    columns: ':not(.noExport)'
-                }
-            }
-        ],
-        language: {
-            processing: "{{ 'Traitement en cours...'|trans }}",
-            search: "{{ 'Rechercher'|trans }} :",
-            lengthMenu: "{{ 'Afficher'|trans }} _MENU_ {{'messages'|trans}}",
-            info: "{{'Affichage de message'|trans}} _START_ {{'à'|trans}} _END_ {{ 'sur'|trans }} _TOTAL_ {{'messages'|trans}}",
-            infoEmpty: "{{'Affichage de message 0 à 0 sur 0 message'|trans}}",
-            infoFiltered: "({{'filtré de'|trans}} _MAX_ {{'message au total'|trans}})",
-            infoPostFix: "",
-            loadingRecords: "{{ 'Chargement en cours...'|trans }}",
-            zeroRecords: "{{'Aucun message à afficher'|trans}}",
-            emptyTable: "{{'Aucun message'|trans}}",
-            paginate: {
-                first: "{{ 'Premier'|trans }}",
-                previous: "{{'Précédent'|trans}}",
-                next: "{{ 'Suivant'|trans }}",
-                last: "{{ 'Dernier'|trans }}"
-            },
-            aria: {
-                sortAscending: ": {{ 'activer pour trier la colonne par ordre croissant'|trans }}",
-                sortDescending: ": {{'activer pour trier la colonne par ordre décroissant'|trans}}"
-            }
-        }
-
-    });
-
-    var messagerie = $('#message').DataTable({
+    let messagerie = $('#message').DataTable({
 
         responsive: true,
         "pageLength": 25,
@@ -556,7 +513,7 @@
 
     //gestion des tableaux multiples
     function reponse() {
-        var table = $('table').DataTable({
+        let table = $('table').DataTable({
 
             responsive: true,
             "pageLength": 25,

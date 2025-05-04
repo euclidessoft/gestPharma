@@ -736,7 +736,7 @@ select:required {
     /*background-color: #e5fadc;*/
 }
 
-.input-group-append .input-group-text {
+/*.input-group-append .input-group-text {
     color: var(--vert);
     font-weight: bold;
     border: 1px solid #039c4f;
@@ -748,7 +748,7 @@ select:required {
     font-weight: bold;
     border: 1px solid #039c4f;
     border-radius: 10px 0 0 10px !important;
-}
+}*/
 
 .nav-tabs {
     border-bottom: 2px solid var(--vert);
@@ -815,6 +815,7 @@ table.dataTable thead .sorting_desc:after {
 
 .page-item .page-link {
     border-color: var(--vert);
+    color: var(--vert);
 }
 
 .page-item .page-link:hover {

@@ -41,10 +41,8 @@
             {{ include('message/menu.html.twig') }}
             <div class="col-9 p-5" style="border-top: 2px solid var(--vert);border-left: 2px solid var(--vert);">
                 {% for message in app.flashes('message') %}
-                    <div class="alert alert-success alert-dismissible fade show radius-10 shadow-black mb-5">
-                        <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">
-                            &times;
-                        </button>
+                    <div role="alert" class="alert alert-success alert-dismissible fade show radius-10 shadow-black mb-5">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         {{ message|trans }}
                     </div>
                 {% endfor %}

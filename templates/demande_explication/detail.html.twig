@@ -71,7 +71,7 @@
                 {{ form_start(form, {'attr': {'id': 'form'}}) }}
 
                 {% for message in app.flashes('notice') %}
-                <div class="alert alert-success alert-dismissible fade show radius-10 shadow-black">
+                <div role="alert" class="alert alert-success alert-dismissible fade show radius-10 shadow-black">
                     <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">&times;</button>
                     {{ message|trans }}
                 </div>

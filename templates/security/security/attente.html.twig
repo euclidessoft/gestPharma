@@ -103,12 +103,12 @@
         {{ 'Demandes en attente'|trans }}
     </h3>
     {% for message in app.flashes('notice')%}
-    <div class="alert alert-success alert-dismissible fade show radius-10 shadow-black">
+    <div role="alert" class="alert alert-success alert-dismissible fade show radius-10 shadow-black">
         <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">&times;</button>
         {{ message|trans }}
     </div>
     {% endfor%}
-    <div class="alert alert-primary">
+    <div role="alert" class="alert alert-primary">
         {{ users|length }} {{'élément(s) trouvé(s)'|trans}}
     </div>
     <table width="100%" class="table table-success-light table-bordered table-hover table-striped" id="liste">

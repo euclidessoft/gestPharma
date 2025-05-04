@@ -10,10 +10,8 @@
             {{ "Liste Produits"|trans }}
         </h3>
         {% for message in app.flashes('notice') %}
-            <div class="alert alert-success alert-dismissible fade show radius-10 shadow-black">
-                <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">
-                    &times;
-                </button>
+            <div role="alert" class="alert alert-success alert-dismissible fade show radius-10 shadow-black">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 {{ message|trans }}
             </div>
         {% endfor %}

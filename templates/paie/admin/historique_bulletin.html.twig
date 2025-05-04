@@ -12,7 +12,7 @@
 
 {% block body %}
     {% if paie is empty %}
-        <div class="alert alert-info">Aucun paie enregistrée.</div>
+        <div role="alert" class="alert alert-info">Aucun paie enregistrée.</div>
     {% else %}
         {% for employe, paie in paie %}
             <div class="card mb-4">

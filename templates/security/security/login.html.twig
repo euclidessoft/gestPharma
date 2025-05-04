@@ -3,20 +3,20 @@
 {% block body %}
     <div class="col-12">
         {% for message in app.flashes('change') %}
-            <div class="alert alert-success alert-dismissible fade show mt-4 shadow-5" role="alert">
+            <div role="alert" class="alert alert-success alert-dismissible fade show mt-4 shadow-5" role="alert">
                 {{ message|trans }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         {% endfor %}
         {% for message in app.flashes('notice') %}
-            <div class="alert alert-danger alert-dismissible fade show mt-4 shadow-5" role="alert">
+            <div role="alert" class="alert alert-danger alert-dismissible fade show mt-4 shadow-5" role="alert">
                 {{ message|trans }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         {% endfor %}
 
         {% if error %}
-            <div class="alert alert-danger alert-dismissible fade show mt-4 shadow-5" role="alert">
+            <div role="alert" class="alert alert-danger alert-dismissible fade show mt-4 shadow-5" role="alert">
                 {{ 'Adresse email ou mot de passe incorrecte'|trans }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
