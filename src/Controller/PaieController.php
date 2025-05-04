@@ -28,7 +28,7 @@ class PaieController extends AbstractController
 {
 
     private $paieService;
-    public function __construct(PaieService $paieService, private \Symfony\Bundle\SecurityBundle\Security $security)
+    public function __construct(PaieService $paieService, private Security $security, private EntityManagerInterface $entityManager)
     {
         $this->paieService = $paieService;
     }
@@ -37,7 +37,7 @@ class PaieController extends AbstractController
     public function index(): Response
     {
         if ($this->security->isGranted('ROLE_RH')) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $employes = $entityManager->getRepository(Employe::class)->findBy(['status' => true]);
             $paies = [];
             $startOfMonth = new \DateTime('01-' . date('m') . '-' . date('Y'));
@@ -132,7 +132,7 @@ class PaieController extends AbstractController
     public function new(Request $request, PrimeRepository $primeRepository, HeureSuplementaireRepository $heureSuplementaireRepository, RetenueRepository $retenueRepository): Response
     {// validation de tous les buletins de salaire
         if ($this->security->isGranted('ROLE_RH')) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $startOfMonth = new \DateTime('01-' . date('m') . '-' . date('Y'));
             $endOfMonth = new \DateTime('last day of this month');
             $mois = $entityManager->getRepository(Mois::class)->find(date('m'));
@@ -355,7 +355,7 @@ class PaieController extends AbstractController
     public function show(int $id, PrimeRepository $primeRepository, HeureSuplementaireRepository $heureSuplementaireRepository): Response
     {
         if ($this->security->isGranted('ROLE_RH')) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $startOfMonth = new \DateTime('01-' . date('m') . ('-') . date('Y'));
             $endOfMonth = new \DateTime('last day of this month');
             $employe = $entityManager->getRepository(Employe::class)->find($id);
@@ -440,7 +440,7 @@ class PaieController extends AbstractController
     public function valider(int $id, PrimeRepository $primeRepository, HeureSuplementaireRepository $heureSuplementaireRepository): Response
     {// validation d'un seul buletin de salaire
         if ($this->security->isGranted('ROLE_RH')) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $employe = $entityManager->getRepository(Employe::class)->find($id);
             $mois = $entityManager->getRepository(Mois::class)->find(date('m'));
 
@@ -526,7 +526,7 @@ class PaieController extends AbstractController
     public function paiement(Security $security, Request $request, PaieRepository $paieRepository): Response
     {
         if ($this->getUser() !== null) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
 //            $mois = $entityManager->getRepository(Mois::class)->find(date('m'));
             $employe = $security->getUser();
 

@@ -71,7 +71,7 @@ class FinancementController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
+//                $entityManager = $this->getDoctrine()->getManager();
 
                 $credit = new Credit();
                 $ecriture = new Ecriture();
@@ -147,7 +147,7 @@ class FinancementController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
 
                 $credit = new Credit();
                 $credit->setFinancement($financement);// ecriture comptable
@@ -259,7 +259,7 @@ class FinancementController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
             if ($this->isCsrfTokenValid('delete' . $financement->getId(), $request->request->get('_token'))) {
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
                 $entityManager->remove($financement);
                 $entityManager->flush();
             }

@@ -72,7 +72,7 @@ class SanctionController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
                 $sanction->setDateCreation(new \DateTime());
                 $sanction->setCreatedAt(new \DateTime());
                 $employe = $sanction->getEmploye();
@@ -183,7 +183,7 @@ class SanctionController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_RH')) {
             if ($this->isCsrfTokenValid('delete' . $sanction->getId(), $request->request->get('_token'))) {
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
                 $entityManager->remove($sanction);
                 $entityManager->flush();
             }

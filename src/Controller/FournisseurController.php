@@ -138,7 +138,7 @@ class FournisseurController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
             if ($this->isCsrfTokenValid('delete' . $fournisseur->getId(), $request->request->get('_token'))) {
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
                 $entityManager->remove($fournisseur);
                 $entityManager->flush();
             }

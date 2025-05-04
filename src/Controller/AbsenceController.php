@@ -61,7 +61,7 @@ class AbsenceController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager();
                 $employe = $absence->getEmploye();
 
                 // Définir la date du jour pour la date de début et de fin (journée entière)
@@ -189,7 +189,7 @@ class AbsenceController extends AbstractController
             $form = $this->createForm(ReponseAbsenceType::class, $justificatif);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager();
                 $file = $form->get('file')->getData();
                 if ($file) {
                     $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
@@ -230,7 +230,7 @@ class AbsenceController extends AbstractController
     public function confirmer(Request $request, Absence $absence, Security $security)
     {
         if ($this->security->isGranted('ROLE_RH')) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $responsable = $security->getUser();
 
             if ($this->isCsrfTokenValid('confirmer' . $absence->getId(), $request->request->get('_token'))) {
@@ -265,7 +265,7 @@ class AbsenceController extends AbstractController
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 $responsable = $security->getUser();
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
 
                 $typeDecision = $decision->getType();
                 $decision->setDateDecision(new \DateTime());
@@ -392,7 +392,6 @@ class AbsenceController extends AbstractController
     public function accepter(Security $security, AbsenceRepository $absenceRepository): Response
     {
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
-            $entityManager = $this->getDoctrine()->getManager();
             $employe = $security->getUser();
             $absences = $absenceRepository->findAbsenceAttente($employe);
             return $this->render('absence/attente.html.twig', [
@@ -416,7 +415,6 @@ class AbsenceController extends AbstractController
     public function attente(Security $security, AbsenceRepository $absenceRepository): Response
     {
         if ($this->security->isGranted('ROLE_RH')) {
-            $entityManager = $this->getDoctrine()->getManager();
             $employe = $security->getUser();
             $absences = $absenceRepository->adminAttente();
             return $this->render('absence/admin/attente.html.twig', [
@@ -440,7 +438,6 @@ class AbsenceController extends AbstractController
     public function RefuserAbsence(Security $security, AbsenceRepository $absenceRepository): Response
     {
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
-            $entityManager = $this->getDoctrine()->getManager();
             $employe = $security->getUser();
             $absences = $absenceRepository->findAbsenceRefuser($employe);
             return $this->render('absence/refuser.html.twig', [
@@ -463,7 +460,6 @@ class AbsenceController extends AbstractController
     public function RefuserAdmin(Security $security, AbsenceRepository $absenceRepository): Response
     {
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
-            $entityManager = $this->getDoctrine()->getManager();
             $employe = $security->getUser();
             $absences = $absenceRepository->findBy(['status' => true, 'justifier' => true]);
             return $this->render('absence/admin/refuser.html.twig', [
@@ -488,7 +484,6 @@ class AbsenceController extends AbstractController
     public function AccepterAbsence(Security $security, AbsenceRepository $absenceRepository): Response
     {
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
-            $entityManager = $this->getDoctrine()->getManager();
             $employe = $security->getUser();
             $absences = $absenceRepository->findAbsenceAccepeter($employe);
             return $this->render('absence/accepter.html.twig', [
@@ -512,7 +507,6 @@ class AbsenceController extends AbstractController
     public function AccepterAdmin(Security $security, AbsenceRepository $absenceRepository): Response
     {
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
-            $entityManager = $this->getDoctrine()->getManager();
             $employe = $security->getUser();
             $absences = $absenceRepository->findBy(['status' => 1, 'justifier' => true]);
             return $this->render('absence/admin/accepter.html.twig', [

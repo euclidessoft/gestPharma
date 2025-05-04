@@ -49,7 +49,7 @@ return $response;
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $categorie->setCompte('605'.str_pad($categorie->getCompte(), 3, '0', STR_PAD_LEFT));
             $entityManager->persist($categorie);
             $entityManager->flush();
@@ -133,7 +133,7 @@ return $response;
     {
          if ($this->security->isGranted('ROLE_FINANCE')) {
         if ($this->isCsrfTokenValid('delete'.$categorie->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $entityManager->remove($categorie);
             $entityManager->flush();
         }

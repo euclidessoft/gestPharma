@@ -75,7 +75,7 @@ class SuggestionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $entityManager->persist($suggestion);
             $entityManager->flush();
 
@@ -119,7 +119,7 @@ class SuggestionController extends AbstractController
     public function delete(Request $request, Suggestion $suggestion): Response
     {
         if ($this->isCsrfTokenValid('delete'.$suggestion->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $entityManager->remove($suggestion);
             $entityManager->flush();
         }

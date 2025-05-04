@@ -43,7 +43,7 @@ class HeureSuplementaireController extends AbstractController
     public function suivi(Security $security): Response
     {
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $employe = $security->getUser();
             $heures = $entityManager->getRepository(HeureSuplementaire::class)->findBy(['employe' => $employe]);
             return $this->render('heure_suplementaire/index.html.twig', [
@@ -72,7 +72,7 @@ class HeureSuplementaireController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
                 $heureSuplementaire->setCreatedAt(new \DateTime());
                 $heureSuplementaire->setTauxHoraire($heureSuplementaire->getEmploye()->getPoste()->getHeureSup());
                 $entityManager->persist($heureSuplementaire);
@@ -156,7 +156,7 @@ class HeureSuplementaireController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_RH')) {
             if ($this->isCsrfTokenValid('delete' . $heureSuplementaire->getId(), $request->request->get('_token'))) {
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
                 $entityManager->remove($heureSuplementaire);
                 $entityManager->flush();
             }

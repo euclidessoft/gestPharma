@@ -34,7 +34,7 @@ class PrimePerformanceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $entityManager->persist($primePerformance);
             $entityManager->flush();
 
@@ -77,7 +77,7 @@ class PrimePerformanceController extends AbstractController
     public function delete(Request $request, PrimePerformance $primePerformance): Response
     {
         if ($this->isCsrfTokenValid('delete'.$primePerformance->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $entityManager->remove($primePerformance);
             $entityManager->flush();
         }

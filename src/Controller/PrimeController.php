@@ -9,12 +9,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route("/{_locale}/Prime") ]
 class PrimeController extends AbstractController
 {
-    public function __construct(private \Symfony\Bundle\SecurityBundle\Security $security)
+    public function __construct(private Security $security, private EntityManagerInterface $entityManager)
     {
     }
 
@@ -43,7 +44,7 @@ class PrimeController extends AbstractController
     public function suivi(Security $security): Response
     {
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $employe = $security->getUser();
             $primes = $entityManager->getRepository(Prime::class)->findBy(['employe' => $employe]);
             return $this->render('prime/index.html.twig', [
@@ -72,7 +73,7 @@ class PrimeController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
                 $prime->setCreatedAt(new  \DateTime());
                 $entityManager->persist($prime);
                 $entityManager->flush();
@@ -127,7 +128,7 @@ class PrimeController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $this->getDoctrine()->getManager()->flush();
+                $this->entityManager->flush();
 
                 return $this->redirectToRoute('prime_index', [], Response::HTTP_SEE_OTHER);
             }
@@ -155,7 +156,7 @@ class PrimeController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_RH')) {
             if ($this->isCsrfTokenValid('delete' . $prime->getId(), $request->request->get('_token'))) {
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
                 $entityManager->remove($prime);
                 $entityManager->flush();
             }

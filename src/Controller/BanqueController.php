@@ -49,7 +49,7 @@ class BanqueController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $totalbanque = $entityManager->getRepository(Banque::class)->findAll();
 
             $banque->setCompte('52'.$banque->getCompte());
@@ -135,7 +135,7 @@ class BanqueController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
         if ($this->isCsrfTokenValid('delete'.$banque->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $entityManager->remove($banque);
             $entityManager->flush();
         }

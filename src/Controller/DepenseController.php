@@ -54,7 +54,7 @@ class DepenseController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
+//                $entityManager = $this->getDoctrine()->getManager();
                 $depense->setUser($this->getUser());
                 $montant = 0;
                 if ($depense->getType() == 'Espece') {
@@ -70,7 +70,7 @@ class DepenseController extends AbstractController
                     $ecriture->setComptedebit(54);
                     $ecriture->setLibellecomptedebit('Caisse');
                 } else {
-                    $montant = $solde->montantbanque($entityManager, $depense->getBanque()->getCompte());
+                    $montant = $solde->montantbanque($this->entityManager, $depense->getBanque()->getCompte());
                     $depense->setType('Banque');
                     $depense->setCompte($depense->getCategorie()->getCompte());
 
@@ -92,10 +92,10 @@ class DepenseController extends AbstractController
                     $ecriture->setMontant($depense->getMontant());
                     $ecriture->setLibelle($depense->getLibelle());
 
-                    $entityManager->persist($depense);
-                    $entityManager->persist($debit);
-                    $entityManager->persist($ecriture);
-                    $entityManager->flush();
+                    $this->entityManager->persist($depense);
+                    $this->entityManager->persist($debit);
+                    $this->entityManager->persist($ecriture);
+                    $this->entityManager->flush();
 
                     return $this->redirectToRoute('depense_index', [], Response::HTTP_SEE_OTHER);
                 } else {
@@ -150,7 +150,7 @@ class DepenseController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $this->getDoctrine()->getManager()->flush();
+                $this->entityManager->flush();
 
                 return $this->redirectToRoute('depense_index', [], Response::HTTP_SEE_OTHER);
             }
@@ -178,9 +178,9 @@ class DepenseController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
             if ($this->isCsrfTokenValid('delete' . $depense->getId(), $request->request->get('_token'))) {
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->remove($depense);
-                $entityManager->flush();
+//                $entityManager = $this->getDoctrine()->getManager();
+                $this->entityManager->remove($depense);
+                $this->entityManager->flush();
             }
 
             return $this->redirectToRoute('depense_index', [], Response::HTTP_SEE_OTHER);

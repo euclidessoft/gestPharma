@@ -237,7 +237,7 @@ class ApprovisionnementController extends AbstractController
     public function fournisseur(Request $request, ProduitRepository $repository, SessionInterface $session)
     {
 
-        $fournisseurproduits = $this->getDoctrine()->getRepository(FournisseurProduit::class)->findBy(['produit' => $request->get('prod')]);
+        $fournisseurproduits = $this->entityManager->getRepository(FournisseurProduit::class)->findBy(['produit' => $request->get('prod')]);
 
         if(count($fournisseurproduits) > 0) {
             foreach ($fournisseurproduits as $fournisseurproduit) {
@@ -286,7 +286,7 @@ class ApprovisionnementController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_STOCK')) {
             $approv = $session->get("approv", []);
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->entityManager;
             $approvisionner = new  Approvisionner();
             $fact = [];
             $listfournisseur = [];

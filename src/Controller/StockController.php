@@ -302,7 +302,7 @@ class StockController extends AbstractController
         if ($this->security->isGranted('ROLE_STOCK')) {
 
             $com = $request->get('commande');
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->entityManager;
             $commande = $em->getRepository(Commande::class)->find($com);
             $produits = $session->get('retour', []);
             $retour = new Retour();
@@ -358,7 +358,7 @@ class StockController extends AbstractController
             $peremption = $request->get('peremption');
             $id = $request->get('produit');
             $retour = $request->get('retour');
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->entityManager;
             $approvisionner = new Approvisionner();
             $approvisionner->setUser($this->getUser());
             $em->persist($approvisionner);
@@ -409,7 +409,7 @@ class StockController extends AbstractController
             $lot = $request->get('lot');
             $id = $request->get('produit');
             $retour = $request->get('retour');
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->entityManager;
 
             $produit = $em->getRepository(Produit::class)->find($id);
             $retour = $em->getRepository(RetourProduit::class)->findOneBy(['retour' => $retour, 'produit' => $produit, 'lot' => $lot]);
@@ -447,7 +447,7 @@ class StockController extends AbstractController
 
 
 
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->entityManager;
             $retourProduit = $request->get('retour');
             $RetourProduit = $em->getRepository(RetourProduit::class)->find($retourProduit);
             $avoir = new Avoir($RetourProduit->getCommande()->getUser(), $this->getUser(), $RetourProduit->getCommande());

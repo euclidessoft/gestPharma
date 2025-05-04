@@ -89,7 +89,7 @@ class ProduitController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 if($produit->getPrix() < $produit->getPrixpublic()) {
-                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager = $this->entityManager;
                     $entityManager->persist($produit);
                     $entityManager->flush();
                     $this->addFlash('notice', 'Nouveau Produit Ajouté');
@@ -511,7 +511,7 @@ class ProduitController extends AbstractController
     {
         try {
             if ($this->isCsrfTokenValid('delete' . $produit->getId(), $request->request->get('_token'))) {
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
                 $entityManager->remove($produit);
                 $entityManager->flush();
             }

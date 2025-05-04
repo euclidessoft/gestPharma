@@ -39,7 +39,7 @@ class TransfertController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $montant = $solde->montantcaisse($entityManager,54);
             if($transfert->getMontant() <= $montant){
             $transfert->setSource('Caisse');
@@ -108,7 +108,7 @@ class TransfertController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $montant = $solde->montantbanque($entityManager, $transfert->getBanque()->getCompte());
             if($transfert->getMontant() <= $montant){
             $transfert->setSource('Banque');
@@ -198,7 +198,7 @@ class TransfertController extends AbstractController
     public function delete(Request $request, Transfert $transfert): Response
     {
         if ($this->isCsrfTokenValid('delete'.$transfert->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $entityManager->remove($transfert);
             $entityManager->flush();
         }

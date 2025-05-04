@@ -50,7 +50,7 @@ class CongeController extends AbstractController
     {
 
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
 //            $employe = $security->getUser();
             $conges = $congesRepository->findBy(['employe' => $this->getUser()]);
             return $this->render('conge/demande.html.twig', [
@@ -75,7 +75,7 @@ class CongeController extends AbstractController
     {
 
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $query = $entityManager->createQuery(
                 'SELECT c FROM App\Entity\Conges c WHERE c.status IS NULL OR c.confirmer IS NULL AND c.employe = :employe'
             )
@@ -103,7 +103,7 @@ class CongeController extends AbstractController
     public function traitementAdmin(Security $security, CongesRepository $congesRepository): Response
     {
         if ($this->security->isGranted('ROLE_RH')) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $query = $entityManager->createQuery(
                 'SELECT c FROM App\Entity\Conges c WHERE c.status IS NULL OR c.confirmer IS NULL'
             );
@@ -129,7 +129,7 @@ class CongeController extends AbstractController
     public function accepter(Security $security, CongesRepository $congesRepository): Response
     {
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $employe = $security->getUser();
             $conges = $congesRepository->findBy(['status' => true, 'employe' => $this->getUser()]);
 
@@ -154,7 +154,7 @@ class CongeController extends AbstractController
     public function refuser(Security $security, CongesRepository $congesRepository): Response
     {
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $employe = $security->getUser();
             $conges = $congesRepository->findBy(['status' => false, 'employe' => $this->getUser()]);
             return $this->render('conge/refuser.html.twig', [
@@ -179,7 +179,7 @@ class CongeController extends AbstractController
     public function accepterAdmin(Security $security, CongesRepository $congesRepository): Response
     {
         if ($this->security->isGranted('ROLE_RH')) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $employe = $security->getUser();
             $conges = $congesRepository->findBy(['status' => true]);
 
@@ -204,7 +204,7 @@ class CongeController extends AbstractController
     public function refuserAdmin(Security $security, CongesRepository $congesRepository): Response
     {
         if ($this->security->isGranted('ROLE_RH')) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $employe = $security->getUser();
             $conges = $congesRepository->findBy(['status' => false]);
 
@@ -236,7 +236,7 @@ class CongeController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
 
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
                 $employe = $security->getUser();
                 $conges->setEmploye($employe);
 
@@ -275,7 +275,7 @@ class CongeController extends AbstractController
             $form = $this->createForm(ApprouverType::class, $conges);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
                 $startDateDemande = $conges->getDateDebut();
                 $endDateDemande = $conges->getDateFin();
                 $startDateAccorder = $form->get('dateDebutAccorder')->getData();
@@ -326,7 +326,7 @@ class CongeController extends AbstractController
     public function rejeter(Request $request, Conges $conges): Response
     {
         if ($this->security->isGranted('ROLE_RH')) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
 
             if ($this->isCsrfTokenValid('rejeter' . $conges->getId(), $request->request->get('_token'))) {
                 $conges->setStatus(false);
@@ -356,7 +356,7 @@ class CongeController extends AbstractController
     public function confirmer(Request $request, Conges $conges)
     {
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
 
 //            if ($this->isCsrfTokenValid('confirmer' . $conges->getId(), $request->request->get('_token'))) {
                 $conges->setConfirmer(true);
@@ -386,7 +386,7 @@ class CongeController extends AbstractController
     public function decliner(Request $request, Conges $conges)
     {
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
 
 //            if ($this->isCsrfTokenValid('decliner' . $conges->getId(), $request->request->get('_token'))) {
                 $conges->setConfirmer(false);

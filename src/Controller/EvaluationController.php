@@ -48,19 +48,19 @@ class EvaluationController extends AbstractController
     public function new(Request $request): Response
     {
         if ($this->security->isGranted('ROLE_RH')) {
-            $criteres = $this->getDoctrine()->getRepository(CritereEvaluation::class)->findAll();
-            $employes = $this->getDoctrine()->getRepository(Employe::class)->findAll();
+            $criteres = $this->entityManager->getRepository(CritereEvaluation::class)->findAll();
+            $employes = $this->entityManager->getRepository(Employe::class)->findAll();
 
             $evaluation = new Evaluation();
             $form = $this->createForm(EvaluationType::class, $evaluation);
             $form->handleRequest($request);
             if ($request->isMethod('POST')) {
-                $entityManager = $this->getDoctrine()->getManager();
+//                $entityManager = $this->getDoctrine()->getManager();
                 $employeSelect = $request->request->get('employe');
                 $dateEvaluation = new \DateTime($request->request->get('dateEvaluation'));
                 $notes = $request->request->get('notes');
                 $commentaires = $request->request->get('commentaires');
-                $employe = $entityManager->getRepository(Employe::class)->find($employeSelect);
+                $employe = $this->entityManager->getRepository(Employe::class)->find($employeSelect);
 
                 $evaluation->setDateEvaluation($dateEvaluation);
                 $evaluation->setEmploye($employe);
@@ -86,8 +86,8 @@ class EvaluationController extends AbstractController
                 $moyenne = ($nbNotes > 0) ? ($totalNotes / $nbNotes) : 0;
                 $evaluation->setMoyenne($moyenne);
                 $evaluation->addEvaluationDetail($evaluationDetail);
-                $entityManager->persist($evaluation);
-                $entityManager->flush();
+                $this->entityManager->persist($evaluation);
+                $this->entityManager->flush();
 
                 return $this->redirectToRoute('evaluation_index', [], Response::HTTP_SEE_OTHER);
             }
@@ -183,7 +183,7 @@ class EvaluationController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $this->getDoctrine()->getManager()->flush();
+                $this->entityManager->flush();
 
                 return $this->redirectToRoute('evaluation_index', [], Response::HTTP_SEE_OTHER);
             }
@@ -211,9 +211,9 @@ class EvaluationController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_RH')) {
             if ($this->isCsrfTokenValid('delete' . $evaluation->getId(), $request->request->get('_token'))) {
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->remove($evaluation);
-                $entityManager->flush();
+//                $entityManager = $this->getDoctrine()->getManager();
+                $this->entityManager->remove($evaluation);
+                $this->entityManager->flush();
             }
 
             return $this->redirectToRoute('evaluation_index', [], Response::HTTP_SEE_OTHER);

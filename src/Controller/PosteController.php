@@ -204,7 +204,7 @@ class PosteController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_RH')) {
             if ($this->isCsrfTokenValid('delete' . $poste->getId(), $request->request->get('_token'))) {
-                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager = $this->entityManager;
                 $entityManager->remove($poste);
                 $entityManager->flush();
             }
