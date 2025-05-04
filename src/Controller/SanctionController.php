@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\Security;
 #[Route("/{_locale}/Sanction") ]
 class SanctionController extends AbstractController
 {
-    public function __construct(private \Symfony\Bundle\SecurityBundle\Security $security)
+    public function __construct(private Security $security, private EntityManagerInterface $entityManager)
     {
     }
 

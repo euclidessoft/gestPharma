@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\Security;
 #[Route("/{_locale}/HeureSuplementaire") ]
 class HeureSuplementaireController extends AbstractController
 {
-    public function __construct(private \Symfony\Bundle\SecurityBundle\Security $security)
+    public function __construct(private Security $security, private EntityManagerInterface $entityManager)
     {
     }
     #[Route("/", name :"heure_suplementaire_index", methods : ["GET"]) ]
