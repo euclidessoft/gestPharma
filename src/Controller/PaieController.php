@@ -445,6 +445,15 @@ class PaieController extends AbstractController
             $endOfMonth = new \DateTime('last day of this month');
             $employe = $entityManager->getRepository(Employe::class)->find($id);
             $mois = $entityManager->getRepository(Mois::class)->find(date('m'));
+            $transport = 0;
+            $ponction = 0;
+            $totalprime = [];
+
+            $paie = new Paie();
+            $paie->setSalaireBase($employe->getPoste()->getSalaire());
+            $paie->setEmploye($employe);
+            $paie->setMois($mois);
+            
 
             // Vérifier si la paie du mois en cours est déjà validée
             $paieExistante = $entityManager->getRepository(Paie::class)->findByDate($employe->getId(), $startOfMonth, $endOfMonth);
@@ -453,12 +462,39 @@ class PaieController extends AbstractController
 
             $primes = $entityManager->getRepository(Prime::class)->findBy(['employe' => $employe->getId()]);
 
+                        
+            
+            $nbrjoursmois = new \DateTime();
+            $ponction = $employe->getPoste()->getSalaire() / $nbrjoursmois->format('t');
+            foreach ($primes as $prime) {
+                // Vérifie si la description est "indemnité de transport" (en minuscules)
+                if (strtolower($prime->getDescription()) === 'indemnité de transport') {
+                    $transport = $prime->getMontant();
+                }
+
+                // Vérifie si la prime est journalière (base == true)
+                if (!empty($prime->getBase()) && $prime->getBase() === true) {
+                    $ponction += $prime->getMontant() / $nbrjoursmois->format('t');
+                    $totalprime = [ 'designation' => $prime->getDesignation(), 
+                                    'montant' => $prime->getMontant()
+                                ];
+                } else {
+                    $totalprime = [ 'designation' => $prime->getDesignation(), 
+                                    'montant' => $prime->getMontant()
+                                ];
+                }
+            }
+            $paie->setIndemnite($totalprime);
+
+
             $heureSups = $heureSuplementaireRepository->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
             $nombreHeures = 0;
             foreach ($heureSups as $heureSup) {
                 // calcul nombre d'heure
                 $nombreHeures = $nombreHeures + $heureSup->getDuree();
             }
+            $paie->setBaseheureSup($employe->getPoste()->getHeureSup());
+            $paie->setTauxheureSup($nombreHeures);
 
 
             $primeperformances = $entityManager->getRepository(PrimePerformance::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
@@ -467,6 +503,7 @@ class PaieController extends AbstractController
                 // calcul nombre d'heure
                 $totalPrimePerf = $totalPrimePerf + $primeP->getMontant();
             }
+            $paie->setPerformance($totalPrimePerf);
 
 
             $sanctions = $entityManager->getRepository(Sanction::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
@@ -488,41 +525,14 @@ class PaieController extends AbstractController
 //                    $montantRetenue = $montantRetenue + $salaireJournalier * $nombreJours;
                 }
 
-                $retenues[] = [
-//                    'type' => $sanction->getTypeSanction()->getNom(),
-                    'montant' => $salaireJournalier,
-                    'jours' => $nombreJours,//isset($nombreJours) ? "{$nombreJours}" : 'Période inconnue',
-                ];
             }
-
-            $nbrjoursmois = new \DateTime();
-//             return $this->render('paie/admin/show.html.twig', [
-//                 'employe' => $employe,
-//                 'primes' => $primes,
-//                 'nbrjoursmois' => $nbrjoursmois->format('t'),
-//                 'nombreJours' => $nombreJours,
-//                 'totalPrimePerf' => $totalPrimePerf,
-//                 'heureSups' => $nombreHeures,
-// //                'retenues' => $retenues,
-//                 'paieExistante' => $paieExistante,
-//                 'mois' => $mois,
-//             ]);
+            
+            $paie->setBaseponction($ponction);
+            $paie->setTauxponction($nombreJours);
+    
 
             // Enregistrement dans la table paie
-            $paie = new Paie();
-            $paie->setSalaireBase($salaireDeBase);
-            $paie->setEmploye($employe);
-            $paie->setMois($mois);
-            $paie->setTotalPrime($totalPrimes);
-            $paie->setTotalheureSup($totalHeureSup);
-            $paie->setTotalRetenue($totalRetenue);
-            $paie->setSalaireBrut($salaireBrut);
-            $paie->setSalaireNetImposable($salaireNetImposable);
-            $paie->setTotalChargeEmploye($chargeSocial);
-            $paie->setTotalChargePatronal($chargePatronal);
-            $paie->setSalaireNet($salaireNet);
-            $paie->setImpot($impot);
-            $paie->setDetailsRetenues(json_encode($detailsRetenues));
+            
             $entityManager->persist($paie);
             $entityManager->flush();
             $this->addFlash('notice', 'Bulletin validé qvec succès');
