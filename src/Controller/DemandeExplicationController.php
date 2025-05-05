@@ -53,7 +53,7 @@ class DemandeExplicationController extends AbstractController
             $form = $this->createForm(DemandeExplicationType::class, $demande);
             $form->handleRequest($request);
 
-            $employes = $this->getDoctrine()->getRepository(Employe::class)->findAll();
+            $employes = $this->entityManager->getRepository(Employe::class)->findAll();
             if ($form->isSubmitted() && $form->isValid()) {
                 $entityManager = $this->entityManager;
                 $demande->setDate(new \DateTime());
@@ -62,7 +62,7 @@ class DemandeExplicationController extends AbstractController
                 $demande->setStatus(false);
                 if (!empty($selectEmployes)) {
                     // Recherche des employés sélectionnés
-                    $employe = $this->getDoctrine()->getRepository(Employe::class);
+                    $employe = $this->entityManager->getRepository(Employe::class);
                     $employes = $employe->findBy(['id' => $selectEmployes]);
 
                     // Ajout des employés à la demande d'explication

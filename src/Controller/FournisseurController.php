@@ -110,7 +110,7 @@ class FournisseurController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $this->getDoctrine()->getManager()->flush();
+                $this->entityManager->flush();
 
                 return $this->redirectToRoute('fournisseur_index', [], Response::HTTP_SEE_OTHER);
             }

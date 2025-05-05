@@ -75,7 +75,7 @@ class AccueilController extends AbstractController
             $form->handleRequest($request);
             if($form->isValid())
             {
-                $em = $this->getDoctrine()->getManager();
+                $em = $this->entityManager;
                 $candidature->getCv()->upload($candidature);
                 $em->persist($candidature);
                 $em->flush();
@@ -92,7 +92,7 @@ class AccueilController extends AbstractController
     #[Route("/Gallery-photo", name :"Gallery_photo") ]
     public function photo(Request $request)
     {
-        $albums = $this->getDoctrine()->getRepository(Album::class)->findAll();
+        $albums = $this->entityManager->getRepository(Album::class)->findAll();
         return  $this->render('gnt/galleryphoto.html.twig',[
             'albums' => $albums,
         ]);

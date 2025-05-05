@@ -104,7 +104,7 @@ class SuggestionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('suggestion_index', [], Response::HTTP_SEE_OTHER);
         }

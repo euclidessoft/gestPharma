@@ -238,7 +238,7 @@ class CommandeController extends AbstractController
 
             $panier = $session->get("panier", []);
             $dataPanier = [];
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->entityManager;
             $commande = new Commande();
             $commande->setAdmin($this->getUser());
 
@@ -844,7 +844,7 @@ class CommandeController extends AbstractController
 
             $response = $this->render('commande/traitement.html.twig', [
                 'commandeproduits' => $repository->findBy(['commande' => $commande]),
-                'commande' => $this->getDoctrine()->getRepository(Commande::class)->find($commande),
+                'commande' => $this->entityManager->getRepository(Commande::class)->find($commande),
                 'panier' => $panier,
             ]);
             $response->setSharedMaxAge(0);
@@ -885,7 +885,7 @@ class CommandeController extends AbstractController
 
             $response = $this->render('commande/admin/traitement.html.twig', [
                 'commandeproduits' => $repository->findBy(['commande' => $commande]),
-                'commande' => $this->getDoctrine()->getRepository(Commande::class)->find($commande),
+                'commande' => $this->entitymanager->getRepository(Commande::class)->find($commande),
                 'panier' => $panier,
             ]);
             $response->setSharedMaxAge(0);
@@ -1191,7 +1191,7 @@ class CommandeController extends AbstractController
                 return $response;
 
             }
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->entityManager;
             $commande->setSuivi(true);
             $em->persist($commande);
             $em->flush();

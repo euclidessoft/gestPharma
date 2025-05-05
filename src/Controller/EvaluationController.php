@@ -115,7 +115,7 @@ class EvaluationController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
             $employe = $security->getUser();
-            $evaluations = $this->getDoctrine()->getRepository(Evaluation::class)->findBy(['employe' => $employe]);
+            $evaluations = $this->entityManager->getRepository(Evaluation::class)->findBy(['employe' => $employe]);
             return $this->render('evaluation/suivi.html.twig', [
                 'evaluations' => $evaluations,
             ]);

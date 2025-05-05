@@ -161,7 +161,7 @@ class MessageController extends AbstractController
                 ->findBy(['isRead' => false, 'recipient' => $this->getUser()], ['id' => 'DESC']);
 
             $message->setIsRead(true);
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->entityManager;
             $em->persist($message);
             $em->flush();
 

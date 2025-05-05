@@ -108,7 +108,7 @@ class FinanceController extends AbstractController
                 'soldebanque' => $bank - $debitbanque,
                 'banque' => $banque,
                 'ecritures' => $ecrit,
-                'solde' => $solde->montantbanque($this->getDoctrine()->getManager(), $banque->getCompte()),
+                'solde' => $solde->montantbanque($this->entityManager, $banque->getCompte()),
             ]);
         } else {
             $response = $this->redirectToRoute('security_logout');
@@ -610,7 +610,7 @@ class FinanceController extends AbstractController
     public function daybrouyard(Request $request, $jour)
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
-            $repository = $this->getDoctrine()->getManager()->getRepository(Ecriture::class);
+            $repository = $this->entityManager->getRepository(Ecriture::class);
             $ecritures = $repository->daybrouyard($jour);
             $ouverture = $repository->ouvertureplace($jour);
             $caisse = 0;
@@ -684,7 +684,7 @@ class FinanceController extends AbstractController
     public function daybrouyard_print(Request $request, $jour)
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
-            $repository = $this->getDoctrine()->getManager()->getRepository(Ecriture::class);
+            $repository = $this->entityManager->getRepository(Ecriture::class);
             $ecritures = $repository->daybrouyard($jour);
             $ouverture = $repository->ouvertureplace($jour);
             $caisse = 0;
@@ -785,7 +785,7 @@ class FinanceController extends AbstractController
     public function daybrouyardcaisse(Request $request, $jour)
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
-            $repository = $this->getDoctrine()->getManager()->getRepository(Ecriture::class);
+            $repository = $this->entityManager->getRepository(Ecriture::class);
             $ecritures = $repository->daybrouyardcaisse($jour);
             $ouverture = $repository->ouvertureplacecaisse($jour);
             $caisse = 0;
@@ -850,7 +850,7 @@ class FinanceController extends AbstractController
     public function daybrouyardcaisse_print(Request $request, $jour)
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
-            $repository = $this->getDoctrine()->getManager()->getRepository(Ecriture::class);
+            $repository = $this->entityManager->getRepository(Ecriture::class);
             $ecritures = $repository->daybrouyardcaisse($jour);
             $ouverture = $repository->ouvertureplacecaisse($jour);
             $caisse = 0;
@@ -943,7 +943,7 @@ class FinanceController extends AbstractController
     public function daybrouyardbanque(Request $request, $jour)
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
-            $repository = $this->getDoctrine()->getManager()->getRepository(Ecriture::class);
+            $repository = $this->entityManager->getRepository(Ecriture::class);
             $ecritures = $repository->daybrouyardbanque($jour);
             $ouverture = $repository->ouvertureplacebanque($jour);
             $caisse = 0;
@@ -1008,7 +1008,7 @@ class FinanceController extends AbstractController
     public function daybrouyardbanque_print(Request $request, $jour)
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
-            $repository = $this->getDoctrine()->getManager()->getRepository(Ecriture::class);
+            $repository = $this->entityManager->getRepository(Ecriture::class);
             $ecritures = $repository->daybrouyardbanque($jour);
             $ouverture = $repository->ouvertureplacebanque($jour);
             $caisse = 0;
@@ -1124,7 +1124,7 @@ class FinanceController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
 
-            $repository = $this->getDoctrine()->getManager()->getRepository(Ecriture::class);
+            $repository = $this->entityManager->getRepository(Ecriture::class);
             $ecritures = $repository->plage($date1, $date2);
             $ouverture = $repository->ouvertureplace($date1);
             $caisse = 0;
@@ -1200,7 +1200,7 @@ class FinanceController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
 
-            $repository = $this->getDoctrine()->getManager()->getRepository(Ecriture::class);
+            $repository = $this->entityManager->getRepository(Ecriture::class);
             $ecritures = $repository->plage($date1, $date2);
             $ouverture = $repository->ouvertureplace($date1);
             $caisse = 0;
@@ -1305,7 +1305,7 @@ class FinanceController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
 
-            $repository = $this->getDoctrine()->getManager()->getRepository(Ecriture::class);
+            $repository = $this->entityManager->getRepository(Ecriture::class);
             $ecritures = $repository->plagecaisse($date1, $date2);
             $ouverture = $repository->ouvertureplacecaisse($date1);
             $caisse = 0;
@@ -1368,7 +1368,7 @@ class FinanceController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
 
-            $repository = $this->getDoctrine()->getManager()->getRepository(Ecriture::class);
+            $repository = $this->entityManager->getRepository(Ecriture::class);
             $ecritures = $repository->plagecaisse($date1, $date2);
             $ouverture = $repository->ouvertureplacecaisse($date1);
             $caisse = 0;
@@ -1461,7 +1461,7 @@ class FinanceController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
 
-            $repository = $this->getDoctrine()->getManager()->getRepository(Ecriture::class);
+            $repository = $this->entityManager->getRepository(Ecriture::class);
             $ecritures = $repository->plagebanque($date1, $date2);
             $ouverture = $repository->ouvertureplacebanque($date1);
             $caisse = 0;
@@ -1528,7 +1528,7 @@ class FinanceController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
 
-            $repository = $this->getDoctrine()->getManager()->getRepository(Ecriture::class);
+            $repository = $this->entityManager->getRepository(Ecriture::class);
             $ecritures = $repository->plagebanque($date1, $date2);
             $ouverture = $repository->ouvertureplacebanque($date1);
             $caisse = 0;
@@ -1598,7 +1598,7 @@ class FinanceController extends AbstractController
             $paie = $paieRepository->findBy(['payer' => false]);
             return $this->render('finance/salaire.html.twig', [
                 'paies' => $paie,
-                'banques' => $this->getDoctrine()->getRepository(Banque::class)->findAll(),
+                'banques' => $this->entityManager->getRepository(Banque::class)->findAll(),
             ]);
         } else {
             $response = $this->redirectToRoute('security_logout');

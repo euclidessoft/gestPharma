@@ -98,7 +98,7 @@ class PromotionController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
+                $em = $this->entityManager;
                 $promo = $session->get("promo", []);
                 if (count($promo) >= 1) {
                     $promotion->setUser($this->getUser());
@@ -366,7 +366,7 @@ class PromotionController extends AbstractController
     {
 
         $date = new \DateTime();
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->entityManager;
         $start = $em->getRepository(Promotion::class)->findBy(['debut' => $date]);
         $end = $em->getRepository(Promotion::class)->findBy(['fin' => $date]);
 
@@ -440,7 +440,7 @@ class PromotionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('promotion_index', [], Response::HTTP_SEE_OTHER);
         }

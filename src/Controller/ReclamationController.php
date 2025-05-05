@@ -188,7 +188,7 @@ class ReclamationController extends AbstractController
     public function cloturer(SessionInterface $session, Request $request, Reclamation $reclamation): Response
     {
         if ($this->security->isGranted('ROLE_BACK')) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->entityManager;
             $reclamation->setCloture(new \DateTime());
             $reclamation->setUsercloture($this->getUser());
             $reclamation->setStatus(true);
@@ -272,7 +272,7 @@ class ReclamationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('reclamation_index', [], Response::HTTP_SEE_OTHER);
         }

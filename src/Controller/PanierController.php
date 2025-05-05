@@ -400,7 +400,7 @@ class PanierController extends AbstractController
     {
         // On récupère le panier actuel
         $panier = $session->get("panier", []);
-        $id = $this->getDoctrine()->getRepository(Produit::class)->find( $id = $request->get('prod'))->getId();
+        $id = $this->entityManager->getRepository(Produit::class)->find( $id = $request->get('prod'))->getId();
 
         if(!empty($panier[$id])){
             unset($panier[$id]);

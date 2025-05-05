@@ -45,7 +45,7 @@ class SanctionController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
             $employe = $security->getUser();
-            $sanction = $this->getDoctrine()->getRepository(Sanction::class)->findBy(['employe' => $employe]);
+            $sanction = $this->entityManager->getRepository(Sanction::class)->findBy(['employe' => $employe]);
             return $this->render('sanction/suivi.html.twig', [
                 'sanctions' => $sanction,
             ]);
@@ -155,7 +155,7 @@ class SanctionController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $this->getDoctrine()->getManager()->flush();
+                $this->entityManager->flush();
 
                 return $this->redirectToRoute('sanction_index', [], Response::HTTP_SEE_OTHER);
             }

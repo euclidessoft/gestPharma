@@ -175,7 +175,7 @@ class AchatController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->entityManager->flush();
 
             $response = $this->redirectToRoute('achat_index', [], Response::HTTP_SEE_OTHER);
             $response->setSharedMaxAge(0);

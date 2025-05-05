@@ -300,7 +300,7 @@ class LivrerController extends AbstractController
 
         if ($this->security->isGranted('ROLE_LIVREUR') && $livrer->getLivreur() == $this->getUser()) {
 
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->entityManager;
             $livrer->setDateefectlivraison(new \DateTime());
             $livrer->setLivrer(true);
             $livrer->getCommande()->setLivrer(true);
@@ -772,7 +772,7 @@ class LivrerController extends AbstractController
                 $this->addFlash('notice', 'Donner les details des produits avant validation.');
                 return $this->redirectToRoute('livraison_show', ['id' => $commande->getid()]);
             }
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->entityManager;
             $commandeproduits = $comprodrepository->findBy(['commande' => $commande]);
             $livreur = $em->getRepository(User::class)->find($session->get('livreur'));
 
@@ -952,7 +952,7 @@ class LivrerController extends AbstractController
         if ($this->security->isGranted('ROLE_STOCK')) {
 
 
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->entityManager;
             $commandeproduits = $livrerResteRepository->findBy(['commande' => $commande]);
 
             $oldlivrer = $livrerrepository->findOneBy(['commande' => $commande]);
@@ -1049,7 +1049,7 @@ class LivrerController extends AbstractController
         if ($this->security->isGranted('ROLE_STOCK')) {
 
             $commande = $retour->getCommande();
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->entityManager;
             $commandeproduits = $retourProduitRepository->findBy(['retour' => $retour, 'valider' => true, 'rembourser' => false]);
 
             $livreur = $em->getRepository(User::class)->find($session->get('livreur'));
@@ -1158,7 +1158,7 @@ class LivrerController extends AbstractController
         $file = $folderPath . $filename;
         file_put_contents($file, $image_base64);
 
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->entityManager;
         $livraison = $em->getRepository(Livrer::class)->find($liver);
         $livraison->setLivrer(true);
         $livraison->getCommande()->setLivrer(true);

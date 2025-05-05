@@ -456,7 +456,7 @@ class ProduitController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
 
                 if($produit->getPrix() < $produit->getPrixpublic()){
-                    $this->getDoctrine()->getManager()->flush();
+                    $this->entityManager->flush();
                     $this->addFlash('notice', 'Produit modifié avec succès');
 
                     $response = $this->redirectToRoute('produit_show', ['id' => $produit->getId()], Response::HTTP_SEE_OTHER);

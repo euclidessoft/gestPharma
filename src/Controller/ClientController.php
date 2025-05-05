@@ -10,7 +10,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 #[Route("/{_locale}/Client") ]
@@ -44,7 +44,7 @@ class ClientController extends AbstractController
 
 
     #[Route("/new", name :"client_new", methods : ["GET","POST"]) ]
-    public function new(Request $request, UserPasswordEncoderInterface $encoder, TokenGeneratorInterface $tokenGenerator): Response
+    public function new(Request $request, UserPasswordHasherInterface $encoder, TokenGeneratorInterface $tokenGenerator): Response
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
             $client = new Client();
@@ -54,7 +54,7 @@ class ClientController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
                 $entityManager = $this->entityManager;
 
-                $hashpass = $encoder->encodePassword($client, "Passer2023");
+                $hashpass = $encoder->hashPassword($client, $client->getPassword());
 
                 $client->setPassword($hashpass);
                 $client->setUsername($client->getNom());
@@ -104,7 +104,7 @@ class ClientController extends AbstractController
             $form->handleRequest($request);
             $form->remove('password');
             if ($form->isSubmitted() && $form->isValid()) {
-                $this->getDoctrine()->getManager()->flush();
+                $this->entityManager->flush();
                 $this->addFlash('notice', 'Client modifié avec succès');
                 return $this->redirectToRoute('client_index', [], Response::HTTP_SEE_OTHER);
             }
