@@ -15,7 +15,7 @@
         <i class="fa fa-money-bill me-2"></i>
         {{ "Mes sanctions"|trans }}
     </h3>
-    <table class="table table-success-light table-bordered table-hover table-striped w-100" id="liste">
+    <table class="table table-success-light table-bordered table-hover table-striped my-3" id="liste">
         <thead>
             <tr>
                 <th>Sanction</th>
@@ -28,10 +28,7 @@
                 <td>{{ sanction.typeSanction.nom }}</td>
                 <td>{{ sanction.dateCreation ? sanction.dateCreation|date('d/m/Y') : '' }}</td>
             </tr>
-            {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
+
             {% endfor %}
         </tbody>
     </table>

@@ -159,13 +159,6 @@
                 {% else %}
                     {% set transfert = 0 %}
                 {% endif %}
-            {% else %}
-                <tr>
-                    <td data-label="colspan" colspan="7">
-                        {{ 'Aucune transaction'|trans }}
-                    </td>
-                </tr>
-
             {% endfor %}
             <!-- <tr>
                 <td data-label="colspan" colspan="5" class="text-bold text-end">

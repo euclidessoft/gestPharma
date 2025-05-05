@@ -26,7 +26,7 @@
         {% endfor %}
 
 
-        <table class="table table-success-light table-bordered table-hover table-striped w-100" id="list">
+        <table class="table table-success-light table-bordered table-hover table-striped w-100" id="liste">
             <thead>
             <tr>
                 <th>{{'N° bordereau'|trans}} </th>
@@ -48,10 +48,6 @@
                             <i class="fa fa-list"></i>
                             {{'Afficher'|trans}}</a>
                     </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="4">{{'Aucune commande'|trans}}</td>
                 </tr>
             {% endfor %}
             </tbody>

@@ -39,7 +39,7 @@
             </a>
         </li>
     </ul>
-    <table class="table table-success-light table-bordered table-hover table-striped w-100" id="liste">
+    <table class="table table-success-light table-bordered table-hover table-striped my-3" id="liste">
         <thead>
         <tr>
             <th>{{ ('Date absence'|trans) }}</th>
@@ -76,10 +76,6 @@
                         <a href="{{ path('absence_detail', {'id': absence.id}) }}" class="btn btn-success"><i class="fas fa-eye"></i>Details</a>
                     {% endif %}
                 </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4" class="text-center">Aucune absence enrégistré</td>
             </tr>
         {% endfor %}
         </tbody>

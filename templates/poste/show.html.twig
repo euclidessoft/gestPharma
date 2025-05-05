@@ -50,7 +50,7 @@
             <i class="fa fa-plus-circle"></i> {{ 'Attribuer des employés'|trans }}
         </a>
     </div>
-    <table class="table table-success-light table-bordered table-hover table-striped w-100" id="liste">
+    <table class="table table-success-light table-bordered table-hover table-striped my-3" id="liste">
         <thead>
             <tr>
                 <th>{{('Nom'|trans)}}</th>
@@ -68,10 +68,6 @@
                 <td data-label="Description">{{ employe.phone }}</td>
                 <td data-label="Description">{{ employe.email }}</td>
                 <td data-label="Description">{{ employe.adresse }}</td>
-            </tr>
-            {% else %}
-            <tr>
-                <td colspan="5" class="text-center">Aucun employé pour ce poste</td>
             </tr>
             {% endfor %}
         </tbody>

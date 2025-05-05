@@ -40,7 +40,7 @@
             </a>
         </li>
     </ul>
-    <table class="table table-success-light table-bordered table-hover table-striped w-100" id="liste">
+    <table class="table table-success-light table-bordered table-hover table-striped my-3" id="liste">
         <thead>
             <tr>
                 <th>Type de Congé</th>
@@ -98,10 +98,6 @@
                     {% endif %}
 
                 </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td data-label="colspan" colspan="8">{{ "Aucune demande enregistrée"|trans }}</td>
             </tr>
         {% endfor %}
         </tbody>

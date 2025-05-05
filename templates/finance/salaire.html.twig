@@ -31,7 +31,7 @@
         {% endfor %}
         <div id="flash"></div>
 
-        <table class="table table-success-light table-bordered table-hover table-striped w-100" id="liste">
+        <table class="table table-success-light table-bordered table-hover table-striped my-3" id="liste">
             <thead>
             <tr>
                 <th>{{ 'Matricule'|trans }}</th>
@@ -71,7 +71,7 @@
                                     </div>
                                     <div class="modal-body px-5">
                                         <div class="mt-4">
-                                            <label for="{#mois{{ mois.id }}#}"></label>
+                                            <label for="banque{{ paie.id }}"></label>
                                             <select class="form-control" id="banque{{ paie.id }}">
                                                 <option value="0">Selectionnez une banque</option>
                                                 {% for banque in banques  %}
@@ -100,10 +100,6 @@
 
                     </td>
                     {% set montant = montant + paie.salaireBrut + paie.totalchargepatronal %}
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="8" class="text-center">Aucun paiement enregistré</td>
                 </tr>
             {% endfor %}
             {% if paies|length > 1 %}

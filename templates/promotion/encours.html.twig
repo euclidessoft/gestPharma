@@ -16,7 +16,7 @@
         </div>
     {% endfor %}
 
-    <table class="table table-success-light table-bordered table-hover table-striped w-100" id="liste">
+    <table class="table table-success-light table-bordered table-hover table-striped my-3" id="liste">
         <thead>
             <tr>
                 <th>{{ 'Désignation'|trans }}</th>
@@ -40,10 +40,6 @@
                     </a>
               
                 </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">{{ 'Aucune promotion'|trans }}</td>
             </tr>
         {% endfor %}
         </tbody>

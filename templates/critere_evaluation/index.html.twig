@@ -16,7 +16,7 @@
             {{ "Liste des critères d'évaluation"|trans }}
         </h3>
         <a href="{{ path('critere_evaluation_new') }}" class="btn btn-success mb-3">Nouveau critère</a>
-        <table class="table table-success-light table-bordered table-hover table-striped w-100" id="liste">
+        <table class="table table-success-light table-bordered table-hover table-striped my-3" id="liste">
         <thead>
             <tr>
                 <th>Nom</th>
@@ -32,10 +32,6 @@
                 <td>
                     <a href="{{ path('critere_evaluation_edit', {'id': critere_evaluation.id}) }}" class="btn btn-success-light"><i class="fas fa-edit"></i></a>
                 </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
             </tr>
         {% endfor %}
         </tbody>

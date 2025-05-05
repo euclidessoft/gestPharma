@@ -22,7 +22,7 @@
             </li>
         </ul>
 
-        <table class="table table-success-light table-bordered table-hover table-striped" id="list">
+        <table class="table table-success-light table-bordered table-hover table-striped" id="liste">
             <thead>
             <tr>
                 <th>{{'Référence'|trans}}</th>
@@ -42,10 +42,6 @@
                         </a>
                         {#                    <a href="{{ path('reclamation_edit', {'id': reclamation.id}) }}">edit</a>#}
                     </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="6">{{'Aucune réclamation'|trans}}</td>
                 </tr>
             {% endfor %}
             </tbody>

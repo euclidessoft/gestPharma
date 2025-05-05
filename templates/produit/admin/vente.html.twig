@@ -24,7 +24,7 @@
             </div>
         {% endfor %}
 
-        <table class="table table-success-light table-bordered text-center table-hover table-striped w-100">
+        <table class="table table-success-light table-bordered text-center table-hover table-striped my-3" id="liste">
             <thead>
             <tr>
                 <th>{{ 'Référence'|trans }}</th>
@@ -44,10 +44,6 @@
                     <td>{{ approvisionnement.produit.prixpublic }}</td>
                     <td>{{ approvisionnement.produit.mincommande }}</td>
                     <td class="text-start">{{ approvisionnement.produit.fabriquant }}</td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="7">{{ "Aucun produit"|trans }}</td>
                 </tr>
             {% endfor %}
             </tbody>

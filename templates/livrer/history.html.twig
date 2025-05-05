@@ -25,7 +25,7 @@
         {% endfor %}
 
 
-        <table class="table table-success-light table-bordered table-hover table-striped w-100" id="list">
+        <table class="table table-success-light table-bordered table-hover table-striped w-100" id="liste">
             <thead>
             <tr>
                 <th>{{'N° commande'|trans}} </th>
@@ -47,10 +47,6 @@
                             {{ 'Afficher'|trans }}
                         </a>
                     </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="3">{{ 'Aucune commande'|trans }}</td>
                 </tr>
             {% endfor %}
             </tbody>

@@ -40,7 +40,7 @@
 
                 {% endfor %}
 
-                <table class="table table-success-light table-bordered table-hover table-striped w-100" id="liste">
+                <table class="table table-success-light table-bordered table-hover table-striped my-3" id="liste">
                     <thead>
                     <tr>
                         <th>{{ 'Référence'|trans }}</th>
@@ -98,10 +98,6 @@
                                     </div>
                                 </div>
                             </td>
-                        </tr>
-                    {% else %}
-                        <tr>
-                            <td colspan="3">no records found</td>
                         </tr>
                     {% endfor %}
                     </tbody>

@@ -49,7 +49,7 @@
     <div class="tab-content">
         <!-- Section Département -->
     <a href="{{ path('type_conge_new') }}" class="btn btn-success mb-4"><i class="fas fa-plus"></i>Nouvel type conge</a>
-    <table class="table table-success-light table-bordered table-hover table-striped w-100" id="liste">
+    <table class="table table-success-light table-bordered table-hover table-striped my-3" id="liste">
         <thead>
             <tr>
                 <th>{{('Nom'|trans)}}</th>
@@ -67,10 +67,7 @@
                     {{ include('type_conge/_delete_form.html.twig') }}
                 </td>
             </tr>
-        {% else %}
-            <tr>
-                <td colspan="4" class="text-center">Aucune ligne de dépenses</td>
-            </tr>
+
         {% endfor %}
         </tbody>
     </table>

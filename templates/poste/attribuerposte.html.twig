@@ -22,7 +22,7 @@
     </div>
     {% endfor %}
     <form method="POST">
-        <table class="table table-success-light table-bordered table-hover table-striped w-100" id="liste">
+        <table class="table table-success-light table-bordered table-hover table-striped my-3" id="liste">
             <thead>
                 <tr>
                     <th><input type="checkbox" id="select_all" title="Sélectionnez Tous"></th>
@@ -44,10 +44,6 @@
                     <td>{{ employe.phone }}</td>
                     <td>{{ employe.email }}</td>
                     <td>{{ employe.adresse }}</td>
-                </tr>
-                {% else %}
-                <tr>
-                    <td colspan="6" class="text-center">{{ 'Aucun employé à attribuer'|trans }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

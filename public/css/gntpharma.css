@@ -84,6 +84,7 @@ tr {
     display: block;
     margin: 0 auto;
     backdrop-filter: blur(5px);
+    padding: 1rem;
 }
 
 .fond-5 {
@@ -1128,13 +1129,14 @@ select#transfert_date_time_minute {
         background-color: transparent !important;
     }
 
-    thead {
+    thead,
+    th {
         display: none;
     }
 
     tr {
         margin-bottom: 1.3rem;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     }
 
     tr[data-label="couple"] {
@@ -1173,7 +1175,7 @@ select#transfert_date_time_minute {
     }
 
     td::before {
-        border-right: 1px solid var(--vert);
+        border-right: 1px solid transparent;
         padding: 0 10px;
         content: attr(data-label);
         position: absolute;
@@ -1188,7 +1190,7 @@ select#transfert_date_time_minute {
         text-transform: none;
         white-space: normal;
         line-height: 20px;
-
+        margin: 0 -10px;
     }
 
     .table-success-light td::before {
@@ -1214,16 +1216,16 @@ select#transfert_date_time_minute {
 
     td[data-label="couple"],
     td[data-label="Photo"],
-    td[data-label="colspan"] {
+    td[colspan] {
         padding: 10px !important;
-        font-weight: bold;
+        /*font-weight: bold;*/
         text-align: center !important;
         box-sizing: border-box !important;
     }
 
     td[data-label="couple"]::before,
     td[data-label="Photo"]::before,
-    td[data-label="colspan"]::before {
+    td[colspan]::before {
         display: none;
     }
 

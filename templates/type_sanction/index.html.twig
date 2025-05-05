@@ -46,7 +46,7 @@
     </ul>
     <h5>{{ "Types de sanction"|trans }}</h5>
     <div class="tab-content">
-        <table class="table table-success-light table-bordered table-hover table-striped w-100" id="liste">
+        <table class="table table-success-light table-bordered table-hover table-striped my-3" id="liste">
             <thead>
                 <tr>
                     <th>Sanction</th>
@@ -56,10 +56,6 @@
                 {% for type_sanction in type_sanctions %}
                 <tr>
                     <td>{{ type_sanction.nom }}</td>
-                </tr>
-                {% else %}
-                <tr>
-                    <td colspan="3">Aucun enregistrement</td>
                 </tr>
                 {% endfor %}
             </tbody>

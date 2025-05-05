@@ -30,7 +30,7 @@
     {% endfor %}
 
 
-    <table class="table table-success-light table-bordered table-hover table-striped w-100" id="list">
+    <table class="table table-success-light table-bordered table-hover table-striped w-100" id="liste">
         <thead>
             <tr>
                 <th>{{ 'N° Commande'|trans }} </th>
@@ -52,10 +52,6 @@
                     </a>
                 </td>
             </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">{{ 'Aucune commande'|trans }}</td>
-            </tr>
         {% endfor %}
         </tbody>
     </table>
@@ -64,7 +60,7 @@
         <h5 class="mt-3 mb-2 text-bold">
             {{ "Reste à livrer ou retour de stock"|trans }}
         </h5>
-        <table class="table table-success-light table-bordered table-hover table-striped w-100" id="list">
+        <table class="table table-success-light table-bordered table-hover table-striped w-100" id="liste">
             <thead>
             <tr>
                 <th>{{ 'N° Commande'|trans }} </th>
@@ -84,10 +80,6 @@
                             {{ 'Traitement'|trans }}
                         </a>
                     </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="4">{{ 'Aucun reste à livrer'|trans }}</td>
                 </tr>
             {% endfor %}
             {% for retour in retours %}

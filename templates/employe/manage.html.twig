@@ -23,7 +23,7 @@
             </div>
         {% endfor %}
 
-        <table class="table table-success-light table-bordered table-hover table-striped w-100" id="liste">
+        <table class="table table-success-light table-bordered table-hover table-striped my-3" id="liste">
             <thead>
             <tr>
                 <th>{{ 'Utilisateur'|trans }}</th>
@@ -61,10 +61,6 @@
                         </button>
                     </form>
                 </td>
-            {% else %}
-                <tr>
-                    <td class="text-center" colspan="6">{{ 'Aucun utilisateur enregistré'|trans }}</td>
-                </tr>
             {% endfor %}
             </tbody>
         </table>

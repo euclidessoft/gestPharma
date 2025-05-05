@@ -23,51 +23,49 @@
         {{ message|trans }}
     </div>
     {% endfor %}
-    <table class="table table-success-light table-bordered text-center table-hover table-striped">
-        <tbody>
+    <table class="table table-success-light table-bordered table-hover table-striped">
             <tr>
                 <th class="text-end">{{ 'Code Produit'|trans }}</th>
-                <td class="text-start">{{ produit.reference }}</td>
+                <td class="text-start" data-label="Code Produit">{{ produit.reference }}</td>
             </tr>
             <tr>
-                <th class="text-end">{{ 'Desigantion'|trans }}</th>
-                <td class="text-start">{{ produit.desigantion }}</td>
+                <th class="text-end">{{ 'Désigantion'|trans }}</th>
+                <td class="text-start" data-label="Désigantion">{{ produit.desigantion }}</td>
             </tr>
             <tr>
                 <th class="text-end">{{ 'Prix grossiste hors taxe'|trans }}</th>
-                <td class="text-start">{{ produit.pght }}</td>
+                <td class="text-start" data-label="Prix grossiste hors taxe">{{ produit.pght }}</td>
             </tr>
             <tr>
                 <th class="text-end">{{ 'Prix Cession'|trans }}</th>
-                <td class="text-start">{{ produit.prix }}</td>
+                <td class="text-start" data-label="Prix Cession">{{ produit.prix }}</td>
             </tr>
             <tr>
                 <th class="text-end">{{ 'Prix Public'|trans }}</th>
-                <td class="text-start">{{ produit.prixpublic }}</td>
+                <td class="text-start" data-label="Prix Public">{{ produit.prixpublic }}</td>
             </tr>
             <tr>
                 <th class="text-end">{{ 'Commande minimum'|trans }}</th>
-                <td class="text-start">{{ produit.mincommande }}</td>
+                <td class="text-start" data-label="Commande minimum">{{ produit.mincommande }}</td>
             </tr>
             <tr>
                 <th class="text-end">{{ 'Fabricant'|trans }}</th>
-                <td class="text-start">{{ produit.fabriquant }}</td>
+                <td class="text-start" data-label="Fabricant">{{ produit.fabriquant }}</td>
             </tr>
             <tr>
                 <th class="text-end">{{ 'TVA'|trans }}</th>
-                <td class="text-start">{{ produit.tva ? 'OUI' : 'NON' }}</td>
+                <td class="text-start" data-label="TVA">{{ produit.tva ? 'OUI' : 'NON' }}</td>
             </tr>
-        </tbody>
     </table>
 
     <div class="col-md-7 offset-md-3 mt-4 p-3 fond-7">
         <div class="centrer gap-3">
-            <a id="{{ produit.id }}" onclick="load({{ produit.id }})" class="btn btn-success-light text-green" href="{{ path('produit_index') }}">
-                <i class="fa fa-undo"></i>
-                {{ 'Retour'|trans }}
-            </a>
             <a class="btn btn-success" href="{{ path('produit_edit', {'id': produit.id}) }}">
                 <i class="fa fa-edit"></i> Modifier
+            </a>
+            <a id="{{ produit.id }}" onclick="load({{ produit.id }})" class="btn btn-success-light btn-normal" href="{{ path('produit_index') }}">
+                <i class="fa fa-undo"></i>
+                {{ 'Retour'|trans }}
             </a>
             {{ include('produit/admin/_delete_form.html.twig') }}
         </div>
@@ -79,7 +77,7 @@
         <i class="fa-brands fa-product-hunt me-2"></i>
         {{ "Fournisseurs ayant ce produit"|trans }}
     </h4>
-    <table class="table table-success-light table-bordered table-hover table-striped w-100" id="liste">
+    <table class="table table-success-light table-bordered table-hover table-striped my-3" id="liste">
         <thead>
             <tr>
                 <th>{{'Désignation'|trans }}</th>
@@ -104,14 +102,9 @@
                     </a>
                 </td>
             </tr>
-            {% else %}
-            <tr>
-                <td colspan="6" class="text-center">Aucun fournisseur</td>
-            </tr>
             {% endfor %}
         </tbody>
     </table>
-
 </div>
 
 

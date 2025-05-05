@@ -101,13 +101,6 @@
                         {{ (commandeproduit.quantite * commandeproduit.produit.prix)|number_format(0, '' , ' ') }}
                         {% set total = total + (commandeproduit.quantite * commandeproduit.produit.prix) %}
                     </td>
-
-
-                </tr>
-
-            {% else %}
-                <tr>
-                    <td colspan="10">{{ 'Aucune commande'|trans }}</td>
                 </tr>
             {% endfor %}
             <tr class="text-bold">

@@ -16,7 +16,7 @@
             <i class="fa-solid fa-gears fa-lg"></i>
             {{ 'Liste des primes'|trans }}
         </h4>
-        <table class="table table-success-light table-bordered table-hover table-striped w-100" id="liste">
+        <table class="table table-success-light table-bordered table-hover table-striped my-3" id="liste">
             <thead>
             <tr>
 {#                <th>Date prime</th>#}
@@ -30,10 +30,6 @@
 {#                    <td>{{ prime.createdAt ? prime.createdAt|date('d/m/Y') }}</td>#}
                     <td>{{ prime.montant|number_format(0,'',' ') }} FCFA</td>
                     <td>{{ prime.description }}</td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="4">no records found</td>
                 </tr>
             {% endfor %}
             </tbody>

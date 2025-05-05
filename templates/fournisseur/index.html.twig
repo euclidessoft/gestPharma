@@ -12,15 +12,15 @@
 {% block all_fournisseurs %}active{% endblock %}
 {% block body %}
     <div class="container mt-4 fond-7">
-        <h3 class="mt-4 mb-5 text-bold">
+        <h3 class="my-4 text-bold">
             <i class="fa-solid fa-hospital-user"></i>
             {{ "Liste des fournisseurs"|trans }}
         </h3>
-        <a class="btn btn-green mb-5" href="{{ path('fournisseur_new') }}">
+        <a class="btn btn-green mb-" href="{{ path('fournisseur_new') }}">
             <i class="fa-solid fa-hospital-user"></i><i class="fa-solid fa-plus"></i>
             {{ 'Nouveau fournisseur'|trans }}
         </a>
-        <table class="table table-success-light table-bordered table-hover table-striped w-100" id="liste">
+        <table class="table table-success-light table-bordered table-hover table-striped my-3" id="liste">
             <thead>
             <tr>
                 <th>{{ 'Nº Compte'|trans }}</th>
@@ -53,10 +53,6 @@
                         </a>
                         {{ include('fournisseur/_delete_form.html.twig') }}
                     </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="7" class="text-center">Aucun fournisseur enregistré</td>
                 </tr>
             {% endfor %}
             </tbody>
