@@ -129,12 +129,17 @@ class DepartementController extends AbstractController
     public function delete(Request $request, Departement $departement): Response
     {
         if ($this->security->isGranted('ROLE_RH')) {
-            if ($this->isCsrfTokenValid('delete' . $departement->getId(), $request->request->get('_token'))) {
-                $this->entityManager->remove($departement);
-                $entityManager->flush();
+            try{
+                if ($this->isCsrfTokenValid('delete' . $departement->getId(), $request->request->get('_token'))) {
+                    $this->entityManager->remove($departement);
+                    $this->entityManager->flush();
+                }
+            }catch (Throwable $e) {
+                $this->adFlash('notice', 'suppression impossible');
             }
 
-            return $this->redirectToRoute('departement_index', [], Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute('departement_index', [], Response::HTTP_SEE_OTHER);
+           
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);

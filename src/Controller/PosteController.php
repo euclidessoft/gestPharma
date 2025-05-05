@@ -203,12 +203,15 @@ class PosteController extends AbstractController
     public function delete(Request $request, Poste $poste): Response
     {
         if ($this->security->isGranted('ROLE_RH')) {
+            try{
             if ($this->isCsrfTokenValid('delete' . $poste->getId(), $request->request->get('_token'))) {
                 $entityManager = $this->entityManager;
                 $entityManager->remove($poste);
                 $entityManager->flush();
             }
-
+        }catch (Throwable $e) {
+            $this->adFlash('notice', 'suppression impossible');
+        }
             return $this->redirectToRoute('poste_index', [], Response::HTTP_SEE_OTHER);
         } else {
             $response = $this->redirectToRoute('security_logout');
