@@ -12,11 +12,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\SecurityBundle\Security;
 
 #[Route("/{_locale}/NoteService") ]
 class NoteServiceController extends AbstractController
 {
-    public function __construct(private \Symfony\Bundle\SecurityBundle\Security $security)
+    public function __construct(private Security $security, private EntityManagerInterface $entityManager)
     {
     }
     #[Route("/", name :"note_service_index", methods : ["GET"]) ]
