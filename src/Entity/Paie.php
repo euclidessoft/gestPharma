@@ -40,8 +40,8 @@ class Paie
     #[ORM\Column(type:"array", nullable:true) ] 
     protected $indemnite = [];
     
-    #[ORM\Column(type:"array", nullable:true) ] 
-    protected $performance = [];
+    #[ORM\Column(type:"integer", nullable:true) ] 
+    protected $performance;
 
     #[ORM\Column(type:"integer") ]
     private $baseheuresup;
@@ -257,18 +257,6 @@ class Paie
     public function setIndemnite(?array $indemnite): static
     {
         $this->indemnite = $indemnite;
-
-        return $this;
-    }
-
-    public function getPerformance(): ?array
-    {
-        return $this->performance;
-    }
-
-    public function setPerformance(?array $performance): static
-    {
-        $this->performance = $performance;
 
         return $this;
     }

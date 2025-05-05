@@ -15,11 +15,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\SecurityBundle\Security;
 
 #[Route("/{_locale}/produit") ]
 class ProduitController extends AbstractController
 {
-    public function __construct(private \Symfony\Bundle\SecurityBundle\Security $security)
+    public function __construct(private Security $security, private EntityManagerInterface $entityManager)
     {
     }
 

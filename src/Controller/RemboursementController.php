@@ -19,13 +19,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\SecurityBundle\Security;
 
 #[Route("/{_locale}/remboursement") ]
 class RemboursementController extends AbstractController
 {
-    public function __construct(private \Symfony\Bundle\SecurityBundle\Security $security)
+    public function __construct(private Security $security, private EntityManagerInterface $entityManager)
     {
     }
+
 
 #[Route("/", name :"remboursement_index", methods : ["GET"]) ]
     public function index(RemboursementRepository $remboursementRepository): Response

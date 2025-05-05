@@ -17,27 +17,25 @@ class MessageRecipient
 
     /**
      * Le message associé.
-     *
-     #[\ManyToOne(targetEntity:"App\Entity\Message", inversedBy:"recipients") ]
+     */
+     #[ORM\ManyToOne(targetEntity:"App\Entity\Message", inversedBy:"recipients") ]
      #[ORM\JoinColumn(nullable:false) ]
     private $message;
 
     /**
      * Le destinataire du message.
-     *
-     #[\ManyToOne(targetEntity:"App\Entity\Employe", inversedBy:"sent") ]
+     */
+     #[ORM\ManyToOne(targetEntity:"App\Entity\Employe", inversedBy:"sent") ]
      #[ORM\JoinColumn(nullable:false) ]
     private $sender;
 
     /**
-     * Le destinataire du message.
-     *
-     #[\ManyToOne(targetEntity:"App\Entity\Employe", inversedBy:"received") ]
+     * Le destinataire du message.  */
+     #[ORM\ManyToOne(targetEntity:"App\Entity\Employe", inversedBy:"received") ]
      #[ORM\JoinColumn(nullable:false) ]
     private $recipient;
 
-    /**
-     * Indique si le message a été lu par ce destinataire.
+    /**Indique si le message a été lu par ce destinataire. */
     #[ORM\Column(type:"boolean") ]
     private $isRead = false;
 
@@ -47,7 +45,7 @@ class MessageRecipient
     #[ORM\Column(type:"datetime", nullable:true) ]
     private $deletedAt;
 
-    /**
+    
     #[ORM\Column(type:"boolean") ]
     private $deletedest = false;
 
@@ -81,7 +79,7 @@ class MessageRecipient
 
     public function setMessage(?Message $message): self
     {
-        $this->  message : $message;
+        $this->message = $message;
 
         return $this;
     }

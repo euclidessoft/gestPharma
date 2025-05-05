@@ -32,6 +32,7 @@ class PosteType extends AbstractType
                 'placeholder' => 'Occupation Unique ou Multiple'
             ])
             ->add('description')
+            ->add('heureSup')
         ;
     }
 
