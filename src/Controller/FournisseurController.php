@@ -203,11 +203,12 @@ class FournisseurController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
             try{
-            if ($this->isCsrfTokenValid('delete' . $fournisseur->getId(), $request->request->get('_token'))) {
+            if ($this->isCsrfTokenValid('delete' . $fournisseur->getId(), $request->request->get('_token')) && empty($fournisseur->getProduits())) {
                 $entityManager = $this->entityManager;
                 $entityManager->remove($fournisseur);
                 $entityManager->flush();
             }
+            else  $this->addFlash('notice', 'Suppression impossible verifier s\'il n\'est pas associé à des produits');
         }catch(Throwable $e){
             $this->addFlash('notice', 'Suppression impossilble pour des raison d\'archivage');
 
