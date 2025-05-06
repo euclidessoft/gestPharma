@@ -101,8 +101,9 @@ class ClientController extends AbstractController
         if ($this->security->isGranted('ROLE_FINANCE')) {
 
             $form = $this->createForm(ClientType::class, $client);
-            $form->handleRequest($request);
+            
             $form->remove('password');
+            $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 $this->entityManager->flush();
                 $this->addFlash('notice', 'Client modifié avec succès');

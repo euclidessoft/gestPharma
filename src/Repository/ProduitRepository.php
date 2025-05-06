@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Produit;
+use App\Entity\Fournisseur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -45,6 +46,26 @@ class ProduitRepository extends ServiceEntityRepository
             ->getQuery();
         return $query->getResult();
     }
+
+    public function fournisseur($produits)
+    {
+         return $this->createQueryBuilder('a')
+        ->where('a.id IN (:produits)')
+        ->setParameter('produits', $produits)
+        ->getQuery()
+        ->getResult();
+    }
+
+    public function nonAssocier(Fournisseur $fournisseur): array
+{
+    $qb = $this->createQueryBuilder('p');
+
+    return $qb
+        ->where(':fournisseur NOT MEMBER OF p.fournisseurs')
+        ->setParameter('fournisseur', $fournisseur)
+        ->getQuery()
+        ->getResult();
+}
 
 
 

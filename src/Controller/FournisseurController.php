@@ -3,15 +3,18 @@
 namespace App\Controller;
 
 use App\Entity\Fournisseur;
+use App\Entity\Produit;
 use App\Entity\FournisseurProduit;
 use App\Form\FournisseurType;
 use App\Repository\FournisseurRepository;
+use App\Repository\ProduitRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 #[Route("{_locale}/fournisseur") ]
 class FournisseurController extends AbstractController
@@ -80,7 +83,7 @@ class FournisseurController extends AbstractController
         }
     }
 
-    #[Route("/{id}", name :"fournisseur_show", methods : ["GET"]) ]
+    #[Route("/{id}", name :"fournisseur_show", methods : ["GET"], requirements:  ['id' => '\d+']) ]
     public function show(Fournisseur $fournisseur): Response
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
@@ -100,6 +103,68 @@ class FournisseurController extends AbstractController
             return $response;
         }
     }
+
+    #[Route("/Produits/{id}", name :"fournisseur_produit", methods : ["GET"]) ]
+    public function produit(Fournisseur $fournisseur, ProduitRepository $repository): Response
+    {/*  selection produits a affecter a un fournisseur*/
+        if ($this->security->isGranted('ROLE_FINANCE')) {
+            return $this->render('fournisseur/produit.html.twig', [
+                'fournisseur' => $fournisseur,
+                'produits' => $repository->nonAssocier($fournisseur),
+            ]);
+        } else {
+            $response = $this->redirectToRoute('security_logout');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        }
+    }
+
+    #[Route("/Affecter", name :"fournisseur_affecter", methods : [ "POST"]) ]
+    public function affecter(Request $request, EntityManagerInterface $entityManager)
+    {/** affectation de produits */
+		if ($this->security->isGranted('ROLE_FINANCE')) 
+		{
+				if($request->get('produit'))
+				{
+					$produit = explode(";",$request->get('produit'));
+					$produits = $entityManager->getrepository(Produit::class)->fournisseur( $produit);
+					$fournisseur = $entityManager->getrepository(Fournisseur::class)->find($request->get('id'));
+                    foreach($produits as  $prod){
+                        $prod->addFournisseur($fournisseur);
+                        $entityManager->persist($prod);
+                    }
+                    $entityManager->flush();
+					$this->addFlash('notice', 'Produits effectués');
+                    $url = $this->generateUrl('fournisseur_show', ['id' => $request->get('id')], UrlGeneratorInterface::ABSOLUTE_URL);
+					$res['id']= $url;
+					
+					$response = new Response();
+					$response->headers->set('content-type','application/json');
+					$re = json_encode($res);
+					$response->setContent($re);
+					return $response;
+				}
+			
+            } else {
+                $response = $this->redirectToRoute('security_logout');
+                $response->setSharedMaxAge(0);
+                $response->headers->addCacheControlDirective('no-cache', true);
+                $response->headers->addCacheControlDirective('no-store', true);
+                $response->headers->addCacheControlDirective('must-revalidate', true);
+                $response->setCache([
+                    'max_age' => 0,
+                    'private' => true,
+                ]);
+                return $response;
+            }
+	}
 
     #[Route("/{id}/edit", name :"fournisseur_edit", methods : ["GET","POST"]) ]
     public function edit(Request $request, Fournisseur $fournisseur): Response
@@ -137,11 +202,16 @@ class FournisseurController extends AbstractController
     public function delete(Request $request, Fournisseur $fournisseur): Response
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
+            try{
             if ($this->isCsrfTokenValid('delete' . $fournisseur->getId(), $request->request->get('_token'))) {
                 $entityManager = $this->entityManager;
                 $entityManager->remove($fournisseur);
                 $entityManager->flush();
             }
+        }catch(Throwable $e){
+            $this->addFlash('notice', 'Suppression impossilble pour des raison d\'archivage');
+
+        }
 
             return $this->redirectToRoute('fournisseur_index', [], Response::HTTP_SEE_OTHER);
         } else {
