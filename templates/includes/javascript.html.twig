@@ -280,6 +280,9 @@
 
     function envoie() {
         var valider=$('#send');
+        var originalHtml = valider.html();
+        // var originalClasses = valider.attr('class') || '';
+        // alert(originalHtml, originalClasses)
         valider.addClass("disabled");
         valider.html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
         $('#form').submit();

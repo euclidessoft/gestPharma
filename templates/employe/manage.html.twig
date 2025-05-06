@@ -5,8 +5,7 @@
     is_granted('ROLE_STOCK') ? 'stock.html.twig' :
     is_granted('ROLE_LIVREUR') ? 'livreur.html.twig' :
     is_granted('ROLE_EMPLOYER') ? 'employe.html.twig' :
-    'layout.html.twig'
-%}
+    'layout.html.twig' %}
 {% block title %} {{ "Tous les utilisateurs"|trans }} - GNT Pharma {% endblock %}
 {% block employe %}active{% endblock %}
 {% block all_employe %}active{% endblock %}
@@ -27,7 +26,8 @@
             <thead>
             <tr>
                 <th>{{ 'Utilisateur'|trans }}</th>
-                <th>{{ 'Département'|trans }}</th>
+                {#                <th>{{ 'Département'|trans }}</th>#}
+                <th>{{ 'Poste'|trans }}</th>
                 <th class="text-center">{{ 'Téléphone'|trans }}</th>
                 <th>{{ 'Email'|trans }}</th>
                 <th class="text-center">{{ 'Statut'|trans }}</th>
@@ -36,17 +36,19 @@
             </thead>
             <tbody>
             {% for employe in employes %}
-                <tr>
+            <tr>
                 <td data-label="{{ 'Utilisateur'|trans }}">{{ employe.nom }} {{ employe.prenom }}</td>
-                <td data-label="{{ 'Département'|trans }}">{{ employe.poste ? employe.poste.departement.nom: '' }}</td>
+                {# <td data-label="{{ 'Département'|trans }}">{{ employe.poste ? employe.poste.departement.nom: '' }}</td>#}
+                <td data-label="{{ 'Poste'|trans }}">{{ employe.poste ? employe.poste.nom: '' }}</td>
                 <td class="text-center" data-label="{{ 'Téléphone'|trans }}">{{ employe.phone }}</td>
                 <td data-label="{{ 'Email'|trans }}">{{ employe.email }}</td>
                 <td data-label="{{ 'Statut'|trans }}" class="text-center">
-                    {% if employe.status %}
+                    {{ employe.status ? "Actif"|trans : "Inactif"|trans }}
+                    {#{% if employe.status %}
                         {{ "Actif "|trans }}
                     {% else %}
                         {{ "Inactif"|trans }}
-                    {% endif %}
+                    {% endif %}#}
                 </td>
                 <td data-label="{{ 'Action'|trans }}" class="text-center px-1">
                     <form action="{{ path('employe_toggle_status', { 'id': employe.id }) }}" method="post"
@@ -61,7 +63,7 @@
                         </button>
                     </form>
                 </td>
-            {% endfor %}
+                {% endfor %}
             </tbody>
         </table>
     </div>
