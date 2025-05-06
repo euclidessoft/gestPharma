@@ -14,6 +14,12 @@
         <i class="fa-brands fa-product-hunt me-2"></i>
         {{ "Informations du fournisseur"|trans }}
     </h3>
+     {% for message in app.flashes('notice') %}
+            <div role="alert" class="alert alert-success alert-dismissible fade show radius-10 shadow-black">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                {{ message|trans }}
+            </div>
+        {% endfor %}
 
     <table class="table table-success-light table-bordered text-center table-hover table-striped w-100">
         <tbody>
@@ -45,9 +51,14 @@
         <div class="centrer">
 {#            <a class="btn btn-success me-3" href="{{ path('fournisseur_edit', {'id': fournisseur.id}) }}">#}
 {#                <i class="fa fa-edit"></i> Modifier</a>#}
-            <a id="{{ fournisseur.id }}" onclick="load({{ fournisseur.id }})" class="btn btn-success-light text-green" href="{{ path('fournisseur_index') }}">
+            <a id="{{ fournisseur.id }}" onclick="load({{ fournisseur.id }})" class="btn btn-success-light text-green m-2" href="{{ path('fournisseur_index') }}">
                 <i class="fa fa-undo"></i>
                 {{ 'Retour'|trans }}
+            </a>
+
+            <a id="aff{{ fournisseur.id }}" onclick="load('aff'~{{ fournisseur.id }})" class="btn btn-success" href="{{ path('fournisseur_produit',{'id' : fournisseur.id}) }}">
+                <i class="fa fa-undo"></i>
+                {{ 'Affecter Produits'|trans }}
             </a>
         </div>
     </div>

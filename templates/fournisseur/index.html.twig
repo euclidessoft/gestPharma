@@ -16,6 +16,13 @@
             <i class="fa-solid fa-hospital-user"></i>
             {{ "Liste des fournisseurs"|trans }}
         </h3>
+         {% for message in app.flashes('notice') %}
+            <div role="alert" class="alert alert-success alert-dismissible fade show radius-10 shadow-black">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                {{ message|trans }}
+            </div>
+        {% endfor %}
+        
         <a class="btn btn-green mb-" href="{{ path('fournisseur_new') }}">
             <i class="fa-solid fa-hospital-user"></i><i class="fa-solid fa-plus"></i>
             {{ 'Nouveau fournisseur'|trans }}
