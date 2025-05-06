@@ -83,7 +83,7 @@ tr {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.9) !important;
     display: block;
     margin: 0 auto;
-    backdrop-filter: blur(5px);
+    /*backdrop-filter: blur(5px);*/
     padding: 1rem;
 }
 
@@ -722,6 +722,16 @@ td[data-label="colspan"] {
     font-size: 30px;
     font-weight: 900;
     text-transform: uppercase;
+}
+
+.modal {
+    z-index: 1060 !important; /* Plus élevé que vos autres éléments */
+    position: fixed;
+}
+
+.modal-backdrop {
+    z-index: 1050 !important;
+    position: fixed;
 }
 
 /*.modal-backdrop.show {

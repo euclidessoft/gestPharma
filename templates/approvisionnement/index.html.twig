@@ -49,8 +49,7 @@
                             <td>{{ produit.desigantion }}</td>
                             <td>
                                 <!-- Button trigger modal -->
-                                <button type="button"
-                                        class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal{{ produit.id }}"
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal{{ produit.id }}"
                                        id="btn{{ produit.id }}" {# onclick="fournisseur({{ produit.id }})"#}>
                                     <i class="fa fa-plus"></i> {{ 'Ajouter'|trans }}
                                 </button>
@@ -62,9 +61,8 @@
                                             <div class="modal-header">
                                                 <h4 class="modal-title fs-5" id="exampleModalLabel">
                                                     {{ produit.reference }} {{ produit.desigantion }} {{ produit.fabriquant }}</h4>
-                                                <button type="button" class="close" data-bs-dismiss="modal"
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
                                             <div class="modal-body px-5">
