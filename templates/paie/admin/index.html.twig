@@ -37,17 +37,12 @@
                 <td>{{ paie.employe.matricule }}</td>
                 <td>{{ paie.employe.nom~' '~paie.employe.prenom }}</td>
                 <td>{{ paie.salaireNet|number_format(0, '', ' ') }}</td>
-
                 <td>
                     <a href="{{ path('paie_show', {'id': paie.employe.id }) }}" class="btn btn-success">
                         <i class="fa fa-eye"></i>
                         Details
                     </a>
                 </td>
-            </tr>
-            {% else %}
-            <tr>
-                <td colspan="4" class="text-center">Aucune fiche de paie enregistrée.</td>
             </tr>
             {% endfor %}
         </tbody>

@@ -100,7 +100,9 @@
 
     }
     function load(id) {
-        $("#"+id).html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
+        let btnRetour = $("#"+id);
+        btnRetour.html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
+        btnRetour.addClass('disabled');
 
     }
 

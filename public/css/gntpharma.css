@@ -5,6 +5,8 @@
     --gris-hover: #444;
     --vert-hover: #036f38;
     --blanc: #fff;
+    --bs-border-width: 1px;
+    --bs-body-color-rgb: 33, 37, 41;
 }
 
 body {
@@ -80,7 +82,7 @@ tr {
 .fond-5, .fond-7 {
     border: 1px solid transparent;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.9) !important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5) !important;
     display: block;
     margin: 0 auto;
     /*backdrop-filter: blur(5px);*/
@@ -336,8 +338,7 @@ tr {
 
 .dropdown-item.submenu:hover > a {
     background: var(--vert-clair);
-    color: var(--vert);
-!important;
+    color: var(--vert) !important;
 }
 
 .dropdown-toggle[aria-expanded="true"]:after {
@@ -398,10 +399,15 @@ tr {
     border-radius: 10px;
     border: 1px solid var(--vert);
 }
-
-.form-control.is-invalid {
+.input-group:has(.form-floating):has(.is-invalid),
+.form-control.is-invalid,
+.input-group:has(.is-invalid) {
     border-color: #dc3545 !important;
     border-width: 2px !important;
+}
+
+.form-control.is-invalid:focus {
+    box-shadow: 0 0 0.5rem 0.25rem rgba(var(--bs-danger-rgb), .25);
 }
 
 /*.input-group-apend + .form-control {
@@ -412,22 +418,44 @@ tr {
     border-radius: 0 10px 10px 0 !important;
 }*/
 
+.input-group:has(.input-group-text) {
+    border-radius: 10px;
+    border: 1px solid #039c4f;
+}
+
+.input-group:has(.form-floating):has(.is-invalid) .form-control,
+.input-group:has(.input-group-text) .form-control {
+    /*border-radius: 10px;*/
+    border: 1px solid transparent !important;
+}
+
+.input-group > .form-control:not(:last-child),
+.input-group > .custom-select:not(:last-child) {
+    border: 1px solid transparent !important;
+}
+
 .input-group > .form-control:not(:first-child),
+.input-group > .custom-select:not(:first-child) {
+    border: 1px solid transparent !important;
+}
+
+.input-group-text {
+    border-radius: 10px;
+    background-color: #dee2e6;
+}
+
+/*.input-group > .form-control:not(:first-child),
 .input-group > .custom-select:not(:first-child),
 .input-group > .form-control:not(:last-child),
 .input-group > .custom-select:not(:last-child) {
     border: 1px solid var(--vert);
     border-radius: 10px;
-}
-
-.input-group-text {
-    border-radius: 9px;
-}
+}*/
 
 .form-control:focus,
 .form-select:focus {
     border: 1px solid var(--vert);
-    box-shadow: 0 0 8px rgba(3, 156, 79, 0.5);
+    box-shadow: 0 0 0.5rem 0.10rem rgba(3, 156, 79, 0.5);
 }
 
 .card {
@@ -613,8 +641,7 @@ td[data-label="colspan"] {
 }
 
 .OK {
-    background: var(--vert-clair);
-!important;
+    background: var(--vert-clair) !important;
     color: var(--vert);
     font-weight: bold;
     text-align: center;
@@ -1370,8 +1397,7 @@ select#transfert_date_time_minute {
     }
 
     .table-bordered {
-        border: 1px solid var(--gris-hover);
-    !important;
+        border: 1px solid var(--gris-hover) !important;
     }
 
     .shadow-black,
@@ -1381,8 +1407,7 @@ select#transfert_date_time_minute {
     }
 
     .border-imp {
-        border: 1px solid var(--gris-hover);
-    !important;
+        border: 1px solid var(--gris-hover) !important;
     }
 
     .trait {
@@ -1405,16 +1430,13 @@ select#transfert_date_time_minute {
 
     th,
     td {
-        border: 1px solid var(--gris-hover);
-    !important;
+        border: 1px solid var(--gris-hover) !important;
     }
 
     tr[data-label="couple"],
     td[data-label="couple"] {
-        border-left: 1px solid var(--blanc);
-    !important;
-        border-right: 1px solid var(--blanc);
-    !important;
+        border-left: 1px solid var(--blanc) !important;
+        border-right: 1px solid var(--blanc) !important;
         background: transparent !important;
     }
 }
@@ -2380,11 +2402,11 @@ button.bg-default:focus {
     padding-bottom: 1rem;
 }
 
-.form-floating>.form-control:-webkit-autofill~label,
-.form-floating>.form-control-plaintext~label,
-.form-floating>.form-control:focus~label,
-.form-floating>.form-control:not(:placeholder-shown)~label,
-.form-floating>.form-select~label {
+.form-floating > .form-control:-webkit-autofill ~ label,
+.form-floating > .form-control-plaintext ~ label,
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label,
+.form-floating > .form-select ~ label {
     transform: scale(.75) translateY(-.5rem) translateX(.15rem);
 }
 
@@ -2432,12 +2454,13 @@ button.bg-default:focus {
     padding: 0 10px;
     height: auto !important;
     border-radius: 10px;
-    color: rgba(var(--bs-body-color-rgb),.8);
+    color: rgba(var(--bs-body-color-rgb), 0.8);
 }
 
 .form-check-input:checked {
     background-color: var(--vert);
 }
+
 .form-check-input {
     border: 1px solid var(--gris-hover);,
 }
@@ -2458,3 +2481,4 @@ textarea.rows-10 {
     padding: 10px;
     margin: 5px 5px 5px auto;
 }
+

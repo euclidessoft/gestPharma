@@ -43,10 +43,6 @@
                     <a href="{{ path('paie_show', {'id': paies.employe.id }) }}" class="btn btn-success">Details</a>
                 </td>
             </tr>
-            {% else %}
-            <tr>
-                <td colspan="6" class="text-center">Aucune fiche de paie valié.</td>
-            </tr>
             {% endfor %}
         </tbody>
     </table>

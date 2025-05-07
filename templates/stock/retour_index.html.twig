@@ -15,8 +15,8 @@
 {% block body %}
     <div class="container mt-4 fond-7">
         <h3 class="mt-4 mb-5 text-bold">
-            <i class="fas fa-warehouse me-2"></i><i class="fas fa-arrow-left me-2"></i>
-            {{ "Liste des Retours de produits"|trans }}
+            <i class="fas fa-warehouse"></i><i class="fas fa-undo"></i>
+            {{ "Retours de produits"|trans }}
         </h3>
 
         {% for message in app.flashes('notice') %}
@@ -31,7 +31,7 @@
                 <th>{{'N° Retour'|trans}}</th>
                 <th>{{'N° Commande'|trans}}</th>
                 <th>{{'Date de retour'|trans}}</th>
-                <th>{{ 'Client'|trans }} </th>
+                <th>{{'Client'|trans }} </th>
                 <th> </th>
             </tr>
             </thead>
@@ -48,16 +48,9 @@
                             {{ 'Détails'|trans }}
                         </a>
                     </td>
-
-
                 </tr>
-
             {% else %}
-                <tr>
-                    <td colspan="5">
-                        {{ 'Aucune commande'|trans }}
-                    </td>
-                </tr>
+
             {% endfor %}
             </tbody>
         </table>
