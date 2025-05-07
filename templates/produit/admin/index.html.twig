@@ -23,7 +23,10 @@
         {{ message|trans }}
     </div>
     {% endfor %}
-
+    <a href="{{ path('produit_new') }}" class="btn btn-green my-4">
+        <i class="fa fa-plus"></i>
+        {{ "Nouveau"|trans }}
+    </a>
     <table class="table table-success-light table-bordered table-hover table-striped w-100 text-center my-3" id="liste">
         <thead>
             <tr>

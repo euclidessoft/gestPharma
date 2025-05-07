@@ -43,10 +43,6 @@
                     <td>{{ approvisionnement.produit.prixpublic }}</td>
                     <td class="text-start">{{ approvisionnement.produit.fabriquant }}</td>
                 </tr>
-            {% else %}
-                <tr>
-                    <td colspan="6">{{ "Aucun produit"|trans }}</td>
-                </tr>
             {% endfor %}
             </tbody>
         </table>
