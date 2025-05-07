@@ -33,7 +33,7 @@ class ApprovisionnementController extends AbstractController
     {
 
         if ($this->security->isGranted('ROLE_STOCK')) {
-            $produits = $produitRepository->findAll();
+            $produits = $produitRepository->reapprovisionnement();
 
             $approv = $session->get("approv", []);
             $dataPanier = [];
@@ -61,12 +61,20 @@ class ApprovisionnementController extends AbstractController
                     ];
             }
 
-
-            return $this->render('approvisionnement/index.html.twig', [
+            $response = $this->render('approvisionnement/index.html.twig', [
                 'approvisionnements' => $approvisionnementRepository->findAll(),
                 'produits' => $produits,
                 'panier' => $dataPanier,
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_login');
             $response->setSharedMaxAge(0);

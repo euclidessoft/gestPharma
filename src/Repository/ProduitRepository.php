@@ -67,6 +67,14 @@ class ProduitRepository extends ServiceEntityRepository
         ->getResult();
 }
 
+public function reapprovisionnement(): array
+{/** produits avec au moins un fournisseur */
+    return $this->createQueryBuilder('p')
+        ->where('p.fournisseurs IS NOT EMPTY')
+        ->getQuery()
+        ->getResult();
+}
+
 
 
 
