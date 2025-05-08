@@ -167,16 +167,15 @@
             </div>
         </div>
     </div>
-<div class="modal fade" id="modal" tabindex="-1" tabindex="-1" aria-labelledby="" aria-hidden="true" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered text-center">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h1 class="modal-title fs-5" id="exampleModalLabel">
                                     {{ 'Paiement'|trans }}
                                  </h1>
-                                <button type="button" class="close" data-bs-dismiss="modal"
-                                        aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
                                 </button>
                             </div>
                             <div class="modal-body px-5">
@@ -225,7 +224,7 @@
                         </div>
                     </div>
                 </div>
-{{ include('includes/javascript.html.twig') }}
+{#{{ include('includes/javascript.html.twig') }}#}
 
 {% endblock %}
 

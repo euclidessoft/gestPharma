@@ -29,8 +29,7 @@
                 <th>{{ 'Commande'|trans }}<br> {{ 'Minimum'|trans }}</th>
                 <th>{{ 'Quantité'|trans }}</th>
                 <th>{{ 'Total'|trans }}</th>
-
-                <th>{{ 'actions'|trans }}</th>
+                <th>{{ 'Actions'|trans }}</th>
             </tr>
             </thead>
             <tbody>
@@ -149,6 +148,12 @@
                     <td class="text-center">
                         <span id="total">{{ (total +tva-reduction)|number_format(0, '' , ' ') }}</span>
                         <input type="hidden" value="{{ total }}" id="totaltamp"/>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="10" class="text-center py-4">
+                        {{ "Panier vide"|trans }}
                     </td>
                 </tr>
             {% endif %}

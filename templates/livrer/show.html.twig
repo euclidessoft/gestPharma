@@ -139,7 +139,7 @@
                         <i class="fa fa-edit"></i>
                         {{ 'Détails'|trans }}
                     </button>
-                    <div class="modal fade" id="modal{{ commande.produit.id }}" tabindex="-1" tabindex="-1" aria-labelledby="" aria-hidden="true"
+                    <div class="modal fade" id="modal{{ commande.produit.id }}" tabindex="-1" aria-labelledby=""
                          aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-lg text-center">
                             <div class="modal-content">
@@ -147,9 +147,9 @@
                                     <h5 class="modal-title fs-5" id="exampleModalLabel">
                                         {{ commande.produit.reference }} {{ commande.produit.desigantion }} {{ commande.produit.fabriquant }}
                                     </h5>
-                                    <button type="button" class="close" data-bs-dismiss="modal"
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
+
                                     </button>
                                 </div>
                                 <div class="modal-body px-5">
@@ -204,8 +204,7 @@
 
 
         <!-- Modal -->
-        <div class="modal fade" id="livreur" tabindex="-1" tabindex="-1" aria-labelledby="" aria-hidden="true" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
+        <div class="modal fade" id="livreur" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered text-center">
                 <div class="modal-content ">
                     <div class="modal-header">
@@ -213,9 +212,8 @@
                             <i class="fa-solid fa-truck-fast"></i>
                             {{ 'Livraison'|trans }}
                         </h4>
-                        <button type="button" class="close" data-bs-dismiss="modal"
-                                aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
                         </button>
                     </div>
                     <div class="modal-body px-5 pb-5">
@@ -230,10 +228,7 @@
                             {{ 'Valider'|trans }}
                         </button>
                         {{ form_end(form) }}
-
-
                     </div>
-
                 </div>
             </div>
         </div>

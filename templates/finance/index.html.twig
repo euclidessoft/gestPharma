@@ -23,7 +23,7 @@
         </h3>
         {% for message in app.session.flashbag.get('notice') %}
             <div role="alert" class="alert alert-danger alert-dismissible fade show radius-10 shadow-black mt-5 mb-5">
-                <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">&times;</button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">&times;</button>
                 {{ message|trans }}
             </div>
         {% endfor %}

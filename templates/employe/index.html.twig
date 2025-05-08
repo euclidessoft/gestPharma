@@ -37,15 +37,16 @@
                 <th class="text-center">{{ 'Age'|trans }}</th>
                 <th class="text-center">{{ 'Sexe'|trans }}</th>
                 <th>{{ 'Téléphone'|trans }}</th>
-                <th>{{ 'Adresse'|trans }}</th>
+                <th>{{ 'Email'|trans }}</th>
                 <th>{{ 'Poste'|trans }}</th>
                 <th>{{ 'Département'|trans }}</th>
+                <th>{{ 'Statut'|trans }}</th>
                 <th class="text-center noExport">{{ 'Action'|trans }}</th>
             </tr>
             </thead>
             <tbody>
             {% for employe in employes %}
-                <tr>
+            <tr>
                 <td data-label="{{ 'Matricule'|trans }}">
                     {{ employe.matricule }}
                 </td>
@@ -65,8 +66,8 @@
                 <td data-label="{{ 'Téléphone'|trans }}">
                     {{ employe.phone }}
                 </td>
-                <td data-label="{{ 'Adresse'|trans }}">
-                    {{ employe.adresse }}
+                <td data-label="{{ 'Email'|trans }}">
+                    {{ employe.email }}
                 </td>
                 <td data-label="{{ 'Poste'|trans }}">
                     {{ employe.poste ? employe.poste.nom: '' }}
@@ -74,17 +75,29 @@
                 <td data-label="{{ 'Département'|trans }}">
                     {{ employe.poste ? employe.poste.departement.nom: '' }}
                 </td>
+                <td data-label="{{ 'Statut'|trans }}" class="text-center">
+                    {{ employe.status ? "Actif"|trans : "Inactif"|trans }}</td>
                 <td data-label="{{ 'Action'|trans }}" class="text-center noExport">
-                    <a href="{{ path('employe_show', {'id': employe.id}) }}" class="btn btn-green mb-1 me-2"
-                       title="{{ "Voir"|trans }}">
+                    <a href="{{ path('employe_show', {'id': employe.id}) }}" class="btn btn-green" title="{{ "Voir"|trans }}">
                         <i class="fa fa-eye"></i>
                     </a>
-                    <a href="{{ path('employe_edit', {'id': employe.id}) }}" class="btn btn-success-light mb-1"
+                    <a href="{{ path('employe_edit', {'id': employe.id}) }}" class="btn btn-success-light"
                        title="{{ "Modifier"|trans }}">
                         <i class="fa fa-edit"></i>
                     </a>
+                    <form action="{{ path('employe_toggle_status', { 'id': employe.id }) }}" method="post"
+                          class="d-inline">
+                        <input type="hidden" name="_token" value="{{ csrf_token('toggle' ~ employe.id) }}">
+                        <button type="submit" class="btn btn-{% if employe.status %}danger{% else %}success{% endif %}">
+                            {% if employe.status %}
+                                <i class="fa fa-user-lock" title="{{ "Désactiver cet employé"|trans }}"></i>
+                            {% else %}
+                                <i class="fa-solid fa-user-check" title="{{ "Activer cet employé"|trans }}"></i>
+                            {% endif %}
+                        </button>
+                    </form>
                 </td>
-            {% endfor %}
+                {% endfor %}
             </tbody>
         </table>
 
