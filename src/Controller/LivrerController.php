@@ -904,7 +904,8 @@ class LivrerController extends AbstractController
             $em->persist($commande);
             $em->flush();
             $this->addFlash('notice', 'Livraison enregistrée avec succés');
-            $response = $this->redirectToRoute('livraison_historique_show_print', ['id' => $commande->getId()]);
+            $response = $this->redirectToRoute('livraison_index');
+            // $response = $this->redirectToRoute('livraison_historique_show_print', ['id' => $commande->getId()]);
 
             $session->remove('traitement');
             $session->remove('livreur');
