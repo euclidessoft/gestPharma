@@ -144,73 +144,316 @@ class PaieController extends AbstractController
                 continue;
             }
 
-            $salaireDeBase = $employe->getPoste()->getSalaire();// + $employe->getSursalaire();
-            $salaireJournaliere = $salaireDeBase / 30;
+            $transport = 0;
+            $logement = 0;
+            $ponction = 0;
+            $totalprime = [];
+            $montantprime = 0;
 
-                $primes = $entityManager->getRepository(Prime::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
-                $heureSup = $entityManager->getRepository(HeureSuplementaire::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
-                $sanctions = $entityManager->getRepository(Sanction::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
+            /** enciennete */
+            $now = new \DateTime();
+           
+            $interval = $now->diff($employe->getHireDate());
 
-                $totalRetenue = 0;
-                $detailsRetenues = [];
+            $yearDiff = $interval->y;
+            $monthDiff = $interval->m + 1; // +1 comme dans votre code original
 
-                foreach ($sanctions as $sanction) {
-                    if ($sanction->getTypeSanction()->getNom() === 'ponction salarial') {
-                        $nombreJours = $sanction->getNombreJours();
-                        $montantRetenue = $salaireJournaliere * $nombreJours;
-                        $totalRetenue += $montantRetenue;
 
-                        $detailsRetenues[] = [
-                            'type' => 'Ponction salariale',
-                            'montant' => round($montantRetenue, 2),
-                            'details' => $nombreJours . ' jours de retenue',
-                        ];
-                    } elseif ($sanction->getTypeSanction()->getNom() === 'mis a pied') {
-                        $dateDebut = $sanction->getDateDebut();
-                        $dateFin = $sanction->getDateFin();
-                        $nombreJours = $dateDebut->diff($dateFin)->days + 1;
-                        $montantRetenue = $salaireJournaliere * $nombreJours;
-                        $totalRetenue += $montantRetenue;
+            $paie = new Paie();
+            $paie->setTauxenciennete($yearDiff);
+            $paie->setBaseenciennete($employe->getPoste()->getSalaire());
+            $paie->setCode(0);
+            $paie->setSalaireBase($employe->getPoste()->getSalaire());
+            $paie->setEmploye($employe);
+            $paie->setMois($mois);
+            
 
-                        $detailsRetenues[] = [
-                            'type' => 'Mise à pied',
-                            'montant' => round($montantRetenue, 2),
-                            'details' => 'Du ' . $dateDebut->format('d/m/Y') . ' au ' . $dateFin->format('d/m/Y'),
-                        ];
-                    }
+            // Vérifier si la paie du mois en cours est déjà validée
+            $paieExistante = $entityManager->getRepository(Paie::class)->findByDate($employe->getId(), $startOfMonth, $endOfMonth);
+//            $primes = $entityManager->getRepository(Prime::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
+//            $heureSup = $entityManager->getRepository(HeureSuplementaire::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
+
+            $primes = $entityManager->getRepository(Prime::class)->findBy(['employe' => $employe->getId()]);
+
+                        
+            
+            $nbrjoursmois = new \DateTime();
+            $ponction = $employe->getPoste()->getSalaire() / $nbrjoursmois->format('t');
+            foreach ($primes as $prime) {
+                // Vérifie si la description est "indemnité de transport" (en minuscules)
+                if (strtolower($prime->getDescription()) === 'indemnité de transport') {
+                    $transport = $prime->getMontant();
+                }
+                else if(strtolower($prime->getDescription()) === 'indemnité de logement') {
+                    $logement = $prime->getMontant();
                 }
 
-                $totalPrimes = $primeRepository->getTotalPrimesByEmploye($employe);
-                $totalHeureSup = $heureSuplementaireRepository->getTotalHeuresByEmploye($employe);
-                $salaireBrut = $salaireDeBase + $totalHeureSup + $totalPrimes - $totalRetenue;
-                $chargeSocial = 14000;
-                $chargePatronal= 7000;
-                $salaireNetImposable = $salaireBrut - $chargeSocial;
-                $impot = 8000;
-                $salaireNet = $salaireNetImposable - $impot;
-                // Enregistrement dans la table paie
-                $paie = new Paie();
-                $paie->setSalaireBase($salaireDeBase);
-                $paie->setEmploye($employe);
-                $paie->setMois($mois);
-                $paie->setTotalPrime($totalPrimes);
-                $paie->setTotalheureSup($totalHeureSup);
-                $paie->setTotalRetenue($totalRetenue);
-                $paie->setSalaireBrut($salaireBrut);
-                $paie->setSalaireNetImposable($salaireNetImposable);
-                $paie->setTotalChargeEmploye($chargeSocial);
-                $paie->setTotalChargePatronal($chargePatronal);
-                $paie->setSalaireNet($salaireNet);
-                $paie->setImpot($impot);
-                $paie->setDetailsRetenues(json_encode($detailsRetenues));
-                $entityManager->persist($paie);
+                // Vérifie si la prime est journalière (base == true)
+                if (!empty($prime->getBase()) && $prime->getBase() === true) {
+                    $ponction += $prime->getMontant() / $nbrjoursmois->format('t');
+                    $totalprime = [ 'designation' => $prime->getDescription(), 
+                                    'montant' => $prime->getMontant()
+                                ];
+                } else {
+                    $totalprime = [ 'designation' => $prime->getDescription(), 
+                                    'montant' => $prime->getMontant()
+                                ];
+                }
+                $montantprime += $prime->getMontant();
+            }
+            $paie->setIndemnite($totalprime);
+
+
+            $heureSups = $heureSuplementaireRepository->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
+            $nombreHeures = 0;
+            $montantheureSup = 0;
+            foreach ($heureSups as $heureSup) {
+                // calcul nombre d'heure
+                $nombreHeures = $nombreHeures + $heureSup->getDuree();
+            }
+            $paie->setBaseheureSup($employe->getPoste()->getHeureSup());
+            $paie->setTauxheureSup($nombreHeures);
+            
+            $montantheureSup = $employe->getPoste()->getHeureSup() * $nombreHeures;
+
+
+            $primeperformances = $entityManager->getRepository(PrimePerformance::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
+            $totalPrimePerf = 0;
+            foreach ($primeperformances as $primeP) {
+                // calcul nombre d'heure
+                $totalPrimePerf = $totalPrimePerf + $primeP->getMontant();
+            }
+            $paie->setPerformance($totalPrimePerf);
+
+
+            $sanctions = $entityManager->getRepository(Sanction::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
+
+            $retenues = [];
+            $nombreJours = 0;
+            // $salaireJournalier = $employe->getPoste()->getSalaire() / 30; // Salaire journalier
+            $montantRetenue = 0;
+            foreach ($sanctions as $sanction) {
+                // calcul nombre jours
+
+                if ($sanction->getTypeSanction()->getNom() === 'Ponction Salariale') {
+                    $nombreJours =  $nombreJours + $sanction->getNombreJours();
+//                    $montantRetenue = $montantRetenue + $salaireJournalier * $nombreJours;
+                } elseif ($sanction->getTypeSanction()->getNom() === 'Mis a pied') {
+                    $dateDebut = $sanction->getDateDebut();
+                    $dateFin = $sanction->getDateFin();
+                    $nombreJours = $nombreJours + $dateDebut->diff($dateFin)->days + 1;
+//                    $montantRetenue = $montantRetenue + $salaireJournalier * $nombreJours;
+                }
+
+            }
+            $paie->setJours($nombreJours);
+            
+            $paie->setBaseponction($ponction);
+            $paie->setTauxponction($nombreJours);
+            $paie->setBrut($employe->getPoste()->getSalaire() + $montantprime + $montantheureSup + $totalPrimePerf);
+            $paie->setBrutinter($paie->getBrut() - $montantprime);
+            
+            /** logement fisc */
+            $logementfisc = 0;
+            if ($paie->getBrutinter() * 0.1 <= $transport) {
+                $logementfisc = $paie->getBrutinter() * 0.1;
+            } else {
+                $logementfisc = $transport;
+            }
+            $paie->setLogementfisc($logementfisc);
+
+            /** vehicule fisc */
+            if ($paie->getBrutinter() * 0.15 <= $logement) {
+                $vehiculefisc = $paie->getBrutinter() * 0.15;
+            } else {
+                $vehiculefisc = $logement;
+            }
+            $paie->setVehiculefisc($vehiculefisc);
+
+            /** logement cnps */
+            if ($paie->getBrutinter() * 0.1 > $transport) {
+                $logementcnps = 0;
+            } elseif ($paie->getBrutinter() * 0.1 < $transport) {
+                $logementcnps = $transport - ($paie->getBrutinter() * 0.1);
+            } else {
+                $logementcnps = 0;
+            }
+            $paie->setLogementcnps($logementcnps);
+
+            /** vehicule cnps */
+            if ($paie->getBrutinter() * 0.15 > $logement) {
+                $vehiculecnps = 0;
+            } elseif ($paie->getBrutinter() * 0.15 < $logement) {
+                $vehiculecnps = $logement - ($paie->getBrutinter() * 0.15);
+            } else {
+                $vehiculecnps = 0;
+            }
+            $paie->setVehiculecnps($vehiculecnps);
+
+            /** salaire brut taxe brutinter + transport + vehiculefisc */
+            $paie->setBruttaxable($paie->getBrutinter() + $transport + $vehiculefisc);
+            $paie->setSalairecotisable($paie->getBrutinter()  + $vehiculecnps);
+
+            /** irpp */
+            if($paie->getBruttaxable() < 62000) {
+                $irpp = 0;
+            } elseif ($paie->getBruttaxable() < 310000) {
+                $irpp = ($paie->getBruttaxable() * 0.7 - $paie->getBruttaxable() * 0.028 - 41667) * 0.1;
+            } elseif ($paie->getBruttaxable() < 429000) {
+                $irpp = 16693 + ($paie->getBruttaxable() - 310000) * 0.7 * 0.15;
+            } elseif ($paie->getBruttaxable() < 667000) {
+                $irpp = 29188 + ($paie->getBruttaxable() - 429000) * 0.7 * 0.25;
+            } elseif ($paie->getBruttaxable() > 667001) {
+                $irpp = 70830 + ($paie->getBruttaxable() - 667000) * 0.7 * 0.35;
+            }
+            $paie->setBaseirpp($paie->getBruttaxable());
+            // $paie->setTauxirpp($irpp);
+            $paie->setIrpp($irpp); 
+            $paie->setBaseca($irpp);
+            $paie->setTauxca(10);
+            $ca = $irpp * 0.1;
+            $paie->setca($ca);
+           
+            /** dve local */
+            if ($paie->getBruttaxable() < 62000) {
+                $com = 0;
+            } elseif ($paie->getBruttaxable() < 75001) {
+                $com = 250;
+            } elseif ($paie->getBruttaxable() < 100001) {
+                $com = 500;
+            } elseif ($paie->getBruttaxable() < 125001) {
+                $com = 750;
+            } elseif ($paie->getBruttaxable() < 150001) {
+                $com = 1000;
+            } elseif ($paie->getBruttaxable() < 200001) {
+                $com = 1250;
+            } elseif ($paie->getBruttaxable() < 250001) {
+                $com = 1500;
+            } elseif ($paie->getBruttaxable() < 300001) {
+                $com = 2000;
+            } elseif ($paie->getBruttaxable() < 500001) {
+                $com = 2250;
+            } elseif ($paie->getBruttaxable() > 500001) {
+                $com = 2500;
+            }
+            $paie->setBaselocal($paie->getBruttaxable());
+            $paie->setTauxlocal($com);
+            $paie->setLocal($com);
+           
+            /** vcnps viel */
+            if ($paie->getSalairecotisable() <= 750000) {
+                $pv = $paie->getSalairecotisable() * 0.042;
+            } else {
+                $pv = 750000 * 0.042;
+            }
+            $paie->setBasevieil($paie->getSalairecotisable());
+            $paie->setTauxvieil(4.2);
+            $paie->setVieil($pv);
+            
+            /** fonfoncier */
+            if ($paie->getBruttaxable() <= 62000) {
+                $foncier = 0;
+            } else {
+                $foncier = $paie->getBruttaxable() * 0.01;
+            }
+            $paie->setBasefoncier($paie->getBruttaxable());
+            $paie->setTauxfoncier(1);
+            $paie->setFoncier($foncier);
+            
+            /** crtv */
+            if ($paie->getBruttaxable() <= 52000) {
+                $CRTV = 0;
+            } elseif ($paie->getBruttaxable() <= 100000) {
+                $CRTV = 750;
+            } elseif ($paie->getBruttaxable() <= 200000) {
+                $CRTV = 1950;
+            } elseif ($paie->getBruttaxable() < 300000) {
+                $CRTV = 3250;
+            } elseif ($paie->getBruttaxable() <= 400000) {
+                $CRTV = 4550;
+            } elseif ($paie->getBruttaxable() <= 500000) {
+                $CRTV = 5850;
+            } elseif ($paie->getBruttaxable() < 600000) {
+                $CRTV = 7150;
+            } elseif ($paie->getBruttaxable() <= 700000) {
+                $CRTV = 8450;
+            }
+
+            if ($paie->getBruttaxable() > 700000 && $paie->getBruttaxable() <= 800000) {
+                $CRTV += 9750;
+            } elseif ($paie->getBruttaxable() > 800000 && $paie->getBruttaxable() <= 900000) {
+                $CRTV += 11050;
+            } elseif ($paie->getBruttaxable() > 900000 && $paie->getBruttaxable() <= 1000000) {
+                $CRTV += 12350;
+            } elseif ($paie->getBruttaxable() > 1000000) {
+                $CRTV += 13000;
+            }
+            // $paie->setTauxcrtv();
+            $paie->setBasecrtv($paie->getBruttaxable());
+            $paie->setCrtv($CRTV);
+
+            /** allocation */
+            if ($paie->getCode() == 1) {
+                $allocation = 0;
+            } else {
+                if ($paie->getSalairecotisable() <= 750000) {
+                    $allocation = $paie->getSalairecotisable() * 0.07;
+                } else {
+                    $allocation = 750000 * 0.07;
+                }
+            }
+            $paie->setAllocation($allocation);
+            
+            /** cp vieil */
+            if ($paie->getCode() == 1) {
+                $Vieillesse = 0;
+            } else {
+                if ($paie->getSalairecotisable() <= 750000) {
+                    $Vieillesse = $paie->getSalairecotisable() * 0.042;  // 4.2% du salaire
+                } else {
+                    $Vieillesse = 750000 * 0.042;          // 4.2% plafonné à 750,000
+                }
+            }
+            $paie->setCpvieil($Vieillesse);
+
+            /** trav */
+            if ($paie->getCode() == 1) {
+                $trav = 0;
+            } else {
+                $trav = $paie->getSalairecotisable() * 0.0175;
+            }
+            $paie->setTav($trav);
+
+            /** cp foncier */
+            $paie->setCpfoncier($paie->getBrut() * 0.015);
+
+            /** fne */
+            $paie->setFne($paie->getBrut() * 0.01);
+
+            // a gere plutard
+            $paie->setSalaireNet($paie->getBrut() - ( $CRTV + $foncier + $pv + $com + $ca + $irpp + $ponction * $nombreJours) );
+
+            // Enregistrement dans la table paie
+            
+            $entityManager->persist($paie);
+            $entityManager->flush();
+           
             }
 
 
 
-        $entityManager->flush();
-        $this->addFlash('notice', 'Bulletin validé qvec succès');
-        return $this->redirectToRoute('print_bulletin');
+            $this->addFlash('notice', 'Bulletins validés avec succès');
+            // return $this->redirectToRoute('paie_historique');
+        $response = $this->redirectToRoute('print_bulletin');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -330,13 +573,12 @@ class PaieController extends AbstractController
     public function historiqueShow(Paie $paie): Response
     {
         if ($this->security->isGranted('ROLE_RH')) {
-            $detailsRetenues = json_decode($paie->getDetailsRetenues(), true); // Si tu as stocké en JSON, décode-le en tableau associatif
 
+            // dd($paie->getIndemnite());
             return $this->render('paie/admin/historique_show.html.twig', [
                 'paie' => $paie,
-                'detailsRetenues' => $detailsRetenues,
-                'mois' => $this->entityManager->getRepository(Mois::class)->find(date('m')),
             ]);
+
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -362,7 +604,7 @@ class PaieController extends AbstractController
             $mois = $entityManager->getRepository(Mois::class)->find(date('m'));
 
             // Vérifier si la paie du mois en cours est déjà validée
-            $paieExistante = $entityManager->getRepository(Paie::class)->findByDate($employe->getId(), $startOfMonth, $endOfMonth);
+            // $paieExistante = $entityManager->getRepository(Paie::class)->findByDate($employe->getId(), $startOfMonth, $endOfMonth);
 //            $primes = $entityManager->getRepository(Prime::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
 //            $heureSup = $entityManager->getRepository(HeureSuplementaire::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
 
@@ -402,12 +644,6 @@ class PaieController extends AbstractController
                     $nombreJours = $nombreJours + $dateDebut->diff($dateFin)->days + 1;
 //                    $montantRetenue = $montantRetenue + $salaireJournalier * $nombreJours;
                 }
-
-                $retenues[] = [
-//                    'type' => $sanction->getTypeSanction()->getNom(),
-                    'montant' => $salaireJournalier,
-                    'jours' => $nombreJours,//isset($nombreJours) ? "{$nombreJours}" : 'Période inconnue',
-                ];
             }
 
             $nbrjoursmois = new \DateTime();
@@ -418,8 +654,6 @@ class PaieController extends AbstractController
                 'nombreJours' => $nombreJours,
                 'totalPrimePerf' => $totalPrimePerf,
                 'heureSups' => $nombreHeures,
-//                'retenues' => $retenues,
-                'paieExistante' => $paieExistante,
                 'mois' => $mois,
             ]);
         } else {
@@ -446,10 +680,24 @@ class PaieController extends AbstractController
             $employe = $entityManager->getRepository(Employe::class)->find($id);
             $mois = $entityManager->getRepository(Mois::class)->find(date('m'));
             $transport = 0;
+            $logement = 0;
             $ponction = 0;
             $totalprime = [];
+            $montantprime = 0;
+
+            /** enciennete */
+            $now = new \DateTime();
+           
+            $interval = $now->diff($employe->getHireDate());
+
+            $yearDiff = $interval->y;
+            $monthDiff = $interval->m + 1; // +1 comme dans votre code original
+
 
             $paie = new Paie();
+            $paie->setTauxenciennete($yearDiff);
+            $paie->setBaseenciennete($employe->getPoste()->getSalaire());
+            $paie->setCode(0);
             $paie->setSalaireBase($employe->getPoste()->getSalaire());
             $paie->setEmploye($employe);
             $paie->setMois($mois);
@@ -471,30 +719,37 @@ class PaieController extends AbstractController
                 if (strtolower($prime->getDescription()) === 'indemnité de transport') {
                     $transport = $prime->getMontant();
                 }
+                else if(strtolower($prime->getDescription()) === 'indemnité de logement') {
+                    $logement = $prime->getMontant();
+                }
 
                 // Vérifie si la prime est journalière (base == true)
                 if (!empty($prime->getBase()) && $prime->getBase() === true) {
                     $ponction += $prime->getMontant() / $nbrjoursmois->format('t');
-                    $totalprime = [ 'designation' => $prime->getDesignation(), 
+                    $totalprime = [ 'designation' => $prime->getDescription(), 
                                     'montant' => $prime->getMontant()
                                 ];
                 } else {
-                    $totalprime = [ 'designation' => $prime->getDesignation(), 
+                    $totalprime = [ 'designation' => $prime->getDescription(), 
                                     'montant' => $prime->getMontant()
                                 ];
                 }
+                $montantprime += $prime->getMontant();
             }
             $paie->setIndemnite($totalprime);
 
 
             $heureSups = $heureSuplementaireRepository->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
             $nombreHeures = 0;
+            $montantheureSup = 0;
             foreach ($heureSups as $heureSup) {
                 // calcul nombre d'heure
                 $nombreHeures = $nombreHeures + $heureSup->getDuree();
             }
             $paie->setBaseheureSup($employe->getPoste()->getHeureSup());
             $paie->setTauxheureSup($nombreHeures);
+            
+            $montantheureSup = $employe->getPoste()->getHeureSup() * $nombreHeures;
 
 
             $primeperformances = $entityManager->getRepository(PrimePerformance::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
@@ -510,7 +765,7 @@ class PaieController extends AbstractController
 
             $retenues = [];
             $nombreJours = 0;
-            $salaireJournalier = $employe->getPoste()->getSalaire() / 30; // Salaire journalier
+            // $salaireJournalier = $employe->getPoste()->getSalaire() / 30; // Salaire journalier
             $montantRetenue = 0;
             foreach ($sanctions as $sanction) {
                 // calcul nombre jours
@@ -526,16 +781,198 @@ class PaieController extends AbstractController
                 }
 
             }
+            $paie->setJours($nombreJours);
             
             $paie->setBaseponction($ponction);
             $paie->setTauxponction($nombreJours);
-    
+            $paie->setBrut($employe->getPoste()->getSalaire() + $montantprime + $montantheureSup + $totalPrimePerf);
+            $paie->setBrutinter($paie->getBrut() - $montantprime);
+            
+            /** logement fisc */
+            $logementfisc = 0;
+            if ($paie->getBrutinter() * 0.1 <= $transport) {
+                $logementfisc = $paie->getBrutinter() * 0.1;
+            } else {
+                $logementfisc = $transport;
+            }
+            $paie->setLogementfisc($logementfisc);
+
+            /** vehicule fisc */
+            if ($paie->getBrutinter() * 0.15 <= $logement) {
+                $vehiculefisc = $paie->getBrutinter() * 0.15;
+            } else {
+                $vehiculefisc = $logement;
+            }
+            $paie->setVehiculefisc($vehiculefisc);
+
+            /** logement cnps */
+            if ($paie->getBrutinter() * 0.1 > $transport) {
+                $logementcnps = 0;
+            } elseif ($paie->getBrutinter() * 0.1 < $transport) {
+                $logementcnps = $transport - ($paie->getBrutinter() * 0.1);
+            } else {
+                $logementcnps = 0;
+            }
+            $paie->setLogementcnps($logementcnps);
+
+            /** vehicule cnps */
+            if ($paie->getBrutinter() * 0.15 > $logement) {
+                $vehiculecnps = 0;
+            } elseif ($paie->getBrutinter() * 0.15 < $logement) {
+                $vehiculecnps = $logement - ($paie->getBrutinter() * 0.15);
+            } else {
+                $vehiculecnps = 0;
+            }
+            $paie->setVehiculecnps($vehiculecnps);
+
+            /** salaire brut taxe brutinter + transport + vehiculefisc */
+            $paie->setBruttaxable($paie->getBrutinter() + $transport + $vehiculefisc);
+            $paie->setSalairecotisable($paie->getBrutinter()  + $vehiculecnps);
+
+            /** irpp */
+            if($paie->getBruttaxable() < 62000) {
+                $irpp = 0;
+            } elseif ($paie->getBruttaxable() < 310000) {
+                $irpp = ($paie->getBruttaxable() * 0.7 - $paie->getBruttaxable() * 0.028 - 41667) * 0.1;
+            } elseif ($paie->getBruttaxable() < 429000) {
+                $irpp = 16693 + ($paie->getBruttaxable() - 310000) * 0.7 * 0.15;
+            } elseif ($paie->getBruttaxable() < 667000) {
+                $irpp = 29188 + ($paie->getBruttaxable() - 429000) * 0.7 * 0.25;
+            } elseif ($paie->getBruttaxable() > 667001) {
+                $irpp = 70830 + ($paie->getBruttaxable() - 667000) * 0.7 * 0.35;
+            }
+            $paie->setBaseirpp($paie->getBruttaxable());
+            // $paie->setTauxirpp($irpp);
+            $paie->setIrpp($irpp); 
+            $paie->setBaseca($irpp);
+            $paie->setTauxca(10);
+            $ca = $irpp * 0.1;
+            $paie->setca($ca);
+           
+            /** dve local */
+            if ($paie->getBruttaxable() < 62000) {
+                $com = 0;
+            } elseif ($paie->getBruttaxable() < 75001) {
+                $com = 250;
+            } elseif ($paie->getBruttaxable() < 100001) {
+                $com = 500;
+            } elseif ($paie->getBruttaxable() < 125001) {
+                $com = 750;
+            } elseif ($paie->getBruttaxable() < 150001) {
+                $com = 1000;
+            } elseif ($paie->getBruttaxable() < 200001) {
+                $com = 1250;
+            } elseif ($paie->getBruttaxable() < 250001) {
+                $com = 1500;
+            } elseif ($paie->getBruttaxable() < 300001) {
+                $com = 2000;
+            } elseif ($paie->getBruttaxable() < 500001) {
+                $com = 2250;
+            } elseif ($paie->getBruttaxable() > 500001) {
+                $com = 2500;
+            }
+            $paie->setBaselocal($paie->getBruttaxable());
+            $paie->setTauxlocal($com);
+            $paie->setLocal($com);
+           
+            /** vcnps viel */
+            if ($paie->getSalairecotisable() <= 750000) {
+                $pv = $paie->getSalairecotisable() * 0.042;
+            } else {
+                $pv = 750000 * 0.042;
+            }
+            $paie->setBasevieil($paie->getSalairecotisable());
+            $paie->setTauxvieil(4.2);
+            $paie->setVieil($pv);
+            
+            /** fonfoncier */
+            if ($paie->getBruttaxable() <= 62000) {
+                $foncier = 0;
+            } else {
+                $foncier = $paie->getBruttaxable() * 0.01;
+            }
+            $paie->setBasefoncier($paie->getBruttaxable());
+            $paie->setTauxfoncier(1);
+            $paie->setFoncier($foncier);
+            
+            /** crtv */
+            if ($paie->getBruttaxable() <= 52000) {
+                $CRTV = 0;
+            } elseif ($paie->getBruttaxable() <= 100000) {
+                $CRTV = 750;
+            } elseif ($paie->getBruttaxable() <= 200000) {
+                $CRTV = 1950;
+            } elseif ($paie->getBruttaxable() < 300000) {
+                $CRTV = 3250;
+            } elseif ($paie->getBruttaxable() <= 400000) {
+                $CRTV = 4550;
+            } elseif ($paie->getBruttaxable() <= 500000) {
+                $CRTV = 5850;
+            } elseif ($paie->getBruttaxable() < 600000) {
+                $CRTV = 7150;
+            } elseif ($paie->getBruttaxable() <= 700000) {
+                $CRTV = 8450;
+            }
+
+            if ($paie->getBruttaxable() > 700000 && $paie->getBruttaxable() <= 800000) {
+                $CRTV += 9750;
+            } elseif ($paie->getBruttaxable() > 800000 && $paie->getBruttaxable() <= 900000) {
+                $CRTV += 11050;
+            } elseif ($paie->getBruttaxable() > 900000 && $paie->getBruttaxable() <= 1000000) {
+                $CRTV += 12350;
+            } elseif ($paie->getBruttaxable() > 1000000) {
+                $CRTV += 13000;
+            }
+            // $paie->setTauxcrtv();
+            $paie->setBasecrtv($paie->getBruttaxable());
+            $paie->setCrtv($CRTV);
+
+            /** allocation */
+            if ($paie->getCode() == 1) {
+                $allocation = 0;
+            } else {
+                if ($paie->getSalairecotisable() <= 750000) {
+                    $allocation = $paie->getSalairecotisable() * 0.07;
+                } else {
+                    $allocation = 750000 * 0.07;
+                }
+            }
+            $paie->setAllocation($allocation);
+            
+            /** cp vieil */
+            if ($paie->getCode() == 1) {
+                $Vieillesse = 0;
+            } else {
+                if ($paie->getSalairecotisable() <= 750000) {
+                    $Vieillesse = $paie->getSalairecotisable() * 0.042;  // 4.2% du salaire
+                } else {
+                    $Vieillesse = 750000 * 0.042;          // 4.2% plafonné à 750,000
+                }
+            }
+            $paie->setCpvieil($Vieillesse);
+
+            /** trav */
+            if ($paie->getCode() == 1) {
+                $trav = 0;
+            } else {
+                $trav = $paie->getSalairecotisable() * 0.0175;
+            }
+            $paie->setTav($trav);
+
+            /** cp foncier */
+            $paie->setCpfoncier($paie->getBrut() * 0.015);
+
+            /** fne */
+            $paie->setFne($paie->getBrut() * 0.01);
+
+            // a gere plutard
+            $paie->setSalaireNet($paie->getBrut() - ( $CRTV + $foncier + $pv + $com + $ca + $irpp + $ponction * $nombreJours) );
 
             // Enregistrement dans la table paie
             
             $entityManager->persist($paie);
             $entityManager->flush();
-            $this->addFlash('notice', 'Bulletin validé qvec succès');
+            $this->addFlash('notice', 'Bulletin validé avec succès');
             return $this->redirectToRoute('paie_historique');
         } else {
             $response = $this->redirectToRoute('security_logout');

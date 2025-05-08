@@ -65,13 +65,19 @@ class Paie
     private $Bruttaxable;
 
     #[ORM\Column(type:"float", nullable:true) ]
-    private $logement;
+    private $logementfisc;
 
     #[ORM\Column(type:"float", nullable:true) ]
-    private $vehicule;
+    private $vehiculefisc;
 
     #[ORM\Column(type:"float", nullable:true) ]
-    private $cotisableinter;
+    private $logementcnps;
+
+    #[ORM\Column(type:"float", nullable:true) ]
+    private $vehiculecnps;
+
+    #[ORM\Column(type:"float", nullable:true) ]
+    private $salairecotisable;
 
     #[ORM\Column(type:"float", nullable:true) ]
     private $baseirpp;
@@ -145,6 +151,15 @@ class Paie
     #[ORM\Column(type:"integer") ]
     private $salaireNet;
 
+    #[ORM\Column(type:"integer", nullable:true) ]
+    private $accompte;
+
+    #[ORM\Column(type:"integer", nullable:true) ]
+    private $pret;
+
+    #[ORM\Column(type:"integer", nullable:true) ]
+    private $autres;
+
     #[ORM\ManyToOne(targetEntity:Mois::class, inversedBy:"paies") ]
     private $mois;
 
@@ -165,24 +180,12 @@ class Paie
         return $this->id;
     }
 
-    public function getEmploye(): ?Employe
-    {
-        return $this->employe;
-    }
-
-    public function setEmploye(?Employe $employe): self
-    {
-        $this->employe = $employe;
-
-        return $this;
-    }
-
     public function getDate(): ?\DateTimeInterface
     {
         return $this->date;
     }
 
-    public function setDate(\DateTimeInterface $date): self
+    public function setDate(\DateTimeInterface $date): static
     {
         $this->date = $date;
 
@@ -257,6 +260,18 @@ class Paie
     public function setIndemnite(?array $indemnite): static
     {
         $this->indemnite = $indemnite;
+
+        return $this;
+    }
+
+    public function getPerformance(): ?int
+    {
+        return $this->performance;
+    }
+
+    public function setPerformance(?int $performance): static
+    {
+        $this->performance = $performance;
 
         return $this;
     }
@@ -345,38 +360,62 @@ class Paie
         return $this;
     }
 
-    public function getLogement(): ?float
+    public function getLogementfisc(): ?float
     {
-        return $this->logement;
+        return $this->logementfisc;
     }
 
-    public function setLogement(?float $logement): static
+    public function setLogementfisc(?float $logementfisc): static
     {
-        $this->logement = $logement;
+        $this->logementfisc = $logementfisc;
 
         return $this;
     }
 
-    public function getVehicule(): ?float
+    public function getVehiculefisc(): ?float
     {
-        return $this->vehicule;
+        return $this->vehiculefisc;
     }
 
-    public function setVehicule(?float $vehicule): static
+    public function setVehiculefisc(?float $vehiculefisc): static
     {
-        $this->vehicule = $vehicule;
+        $this->vehiculefisc = $vehiculefisc;
 
         return $this;
     }
 
-    public function getCotisableinter(): ?float
+    public function getLogementcnps(): ?float
     {
-        return $this->cotisableinter;
+        return $this->logementcnps;
     }
 
-    public function setCotisableinter(?float $cotisableinter): static
+    public function setLogementcnps(?float $logementcnps): static
     {
-        $this->cotisableinter = $cotisableinter;
+        $this->logementcnps = $logementcnps;
+
+        return $this;
+    }
+
+    public function getVehiculecnps(): ?float
+    {
+        return $this->vehiculecnps;
+    }
+
+    public function setVehiculecnps(?float $vehiculecnps): static
+    {
+        $this->vehiculecnps = $vehiculecnps;
+
+        return $this;
+    }
+
+    public function getSalairecotisable(): ?float
+    {
+        return $this->salairecotisable;
+    }
+
+    public function setSalairecotisable(?float $salairecotisable): static
+    {
+        $this->salairecotisable = $salairecotisable;
 
         return $this;
     }
@@ -693,6 +732,18 @@ class Paie
         return $this;
     }
 
+    public function getEmploye(): ?Employe
+    {
+        return $this->employe;
+    }
+
+    public function setEmploye(?Employe $employe): static
+    {
+        $this->employe = $employe;
+
+        return $this;
+    }
+
     public function getMois(): ?Mois
     {
         return $this->mois;
@@ -704,5 +755,42 @@ class Paie
 
         return $this;
     }
+
+    public function getAccompte(): ?int
+    {
+        return $this->accompte;
+    }
+
+    public function setAccompte(int $accompte): static
+    {
+        $this->accompte = $accompte;
+
+        return $this;
+    }
+
+    public function getPret(): ?int
+    {
+        return $this->pret;
+    }
+
+    public function setPret(int $pret): static
+    {
+        $this->pret = $pret;
+
+        return $this;
+    }
+
+    public function getAutres(): ?int
+    {
+        return $this->autres;
+    }
+
+    public function setAutres(int $autres): static
+    {
+        $this->autres = $autres;
+
+        return $this;
+    }
+
 
 }
