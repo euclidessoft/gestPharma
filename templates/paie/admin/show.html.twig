@@ -173,7 +173,7 @@
                         {% elseif prime.description|lower == "indemnité de logement" %}
                              {% set logement = prime.montant%}
                         {% endif %}
-                        {% if prime.base == true %}{# true si prime journalier #}
+     {#                  {% if prime.base == true %} <!--true si prime journalier -->
                             {% set ponction = ponction + prime.montant / nombre %}
                             <tr class="text-end">
                                 <td class="text-start">{{ prime.description }}</td>
@@ -185,7 +185,7 @@
                                 <td></td>
                             </tr>
                             {% set totalprime = totalprime + prime.montant  %} 
-                        {% else %}
+                        {% else %}                                                                                 #}
                             <tr class="text-end">
                                 <td class="text-start">{{ prime.description }}</td>
                                 <td></td>
@@ -196,11 +196,13 @@
                                 <td></td>
                             </tr>
                             {% set totalprime = totalprime + prime.montant %}
-                        {% endif %}
+    {#             {% endif %}                                                                                      #}
+                   
                     {% else %}
+
                     {% endfor %}
 
-{#                    {% set totalheuresup = 0 %}#}
+{#                    {% set totalheuresup = 0 %}                                                                    #}
                     {% if totalPrimePerf != 0 %}
                         <tr class="text-end">
                             <td class="text-start">Prime de Performence</td>
@@ -473,7 +475,7 @@
                         <td class="text-start">Credit foncier</td>
                         <td></td>
                         <td>{{ bruttaxe|number_format(0, '' , ' ') }}</td>
-                        <td>1,50%</td>
+                        <td>1%</td>
                         <td>
                             {% if brutinter <= 62000 %}
                                 {% set foncier = 0 %}
@@ -636,13 +638,15 @@
     </div>
     <div class="container fond-7 mb-5 p-3">
         <div class="centrer">
-            {% if paieExistante == null %}
+      {#      {% if paieExistante == null %}
+      #}
                 <a href="{{ path('paie_valider', {'id': employe.id }) }}"
                    class="btn btn-success btn-lg"><i class="fa fa-save"></i> Valider</a>
-            {% else %}
+ {#           {% else %}
                 <a href="{{ path('paie_index') }}" class="btn btn-secondary btn-lg me-2">Retour</a>
                 <a href="#" class="btn btn-primary btn-lg"><i class="fa fa-print"></i> Imprimer</a>
-            {% endif %}
+            {% endif %} 
+#}
         </div>
     </div>
 

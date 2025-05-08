@@ -5,6 +5,8 @@ namespace App\Service;
 use App\Entity\Employe;
 use App\Entity\HeureSuplementaire;
 use App\Entity\Paie;
+use App\Entity\PrimePerformance;
+use App\Entity\Mois;
 use App\Entity\Prime;
 use App\Entity\Sanction;
 use App\Repository\HeureSuplementaireRepository;
@@ -36,10 +38,12 @@ class PaieService
 
     public function bulletin(): array
     {
+        $entityManager = $this->entityManager;
         // Calcul du début et de la fin du mois
         $startOfMonth = new \DateTime('first day of this month');
         $endOfMonth = new \DateTime('last day of this month');
-        $employes = $this->entityManager->getRepository(Employe::class)->findBy(['status' => true]);
+        $employes = $entityManager->getRepository(Employe::class)->findBy(['status' => true]);
+        $mois = $entityManager->getRepository(Mois::class)->find(date('m'));
         $bulletins = [];
 
         foreach ($employes as $employe) {
@@ -49,51 +53,59 @@ class PaieService
                 continue;
             }
 
-            // Récupération du salaire de base
-            $salaireDeBase = $employe->getPoste()->getSalaire();
-            $salaireJournaliere = $salaireDeBase / 30;
+            $primes = $entityManager->getRepository(Prime::class)->findBy(['employe' => $employe->getId()]);
 
-            // Récupération des primes, heures supplémentaires et sanctions pour le mois en cours
-            $primes = $this->primeRepository->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
-            $heureSup = $this->heureSupRepository->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
-            $sanctions = $this->sanctionRepository->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
-            $impot = $salaireDeBase * 0.01;
-
-            // Calcul des retenues
-            $retenues = [];
-            foreach ($sanctions as $sanction) {
-                if ($sanction->getTypeSanction()->getNom() === 'ponction salarial') {
-                    $nombreJours = $sanction->getNombreJours();
-                    $montantRetenue = $salaireJournaliere * $nombreJours;
-                    $retenues[] = [
-                        'type' => $sanction->getTypeSanction()->getNom(),
-                        'montantRetenue' => round($montantRetenue, 2),
-                        'details' => $sanction->getNombreJours() . ' jours',
-                    ];
-                } elseif ($sanction->getTypeSanction()->getNom() === 'mis a pied') {
-                    $dateDebut = $sanction->getDateDebut();
-                    $dateFin = $sanction->getDateFin();
-                    $nombreJours = $dateDebut->diff($dateFin)->days + 1;
-                    $montantRetenue = $salaireJournaliere * $nombreJours;
-                    $retenues[] = [
-                        'type' => $sanction->getTypeSanction()->getNom(),
-                        'montantRetenue' => round($montantRetenue, 2),
-                        'details' => 'Du ' . $dateDebut->format('d/m/Y') . ' au ' . $dateFin->format('d/m/Y'),
-                    ];
-                }
+            $heureSups = $this->heureSupRepository->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
+            $nombreHeures = 0;
+            foreach ($heureSups as $heureSup) {
+                // calcul nombre d'heure
+                $nombreHeures = $nombreHeures + $heureSup->getDuree();
             }
 
-            // Création du bulletin de paie pour l'employé
+
+            $primeperformances = $entityManager->getRepository(PrimePerformance::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
+            $totalPrimePerf = 0;
+            foreach ($primeperformances as $primeP) {
+                // calcul nombre d'heure
+                $totalPrimePerf = $totalPrimePerf + $primeP->getMontant();
+            }
+
+
+            $sanctions = $entityManager->getRepository(Sanction::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
+
+            $retenues = [];
+            $nombreJours = 0;
+            $salaireJournalier = $employe->getPoste()->getSalaire() / 30; // Salaire journalier
+            $montantRetenue = 0;
+            foreach ($sanctions as $sanction) {
+                // calcul nombre jours
+
+                if ($sanction->getTypeSanction()->getNom() === 'Ponction Salariale') {
+                    $nombreJours =  $nombreJours + $sanction->getNombreJours();
+//                    $montantRetenue = $montantRetenue + $salaireJournalier * $nombreJours;
+                } elseif ($sanction->getTypeSanction()->getNom() === 'Mis a pied') {
+                    $dateDebut = $sanction->getDateDebut();
+                    $dateFin = $sanction->getDateFin();
+                    $nombreJours = $nombreJours + $dateDebut->diff($dateFin)->days + 1;
+//                    $montantRetenue = $montantRetenue + $salaireJournalier * $nombreJours;
+                }
+
+                $retenues[] = [
+//                    'type' => $sanction->getTypeSanction()->getNom(),
+                    'montant' => $salaireJournalier,
+                    'jours' => $nombreJours,//isset($nombreJours) ? "{$nombreJours}" : 'Période inconnue',
+                ];
+            }
+
+            $nbrjoursmois = new \DateTime();
             $bulletins[] = [
                 'employe' => $employe,
-                'mois' => $startOfMonth->format('F Y'),
-                'salaireBase' => $salaireDeBase,
                 'primes' => $primes,
-                'heureSup' => $heureSup,
-                'retenues' => $retenues,
-                'impot' => $impot,
-                'startMonth' => $startOfMonth,
-                'endMonth' => $endOfMonth,
+                'nbrjoursmois' => $nbrjoursmois->format('t'),
+                'nombreJours' => $nombreJours,
+                'totalPrimePerf' => $totalPrimePerf,
+                'heureSups' => $nombreHeures,
+                'mois' => $mois,
             ];
         }
 
