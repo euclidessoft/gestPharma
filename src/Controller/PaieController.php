@@ -896,6 +896,7 @@ class PaieController extends AbstractController
             $paie->setFoncier($foncier);
             
             /** crtv */
+            $CRTV = 0;
             if ($paie->getBruttaxable() <= 52000) {
                 $CRTV = 0;
             } elseif ($paie->getBruttaxable() <= 100000) {
@@ -908,9 +909,9 @@ class PaieController extends AbstractController
                 $CRTV = 4550;
             } elseif ($paie->getBruttaxable() <= 500000) {
                 $CRTV = 5850;
-            } elseif ($paie->getBruttaxable() < 600000) {
+            } elseif ($paie->getBruttaxable() <= 600000) {
                 $CRTV = 7150;
-            } elseif ($paie->getBruttaxable() <= 700000) {
+            } elseif ($paie->getBruttaxable() >= 700000) {
                 $CRTV = 8450;
             }
 

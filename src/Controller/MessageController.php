@@ -21,6 +21,8 @@ class MessageController extends AbstractController
        public function __construct(private Security $security, private EntityManagerInterface $entityManager)
     {
     }
+
+
     #[Route("/messages", name :"message") ]
     public function index(EntityManagerInterface $em): Response
     {
@@ -234,7 +236,7 @@ class MessageController extends AbstractController
                 $em->flush();
 
                 $this->addFlash("message", "Message envoyé avec succès.");
-                return $this->redirectToRoute("message");
+                return $this->redirectToRoute("read", ['id' => $message->getId()]);
             }
 
             return $this->render('message/reply.html.twig', [
