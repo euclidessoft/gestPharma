@@ -596,6 +596,109 @@ class PaieController extends AbstractController
         }
     }
 
+    #[Route("/Historique_print/{id}", name :"paie_historique_show_print", methods : ["GET"]) ]
+    public function historiqueShow_print(Paie $paie): Response
+    {
+        if ($this->security->isGranted('ROLE_RH')) {
+              $indemnite = json_decode($paie->getIndemnite(), true);
+
+            // dd($paie->getIndemnite());
+            return $this->render('paie/admin/historique_show_print.html.twig', [
+                'paie' => $paie,
+                'indemnite' => $indemnite,
+            ]);
+
+        } else {
+            $response = $this->redirectToRoute('security_logout');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        }
+    }
+
+    #[Route("Details_print/{id}", name :"paie_show_rint", methods : ["GET"]) ]
+    public function show_print(int $id, PrimeRepository $primeRepository, HeureSuplementaireRepository $heureSuplementaireRepository): Response
+    {
+        if ($this->security->isGranted('ROLE_RH')) {
+            $entityManager = $this->entityManager;
+            $startOfMonth = new \DateTime('01-' . date('m') . ('-') . date('Y'));
+            $endOfMonth = new \DateTime('last day of this month');
+            $employe = $entityManager->getRepository(Employe::class)->find($id);
+            $mois = $entityManager->getRepository(Mois::class)->find(date('m'));
+
+            // Vérifier si la paie du mois en cours est déjà validée
+            // $paieExistante = $entityManager->getRepository(Paie::class)->findByDate($employe->getId(), $startOfMonth, $endOfMonth);
+//            $primes = $entityManager->getRepository(Prime::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
+//            $heureSup = $entityManager->getRepository(HeureSuplementaire::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
+
+            $primes = $entityManager->getRepository(Prime::class)->findBy(['employe' => $employe->getId()]);
+
+            $heureSups = $heureSuplementaireRepository->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
+            $nombreHeures = 0;
+            foreach ($heureSups as $heureSup) {
+                // calcul nombre d'heure
+                $nombreHeures = $nombreHeures + $heureSup->getDuree();
+            }
+
+
+            $primeperformances = $entityManager->getRepository(PrimePerformance::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
+            $totalPrimePerf = 0;
+            foreach ($primeperformances as $primeP) {
+                // calcul nombre d'heure
+                $totalPrimePerf = $totalPrimePerf + $primeP->getMontant();
+            }
+
+
+            $sanctions = $entityManager->getRepository(Sanction::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
+
+            $retenues = [];
+            $nombreJours = 0;
+            $salaireJournalier = $employe->getPoste()->getSalaire() / 30; // Salaire journalier
+            $montantRetenue = 0;
+            foreach ($sanctions as $sanction) {
+                // calcul nombre jours
+
+                if ($sanction->getTypeSanction()->getNom() === 'Ponction Salariale') {
+                    $nombreJours =  $nombreJours + $sanction->getNombreJours();
+//                    $montantRetenue = $montantRetenue + $salaireJournalier * $nombreJours;
+                } elseif ($sanction->getTypeSanction()->getNom() === 'Mis a pied') {
+                    $dateDebut = $sanction->getDateDebut();
+                    $dateFin = $sanction->getDateFin();
+                    $nombreJours = $nombreJours + $dateDebut->diff($dateFin)->days + 1;
+//                    $montantRetenue = $montantRetenue + $salaireJournalier * $nombreJours;
+                }
+            }
+
+            $nbrjoursmois = new \DateTime();
+            return $this->render('paie/admin/show_print.html.twig', [
+                'employe' => $employe,
+                'primes' => $primes,
+                'nbrjoursmois' => $nbrjoursmois->format('t'),
+                'nombreJours' => $nombreJours,
+                'totalPrimePerf' => $totalPrimePerf,
+                'heureSups' => $nombreHeures,
+                'mois' => $mois,
+            ]);
+        } else {
+            $response = $this->redirectToRoute('security_logout');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        }
+    }
+
     #[Route("Details/{id}", name :"paie_show", methods : ["GET"]) ]
     public function show(int $id, PrimeRepository $primeRepository, HeureSuplementaireRepository $heureSuplementaireRepository): Response
     {
