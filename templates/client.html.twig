@@ -283,7 +283,6 @@
 {% endblock %}
 
 {% block topbar %}
-    {{ include('includes/topbar.html.twig') }}
 
     <div class="container-fluid topbar">
         <div class="row">
@@ -309,23 +308,18 @@
 
                     <div class="col-lg-2 col-md-1 col-6 text-nowrap">
                         <!-- Empty column for spacing or other content -->
-
                     </div>
                     <div class="col-lg-2 col-md-3 col-6 text-nowrap">
                         <div class="row">
                             <div class="col-3">
-                                <div class="dropdown">
-                                    <a class="panier" href="{{ path('commande_panier_panier') }}">
-                                        <small class="text-end">
-                                            <span id="gest_panier" class="badge badge-danger panierNombre">
-                                     {{ panier|length }}
+                                <a class="panier" href="{{ path('commande_panier_panier') }}">
+                                <span class="position-relative">
+                                    <i class="fa fa-cart-shopping fa-lg"></i>
+                                    <span id="gest_panier" class="position-absolute top-10 start-100 translate-middle badge rounded-pill bg-danger text-center">
+                                        {{ panier|length }}
                                     </span>
-                                        </small>
-                                        <i class="fa fa-cart-shopping fa-lg"></i>
-                                    </a>
-                                    <div class="dropdown-menu">
-                                    </div>
-                                </div>
+                                </span>
+                                </a>
                             </div>
                             <div class="col-9">
                                 <div class="text-end">
@@ -428,7 +422,7 @@
     <div class="modal fade about" id="about" tabindex="-1" aria-labelledby="" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content radius-10">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-lg-6">

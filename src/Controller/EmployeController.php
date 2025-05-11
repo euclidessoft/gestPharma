@@ -194,7 +194,7 @@ class EmployeController extends AbstractController
             //verification du token csrf
             if (!$this->isCsrfTokenValid('toggle' . $employe->getId(), $request->request->get('_token'))) {
                 $this->addFlash('notice', 'Token CSRF invalide');
-                return $this->redirectToRoute('employe_manage');
+                return $this->redirectToRoute('employe_index');
             }
 
             if ($employe->getStatus()) {
@@ -209,7 +209,7 @@ class EmployeController extends AbstractController
 
             $entityManager->persist($employe);
             $entityManager->flush();
-            return $this->redirectToRoute('employe_manage');
+            return $this->redirectToRoute('employe_index');
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);

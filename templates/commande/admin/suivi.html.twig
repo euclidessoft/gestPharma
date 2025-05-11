@@ -40,26 +40,28 @@
             </li>
         </ul>
 
-        <table class="table table-success-light table-bordered table-hover table-striped w-100 mt-4" id="liste">
+        <table class="table table-success-light table-bordered table-hover table-striped w-100 my-4 text-center" id="liste">
             <thead>
             <tr>
-                <th>{{'Numero Commande'|trans}}</th>
-                <th>{{ 'Date'|trans }}</th>
-                <th>{{ 'Client'|trans }} </th>
-                <th>{{ 'Montant'|trans }}</th>
-                <th> </th>
+                <th class="text-center">{{'Numero'|trans}}<br>{{'Commande'|trans}}</th>
+                <th class="text-center">{{ 'Date'|trans }}</th>
+                <th class="text-start">{{ 'Client'|trans }} </th>
+                <th class="text-center">{{ 'Telephone'|trans }} </th>
+                <th class="text-end">{{ 'Montant'|trans }}</th>
+                <th class="text-center">{{ 'Validation'|trans }} </th>
             </tr>
             </thead>
             <tbody>
             {% for commande in commandes %}
                 <tr>
-                    <td>{{ commande.id }}</td>
-                    <td>{{ commande.date|date('d/m/Y') }}</td>
-                    <td> {{ commande.user.nom }}</td>
-                    <td>{{ commande.montant|number_format(0, '' , ' ') }}</td>
-                    <td>
+                    <td data-label="{{'Numero'|trans}}">{{ commande.id }}</td>
+                    <td data-label="{{ 'Date'|trans }}">{{ commande.date|date('d/m/Y') }}</td>
+                    <td data-label="{{ 'Client'|trans }} " class="text-start">{{ commande.user.nom }} {{ commande.user.prenom }}</td>
+                    <td data-label="{{ 'Telephone'|trans }} ">{{ commande.user.phone }}</td>
+                    <td data-label="{{ 'Montant'|trans }}" class="text-end">{{ commande.montant|number_format(0, '' , ' ') }}</td>
+                    <td data-label="{{ 'Validation'|trans }} ">
                         <a id="{{ commande.id }}" onclick="load({{ commande.id }})" href="{{ path('commande_panier_paiement', {'commande' : commande.id}) }}" class="btn btn-success">
-                            <i class="fa fa-gears"></i>
+                            <i class="fa-solid fa-file-invoice-dollar"></i>
                             {{ 'Traitement'|trans }}
                         </a>
                     </td>

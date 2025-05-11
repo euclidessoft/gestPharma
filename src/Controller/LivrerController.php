@@ -33,31 +33,6 @@ class LivrerController extends AbstractController
     {
     }
 
-    #[Route("/test/", name :"test") ]
-    public function test(Request $request, StockRepository $repository, SessionInterface $session)
-    {
-        $res['id'] = 'ok';
-        $res['idp'] = 1;
-        $res['ref'] = 'dhdjdjdj';
-        $res['designation'] = 'ddhdjdd';
-        $res['quantite'] = 45;//$produit->getQuantite();
-        $res['motif'] = 'dhdjdd dkdkdddkdk';//$produit->getQuantite();
-        $retour[] = $res;
-
-
-        // On sauvegarde dans la session
-//            $session->set("retour", $retour);
-//
-        suite:
-        $response = new Response();
-        $response->headers->set('content-type', 'application/json');
-        $re = json_encode($retour);
-        $response->setContent($re);
-        // return $response;
-        return $this->render('finance/brouyard.html.twig');
-
-    }
-
     #[Route("/", name :"index", methods : ["GET"]) ]
     public function index(LivrerRepository $livrerRepository, CommandeRepository $repository, SessionInterface $session, RetourProduitRepository $retourProduitRepository): Response
     {
