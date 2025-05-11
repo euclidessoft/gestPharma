@@ -171,35 +171,22 @@
                     </tr>
 
                     {% set totalprime = 0 %}
-                    {% for prime in paie.indemnite %}
-                        {% if prime.designation|lower == "indemnité de transport" %}
-                             {% set transport = prime.montant %}
-                        {% elseif prime.designation|lower == "indemnité de logement" %}
-                             {% set logement = prime.montant %}
+                    {% for prime in indemnite %}
+                        {% if prime['designation']|lower == "indemnité de transport" %}
+                             {% set transport = prime['montant'] %}
+                        {% elseif prime['designation']|lower == "indemnité de logement" %}
+                             {% set logement = prime['montant'] %}
                         {% endif %}
-     {#                  {% if prime.base == true %} <!--true si prime journalier -->
-                            {% set ponction = ponction + prime.montant / nombre %}
                             <tr class="text-end">
-                                <td class="text-start">{{ prime.description }}</td>
-                                <td>{{ nombre }}</td>
-                                <td>{{ (prime.montant / nombre)|number_format(0, '' , ' ') }}</td>
+                                <td class="text-start">{{ prime['designation'] }}</td>
                                 <td></td>
-                                <td>{{ prime.montant|number_format(0, '' , ' ') }}</td>
+                                <td>{{ prime['montant']|number_format(0, '' , ' ') }}</td>
+                                <td></td>
+                                <td>{{ prime['montant']|number_format(0, '' , ' ') }}</td>
                                 <td></td>
                                 <td></td>
                             </tr>
-                            {% set totalprime = totalprime + prime.montant  %} 
-                        {% else %}                                                                                 #}
-                            <tr class="text-end">
-                                <td class="text-start">{{ prime.description }}</td>
-                                <td></td>
-                                <td>{{ prime.montant|number_format(0, '' , ' ') }}</td>
-                                <td></td>
-                                <td>{{ prime.montant|number_format(0, '' , ' ') }}</td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            {% set totalprime = totalprime + prime.montant %}
+                            {% set totalprime = totalprime + prime['montant'] %}
     {#             {% endif %}                                                                                      #}
                    
                     {% else %}
@@ -207,38 +194,37 @@
                     {% endfor %}
 
 {#                    {% set totalheuresup = 0 %}                                                                    #}
-                    {% if totalPrimePerf != 0 %}
+                    {% if paie.performance != 0 %}
                         <tr class="text-end">
                             <td class="text-start">Prime de Performence</td>
                             <td></td>
-                            <td>{{ totalPrimePerf|number_format(0, '' , ' ') }}</td>
+                            <td>{{ paie.performance|number_format(0, '' , ' ') }}</td>
                             <td> </td>
-                            <td>{{ totalPrimePerf|number_format(0, '' , ' ') }}</td>
+                            <td>{{ paie.performance|number_format(0, '' , ' ') }}</td>
                             <td></td>
                             <td></td>
                         </tr>
                     {% endif %}
 
                     {% set totalheuresup = 0 %}
-                    {% if heureSups != 0 %}
+                    {% if paie.tauxheuresup != 0 %}
                         <tr class="text-end">
                             <td class="text-start">Heures Suplementaires</td>
                             <td></td>
-                            <td>{{ employe.poste.heureSup|number_format(0, '' , ' ') }}</td>
-                            <td> {{ heureSups }}</td>
-                            <td>{{ ( employe.poste.heureSup * heureSups )|number_format(0, '' , ' ') }}</td>
+                            <td>{{ paie.tauxheuresup|number_format(0, '' , ' ') }}</td>
+                            <td> {{ paie.tauxheursup }}</td>
+                            <td>{{ ( paie.tauxheuresup * paie.tauxheursup )|number_format(0, '' , ' ') }}</td>
                             <td></td>
                             <td></td>
                         </tr>
-                        {% set totalheuresup = employe.poste.heureSup * heureSups %}
+                        {% set totalheuresup = paie.tauxheuresup * paie.tauxheursup %}
                     {% endif %}
                     
                     <tr class="text-bold text-end">
                         <td class="text-start" colspan="4">SALAIRE BRUT</td>
                         <td>
-                            {% set  brut = employe.poste.salaire + prenciennete + totalprime + totalheuresup + totalPrimePerf %}
-                            {% set  brutinter = brut - totalprime %}
-                            {{ brut|number_format(0, '' , ' ') }}
+                           
+                            {{ paie.brut|number_format(0, '' , ' ') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -246,12 +232,8 @@
                     <tr class="text-bold text-end">
                         <td class="text-start" colspan="4">Logement FISC</td>
                         <td>
-                            {% if brutinter * 0.1 <= transport %}
-                                 {% set logementfisc = brutinter * 0.1 %}
-                            {% else %}
-                                {% set logementfisc = transport %}
-                            {% endif %}
-                            {{ logementfisc|number_format(0, '' , ' ') }}
+                           
+                            {{ paie.logementfisc|number_format(0, '' , ' ') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -259,13 +241,8 @@
                     <tr class="text-bold text-end">
                         <td class="text-start"  colspan="4">Véhicule FISC</td>
                         <td>
-                            {% if brutinter * 0.15 <= logement %}
-                                {% set vehiculefisc = brutinter * 0.15 %}
-                            {% else %}
-                                {% set vehiculefisc = logement %}
-                            {% endif %}
-
-                            {{ vehiculefisc|number_format(0, '' , ' ') }}
+                     
+                            {{ paie.vehiculefisc|number_format(0, '' , ' ') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -273,16 +250,9 @@
                     <tr class="text-bold text-end">
                         <td class="text-start" colspan="4">Logement CNPS</td>
                         <td>
-                            {% if brutinter * 0.1 > transport %}
-                                {% set logementcnps = 0 %}
-                            {% elseif brutinter * 0.1 < transport %}
-                                {% set logementcnps = transport - (brutinter * 0.1) %}
-                            {% else %}
-                                {% set logementcnps = 0 %}
-                            {% endif %}
-
+                   
                             
-                            {{ logementcnps|number_format(0, '' , ' ') }}
+                            {{ paie.logementcnps|number_format(0, '' , ' ') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -290,16 +260,8 @@
                     <tr class="text-bold text-end">
                         <td class="text-start"  colspan="4">Véhicule CNPS</td>
                         <td>
-                            {% if brutinter * 0.15 > logement %}
-                                {% set vehiculecnps = 0 %}
-                            {% elseif brutinter * 0.15 < logement %}
-                                {% set vehiculecnps = logement - (brutinter * 0.15) %}
-                            {% else %}
-                                {% set vehiculecnps = 0 %}
-                            {% endif %}
-                        
-
-                            {{ vehiculecnps|number_format(0, '' , ' ') }}
+                 
+                            {{ paie.vehiculecnps|number_format(0, '' , ' ') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -308,7 +270,7 @@
                         <td class="text-start"  colspan="4">SALAIRE Brut Taxable inter</td>
                         <td>
                            
-                            {{ brutinter|number_format(0, '' , ' ') }}
+                            {{ paie.brutinter|number_format(0, '' , ' ') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -316,8 +278,8 @@
                     <tr class="text-bold text-end">
                         <td class="text-start"  colspan="4">SALAIRE Brut Taxable</td>
                         <td>
-                            {% set  bruttaxe = brutinter + transport + vehiculefisc %} 
-                            {{ bruttaxe|number_format(0, '' , ' ') }}
+                            
+                            {{ paie.bruttaxable|number_format(0, '' , ' ') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -325,8 +287,8 @@
                     <tr class="text-bold text-end">
                         <td class="text-start"  colspan="4">Salaire Cotisable</td>
                         <td>
-                            {% set  salairecotis = brutinter + vehiculecnps %} 
-                            {{ salairecotis|number_format(0, '' , ' ') }}
+                          
+                            {{ paie.salairecotisable|number_format(0, '' , ' ') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -335,211 +297,89 @@
                         <td class="text-start" colspan="5">RETENUES SUR SALAIRE</td>
                         <th colspan="2" class="text-center"> CHARGES PATRONALES</th>
                     </tr>
-{#                    {% set totalretenue = 0 %}#}
-{#                    {% for retenue in retenues %}#}
-{#                        <tr class="text-end">#}
-{#                            <td class="text-start">Ponction Salariale</td>#}
-{#                            <td></td>#}
-{#                            <td>{{ retenue.montant|number_format(0, '' , ' ') }}</td>#}
-{#                            <td>{{ retenue.jours }}</td>#}
-{#                            <td></td>#}
-{#                            <td>#}
-{#                                {{ (retenue.montant * retenue.jours)|number_format(0, '' , ' ') }}#}
-{#                            </td>#}
-{#                            <td></td>#}
-{#                        </tr>#}
-{#                        {% set totalretenue = totalretenue + retenue.montant * retenue.jours %}#}
-{#                    {% else %}#}
-{#                    {% endfor %}#}
                     <tr class="text-end">
                         <td class="text-start">IRPP</td>
                         <td></td>
-                        <td> {{ bruttaxe|number_format(0, '' , ' ') }}</td>
+                        <td> {{ paie.bruttaxable|number_format(0, '' , ' ') }}</td>
                         <td></td>
                         <td>
-                            {% if bruttaxe < 62000 %}
-                                {% set irpp = 0 %}
-                            {% elseif bruttaxe < 310000 %}
-                                {% set irpp = (bruttaxe * 0.7 - bruttaxe * 0.028-41667)*0.1 %}
-                            {% elseif bruttaxe < 429000 %}
-                                {% set irpp = 16693+(bruttaxe-310000)*0.7*0.15 %}
-                            {% elseif bruttaxe < 667000 %}
-                                {% set irpp = 29188+(bruttaxe-429000)*0.7*0.25 %}
-                            {% elseif bruttaxe > 667001 %}
-                                {% set irpp = 70830+(bruttaxe-667000)*0.7*0.35 %}
-                            {% endif %}
-                            {{ irpp|number_format(0, '' , ' ') }}
+                           
+                            {{ paie.irpp|number_format(0, '' , ' ') }}
                         </td>
                         <td>ALLOC FAM</td>
                         <td>
-                            {% if code == 1 %}
-                                {% set allocation = 0 %}
-                            {% else %}
-                                {% if salairecotis <= 750000 %}
-                                    {% set allocation = salairecotis * 0.07 %}
-                                {% else %}
-                                    {% set allocation = 750000 * 0.07 %}
-                                {% endif %}
-                            {% endif %}
-
-                            {{ allocation|number_format(0, '' , ' ') }}
+                            {{ paie.allocation|number_format(0, '' , ' ') }}
 
                         </td>
                     </tr>
                     <tr class="text-end">
                         <td class="text-start">centimes additionnels</td>
                         <td></td>
-                        <td>{{ irpp|number_format(0, '' , ' ') }}</td>
-                        <td>10%</td>
+                        <td>{{ paie.baseca|number_format(0, '' , ' ') }}</td>
+                        <td>{{paie.tauxca}}%</td>
                         <td>
-                            {% set ca = irpp * 0.1 %}
-                            {{ ca|number_format(0, '' , ' ') }}</td>
+                            {{ paie.ca|number_format(0, '' , ' ') }}</td>
                         <td>PENS VIEIL</td>
                         <td>
-                            {% if code == 1 %}
-                                {% set Vieillesse = 0 %}
-                            {% else %}
-                                {% if salairecotis <= 750000 %}
-                                    {% set Vieillesse = salairecotis * 0.042 %}
-                                {% else %}
-                                    {% set Vieillesse = 750000 * 0.042 %}
-                                {% endif %}
-                            {% endif %}
-
-                            {{ Vieillesse|number_format(0, '', ' ') }}
+                       
+                            {{ paie.Vieil|number_format(0, '', ' ') }}
 
                         </td>
                     </tr>
                     <tr class="text-end">
                         <td class="text-start">Taxe de développement local</td>
                         <td></td>
-                        <td>{{ bruttaxe|number_format(0, '' , ' ') }}</td>
+                        <td>{{ paie.baselocal|number_format(0, '' , ' ') }}</td>
                         <td>
-                            {% if bruttaxe < 62000 %}
-                                {% set com = 0 %}
-                            {% elseif bruttaxe < 75001 %}
-                                {% set com = 250 %}
-                            {% elseif bruttaxe < 100001 %}
-                                {% set com = 500 %}
-                            {% elseif bruttaxe < 125001 %}
-                                {% set com = 750 %}
-                            {% elseif bruttaxe < 150001 %}
-                                {% set com = 1000 %}
-                            {% elseif bruttaxe < 200001 %}
-                                {% set com = 1250 %}
-                            {% elseif bruttaxe < 250001 %}
-                                {% set com = 1500 %}
-                            {% elseif bruttaxe < 300001 %}
-                                {% set com = 2000 %}
-                            {% elseif bruttaxe < 500001 %}
-                                {% set com = 2250 %}
-                            {% elseif bruttaxe > 500001 %}
-                                {% set com = 2500 %}
-                            {% endif %}
-                            {{ com|number_format(0, '' , ' ') }}
+                            {{ paie.tauxlocal|number_format(0, '' , ' ') }}
                         </td>
-                        <td>{{ com|number_format(0, '' , ' ') }}</td>
+                        <td>{{ paie.local|number_format(0, '' , ' ') }}</td>
                         <td>ACC TRAV</td>
                         <td>
-                            {% if code == 1 %}
-                                {% set trav = 0 %}
-                            {% else %}
-                                {% set trav = salairecotis * 0.0175 %}
-                            {% endif %}
-
-                            {{ trav|number_format(0, '', ' ') }}
+                            {{ paie.tav|number_format(0, '', ' ') }}
 
                         </td>
                     </tr>
                     <tr class="text-end">
                         <td class="text-start">CNPS / Pension Vieillesse</td>
                         <td></td>
-                        <td> {{ salairecotis|number_format(0, '', ' ')}}</td>
-                        <td>4,20%</td>
+                        <td> {{ paie.basevieil|number_format(0, '', ' ')}}</td>
+                        <td>{{ paie.tauxvieil}}%</td>
                         <td>
-                         
-                            {% if salairecotis <= 750000 %}
-                                {% set pv = salairecotis * 0.042 %}
-                            {% else %}
-                                {% set pv = 750000 * 0.042 %}
-                            {% endif %}
-
-
-                            {{ pv|number_format(0, '' , ' ') }}
+                            {{ paie.vieil|number_format(0, '' , ' ') }}
                         </td>
                         <!-- partie patronale -->
                         <td>CREDIT FONC</td>
                         <td>
-                           
-                            {% set credfonc = brut * 0.015 %}
-                            {{ credfonc|number_format(0, '', ' ')}}
+                            {{ paie.cpfoncier|number_format(0, '', ' ')}}
                         </td>
                     </tr>
                     <tr class="text-end">
                         <td class="text-start">Credit foncier</td>
                         <td></td>
-                        <td>{{ bruttaxe|number_format(0, '' , ' ') }}</td>
-                        <td>1%</td>
+                        <td>{{ paie.basefoncier|number_format(0, '' , ' ') }}</td>
+                        <td>{{ paie.tauxfoncier}}%</td>
                         <td>
-                            {% if brutinter <= 62000 %}
-                                {% set foncier = 0 %}
-                            {% else %}
-                                {% set foncier = bruttaxe * 0.01 %}
-                            {% endif %}
-
-                            {{ foncier|number_format(0, '' , ' ') }}
+                            {{ paie.foncier|number_format(0, '' , ' ') }}
                         </td>
                           <!-- partie patronale -->
                         <td>F.N.E</td>
                         <td>
-                            {% set fne = brut * 0.01 %}
-                            {{ fne|number_format(0, '', ' ')}}
+                            {{ paie.fne|number_format(0, '', ' ')}}
                         </td>
                     </tr>
                     <tr class="text-end">
                         <td class="text-start">redevance audio visuelle (CRTV)</td>
                         <td></td>
-                        <td>{{ bruttaxe|number_format(0, '' , ' ') }}</td>
+                        <td>{{ paie.basecrtv|number_format(0, '' , ' ') }}</td>
                         <td></td>
                         <td>
-                            {% set CRTV = 0 %}
-
-                            {# Bloc 1 - pour bruttaxe <= 700000 #}
-                            {% if bruttaxe <= 52000 %}
-                                {% set CRTV = 0 %}
-                            {% elseif bruttaxe <= 100000 %}
-                                {% set CRTV = 750 %}
-                            {% elseif bruttaxe <= 200000 %}
-                                {% set CRTV = 1950 %}
-                            {% elseif bruttaxe < 300000 %}
-                                {% set CRTV = 3250 %}
-                            {% elseif bruttaxe <= 400000 %}
-                                {% set CRTV = 4550 %}
-                            {% elseif bruttaxe <= 500000 %}
-                                {% set CRTV = 5850 %}
-                            {% elseif bruttaxe < 600000 %}
-                                {% set CRTV = 7150 %}
-                            {% elseif bruttaxe <= 700000 %}
-                                {% set CRTV = 8450 %}
-                            {% endif %}
-                            
-                            {# Bloc 2 - pour bruttaxe > 700000 #}
-                            {% if bruttaxe > 700000 and bruttaxe <= 800000 %}
-                                {% set CRTV = CRTV + 9750 %}
-                            {% elseif bruttaxe > 800000 and bruttaxe <= 900000 %}
-                                {% set CRTV = CRTV + 11050 %}
-                            {% elseif bruttaxe > 900000 and bruttaxe <= 1000000 %}
-                                {% set CRTV = CRTV + 12350 %}
-                            {% elseif bruttaxe > 1000000 %}
-                                {% set CRTV = CRTV + 13000 %}
-                            {% endif %}
-                            
                             {# Affichage du résultat #}
-                            {{ CRTV|number_format(0, '' , ' ') }}
+                            {{ paie.crtv|number_format(0, '' , ' ') }}
                             
                         </td>
                         <td {# rowspan="2" #}class="text-bold text-end"> Total</td>
-                        <td {# rowspan="2" #} class="text-bold text-end"> {{ (allocation + Vieillesse + trav + credfonc + fne)|number_format(0, '' , ' ')}}</td>
+                        <td {# rowspan="2" #} class="text-bold text-end"> {{ (paie.allocation + paie.Vieil + paie.tav + paie.foncier + paie.fne)|number_format(0, '' , ' ')}}</td>
                     </tr>
                     <tr class="text-end">
                         <td class="text-start">Acomptes sur salaires</td>
@@ -560,19 +400,19 @@
                         <td></td>
                      </tr>
                     {% set totalretenue = 0 %}
-                    {% if nombreJours != 0 %}
+                    {% if paie.jours != 0 %}
                         <tr class="text-end">
                             <td class="text-start">ABSENCES </td>
                             <td></td>
-                            <td>{{ ponction|number_format(0, '' , ' ') }}</td>
-                            <td>{{ nombreJours }}</td>
+                            <td>{{ paie.ponction|number_format(0, '' , ' ') }}</td>
+                            <td>{{ paie.jours }}</td>
                             <td>
-                                {{ (ponction * nombreJours)|number_format(0, '' , ' ') }}
+                                {{ (paie.ponction * paie.jours)|number_format(0, '' , ' ') }}
                             </td> 
                             <td></td>
                             <td></td>
+                            {% set totalretenue = paie.ponction * paie.jours %}
                         </tr>
-                        {% set totalretenue = ponction * nombreJours %}
                     {% endif %}
                     <tr class="text-end">
                         <td class="text-start">AUTRES RETENUES</td>
@@ -586,7 +426,7 @@
                     <tr class="text-bold text-end">
                         <td class="text-start" colspan="4">TOTAL DES RETENUES</td>
                         <td>
-                            {% set cotisation = irpp + ca + com + pv + foncier +CRTV + totalretenue %}
+                            {% set cotisation = paie.irpp + paie.ca + paie.local + paie.vieil + paie.foncier + paie.CRTV + totalretenue %}
                             {{ cotisation|number_format(0, '' , ' ') }}
                         </td>
                         <td></td>
@@ -629,8 +469,7 @@
                     </div>
                     <div class="col-6">
                         <h3 class="text-dark text-end text-bold">
-                            {%  set net = brut - cotisation %}
-                            {{ net|number_format(0, '' , ' ') }}
+                            {{ paie.salairenet|number_format(0, '' , ' ') }}
 
                         </h3>
                         {#                        <p class="text-end mb-0"> Payé le : 31/03/2025</p>#}
@@ -642,15 +481,10 @@
     </div>
     <div class="container fond-7 mb-5 p-3">
         <div class="centrer">
-      {#      {% if paieExistante == null %} 
-      #}
-                <a href="{{ path('paie_valider', {'id': employe.id }) }}"
-                   class="btn btn-success btn-lg"><i class="fa fa-save"></i> Valider</a>
- {#           {% else %}
+     
                 <a href="{{ path('paie_index') }}" class="btn btn-secondary btn-lg me-2">Retour</a>
                 <a href="#" class="btn btn-primary btn-lg"><i class="fa fa-print"></i> Imprimer</a>
-            {% endif %} 
-#}
+ 
         </div>
     </div>
 {% endblock %}

@@ -191,17 +191,18 @@ class PaieController extends AbstractController
                 // Vérifie si la prime est journalière (base == true)
                 if (!empty($prime->getBase()) && $prime->getBase() === true) {
                     $ponction += $prime->getMontant() / $nbrjoursmois->format('t');
-                    $totalprime = [ 'designation' => $prime->getDescription(), 
+                    $totalprime[] = [ 'designation' => $prime->getDescription(), 
                                     'montant' => $prime->getMontant()
                                 ];
                 } else {
-                    $totalprime = [ 'designation' => $prime->getDescription(), 
+                    $totalprime[] = [ 'designation' => $prime->getDescription(), 
                                     'montant' => $prime->getMontant()
                                 ];
                 }
                 $montantprime += $prime->getMontant();
             }
-            $paie->setIndemnite($totalprime);
+            //  dd(json_encode($totalprime));
+             $paie->setIndemnite(json_encode($totalprime));
 
 
             $heureSups = $heureSuplementaireRepository->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
@@ -573,10 +574,12 @@ class PaieController extends AbstractController
     public function historiqueShow(Paie $paie): Response
     {
         if ($this->security->isGranted('ROLE_RH')) {
+              $indemnite = json_decode($paie->getIndemnite(), true);
 
             // dd($paie->getIndemnite());
             return $this->render('paie/admin/historique_show.html.twig', [
                 'paie' => $paie,
+                'indemnite' => $indemnite,
             ]);
 
         } else {
@@ -726,17 +729,17 @@ class PaieController extends AbstractController
                 // Vérifie si la prime est journalière (base == true)
                 if (!empty($prime->getBase()) && $prime->getBase() === true) {
                     $ponction += $prime->getMontant() / $nbrjoursmois->format('t');
-                    $totalprime = [ 'designation' => $prime->getDescription(), 
+                    $totalprime[] = [ 'designation' => $prime->getDescription(), 
                                     'montant' => $prime->getMontant()
                                 ];
                 } else {
-                    $totalprime = [ 'designation' => $prime->getDescription(), 
+                    $totalprime[] = [ 'designation' => $prime->getDescription(), 
                                     'montant' => $prime->getMontant()
                                 ];
                 }
                 $montantprime += $prime->getMontant();
             }
-            $paie->setIndemnite($totalprime);
+            $paie->setIndemnite(json_encode($totalprime));
 
 
             $heureSups = $heureSuplementaireRepository->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
