@@ -211,13 +211,13 @@
                         <tr class="text-end">
                             <td class="text-start">Heures Suplementaires</td>
                             <td></td>
-                            <td>{{ paie.tauxheuresup|number_format(0, '' , ' ') }}</td>
-                            <td> {{ paie.tauxheursup }}</td>
-                            <td>{{ ( paie.tauxheuresup * paie.tauxheursup )|number_format(0, '' , ' ') }}</td>
+                            <td>{{ paie.baseheuresup|number_format(0, '' , ' ') }}</td>
+                            <td> {{ paie.tauxheuresup }}</td>
+                            <td>{{ ( paie.baseheuresup * paie.tauxheuresup )|number_format(0, '' , ' ') }}</td>
                             <td></td>
                             <td></td>
                         </tr>
-                        {% set totalheuresup = paie.tauxheuresup * paie.tauxheursup %}
+                        {% set totalheuresup = paie.baseheuresup * paie.tauxheuresup %}
                     {% endif %}
                     
                     <tr class="text-bold text-end">
@@ -404,14 +404,14 @@
                         <tr class="text-end">
                             <td class="text-start">ABSENCES </td>
                             <td></td>
-                            <td>{{ paie.ponction|number_format(0, '' , ' ') }}</td>
+                            <td>{{ paie.baseponction|number_format(0, '' , ' ') }}</td>
                             <td>{{ paie.jours }}</td>
                             <td>
-                                {{ (paie.ponction * paie.jours)|number_format(0, '' , ' ') }}
+                                {{ (paie.baseponction * paie.jours)|number_format(0, '' , ' ') }}
                             </td> 
                             <td></td>
                             <td></td>
-                            {% set totalretenue = paie.ponction * paie.jours %}
+                            {% set totalretenue = paie.baseponction * paie.jours %}
                         </tr>
                     {% endif %}
                     <tr class="text-end">
