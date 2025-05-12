@@ -1,18 +1,12 @@
-{% extends
-    is_granted('ROLE_ADMIN') ? 'admin.html.twig' :
-    is_granted('ROLE_RH') ? 'rh.html.twig' :
-    is_granted('ROLE_FINANCE') ? 'finance.html.twig' :
-    is_granted('ROLE_STOCK') ? 'stock.html.twig' :
-    is_granted('ROLE_LIVREUR') ? 'livreur.html.twig' :
-    is_granted('ROLE_EMPLOYER') ? 'employe.html.twig' :
-    'layout.html.twig'
-%}
+<!doctype html>
+<html lang="{{ app.request.locale }}">
 
-{% block title %}Historique de Paie - GNT Pharma{% endblock %}
-{% block paie %}active{% endblock %}
-
-{% block body %}
-    {% set employe = paie.employe %}
+<head>
+    <title> {% block title %} GNT Pharma {% endblock %} </title>
+    {{ include('includes/head.html.twig') }}
+</head>
+<body onload="print()" onafterprint="history.back()">
+{% set employe = paie.employe %}
     <div class="container fond-7 mb-5">
         <div class="row" style="border-bottom: 2px solid #039c4f;padding-bottom: 10px;">
             <div class="col-2 p-0">
@@ -479,12 +473,5 @@
         </div>
         <br><br><br><br><br>
     </div>
-    <div class="container fond-7 mb-5 p-3">
-        <div class="centrer">
-     
-                <button class="btn btn-secondary btn-lg me-2"  onclick="history.back()"><i class="fa fa-undo"></i> Retour</button>
-                <a href="{{ path('paie_historique_show_print', {'id' : paie.id})}}" class="btn btn-primary btn-lg"><i class="fa fa-print"></i> Imprimer</a>
- 
-        </div>
-    </div>
-{% endblock %}
+    </body>
+    </html>

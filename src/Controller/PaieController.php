@@ -191,17 +191,18 @@ class PaieController extends AbstractController
                 // Vérifie si la prime est journalière (base == true)
                 if (!empty($prime->getBase()) && $prime->getBase() === true) {
                     $ponction += $prime->getMontant() / $nbrjoursmois->format('t');
-                    $totalprime = [ 'designation' => $prime->getDescription(), 
+                    $totalprime[] = [ 'designation' => $prime->getDescription(), 
                                     'montant' => $prime->getMontant()
                                 ];
                 } else {
-                    $totalprime = [ 'designation' => $prime->getDescription(), 
+                    $totalprime[] = [ 'designation' => $prime->getDescription(), 
                                     'montant' => $prime->getMontant()
                                 ];
                 }
                 $montantprime += $prime->getMontant();
             }
-            $paie->setIndemnite($totalprime);
+            //  dd(json_encode($totalprime));
+             $paie->setIndemnite(json_encode($totalprime));
 
 
             $heureSups = $heureSuplementaireRepository->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
@@ -573,12 +574,117 @@ class PaieController extends AbstractController
     public function historiqueShow(Paie $paie): Response
     {
         if ($this->security->isGranted('ROLE_RH')) {
+              $indemnite = json_decode($paie->getIndemnite(), true);
 
             // dd($paie->getIndemnite());
             return $this->render('paie/admin/historique_show.html.twig', [
                 'paie' => $paie,
+                'indemnite' => $indemnite,
             ]);
 
+        } else {
+            $response = $this->redirectToRoute('security_logout');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        }
+    }
+
+    #[Route("/Historique_print/{id}", name :"paie_historique_show_print", methods : ["GET"]) ]
+    public function historiqueShow_print(Paie $paie): Response
+    {
+        if ($this->security->isGranted('ROLE_RH')) {
+              $indemnite = json_decode($paie->getIndemnite(), true);
+
+            // dd($paie->getIndemnite());
+            return $this->render('paie/admin/historique_show_print.html.twig', [
+                'paie' => $paie,
+                'indemnite' => $indemnite,
+            ]);
+
+        } else {
+            $response = $this->redirectToRoute('security_logout');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        }
+    }
+
+    #[Route("Details_print/{id}", name :"paie_show_rint", methods : ["GET"]) ]
+    public function show_print(int $id, PrimeRepository $primeRepository, HeureSuplementaireRepository $heureSuplementaireRepository): Response
+    {
+        if ($this->security->isGranted('ROLE_RH')) {
+            $entityManager = $this->entityManager;
+            $startOfMonth = new \DateTime('01-' . date('m') . ('-') . date('Y'));
+            $endOfMonth = new \DateTime('last day of this month');
+            $employe = $entityManager->getRepository(Employe::class)->find($id);
+            $mois = $entityManager->getRepository(Mois::class)->find(date('m'));
+
+            // Vérifier si la paie du mois en cours est déjà validée
+            // $paieExistante = $entityManager->getRepository(Paie::class)->findByDate($employe->getId(), $startOfMonth, $endOfMonth);
+//            $primes = $entityManager->getRepository(Prime::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
+//            $heureSup = $entityManager->getRepository(HeureSuplementaire::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
+
+            $primes = $entityManager->getRepository(Prime::class)->findBy(['employe' => $employe->getId()]);
+
+            $heureSups = $heureSuplementaireRepository->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
+            $nombreHeures = 0;
+            foreach ($heureSups as $heureSup) {
+                // calcul nombre d'heure
+                $nombreHeures = $nombreHeures + $heureSup->getDuree();
+            }
+
+
+            $primeperformances = $entityManager->getRepository(PrimePerformance::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
+            $totalPrimePerf = 0;
+            foreach ($primeperformances as $primeP) {
+                // calcul nombre d'heure
+                $totalPrimePerf = $totalPrimePerf + $primeP->getMontant();
+            }
+
+
+            $sanctions = $entityManager->getRepository(Sanction::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
+
+            $retenues = [];
+            $nombreJours = 0;
+            $salaireJournalier = $employe->getPoste()->getSalaire() / 30; // Salaire journalier
+            $montantRetenue = 0;
+            foreach ($sanctions as $sanction) {
+                // calcul nombre jours
+
+                if ($sanction->getTypeSanction()->getNom() === 'Ponction Salariale') {
+                    $nombreJours =  $nombreJours + $sanction->getNombreJours();
+//                    $montantRetenue = $montantRetenue + $salaireJournalier * $nombreJours;
+                } elseif ($sanction->getTypeSanction()->getNom() === 'Mis a pied') {
+                    $dateDebut = $sanction->getDateDebut();
+                    $dateFin = $sanction->getDateFin();
+                    $nombreJours = $nombreJours + $dateDebut->diff($dateFin)->days + 1;
+//                    $montantRetenue = $montantRetenue + $salaireJournalier * $nombreJours;
+                }
+            }
+
+            $nbrjoursmois = new \DateTime();
+            return $this->render('paie/admin/show_print.html.twig', [
+                'employe' => $employe,
+                'primes' => $primes,
+                'nbrjoursmois' => $nbrjoursmois->format('t'),
+                'nombreJours' => $nombreJours,
+                'totalPrimePerf' => $totalPrimePerf,
+                'heureSups' => $nombreHeures,
+                'mois' => $mois,
+            ]);
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -726,17 +832,17 @@ class PaieController extends AbstractController
                 // Vérifie si la prime est journalière (base == true)
                 if (!empty($prime->getBase()) && $prime->getBase() === true) {
                     $ponction += $prime->getMontant() / $nbrjoursmois->format('t');
-                    $totalprime = [ 'designation' => $prime->getDescription(), 
+                    $totalprime[] = [ 'designation' => $prime->getDescription(), 
                                     'montant' => $prime->getMontant()
                                 ];
                 } else {
-                    $totalprime = [ 'designation' => $prime->getDescription(), 
+                    $totalprime[] = [ 'designation' => $prime->getDescription(), 
                                     'montant' => $prime->getMontant()
                                 ];
                 }
                 $montantprime += $prime->getMontant();
             }
-            $paie->setIndemnite($totalprime);
+            $paie->setIndemnite(json_encode($totalprime));
 
 
             $heureSups = $heureSuplementaireRepository->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
@@ -896,6 +1002,7 @@ class PaieController extends AbstractController
             $paie->setFoncier($foncier);
             
             /** crtv */
+            $CRTV = 0;
             if ($paie->getBruttaxable() <= 52000) {
                 $CRTV = 0;
             } elseif ($paie->getBruttaxable() <= 100000) {
@@ -908,9 +1015,9 @@ class PaieController extends AbstractController
                 $CRTV = 4550;
             } elseif ($paie->getBruttaxable() <= 500000) {
                 $CRTV = 5850;
-            } elseif ($paie->getBruttaxable() < 600000) {
+            } elseif ($paie->getBruttaxable() <= 600000) {
                 $CRTV = 7150;
-            } elseif ($paie->getBruttaxable() <= 700000) {
+            } elseif ($paie->getBruttaxable() >= 700000) {
                 $CRTV = 8450;
             }
 
