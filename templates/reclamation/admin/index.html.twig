@@ -49,9 +49,9 @@
             {% for reclamation in reclamations %}
                 <tr>
                     <td>RECL{{ reclamation.id }}</td>
-                    <td>{{ reclamation.creation ? reclamation.creation|date('Y-m-d') : '' }}</td>
+                    <td>{{ reclamation.creation ? reclamation.creation|date('d/m/Y') : '' }}</td>
                     <td>{{ reclamation.status ? 'Yes' : 'No' }}</td>
-                    <td>{{ reclamation.cloture ? reclamation.cloture|date('Y-m-d') : '' }}</td>
+                    <td>{{ reclamation.cloture ? reclamation.cloture|date('d/m/Y') : '' }}</td>
                     <td>
                         <a id="{{ reclamation.id }}" onclick="load({{ reclamation.id }})" class="btn btn-success" href="{{ path('reclamation_show', {'id': reclamation.id, 'user' : app.user.id}) }}">
                             <i class="fa fa-list"></i>

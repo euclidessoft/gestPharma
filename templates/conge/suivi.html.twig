@@ -72,11 +72,11 @@
                 <td data-label="{{ 'Raison'|trans }}">{{ conge.description }}</td>
                 <td data-label="{{ 'Statut'|trans }}">
                     {% if conge.status == 0 %}
-                        <span class="badge badge-danger">
+                        <span class="badge bg-danger">
                         {{ "En attente de validation"|trans }}
                     </span>
                     {% else %}
-                        <span class="badge badge-success">
+                        <span class="badge bg-success">
                         {{ "Approuvée"|trans }}
                     </span>
                     {% endif %}

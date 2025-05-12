@@ -558,8 +558,8 @@
     /*****Start Script de conversion le prix en lettre*****/
 
         // Utilisation de la fonction NumberToLetter
-    var montantTotal = document.getElementById("total").innerText;
-    var totalEnLettres = NumberToLetter(montanTotal);
+    var total = document.getElementById("total").innerText;
+    var totalEnLettres = NumberToLetter(total);
     document.getElementById("conversion").innerHTML = totalEnLettres;
     function Unite( nombre ){
         var unite;

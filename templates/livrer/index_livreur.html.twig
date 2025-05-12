@@ -30,7 +30,7 @@
     {% endfor %}
 
 
-    <table class="table table-success-light table-bordered table-hover table-striped w-100" id="liste">
+    <table class="table table-success-light table-bordered table-hover table-striped my-3" id="liste">
         <thead>
             <tr>
                 <th>{{ 'N° Bordereau'|trans }} </th>
@@ -44,7 +44,7 @@
             <tr>
                 <td>{{ commande.id }}</td>
                 <td>{{ commande.date|date('d/m/Y') }}</td>
-                <td>{{ commande.commande.user.nom }}</td>
+                <td>{{ commande.commande.user.nom }} {{ commande.commande.user.prenom }}</td>
                 <td>
                     <a id="{{ commande.id }}" onclick="load({{ commande.id }})" class="btn btn-success" href="{{ path('livraison_livreur_show', {'id': commande.id}) }}"><i class="fas fa-truck-fast"></i>
                         {{ 'Livraison'|trans }}

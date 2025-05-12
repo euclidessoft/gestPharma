@@ -5,91 +5,90 @@
     is_granted('ROLE_STOCK') ? 'stock.html.twig' :
     is_granted('ROLE_LIVREUR') ? 'livreur.html.twig' :
     is_granted('ROLE_EMPLOYER') ? 'employe.html.twig' :
-    'layout.html.twig'
-%}
+    'layout.html.twig' %}
 {% block title %} {{ "Commande-Reclamation"|trans }} - GNT Pharma {% endblock %}
 {% block reclamation %} active{% endblock %}
 
 
 {% block body %}
-<div class="container mt-4 py-4 fond-7">
-    <h3 class="mt-4 mb-5 text-bold">
-        <i class="fa fa-rotate me-2"></i>
-        {{ 'Réclamations'|trans }}
-    </h3>
-    <table class="table table-success-light table-bordered table-hover table-striped mb-4 w-100" id="liste">
-        <thead>
-        <tr>
-            <th>{{ 'Date'|trans }}</th>
-            <th>{{ 'Client'|trans }}</th>
-            <th>{{'N° Commande'|trans}}</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>{{ reclamation.creation ? reclamation.creation|date('Y-m-d') : '' }}</td>
-            <td>{{ reclamation.commande.user.nom }}</td>
-            <td>
-                <a type="button"
-                        data-bs-toggle="modal" data-bs-target="#modal">
-                    {{ reclamation.commande.id }}
-                </a>
-            </td>
-        </tr>
-        <tr>
-            <th>{{ 'Message'|trans }}</th>
-            <td colspan="2">{{ reclamation.commentaire }}</td>
-        </tr>
+    <div class="container mt-4 py-4 fond-7">
+        <h3 class="mt-4 mb-5 text-bold">
+            <i class="fa fa-rotate me-2"></i>
+            {{ 'Réclamations'|trans }}
+        </h3>
+        <table class="table table-success-light table-bordered table-hover table-striped mb-4 w-100">
+            <thead>
+            <tr>
+                <th>{{ 'Date'|trans }}</th>
+                <th>{{ 'Client'|trans }}</th>
+                <th>{{ 'N° Commande'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ reclamation.creation ? reclamation.creation|date('d/m/Y') : '' }}</td>
+                <td>{{ reclamation.commande.user.nom }} {{ reclamation.commande.user.prenom }}</td>
+                <td>
+                    <a type="button" data-bs-toggle="modal" data-bs-target="#modal">
+                        {{ reclamation.commande.id }}
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <th>{{ 'Message'|trans }}</th>
+                <td colspan="2">{{ reclamation.commentaire }}</td>
+            </tr>
 
-    </table>
-</div>
+        </table>
+    </div>
 
-<div class="container py-4">
-    {% for reponse in reclamation.reponses %}
-        <div class="row mt-4">
-            {% if 'ROLE_CLIENT' in reponse.user.roles %}
+    <div class="container py-4">
+        {% for reponse in reclamation.reponses %}
+            <div class="row mt-4">
+                {% if 'ROLE_CLIENT' in reponse.user.roles %}
 
-                <div class="col-md-7  py-4 fond-7">
-                    {{ reponse.user.nom  }} | {{ reponse.date|date("d/m/Y") }}
-                    <hr class="text-secondaire">
-                    {{ reponse.message }}
-                </div>
-                <div class="col-md-5"> </div>
+                    <div class="col-md-7  py-4 fond-7">
+                        {{ reponse.user.nom }} | {{ reponse.date|date("d/m/Y") }}
+                        <hr class="text-secondaire">
+                        {{ reponse.message }}
+                    </div>
+                    <div class="col-md-5"></div>
 
-            {% else %}
-                <div class="col-md-5"> </div>
-                <div class="col-md-7  py-4 fond-7">
-                    {{ reponse.user.nom  }} | {{ reponse.date|date("d/m/Y") }}
-                    <hr class="text-secondaire">
-                    {{ reponse.message }}
-                </div>
-            {% endif %}
-        </div>
-    {% else %}
-    {% endfor %}
-</div>
+                {% else %}
+                    <div class="col-md-5"></div>
+                    <div class="col-md-7  py-4 fond-7">
+                        {{ reponse.user.nom }} | {{ reponse.date|date("d/m/Y") }}
+                        <hr class="text-secondaire">
+                        {{ reponse.message }}
+                    </div>
+                {% endif %}
+            </div>
+        {% else %}
+        {% endfor %}
+    </div>
 
     {% if reclamation.usercloture is null %}
 
-    <div class="col-md-6 offset-md-3 mt-4 mb-5 pt-3 pb-2 fond-7">
-        <div class="centrer">
+        <div class="col-md-6 offset-md-3 mt-4 mb-5 pt-3 pb-2 fond-7">
+            <div class="centrer">
 
-            <a href="{{ path('reponse_new', {'reclamation' : reclamation.id }) }}" class="btn btn-success">
-                <i class="fa fa-edit"></i>
-                {{'Répondre'|trans}}</a>
+                <a href="{{ path('reponse_new', {'reclamation' : reclamation.id }) }}" class="btn btn-success">
+                    <i class="fa fa-edit"></i>
+                    {{ 'Répondre'|trans }}</a>
 
-            <a href="{{ path('reclamation_cloturer', {'reclamation' : reclamation.id }) }}" class="btn btn-success ms-3 float-right">
-                <i class="fa fa-edit"></i>
-                {{ 'Clôturer'|trans }}</a>
+                <a href="{{ path('reclamation_cloturer', {'reclamation' : reclamation.id }) }}"
+                   class="btn btn-success ms-3 float-right">
+                    <i class="fa fa-edit"></i>
+                    {{ 'Clôturer'|trans }}</a>
 
+            </div>
         </div>
-    </div>
     {% else %}
 
         <div class="col-md-6 offset-md-3 mt-4 mb-5 pt-3 pb-2 fond-7">
             <div class="centrer">
 
-                {{'Clôturer le'|trans }} {{ reclamation.cloture|date('d/m/Y') }}
+                {{ 'Clôturer le'|trans }} {{ reclamation.cloture|date('d/m/Y') }}
 
 
             </div>
@@ -97,15 +96,13 @@
 
     {% endif %}
 
-    <div class="modal fade" id="modal" tabindex="-1" tabindex="-1" aria-labelledby="" aria-hidden="true"
-         aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg text-center">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">
-                        </h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close">
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
 
                     </button>
                 </div>
@@ -121,9 +118,10 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <td>{{ reclamation.commande.id }}</td>
-                                <td>{{ reclamation.commande.date|date('d/m/Y') }}</td>
-
+                                <tr>
+                                    <td>{{ reclamation.commande.id }}</td>
+                                    <td>{{ reclamation.commande.date|date('d/m/Y') }}</td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -135,10 +133,10 @@
                             <th>{{ 'Référence'|trans }}</th>
                             <th>{{ 'Désignation'|trans }}</th>
                             <th>{{ 'Quantité Commande'|trans }}</th>
-                            <th>{{'Quantité livrée'|trans}}</th>
-                            <th>{{'Quantité restante'|trans}}</th>
+                            <th>{{ 'Quantité livrée'|trans }}</th>
+                            <th>{{ 'Quantité restante'|trans }}</th>
                             <th>{{ 'Date de Livraison'|trans }}</th>
-                            <th>{{'N° Bordereau'|trans}}</th>
+                            <th>{{ 'N° Bordereau'|trans }}</th>
                         </tr>
                         </thead>
                         <tbody>

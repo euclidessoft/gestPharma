@@ -24,14 +24,14 @@
     </div>
     {% endfor %}
 
-    <div class="row">
+    <div class="row mt-5">
 
         <div class="col-12 mb-4">
-            {{ form_row(form.employe, {'attr': {'placeholder': 'Nom de la sanction*'}, 'label': false}) }}
+            {{ form_row(form.employe, {'attr': {'placeholder': 'Employé à sanctionner *'}, 'label': 'Employé à sanctionner *'}) }}
         </div>
 
         <div class="col-12 mb-4">
-            {{ form_row(form.typeSanction, {'attr': {'placeholder': 'Type sanction *'}, 'label': false}) }}
+            {{ form_row(form.typeSanction, {'attr': {'placeholder': 'Type sanction *'}, 'label': 'Type sanction à infliger *'}) }}
         </div>
 
         <div class="col-12 mb-4" id="dateDebut">

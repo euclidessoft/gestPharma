@@ -47,7 +47,7 @@
                                 {% set reductionproduit =  produit['produit'].quantite * produit['produit'].prix * produit['promotion'] /100 %}
 
                                 {% set reduction =  reduction + reductionproduit %}
-                                <span class="badge badge-danger">
+                                <span class="badge bg-danger">
                                     -{{ produit['produit'].prix * produit['promotion'] /100 }} F
                             </span>
                             {% else %}

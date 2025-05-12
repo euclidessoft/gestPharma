@@ -141,7 +141,7 @@
                                 {% set reductionproduit =  commandeproduit.quantite * commandeproduit.session * commandeproduit.promotion.reduction /100 %}
 
                                 {% set reduction =  reduction + reductionproduit %}
-                                <span class="badge badge-danger">
+                                <span class="badge bg-danger">
                                     -{{ commandeproduit.session * commandeproduit.promotion.reduction /100 }} F
                             </span>
                             {% else %}
