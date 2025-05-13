@@ -52,14 +52,11 @@ class EvaluationController extends AbstractController
             $employes = $this->entityManager->getRepository(Employe::class)->findAll();
 
             $evaluation = new Evaluation();
-            $form = $this->createForm(EvaluationType::class, $evaluation);
-            $form->handleRequest($request);
             if ($request->isMethod('POST')) {
 //                $entityManager = $this->getDoctrine()->getManager();
                 $employeSelect = $request->request->get('employe');
                 $dateEvaluation = new \DateTime($request->request->get('dateEvaluation'));
-                $notes = $request->request->get('notes');
-                $commentaires = $request->request->get('commentaires');
+               
                 $employe = $this->entityManager->getRepository(Employe::class)->find($employeSelect);
 
                 $evaluation->setDateEvaluation($dateEvaluation);
@@ -67,17 +64,19 @@ class EvaluationController extends AbstractController
                 $totalNotes = 0;
                 $nbNotes = 0;
 
-                foreach ($notes as $critereId => $note) {
-                    $critere = $entityManager->getRepository(CritereEvaluation::class)->find($critereId);
+                foreach ($criteres as $critere) {
+                    // $critere = $entityManager->getRepository(CritereEvaluation::class)->find($critereId);
+                    $note = $request->request->get('notes'.$critere->getId());
+                    $commentaires = $request->request->get('commentaires'.$critere->getId());
                     $evaluationDetail = new EvaluationDetail();
                     $evaluationDetail->setCritereEvaluation($critere);
                     $evaluationDetail->setNote((int)$note);
                     $evaluationDetail->setEvaluation($evaluation);
-                    if (isset($commentaires[$critereId])) {
-                        $evaluationDetail->setCommentaire($commentaires[$critereId]);
+                    if (!empty($commentaires)) {
+                        $evaluationDetail->setCommentaire($commentaires);
                     }
                     $evaluation->addEvaluationDetail($evaluationDetail);
-                    $entityManager->persist($evaluationDetail);
+                    $this->entityManager->persist($evaluationDetail);
 
                     $totalNotes += (int)$note;
                     $nbNotes++;
@@ -93,7 +92,6 @@ class EvaluationController extends AbstractController
             }
             return $this->render('evaluation/evaluation.html.twig', [
                 'employes' => $employes,
-                'form' => $form->createView(),
                 'criteres' => $criteres,
             ]);
         } else {

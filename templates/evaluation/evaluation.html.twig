@@ -56,11 +56,11 @@
                     <td>{{ critere.nom }}</td>
                     {% for i in 1..10 %}
                     <td>
-                        <input type="radio" name="notes[{{ critere.id }}]" value="{{ i }}" required>
+                        <input type="radio" name="notes{{ critere.id }}" value="{{ i }}" required>
                     </td>
                     {% endfor %}
                     <td>
-                        <input type="text" name="commentaires[{{ critere.id }}]" class="form-control" placeholder="Commentaire">
+                        <input type="text" name="commentaires{{ critere.id }}" class="form-control" placeholder="Commentaire">
                     </td>
                 </tr>
                 {% endfor %}

@@ -6,6 +6,7 @@ use App\Repository\CritereEvaluationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use symfony\component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass:CritereEvaluationRepository::class) ]
 class CritereEvaluation
@@ -16,9 +17,11 @@ class CritereEvaluation
     private ?int $id = null;
 
     #[ORM\Column(type:"string", length:255) ]
+     #[Assert\NotBlank(message: "Champ obligatoire") ]
     private $nom;
 
     #[ORM\Column(type:"text", nullable:true) ]
+     #[Assert\NotBlank(message: "Champ obligatoire") ]
     private $description;
 
     #[ORM\OneToMany(targetEntity:Evaluation::class, mappedBy:"critereEvaluation") ]
