@@ -21,7 +21,7 @@ class SanctionType extends AbstractType
                 'choice_label' => function (Employe $employe) {
                     return $employe->getNom() . ' ' . $employe->getPrenom();
                 },
-                'placeholder' => 'Choisissez le type de la sanction',
+                'placeholder' => 'Choisissez l\'employé à sanctionner',
                 'required' => true,
                 'expanded' => false,
             ])
@@ -34,7 +34,7 @@ class SanctionType extends AbstractType
             ->add('typeSanction', EntityType::class, [
                 'class' => TypeSanction::class,
                 'choice_label' => 'nom',
-                'placeholder' => 'Choisissez le type de la sanction',
+                'placeholder' => 'Choisissez le type de sanction',
                 'required' => true,
                 'expanded' => false,
             ])
