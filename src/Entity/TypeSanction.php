@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\TypeSanctionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass:TypeSanctionRepository::class) ]
@@ -19,7 +20,7 @@ class TypeSanction
     private $nom;
 
     #[ORM\Column(type:"text") ]
-    private $descritpion;
+    private $description;
 
     #[ORM\OneToMany(targetEntity:Sanction::class, mappedBy:"typeSanction") ]
     private $sanctions;
@@ -51,18 +52,6 @@ class TypeSanction
     public function setNom(string $nom): self
     {
         $this->nom = $nom;
-
-        return $this;
-    }
-
-    public function getDescritpion(): ?string
-    {
-        return $this->descritpion;
-    }
-
-    public function setDescritpion(string $descritpion): self
-    {
-        $this->descritpion = $descritpion;
 
         return $this;
     }
@@ -121,6 +110,18 @@ class TypeSanction
                 $decision->setTypeSanction(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): static
+    {
+        $this->description = $description;
 
         return $this;
     }

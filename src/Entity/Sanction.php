@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\SanctionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use symfony\component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass:SanctionRepository::class) ]
 class Sanction
@@ -17,9 +18,11 @@ class Sanction
     private $dateCreation;
 
     #[ORM\ManyToOne(targetEntity:TypeSanction::class, inversedBy:"sanctions") ]
+    #[Assert\NotBlank(message: "Champ obligatoire") ]
     private $typeSanction;
 
     #[ORM\ManyToOne(targetEntity:Employe::class, inversedBy:"sanctions") ]
+     #[Assert\NotBlank(message: "Champ obligatoire") ]
     private $employe;
 
     #[ORM\Column(type:"datetime", nullable:true) ]
