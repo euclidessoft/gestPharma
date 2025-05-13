@@ -6,6 +6,7 @@ use App\Repository\DemandeExplicationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass:DemandeExplicationRepository::class) ]
 class DemandeExplication
@@ -16,21 +17,26 @@ class DemandeExplication
     private ?int $id = null;
 
     #[ORM\Column(type:"string", length:255) ]
+    #[Assert\NotBlank(message:"Objet obligatoire")]
     private $objet;
 
     #[ORM\Column(type:"text") ]
+    #[Assert\NotBlank(message:"Détails obligatoire")]
     private $details;
 
     #[ORM\Column(type:"datetime") ]
     private $date;
 
     #[ORM\Column(type:"datetime") ]
+    #[Assert\Type(\DateTime::class)]
+    #[Assert\NotBlank(message:"Obligatoire")]
     private $dateIncident;
 
     #[ORM\Column(type:"boolean") ]
     private $status;
 
     #[ORM\ManyToMany(targetEntity:Employe::class, inversedBy:"demandeExplications") ]
+    #[Assert\NotBlank(message:"selectionnez un employe au moins")]
     private $employe;
 
     #[ORM\OneToMany(targetEntity:ReponseExplication::class, mappedBy:"demande") ]
