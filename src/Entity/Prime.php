@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PrimeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass:PrimeRepository::class) ]
 class Prime
@@ -14,12 +15,15 @@ class Prime
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity:Employe::class, inversedBy:"primes") ]
+    #[Assert\NotBlank(message:"employe obligatoire")]
     private $employe;
 
     #[ORM\Column(type:"integer") ]
+    #[Assert\NotBlank(message:"montant obligatoire")]
     private $montant;
 
     #[ORM\Column(type:"string", length:255, nullable:true) ]
+    #[Assert\NotBlank(message:"Description obligatoire")]
     private $description;
 
 

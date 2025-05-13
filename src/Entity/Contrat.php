@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ContratRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass:ContratRepository::class) ]
 class Contrat
@@ -14,12 +15,17 @@ class Contrat
     private ?int $id = null;
 
     #[ORM\OneToOne(targetEntity:Employe::class, cascade:["persist", "remove"]) ]
+    #[Assert\NotBlank(message:"Sélectionnez un employé")]
     private $employe;
 
     #[ORM\Column(type:"datetime") ]
+    #[Assert\NotBlank(message:"Champ obligatoire")]
+    #[Assert\Type(\DateTimeInterface::class)]
     private $dateDebut;
 
     #[ORM\Column(type:"datetime", nullable:true) ]
+    #[Assert\NotBlank(message:"Champ obligatoire")]
+    #[Assert\Type(\DateTimeInterface::class)]
     private $dateFin;
 
     #[ORM\Column(type:"integer") ]
@@ -32,6 +38,7 @@ class Contrat
     private $createdAt;
 
     #[ORM\ManyToOne(targetEntity:TypeContrat::class, inversedBy:"contrats") ]
+    #[Assert\NotBlank(message:"Sélectionnez un type contrat")]
     private $typecontrat;
 
     public function getId(): ?int

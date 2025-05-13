@@ -6,6 +6,7 @@ use App\Repository\AbsenceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass:AbsenceRepository::class) ]
 class Absence
@@ -16,6 +17,7 @@ class Absence
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity:Employe::class, inversedBy:"absences") ]
+    #[Assert\NotBlank(message:"Selectionnez un employé")]
     private $employe;
 
     #[ORM\Column(type:"datetime") ]
