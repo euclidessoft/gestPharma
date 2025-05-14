@@ -34,15 +34,15 @@
             </tr>
             <tr>
                 <th class="text-end">{{ 'Prix grossiste hors taxe'|trans }}</th>
-                <td class="text-start" data-label="Prix grossiste hors taxe">{{ produit.pght }}</td>
+                <td class="text-start" data-label="Prix grossiste hors taxe">{{ produit.pght|number_format(2, ',', ' ') }}</td>
             </tr>
             <tr>
                 <th class="text-end">{{ 'Prix Cession'|trans }}</th>
-                <td class="text-start" data-label="Prix Cession">{{ produit.prix }}</td>
+                <td class="text-start" data-label="Prix Cession">{{ produit.prix|number_format(2, ',', ' ') }}</td>
             </tr>
             <tr>
                 <th class="text-end">{{ 'Prix Public'|trans }}</th>
-                <td class="text-start" data-label="Prix Public">{{ produit.prixpublic }}</td>
+                <td class="text-start" data-label="Prix Public">{{ produit.prixpublic|number_format(2, ',', ' ') }}</td>
             </tr>
             <tr>
                 <th class="text-end">{{ 'Commande minimum'|trans }}</th>

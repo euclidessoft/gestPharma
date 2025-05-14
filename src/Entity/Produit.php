@@ -36,7 +36,7 @@ class Produit
     #[ORM\Column(type:"string", length:255, nullable:true) ]
     private $description;
 
-    #[ORM\Column(type:"integer") ]
+    #[ORM\Column(type:"float") ]
       #[Assert\NotBlank(  message : "Champ obligatoire") ]
     private $prix;
 
@@ -53,7 +53,7 @@ class Produit
     private $lot;
     private $peremption;
 
-    #[ORM\Column(type:"integer") ]
+    #[ORM\Column(type:"float") ]
       #[Assert\NotBlank(  message : "Champ obligatoire") ]
     private $prixpublic;
 
@@ -125,12 +125,12 @@ class Produit
         return $this;
     }
 
-    public function getPrix(): ?int
+    public function getPrix(): ?float
     {
         return $this->prix;
     }
 
-    public function setPrix(int $prix): self
+    public function setPrix(float $prix): self
     {
         $this->prix = $prix;
 
@@ -195,12 +195,12 @@ class Produit
         return $this;
     }
 
-    public function getPrixpublic(): ?int
+    public function getPrixpublic(): ?float
     {
         return $this->prixpublic;
     }
 
-    public function setPrixpublic(int $prixpublic): self
+    public function setPrixpublic(float $prixpublic): self
     {
         $this->prixpublic = $prixpublic;
 
