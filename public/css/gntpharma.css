@@ -838,6 +838,14 @@ select:required {
     font-weight: bold;
 }
 
+.nav-pills .nav-link:hover {
+    background: var(--vert-light);
+}
+
+.nav-pills .nav-link {
+     color: var(--vert);
+ }
+
 .align-center,
 .checkbox-center {
     display: flex;
@@ -1014,10 +1022,6 @@ select#transfert_date_time_minute {
 
 .flex {
     flex: 1;
-}
-
-.nav-pills .nav-link:hover {
-    background: var(--vert-clair);
 }
 
 #message tbody tr {

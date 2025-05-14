@@ -421,7 +421,6 @@
     // let table = $('#liste').DataTable({
         responsive: true,
         pageLength: 100,
-        // dom: 'lrtip', // Configuration du positionnement des éléments
         buttons: [
             {
                 extend: 'excelHtml5',
@@ -471,15 +470,15 @@
         table.button(1).trigger();
     });
 
-    let messagerie = $('#message').DataTable({
+    let messagerie = new DataTable('#message', {
 
         responsive: true,
-        "pageLength": 25,
+        pageLength: 50,
         buttons: [
             {
                 extend: 'excelHtml5',
                 exportOptions: {
-                    columns: ':not(.noExport)' // exclut toutes les colonnes avec .noExport
+                    columns: ':not(.noExport)'
                 }
             },
             {
