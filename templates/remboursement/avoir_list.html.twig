@@ -35,7 +35,7 @@
                     <td>{{ avoir.client.nom }}</td>
                     <td>{{ avoir.date ? avoir.date|date('d/m/Y') : '' }}</td>
                     <td>{{ avoir.admin.nom }}</td>
-                    <td>{{ avoir.Montant|number_format(0, '' , ' ') }}</td>
+                    <td>{{ avoir.Montant|number_format(2, ',' , ' ') }}</td>
                     <td>
                         <a id="{{ avoir.id }}" onclick="load({{ avoir.id }})" class="btn btn-success" href="{{ path('remboursement_avoir', {'avoir': avoir.id}) }}"><i class="fa fa-list"></i>
                             {{ 'Rembourser'|trans }}

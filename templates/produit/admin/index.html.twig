@@ -44,8 +44,8 @@
             <tr>
                 <td>{{ produit.reference }}</td>
                 <td class="text-start">{{ produit.desigantion }}</td>
-                <td>{{ produit.prix }}</td>
-                <td>{{ produit.prixpublic }}</td>
+                <td>{{ produit.prix|number_format(2, ',' , ' ') }}</td>
+                <td>{{ produit.prixpublic|number_format(2, ',' , ' ') }}</td>
                 <td>{{ produit.mincommande }}</td>
                 <td class="text-start">{{ produit.fabriquant }}</td>
                 <td class="text-nowrap">

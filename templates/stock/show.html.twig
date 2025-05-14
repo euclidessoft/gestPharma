@@ -31,11 +31,11 @@
         </tr>
         <tr>
             <th>{{ 'Prix Cession'|trans }}</th>
-            <td>{{ produit.prix }}</td>
+            <td>{{ produit.prix|number_format(2, ',' , ' ') }}</td>
         </tr>
         <tr>
             <th>{{ 'Prix Public'|trans }}</th>
-            <td>{{ produit.prixpublic }}</td>
+            <td>{{ produit.prixpublic|number_format(2, ',' , ' ') }}</td>
         </tr>
         <tr>
             <th>{{ 'Commande minimum'|trans }}</th>

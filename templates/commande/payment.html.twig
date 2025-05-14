@@ -46,7 +46,7 @@
                 <td>{{ commandeproduit.produit.desigantion }} </td>
                 <td> {{ commandeproduit.quantite }} </td>
                 <td>
-                    {{ commandeproduit.produit.prix|number_format(0, '' , ' ') }}
+                    {{ commandeproduit.produit.prix|number_format(2, ',' , ' ') }}
                     {% if commandeproduit.promotion is not null %}
                         {% if commandeproduit.promotion.reduction is not null %}
                             {% set reduction =  reduction + (commandeproduit.quantite * commandeproduit.session * commandeproduit.promotion.reduction /100) %}
@@ -56,9 +56,9 @@
                         {% endif %}
                     {% endif %}
                 </td>
-                <td>{{ commandeproduit.produit.prixpublic|number_format(0, '' , ' ') }}</td>
+                <td>{{ commandeproduit.produit.prixpublic|number_format(2, ',' , ' ') }}</td>
                 <td class="text-nowrap">
-                    {{ (commandeproduit.quantite * commandeproduit.produit.prix)|number_format(0, '' , ' ') }}
+                    {{ (commandeproduit.quantite * commandeproduit.produit.prix)|number_format(2, ',' , ' ') }}
                     {% set total = total + (commandeproduit.quantite * commandeproduit.produit.prix) %}
                 </td>
             </tr>
@@ -68,7 +68,7 @@
                 {{ "Total"|trans }}
             </td>
             <td>
-                <span id="" class="text-nowrap">{{ total|number_format(0, '' , ' ') }}</span>
+                <span id="" class="text-nowrap">{{ total|number_format(2, ',' , ' ') }}</span>
             </td>
         </tr>
         {% if reduction != 0 %}
@@ -77,7 +77,7 @@
                     {{ "Réduction"|trans }}
                 </td>
                 <td>
-                    <span id="" class="text-nowrap">{{ reduction|number_format(0, '' , ' ') }}</span>
+                    <span id="" class="text-nowrap">{{ reduction|number_format(2, ',' , ' ') }}</span>
                 </td>
             </tr>
         {% endif %}
@@ -86,7 +86,7 @@
                 {{ "Net à payer"|trans }}
             </td>
             <td>
-                <span id="total">{{ (total-reduction)|number_format(0, '' , ' ') }}</span>
+                <span id="total">{{ (total-reduction)|number_format(2, ',' , ' ') }}</span>
             </td>
         </tr>
         </tbody>

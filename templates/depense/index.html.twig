@@ -39,7 +39,7 @@
                     <td data-label="{{ 'Libellé'|trans }}">{{ depense.libelle }}</td>
                     <td data-label="{{ 'Date'|trans }}">{{ depense.date ? depense.date|date('Y-m-d H:i:s') : '' }}</td>
                     <td data-label="{{ 'Ligne'|trans }}">{{ depense.categorie ?  depense.categorie.nom : '' }}</td>
-                    <td data-label="{{ 'Montant'|trans }}">{{ depense.montant|number_format(0, '' , ' ') }}</td>
+                    <td data-label="{{ 'Montant'|trans }}">{{ depense.montant|number_format(2, ',' , ' ') }}</td>
                     <td data-label="{{ 'Réglement'|trans }}">{{ depense.type }}</td>
                     <td data-label="{{ 'Status'|trans }}">{{ depense.statut }}</td>
                     <td data-label="{{ 'Actions'|trans }}" class="text-nowrap">

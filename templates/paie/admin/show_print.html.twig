@@ -127,14 +127,14 @@
                         <td>{% set nombre = nbrjoursmois %} {{ nombre }}</td>
 {#                        <td>{% set nombre = nbrjoursmois - nombreJours %} {{ nombre }}</td>#}
                         <td>
-                            {% set base = employe.poste.salaire / 30 %}{{ base|number_format(0, '' , ' ') }}
+                            {% set base = employe.poste.salaire / 30 %}{{ base|number_format(2, ',' , ' ') }}
 
                         </td>
                         {% set ponction= ponction + base %}
-{#                        <td>{% set base = employe.poste.salaire / 30 %}{{ base|number_format(0, '' , ' ') }}</td>#}
+{#                        <td>{% set base = employe.poste.salaire / 30 %}{{ base|number_format(2, ',' , ' ') }}</td>#}
                         <td></td>
-                        <td>{{ employe.poste.salaire|number_format(0, '' , ' ') }}</td>
-{#                        <td>{{ (nombre * base)|number_format(0, '' , ' ') }}</td>#}
+                        <td>{{ employe.poste.salaire|number_format(2, ',' , ' ') }}</td>
+{#                        <td>{{ (nombre * base)|number_format(2, ',' , ' ') }}</td>#}
                         <td></td>
                         <td></td>
                     </tr>
@@ -143,7 +143,7 @@
                         <td class="text-start">Prime d'ancienneté</td>
                         <td></td>
                         <td>
-                          {{ employe.poste.salaire|number_format(0, '' , ' ') }} 
+                          {{ employe.poste.salaire|number_format(2, ',' , ' ') }}
                         </td>
                         <td>
                             {% if yearDiff >= 2 %}
@@ -175,9 +175,9 @@
                             <tr class="text-end">
                                 <td class="text-start">{{ prime.description }}</td>
                                 <td>{{ nombre }}</td>
-                                <td>{{ (prime.montant / nombre)|number_format(0, '' , ' ') }}</td>
+                                <td>{{ (prime.montant / nombre)|number_format(2, ',' , ' ') }}</td>
                                 <td></td>
-                                <td>{{ prime.montant|number_format(0, '' , ' ') }}</td>
+                                <td>{{ prime.montant|number_format(2, ',' , ' ') }}</td>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -186,9 +186,9 @@
                             <tr class="text-end">
                                 <td class="text-start">{{ prime.description }}</td>
                                 <td></td>
-                                <td>{{ prime.montant|number_format(0, '' , ' ') }}</td>
+                                <td>{{ prime.montant|number_format(2, ',' , ' ') }}</td>
                                 <td></td>
-                                <td>{{ prime.montant|number_format(0, '' , ' ') }}</td>
+                                <td>{{ prime.montant|number_format(2, ',' , ' ') }}</td>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -204,9 +204,9 @@
                         <tr class="text-end">
                             <td class="text-start">Prime de Performence</td>
                             <td></td>
-                            <td>{{ totalPrimePerf|number_format(0, '' , ' ') }}</td>
+                            <td>{{ totalPrimePerf|number_format(2, ',' , ' ') }}</td>
                             <td> </td>
-                            <td>{{ totalPrimePerf|number_format(0, '' , ' ') }}</td>
+                            <td>{{ totalPrimePerf|number_format(2, ',' , ' ') }}</td>
                             <td></td>
                             <td></td>
                         </tr>
@@ -217,9 +217,9 @@
                         <tr class="text-end">
                             <td class="text-start">Heures Suplementaires</td>
                             <td></td>
-                            <td>{{ employe.poste.heureSup|number_format(0, '' , ' ') }}</td>
+                            <td>{{ employe.poste.heureSup|number_format(2, ',' , ' ') }}</td>
                             <td> {{ heureSups }}</td>
-                            <td>{{ ( employe.poste.heureSup * heureSups )|number_format(0, '' , ' ') }}</td>
+                            <td>{{ ( employe.poste.heureSup * heureSups )|number_format(2, ',' , ' ') }}</td>
                             <td></td>
                             <td></td>
                         </tr>
@@ -231,7 +231,7 @@
                         <td>
                             {% set  brut = employe.poste.salaire + prenciennete + totalprime + totalheuresup + totalPrimePerf %}
                             {% set  brutinter = brut - totalprime %}
-                            {{ brut|number_format(0, '' , ' ') }}
+                            {{ brut|number_format(2, ',' , ' ') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -244,7 +244,7 @@
                             {% else %}
                                 {% set logementfisc = transport %}
                             {% endif %}
-                            {{ logementfisc|number_format(0, '' , ' ') }}
+                            {{ logementfisc|number_format(2, ',' , ' ') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -258,7 +258,7 @@
                                 {% set vehiculefisc = logement %}
                             {% endif %}
 
-                            {{ vehiculefisc|number_format(0, '' , ' ') }}
+                            {{ vehiculefisc|number_format(2, ',' , ' ') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -275,7 +275,7 @@
                             {% endif %}
 
                             
-                            {{ logementcnps|number_format(0, '' , ' ') }}
+                            {{ logementcnps|number_format(2, ',' , ' ') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -292,7 +292,7 @@
                             {% endif %}
                         
 
-                            {{ vehiculecnps|number_format(0, '' , ' ') }}
+                            {{ vehiculecnps|number_format(2, ',' , ' ') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -301,7 +301,7 @@
                         <td class="text-start"  colspan="4">SALAIRE Brut Taxable inter</td>
                         <td>
                            
-                            {{ brutinter|number_format(0, '' , ' ') }}
+                            {{ brutinter|number_format(2, ',' , ' ') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -310,7 +310,7 @@
                         <td class="text-start"  colspan="4">SALAIRE Brut Taxable</td>
                         <td>
                             {% set  bruttaxe = brutinter + transport + vehiculefisc %} 
-                            {{ bruttaxe|number_format(0, '' , ' ') }}
+                            {{ bruttaxe|number_format(2, ',' , ' ') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -319,7 +319,7 @@
                         <td class="text-start"  colspan="4">Salaire Cotisable</td>
                         <td>
                             {% set  salairecotis = brutinter + vehiculecnps %} 
-                            {{ salairecotis|number_format(0, '' , ' ') }}
+                            {{ salairecotis|number_format(2, ',' , ' ') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -333,11 +333,11 @@
 {#                        <tr class="text-end">#}
 {#                            <td class="text-start">Ponction Salariale</td>#}
 {#                            <td></td>#}
-{#                            <td>{{ retenue.montant|number_format(0, '' , ' ') }}</td>#}
+{#                            <td>{{ retenue.montant|number_format(2, ',' , ' ') }}</td>#}
 {#                            <td>{{ retenue.jours }}</td>#}
 {#                            <td></td>#}
 {#                            <td>#}
-{#                                {{ (retenue.montant * retenue.jours)|number_format(0, '' , ' ') }}#}
+{#                                {{ (retenue.montant * retenue.jours)|number_format(2, ',' , ' ') }}#}
 {#                            </td>#}
 {#                            <td></td>#}
 {#                        </tr>#}
@@ -347,7 +347,7 @@
                     <tr class="text-end">
                         <td class="text-start">IRPP</td>
                         <td></td>
-                        <td> {{ bruttaxe|number_format(0, '' , ' ') }}</td>
+                        <td> {{ bruttaxe|number_format(2, ',' , ' ') }}</td>
                         <td></td>
                         <td>
                             {% if bruttaxe < 62000 %}
@@ -361,7 +361,7 @@
                             {% elseif bruttaxe > 667001 %}
                                 {% set irpp = 70830+(bruttaxe-667000)*0.7*0.35 %}
                             {% endif %}
-                            {{ irpp|number_format(0, '' , ' ') }}
+                            {{ irpp|number_format(2, ',' , ' ') }}
                         </td>
                         <td>ALLOC FAM</td>
                         <td>
@@ -375,18 +375,18 @@
                                 {% endif %}
                             {% endif %}
 
-                            {{ allocation|number_format(0, '' , ' ') }}
+                            {{ allocation|number_format(2, ',' , ' ') }}
 
                         </td>
                     </tr>
                     <tr class="text-end">
                         <td class="text-start">centimes additionnels</td>
                         <td></td>
-                        <td>{{ irpp|number_format(0, '' , ' ') }}</td>
+                        <td>{{ irpp|number_format(2, ',' , ' ') }}</td>
                         <td>10%</td>
                         <td>
                             {% set ca = irpp * 0.1 %}
-                            {{ ca|number_format(0, '' , ' ') }}</td>
+                            {{ ca|number_format(2, ',' , ' ') }}</td>
                         <td>PENS VIEIL</td>
                         <td>
                             {% if code == 1 %}
@@ -406,7 +406,7 @@
                     <tr class="text-end">
                         <td class="text-start">Taxe de développement local</td>
                         <td></td>
-                        <td>{{ bruttaxe|number_format(0, '' , ' ') }}</td>
+                        <td>{{ bruttaxe|number_format(2, ',' , ' ') }}</td>
                         <td>
                             {% if bruttaxe < 62000 %}
                                 {% set com = 0 %}
@@ -429,9 +429,9 @@
                             {% elseif bruttaxe > 500001 %}
                                 {% set com = 2500 %}
                             {% endif %}
-                            {{ com|number_format(0, '' , ' ') }}
+                            {{ com|number_format(2, ',' , ' ') }}
                         </td>
-                        <td>{{ com|number_format(0, '' , ' ') }}</td>
+                        <td>{{ com|number_format(2, ',' , ' ') }}</td>
                         <td>ACC TRAV</td>
                         <td>
                             {% if code == 1 %}
@@ -458,7 +458,7 @@
                             {% endif %}
 
 
-                            {{ pv|number_format(0, '' , ' ') }}
+                            {{ pv|number_format(2, ',' , ' ') }}
                         </td>
                         <!-- partie patronale -->
                         <td>CREDIT FONC</td>
@@ -471,7 +471,7 @@
                     <tr class="text-end">
                         <td class="text-start">Credit foncier</td>
                         <td></td>
-                        <td>{{ bruttaxe|number_format(0, '' , ' ') }}</td>
+                        <td>{{ bruttaxe|number_format(2, ',' , ' ') }}</td>
                         <td>1%</td>
                         <td>
                             {% if brutinter <= 62000 %}
@@ -480,7 +480,7 @@
                                 {% set foncier = bruttaxe * 0.01 %}
                             {% endif %}
 
-                            {{ foncier|number_format(0, '' , ' ') }}
+                            {{ foncier|number_format(2, ',' , ' ') }}
                         </td>
                           <!-- partie patronale -->
                         <td>F.N.E</td>
@@ -492,7 +492,7 @@
                     <tr class="text-end">
                         <td class="text-start">redevance audio visuelle (CRTV)</td>
                         <td></td>
-                        <td>{{ bruttaxe|number_format(0, '' , ' ') }}</td>
+                        <td>{{ bruttaxe|number_format(2, ',' , ' ') }}</td>
                         <td></td>
                         <td>
                             {% set CRTV = 0 %}
@@ -528,11 +528,11 @@
                             {% endif %}
                             
                             {# Affichage du résultat #}
-                            {{ CRTV|number_format(0, '' , ' ') }}
+                            {{ CRTV|number_format(2, ',' , ' ') }}
                             
                         </td>
                         <td {# rowspan="2" #}class="text-bold text-end"> Total</td>
-                        <td {# rowspan="2" #} class="text-bold text-end"> {{ (allocation + Vieillesse + trav + credfonc + fne)|number_format(0, '' , ' ')}}</td>
+                        <td {# rowspan="2" #} class="text-bold text-end"> {{ (allocation + Vieillesse + trav + credfonc + fne)|number_format(2, ',' , ' ')}}</td>
                     </tr>
                     <tr class="text-end">
                         <td class="text-start">Acomptes sur salaires</td>
@@ -557,10 +557,10 @@
                         <tr class="text-end">
                             <td class="text-start">ABSENCES </td>
                             <td></td>
-                            <td>{{ ponction|number_format(0, '' , ' ') }}</td>
+                            <td>{{ ponction|number_format(2, ',' , ' ') }}</td>
                             <td>{{ nombreJours }}</td>
                             <td>
-                                {{ (ponction * nombreJours)|number_format(0, '' , ' ') }}
+                                {{ (ponction * nombreJours)|number_format(2, ',' , ' ') }}
                             </td> 
                             <td></td>
                             <td></td>
@@ -580,7 +580,7 @@
                         <td class="text-start" colspan="4">TOTAL DES RETENUES</td>
                         <td>
                             {% set cotisation = irpp + ca + com + pv + foncier +CRTV + totalretenue %}
-                            {{ cotisation|number_format(0, '' , ' ') }}
+                            {{ cotisation|number_format(2, ',' , ' ') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -602,7 +602,7 @@
                     <tbody>
                     <tr class="text-end">
                         <td colspan="2" class="text-start">Impôt sur le revenu prélevé à la source</td>
-                        <td>{{ net|number_format(0, '' , ' ') }}</td>
+                        <td>{{ net|number_format(2, ',' , ' ') }}</td>
                         <td></td>
                         <td>8 000</td>
                         <td>24 000</td>
@@ -623,7 +623,7 @@
                     <div class="col-6">
                         <h3 class="text-dark text-end text-bold">
                             {%  set net = brut - cotisation %}
-                            {{ net|number_format(0, '' , ' ') }}
+                            {{ net|number_format(2, ',' , ' ') }}
 
                         </h3>
                         {#                        <p class="text-end mb-0"> Payé le : 31/03/2025</p>#}

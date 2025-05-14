@@ -23,7 +23,7 @@
             </tr>
             <tr>
                 <th>{{ 'Prix'|trans }}</th>
-                <td>{{ produit.prix }}</td>
+                <td>{{ produit.prix|number_format(2, ',' , ' ') }}</td>
             </tr>
             <tr>
                 <th>{{ 'Commande minimum'|trans }}</th>

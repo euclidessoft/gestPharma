@@ -7,12 +7,12 @@
     --blanc: #fff;
     --bs-border-width: 1px;
     --bs-body-color-rgb: 33, 37, 41;
+    --bs-danger-rgb: 220, 53, 69;
 }
 
 body {
     font-family: "Lato", sans-serif;
     margin-left: 50px;
-
 }
 
 body:after {
