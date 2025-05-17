@@ -185,7 +185,7 @@
         {%- set attr = attr|merge({class: (attr.class|default('') ~ widget_class)|trim}) -%}
     {% endif -%}
     {%- if type is defined and type in ['range', 'color'] %}
-         Attribute "required" is not supported
+        {# Attribute "required" is not supported #}
         {% set required = false %}
     {% endif -%}
     {{- parent() -}}
@@ -328,16 +328,7 @@
     {%- if help is not empty -%}
         {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
     {%- endif -%}
-    {#{% set is_select = form.vars.block_prefixes is iterable and 'choice' in form.vars.block_prefixes %}
-    {%- set row_class = row_class|default(row_attr.class|default(is_select ? 'select' : 'form-floating')|trim) -%}#}
-
-    {# ✅ Détection des types #}
-    {% set is_select = form.vars.block_prefixes is iterable and 'choice' in form.vars.block_prefixes %}
-    {% set is_textarea = form.vars.block_prefixes is iterable and 'textarea' in form.vars.block_prefixes %}
-
-    {# ✅ Choix de la classe en fonction du type #}
-    {% set default_class = is_textarea ? 'textarea' : (is_select ? 'select' : 'form-floating') %}
-    {% set row_class = row_class|default(row_attr.class|default(default_class)|trim) %}
+    {%- set row_class = row_class|default(row_attr.class|default('mb-3')|trim) -%}
     <{{ element|default('div') }}{% with {attr: row_attr|merge({class: row_class})} %}{{ block('attributes') }}{% endwith %}>
         {%- if 'form-floating' in row_class -%}
             {{- form_widget(form, widget_attr) -}}

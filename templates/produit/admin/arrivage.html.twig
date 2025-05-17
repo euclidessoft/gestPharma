@@ -39,8 +39,8 @@
                 <tr>
                     <td>{{ approvisionnement.produit.reference }}</td>
                     <td class="text-start">{{ approvisionnement.produit.desigantion }}</td>
-                    <td>{{ approvisionnement.produit.prix|number_format(2, ',' , ' ') }}</td>
-                    <td>{{ approvisionnement.produit.prixpublic|number_format(2, ',' , ' ') }}</td>
+                    <td>{{ approvisionnement.produit.prix|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                    <td>{{ approvisionnement.produit.prixpublic|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                     <td class="text-start">{{ approvisionnement.produit.fabriquant }}</td>
                 </tr>
             {% endfor %}

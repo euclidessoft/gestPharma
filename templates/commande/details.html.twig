@@ -188,7 +188,7 @@
                     {#                </td>#}
                     {#                <td> </td>#}
                     <td class="montant">
-                        {{ commandeproduit.produit.prix|number_format(2, ',' , ' ') }}
+                        {{ commandeproduit.produit.prix|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
 
                     </td>
                     <td>
@@ -223,9 +223,9 @@
                             -
                         {% endif %}
                     </td>
-                    <td class="montant">{{ commandeproduit.produit.prixpublic|number_format(2, ',' , ' ') }}</td>
+                    <td class="montant">{{ commandeproduit.produit.prixpublic|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                     <td class="montant">
-                        {{ (commandeproduit.quantite * commandeproduit.produit.prix)|number_format(2, ',' , ' ') }}
+                        {{ (commandeproduit.quantite * commandeproduit.produit.prix)|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         {% set total = total + (commandeproduit.quantite * commandeproduit.produit.prix) %}
                     </td>
                 </tr>
@@ -235,7 +235,7 @@
                     {{ "Total HT"|trans }}
                 </td>
                 <td class="montant">
-                    <span id="" class="text-nowrap">{{ total|number_format(2, ',' , ' ') }}</span>
+                    <span id="" class="text-nowrap">{{ total|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</span>
                 </td>
             </tr>
             {% if reduction != 0 %}
@@ -244,7 +244,7 @@
                         {{ "Total Réduction"|trans }}
                     </td>
                     <td class="montant">
-                        <span id="" class="text-nowrap">{{ reduction|number_format(2, ',' , ' ') }}</span>
+                        <span id="" class="text-nowrap">{{ reduction|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</span>
                     </td>
                 </tr>
             {% endif %}
@@ -253,7 +253,7 @@
                     {{ "Total TVA"|trans }}
                 </td>
                 <td class="montant">
-                    <span id="" class="text-nowrap">{{ tva|number_format(2, ',' , ' ') }}</span>
+                    <span id="" class="text-nowrap">{{ tva|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</span>
                 </td>
             </tr>
 
@@ -263,7 +263,7 @@
                 </td>
                 <td class="montant">
                     <span id="total"
-                          class="text-nowrap">{{ (total + tva - reduction)|number_format(2, ',' , ' ') }}</span>
+                          class="text-nowrap">{{ (total + tva - reduction)|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</span>
                 </td>
             </tr>
             </tbody>

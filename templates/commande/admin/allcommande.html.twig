@@ -36,7 +36,7 @@
                 <td data-label="{{'N commande'|trans}}">{{ commandes.id }}</td>
                 <td data-label="{{'Date'|trans}}">{{ commandes.date ? commandes.date|date('d/m/Y') : '' }}</td>
                 <td data-label="{{'Client'|trans}}">{{ commandes.user.nom }} {{ commandes.user.prenom }}</td>
-                <td data-label="{{'Montant'|trans}}">{{ commandes.montant|number_format(2, ',' , ' ') }}</td>
+                <td data-label="{{'Montant'|trans}}">{{ commandes.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                 <td data-label="{{'Paiement'|trans}}">
                     {% if commandes.payer == 0 %}
                         <span class="text-danger">Non payée</span>

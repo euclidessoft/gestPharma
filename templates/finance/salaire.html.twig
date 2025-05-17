@@ -50,9 +50,9 @@
                     <td>{{ paie.employe.matricule }}</td>
                     <td>{{ paie.employe.nom }} {{ paie.employe.prenom }}</td>
                     <td>{{ paie.date|date('d/m/Y') }}</td>
-                    <td>{{ paie.salaireBrut|number_format(2, ',' , ' ') }} FCFA</td>
-                    <td>{{ paie.salaireNet|number_format(2, ',' , ' ') }} FCFA</td>
-                    <td>{{ paie.totalchargepatronal|number_format(2, ',' , ' ') }} FCFA</td>
+                    <td>{{ paie.salaireBrut|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} FCFA</td>
+                    <td>{{ paie.salaireNet|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} FCFA</td>
+                    <td>{{ paie.totalchargepatronal|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} FCFA</td>
                     <td>
                         <button type="button" class="btn btn-green" data-bs-toggle="modal" data-bs-target="#modal{{ paie.id }}" id="btn{{ paie.id }}">
                             <i class="fa fa-plus"></i>
@@ -105,7 +105,7 @@
             {% if paies|length > 1 %}
             <tr>
                 <th colspan="8" class="text-center">
-                    {{ 'Montant total dû'|trans }} : {{ montant|number_format(2, ',' , ' ') }} FCFA
+                    {{ 'Montant total dû'|trans }} : {{ montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} FCFA
                     <input type="hidden" value="{{ montant }}" id="montant"/>
 
                     <button type="button" class="btn btn-green" data-bs-toggle="modal" data-bs-target="#modal_tous" id="tous">
