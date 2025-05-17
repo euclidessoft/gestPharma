@@ -30,7 +30,7 @@
             </div>
             <div class="card-body">
                 <h4 class="text-success text-bold mb-4">
-                    {{ 'Solde d\'ouverture : '|trans }} {{ ouverture|number_format(0, '', ' ') }}
+                    {{ 'Solde d\'ouverture : '|trans }} {{ ouverture|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                 </h4>
                 <table class="table table-success-light table-bordered table-hover table-striped" id="liste">
                     <thead>
@@ -73,7 +73,7 @@
                                 <td data-label="{{ 'Crédit'|trans }}" class="text-end">
                                 </td>
                                 <td data-label="{{ 'Débit'|trans }}" class="text-end">
-                                    {{ ecriture.montant|number_format(0, '', ' ') }}
+                                    {{ ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                 </td>
                             </tr>
                         {% else %}
@@ -97,7 +97,7 @@
                                     {{ ecriture.debit ? ecriture.libelle : '' }}
                                   </td>
                                 <td data-label="{{ 'Crédit'|trans }}" class="text-end">
-                                    {{ ecriture.montant|number_format(0, '', ' ') }}
+                                    {{ ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                 </td>
                                 <td data-label="{{ 'Débit'|trans }}" class="text-end">
 
@@ -112,7 +112,7 @@
                 <h4 class="text-success text-bold">
                     {{ 'Solde : '|trans }}
                     <span class="text-nowrap">
-                    {{ (banque+caisse)|number_format(0, '', ' ') }} F CFA
+                    {{ (banque+caisse)|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} F CFA
                 </span>
                 </h4>
             </div>

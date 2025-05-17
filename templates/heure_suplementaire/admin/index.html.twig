@@ -34,7 +34,7 @@
                 <td>{{ heure_suplementaire.employe.matricule }}</td>
                 <td>{{ heure_suplementaire.employe.nom~' '~heure_suplementaire.employe.prenom }}</td>
                 <td>{{ heure_suplementaire.duree }}</td>
-                <td>{{ heure_suplementaire.tauxHoraire|number_format(0, '', ' ') }}</td>
+                <td>{{ heure_suplementaire.tauxHoraire|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                 <td>
                     <a href="{{ path('heure_suplementaire_edit', {'id': heure_suplementaire.id}) }}" class="btn btn-success"><i class="fas fa-edit"></i></a>
                 </td>

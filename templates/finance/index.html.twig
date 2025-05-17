@@ -37,7 +37,7 @@
                     <div role="alert" class="alert alert-success shadow-black radius-10 mt-4 p-4 text-green">
                         <span class="text-bold">{{ 'Solde caisse'|trans }}</span> :
                         <h3 class="text-nowrap text-bold text-center mt-3">
-                            {{ caisse|number_format(0, '', ' ') }} F CFA
+                            {{ caisse|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} F CFA
                         </h3>
                     </div>
                 </div>
@@ -50,7 +50,7 @@
                             </a>
                         </span>
                         <h3 class="text-nowrap text-bold text-center mt-3">
-                            {{ banque|number_format(0, '', ' ') }} F CFA
+                            {{ banque|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} F CFA
                         </h3>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                     <div role="alert" class="alert alert-success shadow-black radius-10 mt-4 p-4 text-green">
                         <span class="text-bold">{{ 'Solde global'|trans }}</span> :
                         <h3 class="text-nowrap text-bold text-center mt-3">
-                            {{ (caisse + banque)|number_format(0, '', ' ') }} F CFA
+                            {{ (caisse + banque)|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} F CFA
                         </h3>
                     </div>
                 </div>
@@ -122,12 +122,12 @@
 
                                     </td>
                                     <td data-label="{{ 'Crédit'|trans }}" class="text-end">
-                                        {#                                    {{ ecriture.debit ? ecriture.montant|number_format(0, '', ' ') : '' }}#}
-                                        {{ ecriture.credit ? ecriture.montant|number_format(0, '', ' ') : '' }}
+                                        {#                                    {{ ecriture.debit ? ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') : '' }}#}
+                                        {{ ecriture.credit ? ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') : '' }}
                                     </td>
                                     <td data-label="{{ 'Débit'|trans }}" class="text-end">
-                                        {#                                    {{ ecriture.debit ? ecriture.montant|number_format(0, '', ' ') : '' }}#}
-                                        {#                                    {{ ecriture.credit ? ecriture.montant|number_format(0, '', ' ') : '' }}#}
+                                        {#                                    {{ ecriture.debit ? ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') : '' }}#}
+                                        {#                                    {{ ecriture.credit ? ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') : '' }}#}
 
                                     </td>
                                     {#                                <td data-label="{{ 'solde'|trans }}"  class="text-center">#}
@@ -160,12 +160,12 @@
 
                                     </td>
                                     <td data-label="{{ 'Crédit'|trans }}" class="text-end">
-                                        {#                                                                        {{ ecriture.debit ? ecriture.montant|number_format(0, '', ' ') : '' }}#}
-                                        {#                                    {{ ecriture.credit ? ecriture.montant|number_format(0, '', ' ') : '' }}#}
+                                        {#                                                                        {{ ecriture.debit ? ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') : '' }}#}
+                                        {#                                    {{ ecriture.credit ? ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') : '' }}#}
                                     </td>
                                     <td data-label="{{ 'Débit'|trans }}" class="text-end">
-                                        {#                                    {{ ecriture.debit ? ecriture.montant|number_format(0, '', ' ') : '' }}#}
-                                        {{ ecriture.credit ? ecriture.montant|number_format(0, '', ' ') : '' }}
+                                        {#                                    {{ ecriture.debit ? ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') : '' }}#}
+                                        {{ ecriture.credit ? ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') : '' }}
 
                                     </td>
                                     {#                                <td data-label="{{ 'solde'|trans }}"  class="text-center">#}
@@ -203,12 +203,12 @@
 
                                     </td>
                                     <td data-label="{{ 'Crédit'|trans }}" class="text-end">
-                                        {{ ecriture.debit ? ecriture.montant|number_format(0, '', ' ') : '' }}
-                                        {#                                    {{ ecriture.credit ? ecriture.montant|number_format(0, '', ' ') : '' }}#}
+                                        {{ ecriture.debit ? ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') : '' }}
+                                        {#                                    {{ ecriture.credit ? ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') : '' }}#}
                                     </td>
                                     <td data-label="{{ 'Débit'|trans }}" class="text-end">
-                                        {#                                    {{ ecriture.debit ? ecriture.montant|number_format(0, '', ' ') : '' }}#}
-                                        {#                                    {{ ecriture.credit ? ecriture.montant|number_format(0, '', ' ') : '' }}#}
+                                        {#                                    {{ ecriture.debit ? ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') : '' }}#}
+                                        {#                                    {{ ecriture.credit ? ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') : '' }}#}
 
                                     </td>
                                     {#                                <td data-label="{{ 'solde'|trans }}"  class="text-center">#}
@@ -242,12 +242,12 @@
 
                                     </td>
                                     <td data-label="{{ 'Crédit'|trans }}" class="text-end">
-                                        {#                                                                        {{ ecriture.debit ? ecriture.montant|number_format(0, '', ' ') : '' }}#}
-                                        {#                                    {{ ecriture.credit ? ecriture.montant|number_format(0, '', ' ') : '' }}#}
+                                        {#                                                                        {{ ecriture.debit ? ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') : '' }}#}
+                                        {#                                    {{ ecriture.credit ? ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') : '' }}#}
                                     </td>
                                     <td data-label="{{ 'Débit'|trans }}" class="text-end">
-                                        {{ ecriture.debit ? ecriture.montant|number_format(0, '', ' ') : '' }}
-                                        {#                                    {{ ecriture.credit ? ecriture.montant|number_format(0, '', ' ') : '' }}#}
+                                        {{ ecriture.debit ? ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') : '' }}
+                                        {#                                    {{ ecriture.credit ? ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') : '' }}#}
 
                                     </td>
                                     {#                                <td data-label="{{ 'solde'|trans }}"  class="text-center">#}
@@ -267,7 +267,7 @@
                 <h4 class="text-success text-bold">
                     {{ 'Total transfert'|trans }} :
                     <span class="text-nowrap">
-                    {{ montant2|number_format(0, '', ' ') }} F CFA
+                    {{ montant2|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} F CFA
                 </span>
                 </h4>
             </div>#}

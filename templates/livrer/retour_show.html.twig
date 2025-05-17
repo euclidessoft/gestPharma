@@ -72,7 +72,7 @@
                     </span>
 
                 </td>
-                <td class="text-center">{{ commande.stock|number_format(2, ',' , ' ') }}</td>
+                <td class="text-center">{{ commande.stock|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                 <td class="text-center">
                     <button type="button"
                             class="btn btn-success"

@@ -41,7 +41,7 @@
                 <tr>
                     <td data-label="Référence">{{ produit['produit'].reference }}</td>
                     <td data-label="Désignation">{{ produit['produit'].desigantion }}</td>
-                    <td data-label="Prix Cession">{{ produit['produit'].prix|number_format(2, ',' , ' ') }}</td>
+                    <td data-label="Prix Cession">{{ produit['produit'].prix|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                     <td data-label="Réduction">
                         {% if produit['produit'].promotion is not null %}
                             {% if produit['promotion'] != 0 %}
@@ -66,14 +66,14 @@
                             -
                         {% endif %}
                     </td>
-                    <td data-label="Prix Public">{{ produit.produit.prixpublic|number_format(2, ',' , ' ') }}</td>
+                    <td data-label="Prix Public">{{ produit.produit.prixpublic|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                     <td data-label="Commande">{{ produit['produit'].mincommande }}</td>
 
                     <td data-label="Quantité" class="text-center" id="tdprod{{ produit.produit.id }}">
                         {{ produit['produit'].quantite }}
                     </td>
                     <td data-l="Total" class="text-center" id="soustotal{{ produit.produit.id }}">
-                        {{ (produit['produit'].prix * produit['produit'].quantite)|number_format(2, ',' , ' ') }}
+                        {{ (produit['produit'].prix * produit['produit'].quantite)|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         {% set total = total + (produit.produit.prix * produit['produit'].quantite) %}
                         {#<div class="input-group align-center" style="width:100px">
                             <input type="number" id="text{{ produit.produit.id }}" class="form-control"
@@ -90,7 +90,7 @@
                     </td>
                     <td>
                         <div style="display: inline;" id="btnaction{{ produit.produit.id }}">
-                            <button onclick="edit({{ produit.produit.id }}, {{ produit.produit.quantite }}, {{ produit.produit.mincommande }}, {{ produit.produit.prix|number_format(2, ',' , ' ') }}, {{ produit.produit.stock }})"
+                            <button onclick="edit({{ produit.produit.id }}, {{ produit.produit.quantite }}, {{ produit.produit.mincommande }}, {{ produit.produit.prix|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}, {{ produit.produit.stock }})"
                                     class="btn btn-success" title="{{ 'Modifier quantité'|trans }}">
                                 <i class="fa fa-edit"></i>
                             </button>
@@ -110,7 +110,7 @@
                         {{ "Total"|trans }}
                     </td>
                     <td class="text-center">
-                        <span id="total">{{ total|number_format(2, ',' , ' ') }}</span>
+                        <span id="total">{{ total|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</span>
                         <input type="hidden" value="{{ total }}" id="totaltamp"/>
                     </td>
                     <td data-label="Vider le panier" rowspan="4">
@@ -128,7 +128,7 @@
                         {{ "Total Réduction"|trans }}
                     </td>
                     <td class="text-center">
-                        <span id="total">{{ reduction|number_format(2, ',' , ' ') }}</span>
+                        <span id="total">{{ reduction|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</span>
                         <input type="hidden" value="{{ reduction }}" id="totaltamp"/>
                     </td>
                 </tr>
@@ -137,7 +137,7 @@
                         {{ "Total TVA"|trans }}
                     </td>
                     <td class="text-center">
-                        <span id="total">{{ tva|number_format(2, ',' , ' ') }}</span>
+                        <span id="total">{{ tva|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</span>
                         <input type="hidden" value="{{ tva }}" id="totaltamp"/>
                     </td>
                 </tr>
@@ -146,7 +146,7 @@
                         {{ "Net à payer"|trans }}
                     </td>
                     <td class="text-center">
-                        <span id="total">{{ (total +tva-reduction)|number_format(2, ',' , ' ') }}</span>
+                        <span id="total">{{ (total +tva-reduction)|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</span>
                         <input type="hidden" value="{{ total }}" id="totaltamp"/>
                     </td>
                 </tr>

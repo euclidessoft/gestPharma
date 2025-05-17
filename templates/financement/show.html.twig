@@ -20,7 +20,7 @@
                 <td data-label="Provenance">{{ financement.compte }}</td>
                 <td data-label="Provenance">{{ financement.compteinteret }}</td>
                 <td data-label="Motif">{{ financement.motif }}</td>
-                <td data-label="Montant">{{ financement.montant|number_format(2, ',' , ' ') }}</td>
+                <td data-label="Montant">{{ financement.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                 <td data-label="Type">{{ financement.Type }}</td>
                 <td data-label="Banque">{{ financement.banque ? financement.banque.compte:'' }}</td>
                 <td data-label="Numero">{{ financement.numero }}</td>
@@ -49,7 +49,7 @@
             <tr>
                 <td class="text-start">{{ remboursement.date ? remboursement.date|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ remboursement.compte }}</td>
-                <td>{{ remboursement.montant|number_format(2, ',' , ' ')}}</td>
+                <td>{{ remboursement.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',')}}</td>
                 {% set somme = somme + remboursement.montant %}
             </tr>
         {% else %}
@@ -59,7 +59,7 @@
         {% endfor %}
         <tr>
             <td colspan="2" class="text-end text-bold">Total :</td>
-            <td class="text-bold"> {{somme|number_format(2, ',' , ' ')}}</td>
+            <td class="text-bold"> {{somme|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',')}}</td>
         </tr>
         </tbody>
     </table>

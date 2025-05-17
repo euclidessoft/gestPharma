@@ -44,7 +44,7 @@
                         {% if detailsRetenues[loop.index0] is not empty %}
                             {% for retenue in detailsRetenues[loop.index0] %}
                                 <li class="list-group-item d-flex justify-content-between">
-                                    {{ retenue.type }} : {{ retenue.montant|number_format(0, '', ' ') }} FCFA
+                                    {{ retenue.type }} : {{ retenue.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} FCFA
                                     {% set totalRetenues = totalRetenues + retenue.montant %}
                                 </li>
                                 <li>{{ retenue.details }}</li>

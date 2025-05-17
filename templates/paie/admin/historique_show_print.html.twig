@@ -128,14 +128,14 @@
                         <td>{% set nombre = paie.jours %} {{ nombre }}</td>
 {#                        <td>{% set nombre = nbrjoursmois - nombreJours %} {{ nombre }}</td>#}
                         <td>
-                            {% set base = employe.poste.salaire / 30 %}{{ base|number_format(2, ',' , ' ') }}
+                            {% set base = employe.poste.salaire / 30 %}{{ base|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
 
                         </td>
                         {% set ponction= ponction + base %}
-{#                        <td>{% set base = employe.poste.salaire / 30 %}{{ base|number_format(2, ',' , ' ') }}</td>#}
+{#                        <td>{% set base = employe.poste.salaire / 30 %}{{ base|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>#}
                         <td></td>
-                        <td>{{ employe.poste.salaire|number_format(2, ',' , ' ') }}</td>
-{#                        <td>{{ (nombre * base)|number_format(2, ',' , ' ') }}</td>#}
+                        <td>{{ employe.poste.salaire|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+{#                        <td>{{ (nombre * base)|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>#}
                         <td></td>
                         <td></td>
                     </tr>
@@ -144,7 +144,7 @@
                         <td class="text-start">Prime d'ancienneté</td>
                         <td></td>
                         <td>
-                          {{ employe.poste.salaire|number_format(2, ',' , ' ') }}
+                          {{ employe.poste.salaire|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <td>
                             {% if yearDiff >= 2 %}
@@ -158,7 +158,7 @@
 
                         </td>
                         <td>
-                            {{ prenciennete|number_format(0, '', ' ') }}
+                            {{ prenciennete|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -174,9 +174,9 @@
                             <tr class="text-end">
                                 <td class="text-start">{{ prime['designation'] }}</td>
                                 <td></td>
-                                <td>{{ prime['montant']|number_format(2, ',' , ' ') }}</td>
+                                <td>{{ prime['montant']|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                                 <td></td>
-                                <td>{{ prime['montant']|number_format(2, ',' , ' ') }}</td>
+                                <td>{{ prime['montant']|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -192,9 +192,9 @@
                         <tr class="text-end">
                             <td class="text-start">Prime de Performence</td>
                             <td></td>
-                            <td>{{ paie.performance|number_format(2, ',' , ' ') }}</td>
+                            <td>{{ paie.performance|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                             <td> </td>
-                            <td>{{ paie.performance|number_format(2, ',' , ' ') }}</td>
+                            <td>{{ paie.performance|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                             <td></td>
                             <td></td>
                         </tr>
@@ -205,9 +205,9 @@
                         <tr class="text-end">
                             <td class="text-start">Heures Suplementaires</td>
                             <td></td>
-                            <td>{{ paie.baseheuresup|number_format(2, ',' , ' ') }}</td>
+                            <td>{{ paie.baseheuresup|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                             <td> {{ paie.tauxheuresup }}</td>
-                            <td>{{ ( paie.baseheuresup * paie.tauxheuresup )|number_format(2, ',' , ' ') }}</td>
+                            <td>{{ ( paie.baseheuresup * paie.tauxheuresup )|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                             <td></td>
                             <td></td>
                         </tr>
@@ -218,7 +218,7 @@
                         <td class="text-start" colspan="4">SALAIRE BRUT</td>
                         <td>
                            
-                            {{ paie.brut|number_format(2, ',' , ' ') }}
+                            {{ paie.brut|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -227,7 +227,7 @@
                         <td class="text-start" colspan="4">Logement FISC</td>
                         <td>
                            
-                            {{ paie.logementfisc|number_format(2, ',' , ' ') }}
+                            {{ paie.logementfisc|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -236,7 +236,7 @@
                         <td class="text-start"  colspan="4">Véhicule FISC</td>
                         <td>
                      
-                            {{ paie.vehiculefisc|number_format(2, ',' , ' ') }}
+                            {{ paie.vehiculefisc|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -246,7 +246,7 @@
                         <td>
                    
                             
-                            {{ paie.logementcnps|number_format(2, ',' , ' ') }}
+                            {{ paie.logementcnps|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -255,7 +255,7 @@
                         <td class="text-start"  colspan="4">Véhicule CNPS</td>
                         <td>
                  
-                            {{ paie.vehiculecnps|number_format(2, ',' , ' ') }}
+                            {{ paie.vehiculecnps|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -264,7 +264,7 @@
                         <td class="text-start"  colspan="4">SALAIRE Brut Taxable inter</td>
                         <td>
                            
-                            {{ paie.brutinter|number_format(2, ',' , ' ') }}
+                            {{ paie.brutinter|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -273,7 +273,7 @@
                         <td class="text-start"  colspan="4">SALAIRE Brut Taxable</td>
                         <td>
                             
-                            {{ paie.bruttaxable|number_format(2, ',' , ' ') }}
+                            {{ paie.bruttaxable|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -282,7 +282,7 @@
                         <td class="text-start"  colspan="4">Salaire Cotisable</td>
                         <td>
                           
-                            {{ paie.salairecotisable|number_format(2, ',' , ' ') }}
+                            {{ paie.salairecotisable|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -294,86 +294,86 @@
                     <tr class="text-end">
                         <td class="text-start">IRPP</td>
                         <td></td>
-                        <td> {{ paie.bruttaxable|number_format(2, ',' , ' ') }}</td>
+                        <td> {{ paie.bruttaxable|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                         <td></td>
                         <td>
                            
-                            {{ paie.irpp|number_format(2, ',' , ' ') }}
+                            {{ paie.irpp|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <td>ALLOC FAM</td>
                         <td>
-                            {{ paie.allocation|number_format(2, ',' , ' ') }}
+                            {{ paie.allocation|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
 
                         </td>
                     </tr>
                     <tr class="text-end">
                         <td class="text-start">centimes additionnels</td>
                         <td></td>
-                        <td>{{ paie.baseca|number_format(2, ',' , ' ') }}</td>
+                        <td>{{ paie.baseca|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                         <td>{{paie.tauxca}}%</td>
                         <td>
-                            {{ paie.ca|number_format(2, ',' , ' ') }}</td>
+                            {{ paie.ca|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                         <td>PENS VIEIL</td>
                         <td>
                        
-                            {{ paie.Vieil|number_format(0, '', ' ') }}
+                            {{ paie.Vieil|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
 
                         </td>
                     </tr>
                     <tr class="text-end">
                         <td class="text-start">Taxe de développement local</td>
                         <td></td>
-                        <td>{{ paie.baselocal|number_format(2, ',' , ' ') }}</td>
+                        <td>{{ paie.baselocal|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                         <td>
-                            {{ paie.tauxlocal|number_format(2, ',' , ' ') }}
+                            {{ paie.tauxlocal|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
-                        <td>{{ paie.local|number_format(2, ',' , ' ') }}</td>
+                        <td>{{ paie.local|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                         <td>ACC TRAV</td>
                         <td>
-                            {{ paie.tav|number_format(0, '', ' ') }}
+                            {{ paie.tav|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
 
                         </td>
                     </tr>
                     <tr class="text-end">
                         <td class="text-start">CNPS / Pension Vieillesse</td>
                         <td></td>
-                        <td> {{ paie.basevieil|number_format(0, '', ' ')}}</td>
+                        <td> {{ paie.basevieil|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',')}}</td>
                         <td>{{ paie.tauxvieil}}%</td>
                         <td>
-                            {{ paie.vieil|number_format(2, ',' , ' ') }}
+                            {{ paie.vieil|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <!-- partie patronale -->
                         <td>CREDIT FONC</td>
                         <td>
-                            {{ paie.cpfoncier|number_format(0, '', ' ')}}
+                            {{ paie.cpfoncier|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',')}}
                         </td>
                     </tr>
                     <tr class="text-end">
                         <td class="text-start">Credit foncier</td>
                         <td></td>
-                        <td>{{ paie.basefoncier|number_format(2, ',' , ' ') }}</td>
+                        <td>{{ paie.basefoncier|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                         <td>{{ paie.tauxfoncier}}%</td>
                         <td>
-                            {{ paie.foncier|number_format(2, ',' , ' ') }}
+                            {{ paie.foncier|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                           <!-- partie patronale -->
                         <td>F.N.E</td>
                         <td>
-                            {{ paie.fne|number_format(0, '', ' ')}}
+                            {{ paie.fne|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',')}}
                         </td>
                     </tr>
                     <tr class="text-end">
                         <td class="text-start">redevance audio visuelle (CRTV)</td>
                         <td></td>
-                        <td>{{ paie.basecrtv|number_format(2, ',' , ' ') }}</td>
+                        <td>{{ paie.basecrtv|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                         <td></td>
                         <td>
                             {# Affichage du résultat #}
-                            {{ paie.crtv|number_format(2, ',' , ' ') }}
+                            {{ paie.crtv|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                             
                         </td>
                         <td {# rowspan="2" #}class="text-bold text-end"> Total</td>
-                        <td {# rowspan="2" #} class="text-bold text-end"> {{ (paie.allocation + paie.Vieil + paie.tav + paie.foncier + paie.fne)|number_format(2, ',' , ' ')}}</td>
+                        <td {# rowspan="2" #} class="text-bold text-end"> {{ (paie.allocation + paie.Vieil + paie.tav + paie.foncier + paie.fne)|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',')}}</td>
                     </tr>
                     <tr class="text-end">
                         <td class="text-start">Acomptes sur salaires</td>
@@ -398,10 +398,10 @@
                         <tr class="text-end">
                             <td class="text-start">ABSENCES </td>
                             <td></td>
-                            <td>{{ paie.baseponction|number_format(2, ',' , ' ') }}</td>
+                            <td>{{ paie.baseponction|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                             <td>{{ paie.jours }}</td>
                             <td>
-                                {{ (paie.baseponction * paie.jours)|number_format(2, ',' , ' ') }}
+                                {{ (paie.baseponction * paie.jours)|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                             </td> 
                             <td></td>
                             <td></td>
@@ -421,7 +421,7 @@
                         <td class="text-start" colspan="4">TOTAL DES RETENUES</td>
                         <td>
                             {% set cotisation = paie.irpp + paie.ca + paie.local + paie.vieil + paie.foncier + paie.CRTV + totalretenue %}
-                            {{ cotisation|number_format(2, ',' , ' ') }}
+                            {{ cotisation|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <td></td>
                         <td></td>
@@ -443,7 +443,7 @@
                     <tbody>
                     <tr class="text-end">
                         <td colspan="2" class="text-start">Impôt sur le revenu prélevé à la source</td>
-                        <td>{{ net|number_format(2, ',' , ' ') }}</td>
+                        <td>{{ net|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                         <td></td>
                         <td>8 000</td>
                         <td>24 000</td>
@@ -463,7 +463,7 @@
                     </div>
                     <div class="col-6">
                         <h3 class="text-dark text-end text-bold">
-                            {{ paie.salairenet|number_format(2, ',' , ' ') }}
+                            {{ paie.salairenet|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
 
                         </h3>
                         {#                        <p class="text-end mb-0"> Payé le : 31/03/2025</p>#}

@@ -25,7 +25,7 @@
         </a>
         <div class="d-flex justify-content-end">
             <div role="alert" class="alert alert-success font-weight-bold">
-                {{ "Solde : "|trans }} {{ solde|number_format(0, '', ' ') }}
+                {{ "Solde : "|trans }} {{ solde|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
             </div>
         </div>
         <table class="table table-success-light table-bordered table-hover table-striped">
@@ -100,16 +100,16 @@
                             </td>
                             <td data-label="{{ 'Crédit'|trans }}">
                                 {% if ecriture.comptecredit != banque.compte %}
-                                    {{ ecriture.montant|number_format(0, '', ' ') }}
+                                    {{ ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                 {% endif %}
                             </td>
                             <td data-label="{{ 'Débit'|trans }}">
                                 {% if ecriture.comptedebit != banque.compte %}
-                                    {{ ecriture.montant|number_format(0, '', ' ') }}
+                                    {{ ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                 {% endif %}
                             </td>
                             <!-- <td data-label="{{ 'solde'|trans }}" class="text-center">
-                                {{ solde|number_format(0, '', ' ') }}
+                                {{ solde|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                             </td> -->
                         </tr>
                     {% else %}
@@ -147,19 +147,19 @@
                             </td>
                             <td data-label="{{ 'Crédit'|trans }}" class="text-center">
                                 {% if ecriture.comptecredit != banque.compte %}
-                                    {{ ecriture.montant|number_format(0, '', ' ') }}
+                                    {{ ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                 {% endif %}
                             </td>
                             <td data-label="{{ 'Débit'|trans }}" class="text-center">
                                 {% if ecriture.comptedebit != banque.compte %}
-                                    {{ ecriture.montant|number_format(0, '', ' ') }}
+                                    {{ ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                 {% endif %}
 
                             </td>
                             <!-- <td data-label="{{ 'solde'|trans }}" class="text-center">
 
 
-                                {{ solde|number_format(0, '', ' ') }}
+                                {{ solde|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                             </td> -->
                         </tr>
                     {% endif %}
@@ -179,10 +179,10 @@
                     {{ 'Total'|trans }}
                 </td>
                 <td class="text-center text-bold">
-                    {{ debit|number_format(0, '', ' ') }}
+                    {{ debit|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                 </td>
                 <td class="text-center text-bold">
-                    {{ credit|number_format(0, '', ' ') }}
+                    {{ credit|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                 </td>
                 <td>
                 </td>

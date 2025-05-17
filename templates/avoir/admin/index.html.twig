@@ -47,7 +47,7 @@
                 <tr>
                     <td>{{ avoir.client.nom }}</td>
                     <td>{{ avoir.date ? avoir.date|date('d/m/Y') : '' }}</td>
-                    <td>{{ avoir.Montant|number_format(2, ',' , ' ') }}</td>
+                    <td>{{ avoir.Montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                     <td>{{ avoir.admin.prenom }} {{ avoir.admin.nom }}</td>
                     <td>
                         {{ avoir.reste?"Reste à livré":'' }}

@@ -33,7 +33,7 @@
             </tr>
             <tr>
                 <th>Salaire</th>
-                <td>{{ poste.salaire|number_format(2, ',', ' ') }} </td>
+                <td>{{ poste.salaire|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} </td>
             </tr>
         </tbody>
     </table>

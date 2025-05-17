@@ -35,7 +35,7 @@
         {% for transfert in transferts %}
             <tr>
                 <td>{{ transfert.date ? transfert.date|date('d/m/Y') : '' }}</td>
-                <td>{{ transfert.montant|number_format(2, ',' , ' ') }} FCFA</td>
+                <td>{{ transfert.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} FCFA</td>
                 <td>{{ transfert.user.nom }}</td>
                 <td>{{ transfert.user.prenom }}</td>
                 <td>{{ transfert.source }}</td>

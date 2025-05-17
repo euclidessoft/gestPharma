@@ -113,17 +113,17 @@
                     <tbody>
                     <tr class="text-end">
                         <td class="text-start">SALAIRES DE BASE</td>
-                        <td>{{ employe.poste.salaire|number_format(2, ',' , ' ') }}</td>
+                        <td>{{ employe.poste.salaire|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                         <td></td>
-                        <td>{{ employe.poste.salaire|number_format(2, ',' , ' ') }}</td>
+                        <td>{{ employe.poste.salaire|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr class="text-end">
                         <td class="text-start">SURSALAIRES</td>
-                        <td>{{ employe.sursalaire|number_format(2, ',' , ' ') }}</td>
+                        <td>{{ employe.sursalaire|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                         <td></td>
-                        <td>{{ employe.sursalaire|number_format(2, ',' , ' ') }}</td>
+                        <td>{{ employe.sursalaire|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                         <td></td>
                         <td></td>
                     </tr>
@@ -131,7 +131,7 @@
                         <td class="text-start">TOTAL DES GAINS(Brut)</td>
                         <td></td>
                         <td></td>
-                        <td>{{ (employe.sursalaire + employe.poste.salaire)|number_format(2, ',' , ' ') }}</td>
+                        <td>{{ (employe.sursalaire + employe.poste.salaire)|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                         <td></td>
                         <td></td>
                     </tr>
@@ -163,7 +163,7 @@
                         <td colspan="3">
                             NET IMPOSABLE
                         </td>
-                        <td class="text-end">{{ (employe.sursalaire + employe.poste.salaire- 14000)|number_format(2, ',' , ' ') }}</td>
+                        <td class="text-end">{{ (employe.sursalaire + employe.poste.salaire- 14000)|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                         <td></td>
                         <td></td>
                     </tr>
@@ -184,7 +184,7 @@
                     <tbody>
                     <tr class="text-end">
                         <td colspan="2" class="text-start">Impôt sur le revenu prélevé à la source</td>
-                        <td>{{ (employe.sursalaire + employe.poste.salaire- 14000)|number_format(2, ',' , ' ') }}</td>
+                        <td>{{ (employe.sursalaire + employe.poste.salaire- 14000)|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                         <td></td>
                         <td>8 000</td>
                         <td>24 000</td>
@@ -204,7 +204,7 @@
                     </div>
                     <div class="col-6">
                         <h3 class="text-dark text-end text-bold">
-                            {{ (employe.sursalaire + employe.poste.salaire- 14000-8000)|number_format(2, ',' , ' ') }}
+                            {{ (employe.sursalaire + employe.poste.salaire- 14000-8000)|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </h3>
                         <p class="text-end mb-0"> Payé le :  {{ paie.datepaye|date('d/m/Y') }}</p>
                     </div>

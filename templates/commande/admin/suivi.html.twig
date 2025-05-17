@@ -58,7 +58,7 @@
                     <td data-label="{{ 'Date'|trans }}">{{ commande.date|date('d/m/Y') }}</td>
                     <td data-label="{{ 'Client'|trans }} " class="text-start">{{ commande.user.nom }} {{ commande.user.prenom }}</td>
                     <td data-label="{{ 'Telephone'|trans }} ">{{ commande.user.phone }}</td>
-                    <td data-label="{{ 'Montant'|trans }}" class="text-end">{{ commande.montant|number_format(2, ',' , ' ') }}</td>
+                    <td data-label="{{ 'Montant'|trans }}" class="text-end">{{ commande.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                     <td data-label="{{ 'Validation'|trans }} ">
                         <a id="{{ commande.id }}" onclick="load({{ commande.id }})" href="{{ path('commande_panier_paiement', {'commande' : commande.id}) }}" class="btn btn-success">
                             <i class="fa-solid fa-file-invoice-dollar"></i>
