@@ -77,8 +77,7 @@ class HeureSuplementaireController extends AbstractController
                 if($heureSuplementaire->getEmploye()->getPoste()->getHeureSup() !== null) {
                  $heureSuplementaire->setTauxHoraire($heureSuplementaire->getEmploye()->getPoste()->getHeureSup());
                  }else{
-                    $this->addFlash('notice', 'definie le montant des heures supllementaires');
-                    $this->redirectToRoute('poste_edit');
+                     $heureSuplementaire->setTauxHoraire($heureSuplementaire->getEmploye()->getPoste()->getSalaire()/173.33);
                  } 
                 $entityManager->persist($heureSuplementaire);
                 $entityManager->flush();
