@@ -176,12 +176,6 @@ class PaieController extends AbstractController
             $paie->setSalaireBase($employe->getPoste()->getSalaire());
             $paie->setEmploye($employe);
             $paie->setMois($mois);
-            
-
-            // Vérifier si la paie du mois en cours est déjà validée
-            $paieExistante = $entityManager->getRepository(Paie::class)->findByDate($employe->getId(), $startOfMonth, $endOfMonth);
-//            $primes = $entityManager->getRepository(Prime::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
-//            $heureSup = $entityManager->getRepository(HeureSuplementaire::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
 
             $primes = $entityManager->getRepository(Prime::class)->findBy(['employe' => $employe->getId()]);
 
