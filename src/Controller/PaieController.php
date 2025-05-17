@@ -664,10 +664,10 @@ class PaieController extends AbstractController
             foreach ($sanctions as $sanction) {
                 // calcul nombre jours
 
-                if ($sanction->getTypeSanction()->getNom() === 'Ponction Salariale') {
+                if (strtolower($sanction->getTypeSanction()->getNom()) === 'ponction salariale') {
                     $nombreJours =  $nombreJours + $sanction->getNombreJours();
 //                    $montantRetenue = $montantRetenue + $salaireJournalier * $nombreJours;
-                } elseif ($sanction->getTypeSanction()->getNom() === 'Mis a pied') {
+                } elseif (strtolower($sanction->getTypeSanction()->getNom()) === 'mis à pied') {
                     $dateDebut = $sanction->getDateDebut();
                     $dateFin = $sanction->getDateFin();
                     $nombreJours = $nombreJours + $dateDebut->diff($dateFin)->days + 1;
@@ -709,6 +709,12 @@ class PaieController extends AbstractController
             $employe = $entityManager->getRepository(Employe::class)->find($id);
             $mois = $entityManager->getRepository(Mois::class)->find(date('m'));
 
+            $now = new \Datetime();
+            $interval = $now->diff($employe->getHireDate());
+
+            $yearDiff = $interval->y;
+            $monthDiff = $interval->m + 1; // +1 comme dans votre code original
+
             // Vérifier si la paie du mois en cours est déjà validée
             // $paieExistante = $entityManager->getRepository(Paie::class)->findByDate($employe->getId(), $startOfMonth, $endOfMonth);
 //            $primes = $entityManager->getRepository(Prime::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
@@ -741,10 +747,10 @@ class PaieController extends AbstractController
             foreach ($sanctions as $sanction) {
                 // calcul nombre jours
 
-                if ($sanction->getTypeSanction()->getNom() === 'Ponction Salariale') {
+                if (strtolower($sanction->getTypeSanction()->getNom()) === 'ponction salariale') {
                     $nombreJours =  $nombreJours + $sanction->getNombreJours();
 //                    $montantRetenue = $montantRetenue + $salaireJournalier * $nombreJours;
-                } elseif ($sanction->getTypeSanction()->getNom() === 'Mis a pied') {
+                } elseif (strtolower($sanction->getTypeSanction()->getNom()) === 'mis à pied') {
                     $dateDebut = $sanction->getDateDebut();
                     $dateFin = $sanction->getDateFin();
                     $nombreJours = $nombreJours + $dateDebut->diff($dateFin)->days + 1;
@@ -761,6 +767,8 @@ class PaieController extends AbstractController
                 'totalPrimePerf' => $totalPrimePerf,
                 'heureSups' => $nombreHeures,
                 'mois' => $mois,
+                'yearDiff'=>  $yearDiff,
+                'monthDiff'=>  $monthDiff,
             ]);
         } else {
             $response = $this->redirectToRoute('security_logout');
@@ -876,10 +884,10 @@ class PaieController extends AbstractController
             foreach ($sanctions as $sanction) {
                 // calcul nombre jours
 
-                if ($sanction->getTypeSanction()->getNom() === 'Ponction Salariale') {
+                if (strtolower($sanction->getTypeSanction()->getNom()) === 'ponction salariale') {
                     $nombreJours =  $nombreJours + $sanction->getNombreJours();
 //                    $montantRetenue = $montantRetenue + $salaireJournalier * $nombreJours;
-                } elseif ($sanction->getTypeSanction()->getNom() === 'Mis a pied') {
+                } elseif (strtolower($sanction->getTypeSanction()->getNom()) === 'mis à pied') {
                     $dateDebut = $sanction->getDateDebut();
                     $dateFin = $sanction->getDateFin();
                     $nombreJours = $nombreJours + $dateDebut->diff($dateFin)->days + 1;

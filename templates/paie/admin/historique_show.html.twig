@@ -75,16 +75,8 @@
                         {{ "Ancienneté : "|trans }}
                     </div>
                     <div class="col-8">
-                        {% set yearDiff = 'now'|date('Y') - employe.hireDate|date('Y') %}
-                        {% set monthDiff = 'now'|date('m') - employe.hireDate|date('m') + 1 %}
-                        {% if yearDiff <= 0 %}
-
-                        {% elseif yearDiff > 0  and yearDiff < 2 %}
-                            {{ yearDiff }} {{ "an"|trans }}
-                        {% else %}
-                            {{ yearDiff }} {{ "ans"|trans }}
-                        {% endif %}
-                        {{ monthDiff }} {{ "mois"|trans }}
+                       
+                        {{ paie.tauxanciennete}}
                     </div>
                     <div class="col-4 text-end text-bold">
                         {{ "Période : "|trans }}
