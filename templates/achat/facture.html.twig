@@ -35,9 +35,9 @@
                 <tr>
                     <td> {{ approvisionnement.produit.id }} </td>
                     <td class="text-start">{{ approvisionnement.produit.desigantion }} </td>
-                    <td>{{ approvisionnement.produit.pght|number_format(0, '' , ' ') }} </td>
-                    <td>{{ approvisionnement.quantite|number_format(0, '' , ' ') }}</td>
-                    <td>{{ (approvisionnement.produit.pght * approvisionnement.quantite)|number_format(0, '' , ' ') }}</td>
+                    <td>{{ approvisionnement.produit.pght|number_format(2, ',' , ' ') }} </td>
+                    <td>{{ approvisionnement.quantite|number_format(2, ',' , ' ') }}</td>
+                    <td>{{ (approvisionnement.produit.pght * approvisionnement.quantite)|number_format(2, ',' , ' ') }}</td>
                     {% set total = total + (approvisionnement.produit.pght * approvisionnement.quantite) %}
 
 

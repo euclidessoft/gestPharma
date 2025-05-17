@@ -36,8 +36,8 @@
                 <tr>
                     <td>{{ approvisionnement.produit.reference }}</td>
                     <td>{{ approvisionnement.produit.desigantion }}</td>
-                    <td>{{ approvisionnement.produit.prix }}</td>
-                    <td>{{ approvisionnement.produit.prixpublic }}</td>
+                    <td>{{ approvisionnement.produit.prix|number_format(2, ',' , ' ') }}</td>
+                    <td>{{ approvisionnement.produit.prixpublic|number_format(2, ',' , ' ') }}</td>
                     <td>{{ approvisionnement.produit.mincommande }}</td>
                     <td>{{ approvisionnement.produit.fabriquant }}</td>
                     {% set tamp ='no' %}

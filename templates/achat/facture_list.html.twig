@@ -41,7 +41,7 @@
                     <td>{{ approv.approvisionner.id }}</td>
                     <td>{{ approv.approvisionner.date|date('d/m/Y') }}</td>
                     <td class="text-start">{{ approv.fournisseur ? approv.fournisseur.designation : '' }}</td>
-                    <td class="text-start">{{ approv.montant|number_format(0, '' , ' ') }}</td>
+                    <td class="text-start">{{ approv.montant|number_format(2, ',' , ' ') }}</td>
                     <td>
                         <a id="{{ approv.id }}" onclick="load({{ approv.id }})" class="btn btn-success" href="{{ path('achat_new', {'facture': approv.id}) }}">
                             {{ 'Payer'|trans }}

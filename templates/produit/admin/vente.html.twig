@@ -40,8 +40,8 @@
                 <tr>
                     <td>{{ approvisionnement.produit.reference }}</td>
                     <td class="text-start">{{ approvisionnement.produit.desigantion }}</td>
-                    <td>{{ approvisionnement.produit.prix }}</td>
-                    <td>{{ approvisionnement.produit.prixpublic }}</td>
+                    <td>{{ approvisionnement.produit.prix|number_format(2, ',' , ' ') }}</td>
+                    <td>{{ approvisionnement.produit.prixpublic|number_format(2, ',' , ' ') }}</td>
                     <td>{{ approvisionnement.produit.mincommande }}</td>
                     <td class="text-start">{{ approvisionnement.produit.fabriquant }}</td>
                 </tr>

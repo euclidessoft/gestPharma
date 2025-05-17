@@ -83,7 +83,7 @@
                     <td>{{ commandeproduit.produit.desigantion }} </td>
                     <td> {{ commandeproduit.quantite }} </td>
                     <td>
-                        {{ commandeproduit.produit.prix|number_format(0, '' , ' ') }}
+                        {{ commandeproduit.produit.prix|number_format(2, ',' , ' ') }}
 
                     </td>
                     <td>
@@ -118,9 +118,9 @@
                             -
                         {% endif %}
                     </td>
-                    <td>{{ commandeproduit.produit.prixpublic|number_format(0, '' , ' ') }}</td>
+                    <td>{{ commandeproduit.produit.prixpublic|number_format(2, ',' , ' ') }}</td>
                     <td>
-                        {{ (commandeproduit.quantite * commandeproduit.produit.prix)|number_format(0, '' , ' ') }}
+                        {{ (commandeproduit.quantite * commandeproduit.produit.prix)|number_format(2, ',' , ' ') }}
                         {% set total = total + (commandeproduit.quantite * commandeproduit.produit.prix) %}
                     </td>
                 </tr>
@@ -130,7 +130,7 @@
                     {{ "Total HT"|trans }}
                 </td>
                 <td class=" text-bold">
-                    <span id="" class="text-nowrap">{{ total|number_format(0, '' , ' ') }}</span>
+                    <span id="" class="text-nowrap">{{ total|number_format(2, ',' , ' ') }}</span>
                 </td>
             </tr>
             {% if reduction != 0 %}
@@ -139,7 +139,7 @@
                         {{ "Total Réduction"|trans }}
                     </td>
                     <td>
-                        <span id="" class="text-nowrap">{{ reduction|number_format(0, '' , ' ') }}</span>
+                        <span id="" class="text-nowrap">{{ reduction|number_format(2, ',' , ' ') }}</span>
                     </td>
                 </tr>
             {% endif %}
@@ -148,7 +148,7 @@
                     {{ "Total TVA"|trans }}
                 </td>
                 <td>
-                    <span id="" class="text-nowrap">{{ tva|number_format(0, '' , ' ') }}</span>
+                    <span id="" class="text-nowrap">{{ tva|number_format(2, ',' , ' ') }}</span>
                 </td>
             </tr>
 
@@ -157,7 +157,7 @@
                     {{ "Net à payer"|trans }}
                 </td>
                 <td class="text-bold">
-                    <span id="total" class="text-nowrap">{{ (total+ tva -reduction)|number_format(0, '' , ' ') }}</span>
+                    <span id="total" class="text-nowrap">{{ (total+ tva -reduction)|number_format(2, ',' , ' ') }}</span>
                 </td>
             </tr>
             {#        /***Conversion prix en lettre **/#}
@@ -192,17 +192,17 @@
                     <tr>
                         <td>{{ versement.id }}</td>
                         <td>{{ versement.date|date('d/m/Y') }}</td>
-                        <td>{{ versement.montant|number_format(0, '' , ' ') }}</td>
+                        <td>{{ versement.montant|number_format(2, ',' , ' ') }}</td>
                     </tr>
                 {% else %}
                 {% endfor %}
                 <tr>
                     <td colspan="2" class="text-end text-nowrap">{{ 'Total versement'|trans }}</td>
-                    <td>{{ commande.versement|number_format(0, '' , ' ') }}</td>
+                    <td>{{ commande.versement|number_format(2, ',' , ' ') }}</td>
                 </tr>
                 <tr>
                     <td colspan="2" class="text-end">{{ 'Montant Restant'|trans }}</td>
-                    <td>{{ (commande.montant - commande.versement)|number_format(0, '' , ' ') }}</td>
+                    <td>{{ (commande.montant - commande.versement)|number_format(2, ',' , ' ') }}</td>
                 </tr>
                 </tbody>
             </table>

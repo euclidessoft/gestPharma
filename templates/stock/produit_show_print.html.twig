@@ -99,15 +99,15 @@
             <tr>
                 <th>{{ 'Désignation'|trans }}</th>
                 <td>{{ produit.desigantion }}</td>
-                <td rowspan="5" class="text-center text-bolder w-25">{{ produit.stock|number_format(0, '' , ' ') }}</td>
+                <td rowspan="5" class="text-center text-bolder w-25">{{ produit.stock|number_format(2, ',' , ' ') }}</td>
             </tr>
             <tr>
                 <th>{{ 'Prix Session'|trans }}</th>
-                <td>{{ produit.prix }}</td>
+                <td>{{ produit.prix|number_format(2, ',' , ' ') }}</td>
             </tr>
             <tr>
                 <th>{{ 'Prix Public'|trans }}</th>
-                <td>{{ produit.prixpublic }}</td>
+                <td>{{ produit.prixpublic|number_format(2, ',' , ' ') }}</td>
             </tr>
             <tr>
                 <th>{{ 'Mincommande'|trans }}</th>
@@ -140,7 +140,7 @@
                 <tr>
                     <td>{{ produit.lot }}</td>
                     <td>{{ produit.peremption|date('d/m/Y') }}</td>
-                    <td>{{ produit.quantite|number_format(0, '' , ' ') }}</td>
+                    <td>{{ produit.quantite|number_format(2, ',' , ' ') }}</td>
                 </tr>
             {% else %}
             {% endfor %}

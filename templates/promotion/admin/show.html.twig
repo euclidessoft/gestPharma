@@ -73,8 +73,8 @@
                     <tr>
                         <td>{{ promotionproduit.produit.reference }}</td>
                         <td>{{ promotionproduit.produit.desigantion }}</td>
-                        <td>{{ promotionproduit.produit.prix }}</td>
-                        <td>{{ promotionproduit.produit.prixpublic }}</td>
+                        <td>{{ promotionproduit.produit.prix|number_format(2, ',' , ' ') }}</td>
+                        <td>{{ promotionproduit.produit.prixpublic|number_format(2, ',' , ' ') }}</td>
                         <td>{{ promotionproduit.produit.mincommande }}</td>
                         <td>{{ promotionproduit.produit.fabriquant }}</td>
                     </tr>

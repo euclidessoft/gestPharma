@@ -35,7 +35,7 @@
                         <td>{{ avoir.date ? avoir.date|date('d/m/Y') : '' }}</td>
                         <td>{{ avoir.client.nom }}</td>
                         <td>{{ avoir.commande.id }}</td>
-                        <td>{{ avoir.Montant|number_format(0, '' , ' ') }}</td>
+                        <td>{{ avoir.Montant|number_format(2, ',' , ' ') }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -58,14 +58,14 @@
                 <tr>
                     <td>{{ commande.produit.reference }}</td>
                     <td>{{ commande.produit.desigantion }}</td>
-                    <td>{{ commande.produit.prix|number_format(0, '' , ' ') }}</td>
+                    <td>{{ commande.produit.prix|number_format(2, ',' , ' ') }}</td>
                     <td>
                         {{ commande.quantite }}
                     </td>
 
                     <td class="text-center">{{ commande.quantite - commande.quantitelivre }}</td>
                     <td>
-                        {{ (commande.produit.prix * (commande.quantite - commande.quantitelivre))|number_format(0, '' , ' ') }}
+                        {{ (commande.produit.prix * (commande.quantite - commande.quantitelivre))|number_format(2, ',' , ' ') }}
                         {% set total = total + (commande.produit.prix * (commande.quantite - commande.quantitelivre)) %}
                     </td>
                 </tr>
@@ -75,7 +75,7 @@
                 <td colspan="5" class="text-end">
                     {{ 'Total Avoir'|trans }}
                 </td>
-                <td>{{ total|number_format(0, '' , ' ') }}</td>
+                <td>{{ total|number_format(2, ',' , ' ') }}</td>
             </tr>
         </table>
     </div>

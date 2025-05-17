@@ -65,11 +65,11 @@
 
                 <td>{{ retour.produit.reference }}</td>
                 <td>{{ retour.produit.desigantion }}</td>
-                <td>{{ retour.produit.prix|number_format(0, '' , ' ') }}</td>
+                <td>{{ retour.produit.prix|number_format(2, ',' , ' ') }}</td>
                 <td>
                     {{ retour.quantite }}
                 </td>
-                <td>{{ (retour.produit.prix * retour.quantite )|number_format(0, '' , ' ') }}</td>
+                <td>{{ (retour.produit.prix * retour.quantite )|number_format(2, ',' , ' ') }}</td>
                 {% else %}
                 {% endfor %}
         </table>
