@@ -169,6 +169,12 @@ class Paie
     #[ORM\Column(type:"date", nullable:true) ]
     private $datepaye;
 
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $debutConge = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $finConge = null;
+
     public function __construct()
     {
         $this->date = new \DateTime();
@@ -788,6 +794,30 @@ class Paie
     public function setAutres(int $autres): static
     {
         $this->autres = $autres;
+
+        return $this;
+    }
+
+    public function getDebutConge(): ?\DateTimeInterface
+    {
+        return $this->debutConge;
+    }
+
+    public function setDebutConge(\DateTimeInterface $debutConge): static
+    {
+        $this->debutConge = $debutConge;
+
+        return $this;
+    }
+
+    public function getFinConge(): ?\DateTimeInterface
+    {
+        return $this->finConge;
+    }
+
+    public function setFinConge(\DateTimeInterface $finConge): static
+    {
+        $this->finConge = $finConge;
 
         return $this;
     }
