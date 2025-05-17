@@ -85,7 +85,7 @@
                         {{ "Période : "|trans }}
                     </div>
                     <div class="col-8">
-                        01/04/2025 au 30/04/2025
+                        01/{{'NOW'|date('m/Y')}} au {{ nbrjoursmois }}/{{'now'|date('m/Y')}}
                     </div>
                     <div class="col-4 text-end text-bold">
                         {{ "Code : "|trans }}
@@ -93,6 +93,12 @@
                     <div class="col-8">
                        {% set code = 0 %}
                        {{ code }}
+                    </div>
+                    <div class="col-4 text-end text-bold">
+                        {{ "Congé : "|trans }}
+                    </div>
+                    <div class="col-8">
+                     du   {{conge ? conge.datedebut|date('d/m/Y') : '-' }} au {{ conge ? conge.datefin|date('d/m/Y') : '-'}}
                     </div>
                 </div>
             </div>

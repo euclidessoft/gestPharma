@@ -169,11 +169,14 @@ class Paie
     #[ORM\Column(type:"date", nullable:true) ]
     private $datepaye;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $debutConge = null;
+     #[ORM\Column(type:"date", nullable:true) ]
+    private $debutConge;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $finConge = null;
+    #[ORM\Column(type:"date", nullable:true) ]
+    private $finConge;
+
+    #[ORM\Column]
+    private ?int $anciennete = null;
 
     public function __construct()
     {
@@ -818,6 +821,18 @@ class Paie
     public function setFinConge(\DateTimeInterface $finConge): static
     {
         $this->finConge = $finConge;
+
+        return $this;
+    }
+
+    public function getAnciennete(): ?int
+    {
+        return $this->anciennete;
+    }
+
+    public function setAnciennete(int $anciennete): static
+    {
+        $this->anciennete = $anciennete;
 
         return $this;
     }

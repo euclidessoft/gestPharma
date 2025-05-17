@@ -76,20 +76,19 @@
                     </div>
                     <div class="col-8">
                        
-                        {{ paie.tauxanciennete}}
+                        {{ paie.anciennete }}
                     </div>
                     <div class="col-4 text-end text-bold">
                         {{ "Période : "|trans }}
                     </div>
                     <div class="col-8">
-                        01/04/2025 au 30/04/2025
+                       du {{ paie.debutconge ? paie.debutconge|date('d/m/Y') : '-'}} au {{ paie.finconge ? paie.finconge|date('d/m/Y') : '-'}}
                     </div>
                     <div class="col-4 text-end text-bold">
                         {{ "Code : "|trans }}
                     </div>
                     <div class="col-8">
-                       {% set code = 0 %}
-                       {{ code }}
+                       {{ paie.code }}
                     </div>
                 </div>
             </div>
@@ -126,13 +125,11 @@
                         <td>{% set nombre = paie.jours %} {{ nombre }}</td>
 {#                        <td>{% set nombre = nbrjoursmois - nombreJours %} {{ nombre }}</td>#}
                         <td>
-                            {% set base = employe.poste.salaire / 30 %}{{ base|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                            {% set base = paie.salairebase / paie.jours %}{{ base|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
 
                         </td>
-                        {% set ponction= ponction + base %}
-{#                        <td>{% set base = employe.poste.salaire / 30 %}{{ base|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>#}
-                        <td></td>
-                        <td>{{ employe.poste.salaire|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                          <td></td>
+                        <td>{{  paie.salairebase|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
 {#                        <td>{{ (nombre * base)|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>#}
                         <td></td>
                         <td></td>
@@ -142,17 +139,12 @@
                         <td class="text-start">Prime d'ancienneté</td>
                         <td></td>
                         <td>
-                          {{ employe.poste.salaire|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                          {{  paie.salairebase|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <td>
-                            {% if yearDiff >= 2 %}
-                                {% set anciennete = (2 * yearDiff) / 100 %}
-                            {% else %}
-                                {% set anciennete = 0 %}
-                            {% endif %}
-
-                            {{ anciennete }}%
-                            {% set prenciennete = employe.poste.salaire * anciennete %}
+                          
+                            {{ paie.tauxenciennete }}%
+                            {% set prenciennete =  paie.salairebase * paie.tauxenciennete %}
 
                         </td>
                         <td>
@@ -392,18 +384,18 @@
                         <td></td>
                      </tr>
                     {% set totalretenue = 0 %}
-                    {% if paie.jours != 0 %}
+                    {% if paie.tauxponction != 0 %}
                         <tr class="text-end">
                             <td class="text-start">ABSENCES </td>
                             <td></td>
                             <td>{{ paie.baseponction|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
-                            <td>{{ paie.jours }}</td>
+                            <td>{{ paie.tauxponction }}</td>
                             <td>
-                                {{ (paie.baseponction * paie.jours)|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                {{ (paie.baseponction * paie.tauxponction)|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                             </td> 
                             <td></td>
                             <td></td>
-                            {% set totalretenue = paie.baseponction * paie.jours %}
+                            {% set totalretenue = paie.baseponction * paie.tauxponction %}
                         </tr>
                     {% endif %}
                     <tr class="text-end">

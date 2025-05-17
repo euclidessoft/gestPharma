@@ -7,6 +7,7 @@ use App\Entity\HeureSuplementaire;
 use App\Entity\Mois;
 use App\Entity\Paie;
 use App\Entity\Prime;
+use App\Entity\Calendrier;
 use App\Entity\PrimePerformance;
 use App\Entity\Sanction;
 use App\Form\FiltreBulletinType;
@@ -143,7 +144,7 @@ class PaieController extends AbstractController
             if ($paieExistante) {
                 continue;
             }
-
+             $conge = $entityManager->getRepository(Calendrier::class)->findoneBy(['employe' => $employe->getId()],['id' =>'DESC']);
             $transport = 0;
             $logement = 0;
             $ponction = 0;
@@ -160,7 +161,16 @@ class PaieController extends AbstractController
 
 
             $paie = new Paie();
-            $paie->setTauxenciennete($yearDiff);
+             if($conge !== null){
+                $paie->setDebutConge($conge->getDateDebut());
+                $paie->setFinConge($conge->getDateFin());
+            }
+             $paie->setAnciennete($yearDiff);
+            $anciennete = 0;
+            if ($yearDiff >= 2){
+                $anciennete = (2 * $yearDiff) / 100;
+            }
+            $paie->setTauxenciennete($anciennete);
             $paie->setBaseenciennete($employe->getPoste()->getSalaire());
             $paie->setCode(0);
             $paie->setSalaireBase($employe->getPoste()->getSalaire());
@@ -179,6 +189,8 @@ class PaieController extends AbstractController
             
             $nbrjoursmois = new \DateTime();
             $ponction = $employe->getPoste()->getSalaire() / $nbrjoursmois->format('t');
+            $paie->setJours($nbrjoursmois->format('t'));
+
             foreach ($primes as $prime) {
                 // Vérifie si la description est "indemnité de transport" (en minuscules)
                 if (strtolower($prime->getDescription()) === 'indemnité de transport') {
@@ -212,7 +224,7 @@ class PaieController extends AbstractController
                 // calcul nombre d'heure
                 $nombreHeures = $nombreHeures + $heureSup->getDuree();
             }
-            $paie->setBaseheureSup($employe->getPoste()->getHeureSup());
+            $employe->getPoste()->getHeureSup() != null ? $paie->setBaseheureSup($employe->getPoste()->getHeureSup()) : $paie->setBaseheureSup(0) ;
             $paie->setTauxheureSup($nombreHeures);
             
             $montantheureSup = $employe->getPoste()->getHeureSup() * $nombreHeures;
@@ -247,8 +259,7 @@ class PaieController extends AbstractController
                 }
 
             }
-            $paie->setJours($nombreJours);
-            
+
             $paie->setBaseponction($ponction);
             $paie->setTauxponction($nombreJours);
             $paie->setBrut($employe->getPoste()->getSalaire() + $montantprime + $montantheureSup + $totalPrimePerf);
@@ -707,6 +718,7 @@ class PaieController extends AbstractController
             $startOfMonth = new \DateTime('01-' . date('m') . ('-') . date('Y'));
             $endOfMonth = new \DateTime('last day of this month');
             $employe = $entityManager->getRepository(Employe::class)->find($id);
+            $conge = $entityManager->getRepository(Calendrier::class)->findoneBy(['employe' => $employe->getId()],['id' =>'DESC']);
             $mois = $entityManager->getRepository(Mois::class)->find(date('m'));
 
             $now = new \Datetime();
@@ -769,6 +781,7 @@ class PaieController extends AbstractController
                 'mois' => $mois,
                 'yearDiff'=>  $yearDiff,
                 'monthDiff'=>  $monthDiff,
+                'conge'=> $conge,
             ]);
         } else {
             $response = $this->redirectToRoute('security_logout');
@@ -792,6 +805,7 @@ class PaieController extends AbstractController
             $startOfMonth = new \DateTime('01-' . date('m') . ('-') . date('Y'));
             $endOfMonth = new \DateTime('last day of this month');
             $employe = $entityManager->getRepository(Employe::class)->find($id);
+             $conge = $entityManager->getRepository(Calendrier::class)->findoneBy(['employe' => $employe->getId()],['id' =>'DESC']);
             $mois = $entityManager->getRepository(Mois::class)->find(date('m'));
             $transport = 0;
             $logement = 0;
@@ -809,7 +823,16 @@ class PaieController extends AbstractController
 
 
             $paie = new Paie();
-            $paie->setTauxenciennete($yearDiff);
+            if($conge !== null){
+                $paie->setDebutConge($conge->getDateDebut());
+                $paie->setFinConge($conge->getDateFin());
+            }
+            $paie->setAnciennete($yearDiff);
+            $anciennete = 0;
+            if ($yearDiff >= 2){
+                $anciennete = (2 * $yearDiff) / 100;
+            }
+            $paie->setTauxenciennete($anciennete);
             $paie->setBaseenciennete($employe->getPoste()->getSalaire());
             $paie->setCode(0);
             $paie->setSalaireBase($employe->getPoste()->getSalaire());
@@ -860,7 +883,7 @@ class PaieController extends AbstractController
                 // calcul nombre d'heure
                 $nombreHeures = $nombreHeures + $heureSup->getDuree();
             }
-            $paie->setBaseheureSup($employe->getPoste()->getHeureSup());
+           $employe->getPoste()->getHeureSup() != null ? $paie->setBaseheureSup($employe->getPoste()->getHeureSup()) : $paie->setBaseheureSup(0) ;
             $paie->setTauxheureSup($nombreHeures);
             
             $montantheureSup = $employe->getPoste()->getHeureSup() * $nombreHeures;
@@ -895,7 +918,7 @@ class PaieController extends AbstractController
                 }
 
             }
-            $paie->setJours($nombreJours);
+            $paie->setJours($nbrjoursmois->format('t'));
             
             $paie->setBaseponction($ponction);
             $paie->setTauxponction($nombreJours);

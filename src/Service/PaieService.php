@@ -80,10 +80,10 @@ class PaieService
             foreach ($sanctions as $sanction) {
                 // calcul nombre jours
 
-                if ($sanction->getTypeSanction()->getNom() === 'Ponction Salariale') {
+                if (strtolower($sanction->getTypeSanction()->getNom()) === 'ponction salariale') {
                     $nombreJours =  $nombreJours + $sanction->getNombreJours();
 //                    $montantRetenue = $montantRetenue + $salaireJournalier * $nombreJours;
-                } elseif ($sanction->getTypeSanction()->getNom() === 'Mis a pied') {
+                } elseif (strtolower($sanction->getTypeSanction()->getNom()) === 'mis à pied') {
                     $dateDebut = $sanction->getDateDebut();
                     $dateFin = $sanction->getDateFin();
                     $nombreJours = $nombreJours + $dateDebut->diff($dateFin)->days + 1;
