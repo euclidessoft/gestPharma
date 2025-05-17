@@ -224,7 +224,7 @@ class PaieController extends AbstractController
                 // calcul nombre d'heure
                 $nombreHeures = $nombreHeures + $heureSup->getDuree();
             }
-            $employe->getPoste()->getHeureSup() != null ? $paie->setBaseheureSup($employe->getPoste()->getHeureSup()) : $paie->setBaseheureSup(0) ;
+            $employe->getPoste()->getHeureSup() != null ? $paie->setBaseheureSup($employe->getPoste()->getHeureSup()) : $paie->setBaseheureSup($employe->getPoste()->getSalaire()/173.33) ;
             $paie->setTauxheureSup($nombreHeures);
             
             $montantheureSup = $employe->getPoste()->getHeureSup() * $nombreHeures;
@@ -883,7 +883,7 @@ class PaieController extends AbstractController
                 // calcul nombre d'heure
                 $nombreHeures = $nombreHeures + $heureSup->getDuree();
             }
-           $employe->getPoste()->getHeureSup() != null ? $paie->setBaseheureSup($employe->getPoste()->getHeureSup()) : $paie->setBaseheureSup(0) ;
+           $employe->getPoste()->getHeureSup() != null ? $paie->setBaseheureSup($employe->getPoste()->getHeureSup()) : $paie->setBaseheureSup($employe->getPoste()->getSalaire()/173.33) ;
             $paie->setTauxheureSup($nombreHeures);
             
             $montantheureSup = $employe->getPoste()->getHeureSup() * $nombreHeures;
