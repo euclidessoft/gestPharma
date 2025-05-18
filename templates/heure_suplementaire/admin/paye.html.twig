@@ -19,12 +19,12 @@
 
     <ul class="nav nav-tabs mb-4">
             <li class="nav-item">
-                <a class="nav-link active" href="#">
+                <a class="nav-link" href="{{ path('heure_suplementaire_index') }}">
                     {{ 'Non payées'|trans }}
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ path('heure_suplementaire_paye') }}">
+                <a class="nav-link active" href="#">
                     {{ 'déja payées'|trans }}
                 </a>
             </li>
@@ -39,7 +39,6 @@
                 <th>Employé(e)</th>
                 <th>Duree</th>
                 <th>TauxHoraire</th>
-                <th>actions</th>
             </tr>
         </thead>
         <tbody>
@@ -50,12 +49,7 @@
                 <td>{{ heure_suplementaire.employe.nom~' '~heure_suplementaire.employe.prenom }}</td>
                 <td>{{ heure_suplementaire.duree }}</td>
                 <td>{{ heure_suplementaire.tauxHoraire|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
-                <td>
-                 {% if heure_suplementaire.paye == 0 %} 
-                    <a href="{{ path('heure_suplementaire_edit', {'id': heure_suplementaire.id}) }}" class="btn btn-success"><i class="fas fa-edit"></i></a>
-                    {{ include('heure_suplementaire/admin/_delete_form.html.twig')}} 
-                  {% endif %}
-                </td>
+                
             </tr>
         {% endfor %}
         </tbody>

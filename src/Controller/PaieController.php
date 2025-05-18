@@ -211,12 +211,14 @@ class PaieController extends AbstractController
              $paie->setIndemnite(json_encode($totalprime));
 
 
-            $heureSups = $heureSuplementaireRepository->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
+            $heureSups = $heureSuplementaireRepository->findBy(['employe' => $employe->getId(), 'paye' => false]);
             $nombreHeures = 0;
             $montantheureSup = 0;
             foreach ($heureSups as $heureSup) {
                 // calcul nombre d'heure
                 $nombreHeures = $nombreHeures + $heureSup->getDuree();
+                $heureSup->setPaye(true);
+                $entityManager->persist($heureSup);
             }
             $employe->getPoste()->getHeureSup() != null ? $paie->setBaseheureSup($employe->getPoste()->getHeureSup()) : $paie->setBaseheureSup($employe->getPoste()->getSalaire()/173.33) ;
             $paie->setTauxheureSup($nombreHeures);
@@ -728,7 +730,7 @@ class PaieController extends AbstractController
 
             $primes = $entityManager->getRepository(Prime::class)->findBy(['employe' => $employe->getId()]);
 
-            $heureSups = $heureSuplementaireRepository->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
+            $heureSups = $heureSuplementaireRepository->findBy(['employe' => $employe->getId(), 'paye' => false]);
             $nombreHeures = 0;
             foreach ($heureSups as $heureSup) {
                 // calcul nombre d'heure
@@ -870,12 +872,14 @@ class PaieController extends AbstractController
             $paie->setIndemnite(json_encode($totalprime));
 
 
-            $heureSups = $heureSuplementaireRepository->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
+           $heureSups = $heureSuplementaireRepository->findBy(['employe' => $employe->getId(), 'paye' => false]);
             $nombreHeures = 0;
             $montantheureSup = 0;
             foreach ($heureSups as $heureSup) {
                 // calcul nombre d'heure
                 $nombreHeures = $nombreHeures + $heureSup->getDuree();
+                $heureSup->setPaye(true);
+                $entityManager->persist($heureSup);
             }
            $employe->getPoste()->getHeureSup() != null ? $paie->setBaseheureSup($employe->getPoste()->getHeureSup()) : $paie->setBaseheureSup($employe->getPoste()->getSalaire()/173.33) ;
             $paie->setTauxheureSup($nombreHeures);
