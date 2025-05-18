@@ -226,11 +226,13 @@ class PaieController extends AbstractController
             $montantheureSup = $employe->getPoste()->getHeureSup() * $nombreHeures;
 
 
-            $primeperformances = $entityManager->getRepository(PrimePerformance::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
+            $primeperformances = $entityManager->getRepository(PrimePerformance::class)->findBy(['employe' => $employe->getId(), 'paye' => false]);
             $totalPrimePerf = 0;
             foreach ($primeperformances as $primeP) {
                 // calcul nombre d'heure
                 $totalPrimePerf = $totalPrimePerf + $primeP->getMontant();
+                $primeP->setPaye(true);
+                $entityManager->persist($primeP);
             }
             $paie->setPerformance($totalPrimePerf);
 
@@ -738,7 +740,7 @@ class PaieController extends AbstractController
             }
 
 
-            $primeperformances = $entityManager->getRepository(PrimePerformance::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
+            $primeperformances = $entityManager->getRepository(PrimePerformance::class)->findBy(['employe' => $employe->getId(), 'paye' => false]);
             $totalPrimePerf = 0;
             foreach ($primeperformances as $primeP) {
                 // calcul nombre d'heure
@@ -836,10 +838,6 @@ class PaieController extends AbstractController
             $paie->setMois($mois);
             
 
-            // Vérifier si la paie du mois en cours est déjà validée
-            $paieExistante = $entityManager->getRepository(Paie::class)->findByDate($employe->getId(), $startOfMonth, $endOfMonth);
-//            $primes = $entityManager->getRepository(Prime::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
-//            $heureSup = $entityManager->getRepository(HeureSuplementaire::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
 
             $primes = $entityManager->getRepository(Prime::class)->findBy(['employe' => $employe->getId()]);
 
@@ -887,11 +885,13 @@ class PaieController extends AbstractController
             $montantheureSup = $employe->getPoste()->getHeureSup() * $nombreHeures;
 
 
-            $primeperformances = $entityManager->getRepository(PrimePerformance::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
+            $primeperformances = $entityManager->getRepository(PrimePerformance::class)->findBy(['employe' => $employe->getId(), 'paye' => false]);
             $totalPrimePerf = 0;
             foreach ($primeperformances as $primeP) {
                 // calcul nombre d'heure
                 $totalPrimePerf = $totalPrimePerf + $primeP->getMontant();
+                $primeP->setPaye(true);
+                $entityManager->persist($primeP);
             }
             $paie->setPerformance($totalPrimePerf);
 
