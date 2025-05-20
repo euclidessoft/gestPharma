@@ -2246,6 +2246,10 @@ button.bg-default:focus {
     border-color: var(--bs-table-border-color);
 }
 
+.border-1 {
+    border: 1px solid;
+}
+
 .border-2 {
     border: 2px solid;
 }
