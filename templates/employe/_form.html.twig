@@ -34,6 +34,10 @@
 {#                {{ form_start(form, {'attr':{'id': 'form'}}) }}#}
                 <div class="row gap-3 mt-2">
                     {{ form_row(form.matricule, {'attr':{'placeholder':'Matricule *'}, 'label':'Matricule *'}) }}
+                    {{ form_row(form.categorie, {'attr':{'placeholder':'Catégorie *'}, 'label':'Catégorie *'}) }}
+                    {{ form_row(form.echelle, {'attr':{'placeholder':'Echelle *'}, 'label':'Echelle *'}) }}
+                     {{ form_row(form.cnps, {'attr':{'placeholder':'n° CNPS *'}, 'label':'n° CNPS *'}) }}
+                      {{ form_row(form.banque, {'attr':{'placeholder':'n° compte bancaire*'}, 'label':'n° compte bancaire *'}) }}
                     {{ form_row(form.hiredate, {'attr' : { 'title' : 'Date d\'embauche ', 'placeholder':'Date d\'embauche '}, 'label' : 'Date d\'embauche '}) }}
                     {{ form_row(form.poste, {'label':'Poste'}) }}
                     {{ form_row(form.fonction, {'label':'Niveau d\'accès'}) }}
