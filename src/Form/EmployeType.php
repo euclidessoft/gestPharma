@@ -101,6 +101,10 @@ class EmployeType extends AbstractType
             ->add('famillyname')
             ->add('famillylink',LinkType::class,array('placeholder' => 'Lien de parenté'))
             ->add('famillyphone')
+            ->add('categorie')
+            ->add('echelle')
+            ->add('cnps')
+            ->add('banque')
 //            ->add('sursalaire')
         ;
     }

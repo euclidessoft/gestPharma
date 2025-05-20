@@ -159,6 +159,18 @@ class Employe extends User implements UserInterface
     #[ORM\OneToMany(targetEntity:PrimePerformance::class, mappedBy:"employe") ]
     private $primePerformances;
 
+    #[ORM\Column(length: 255)]
+    private ?string $categorie = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $cnps = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $banque = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $echelle = null;
+
 
     public function __construct()
     {
@@ -1116,6 +1128,54 @@ class Employe extends User implements UserInterface
                 $primePerformance->setEmploye(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCategorie(): ?string
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(string $categorie): static
+    {
+        $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    public function getCnps(): ?string
+    {
+        return $this->cnps;
+    }
+
+    public function setCnps(string $cnps): static
+    {
+        $this->cnps = $cnps;
+
+        return $this;
+    }
+
+    public function getBanque(): ?string
+    {
+        return $this->banque;
+    }
+
+    public function setBanque(string $banque): static
+    {
+        $this->banque = $banque;
+
+        return $this;
+    }
+
+    public function getEchelle(): ?string
+    {
+        return $this->echelle;
+    }
+
+    public function setEchelle(string $echelle): static
+    {
+        $this->echelle = $echelle;
 
         return $this;
     }
