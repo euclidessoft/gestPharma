@@ -25,6 +25,14 @@ class HeureSuplementaire
     #[ORM\Column(type:"datetime") ]
     private $createdAt;
 
+    #[ORM\Column]
+    private ?bool $paye = null;
+    
+    public function __construct()
+    {
+        $this->paye = false;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +82,18 @@ class HeureSuplementaire
     public function setTauxHoraire(int $tauxHoraire): self
     {
         $this->tauxHoraire = $tauxHoraire;
+
+        return $this;
+    }
+
+    public function isPaye(): ?bool
+    {
+        return $this->paye;
+    }
+
+    public function setPaye(bool $paye): static
+    {
+        $this->paye = $paye;
 
         return $this;
     }

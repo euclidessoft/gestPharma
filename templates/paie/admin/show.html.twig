@@ -233,13 +233,21 @@
                         <tr class="text-end">
                             <td class="text-start">{{ "Heures Suplementaires"|trans }}</td>
                             <td></td>
-                            <td>{{ employe.poste.heureSup|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                            <td>
+                            {% if employe.poste.heureSup is not null%}
+                                {{ employe.poste.heureSup|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                               {% set totalheuresup = employe.poste.heureSup * heureSups %}
+                            {% else %}
+                                {{ (employe.poste.salaire / 173.33)|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                               {% set totalheuresup = (employe.poste.salaire / 173.33) * heureSups %}
+                            {% endif %}
+                            </td>
                             <td> {{ heureSups }}</td>
-                            <td>{{ ( employe.poste.heureSup * heureSups )|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                            <td>{{ totalheuresup|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                             <td></td>
                             <td></td>
                         </tr>
-                        {% set totalheuresup = employe.poste.heureSup * heureSups %}
+                        
                     {% endif %}
 
                     <tr class="text-bold text-end">

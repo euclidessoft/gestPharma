@@ -22,9 +22,13 @@ class PrimePerformance
     #[ORM\Column(type:"integer") ]
     private $montant;
 
+    #[ORM\Column]
+    private ?bool $paye = null;
+
     public function __construct()
     {
         $this->createAt = new \DateTime();
+        $this->paye = false;
     }
 
     public function getId(): ?int
@@ -64,6 +68,18 @@ class PrimePerformance
     public function setMontant(int $montant): self
     {
         $this->montant = $montant;
+
+        return $this;
+    }
+
+    public function isPaye(): ?bool
+    {
+        return $this->paye;
+    }
+
+    public function setPaye(bool $paye): static
+    {
+        $this->paye = $paye;
 
         return $this;
     }
