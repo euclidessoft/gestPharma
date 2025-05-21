@@ -8,6 +8,7 @@ use App\Entity\Mois;
 use App\Entity\Paie;
 use App\Entity\Prime;
 use App\Entity\Calendrier;
+use App\Entity\Accompte;
 use App\Entity\PrimePerformance;
 use App\Entity\Sanction;
 use App\Form\FiltreBulletinType;
@@ -161,6 +162,10 @@ class PaieController extends AbstractController
 
 
             $paie = new Paie();
+            $paie->setCategorie($employe->getCategorie());
+            $paie->setEchelle($employe->getEchelle());
+            $paie->setCnps($employe->getCnps());
+            $paie->setBanque($employe->getBanque());
              if($conge !== null){
                 $paie->setDebutConge($conge->getDateDebut());
                 $paie->setFinConge($conge->getDateFin());
@@ -262,6 +267,21 @@ class PaieController extends AbstractController
             $paie->setTauxponction($nombreJours);
             $paie->setBrut($employe->getPoste()->getSalaire() + $montantprime + $montantheureSup + $totalPrimePerf);
             $paie->setBrutinter($paie->getBrut() - $montantprime);
+
+            $accompte= $entityManager->getRepository(Accompte::class)->findOneBy(['employe' => $employe->getId(), 'paye' => false], ['id' =>'DESC']);
+            
+            $totalAccompte= 0;
+             // foreach ($accomptes as $accompte) {
+            //     // calcul nombre d'heure
+            //     $totalAccompte = $totalAccompte + $accompte->getMontant();
+            // }
+            if(!empty($accompte)){
+                $totalAccompte = $accompte->getMontant();
+                $accompte->setPaye(true);
+                $entityManager->persist($accompte);
+
+            }
+            $paie->setAccompte($totalAccompte);
             
             /** logement fisc */
             $logementfisc = 0;
@@ -441,7 +461,7 @@ class PaieController extends AbstractController
             $paie->setFne($paie->getBrut() * 0.01);
 
             // a gere plutard
-            $paie->setSalaireNet($paie->getBrut() - ( $CRTV + $foncier + $pv + $com + $ca + $irpp + $ponction * $nombreJours) );
+            $paie->setSalaireNet($paie->getBrut() - ( $CRTV + $foncier + $pv + $com + $ca + $irpp + $ponction * $nombreJours) + $totalAccompte );
 
             // Enregistrement dans la table paie
             
@@ -582,7 +602,7 @@ class PaieController extends AbstractController
     #[Route("/Historique/{id}", name :"paie_historique_show", methods : ["GET"]) ]
     public function historiqueShow(Paie $paie): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_EMPLOYER')) {
               $indemnite = json_decode($paie->getIndemnite(), true);
 
             // dd($paie->getIndemnite());
@@ -747,6 +767,19 @@ class PaieController extends AbstractController
                 $totalPrimePerf = $totalPrimePerf + $primeP->getMontant();
             }
 
+            $accompte= $entityManager->getRepository(Accompte::class)->findOneBy(['employe' => $employe->getId(), 'paye' => false], ['id' =>'DESC']);
+            
+            $totalAccompte= 0;
+             // foreach ($accomptes as $accompte) {
+            //     // calcul nombre d'heure
+            //     $totalAccompte = $totalAccompte + $accompte->getMontant();
+            // }
+            if(!empty($accompte)){
+                $totalAccompte = $accompte->getMontant();
+
+            }
+           
+
 
             $sanctions = $entityManager->getRepository(Sanction::class)->findByDateRange($employe->getId(), $startOfMonth, $endOfMonth);
 
@@ -780,6 +813,7 @@ class PaieController extends AbstractController
                 'yearDiff'=>  $yearDiff,
                 'monthDiff'=>  $monthDiff,
                 'conge'=> $conge,
+                'accompte'=> $totalAccompte,
             ]);
         } else {
             $response = $this->redirectToRoute('security_logout');
@@ -821,6 +855,10 @@ class PaieController extends AbstractController
 
 
             $paie = new Paie();
+            $paie->setCategorie($employe->getCategorie());
+            $paie->setEchelle($employe->getEchelle());
+            $paie->setCnps($employe->getCnps());
+            $paie->setBanque($employe->getBanque());
             if($conge !== null){
                 $paie->setDebutConge($conge->getDateDebut());
                 $paie->setFinConge($conge->getDateFin());
@@ -922,6 +960,21 @@ class PaieController extends AbstractController
             $paie->setTauxponction($nombreJours);
             $paie->setBrut($employe->getPoste()->getSalaire() + $montantprime + $montantheureSup + $totalPrimePerf);
             $paie->setBrutinter($paie->getBrut() - $montantprime);
+
+            $accompte= $entityManager->getRepository(Accompte::class)->findOneBy(['employe' => $employe->getId(), 'paye' => false], ['id' =>'DESC']);
+            
+            $totalAccompte= 0;
+             // foreach ($accomptes as $accompte) {
+            //     // calcul nombre d'heure
+            //     $totalAccompte = $totalAccompte + $accompte->getMontant();
+            // }
+            if(!empty($accompte)){
+                $totalAccompte = $accompte->getMontant();
+                $accompte->setPaye(true);
+                $entityManager->persist($accompte);
+
+            }
+            $paie->setAccompte($totalAccompte);
             
             /** logement fisc */
             $logementfisc = 0;
@@ -1102,14 +1155,14 @@ class PaieController extends AbstractController
             $paie->setFne($paie->getBrut() * 0.01);
 
             // a gere plutard
-            $paie->setSalaireNet($paie->getBrut() - ( $CRTV + $foncier + $pv + $com + $ca + $irpp + $ponction * $nombreJours) );
+            $paie->setSalaireNet($paie->getBrut() - ( $CRTV + $foncier + $pv + $com + $ca + $irpp + $ponction * $nombreJours + $totalAccompte) );
 
             // Enregistrement dans la table paie
             
             $entityManager->persist($paie);
             $entityManager->flush();
             $this->addFlash('notice', 'Bulletin validé avec succès');
-            return $this->redirectToRoute('paie_historique');
+            return $this->redirectToRoute('paie_historique_mois_en_cours');
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -1136,20 +1189,20 @@ class PaieController extends AbstractController
             $form = $this->createForm(FiltreBulletinType::class);
             $form->remove('employe');
             $form->handleRequest($request);
-            $paie = [];
+            // $paie = [];
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $filters = $form->getData();
-                $paie = $paieRepository->findByFiltrer(
-                    $filters['employe'] ?? null,
-                    $filters['mois'] ?? null,
-                    $filters['annee'] ?? null
-                );
-                return $this->render('paie/index.html.twig', [
-                    'form' => $form->createView(),
-                    'bulletins' => $paie,
-                ]);
-            }
+            // if ($form->isSubmitted() && $form->isValid()) {
+            //     $filters = $form->getData();
+            //     $paie = $paieRepository->findByFiltrer(
+            //         $filters['employe'] ?? null,
+            //         $filters['mois'] ?? null,
+            //         $filters['annee'] ?? null
+            //     );
+            //     return $this->render('paie/index.html.twig', [
+            //         'form' => $form->createView(),
+            //         'bulletins' => $paie,
+            //     ]);
+            // }
             $bulletin = $entityManager->getRepository(Paie::class)->findBy(['employe' => $employe]);
 
             $response = $this->render("paie/index.html.twig", [

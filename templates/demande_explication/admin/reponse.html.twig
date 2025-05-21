@@ -34,15 +34,14 @@
             </h5>
             <ul class="list-group">
                 <li class="list-group-item"><strong>Objet :</strong> {{ demandeExplication.objet }}</li>
-                <li class="list-group-item"><strong>Date de l'incident :</strong> {{ demandeExplication.dateIncident ? demandeExplication.dateIncident|date('d/m/Y') : 'N/A' }}</li>
                 <li class="list-group-item"><strong>Date de reponse :</strong> {{ reponse.dateReponse ? reponse.dateReponse|date('d/m/Y') : 'N/A' }}</li>
                 <li class="list-group-item">
                     <p class="mt-2">{{ reponse.reponse }}</p>
                     <p>Cordialement,</p>
                     <p class="mt-2 text-end">
-                        <strong>{{employe.nom ~' '~ employe.prenom }}</strong><br>
-                        {{ employe.poste.nom }}<br>
-                        {{ demandeExplication.responsable.email }} | {{ demandeExplication.responsable.phone }}
+                        <strong>{{reponse.employe.nom ~' '~ reponse.employe.prenom }}</strong><br>
+                        {{ reponse.employe.poste.nom }}<br>
+                        {{ reponse.employe.email }} | {{ reponse.employe.phone }}
                     </p>
                 </li>
             </ul>

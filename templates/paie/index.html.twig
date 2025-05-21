@@ -88,7 +88,7 @@
                 <td data-label="Salaire de base">{{ bulletin.salaireBase|number_format(0,'',' ') }} FCFA</td>
                 <td data-label="Salaire net">{{ bulletin.salaireNet|number_format(0,'',' ') }} FCFA</td>
                 <td data-label="Actions">
-                    <a href="{{ path('mes_bulletin_details', {'id': bulletin.id}) }}" class="btn btn-success">Details</a>
+                    <a href="{{ path('paie_historique_show', {'id': bulletin.id}) }}" class="btn btn-success">Details</a>
                 </td>
             </tr>
             {% else %}

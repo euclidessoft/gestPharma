@@ -561,15 +561,17 @@
                         <td {# rowspan="2" #}
                                 class="text-bold text-end"></td>
                     </tr>
+                    {% if accompte != 0%}
                     <tr class="text-end">
-                        <td class="text-start">{{ "Acomptes sur salaires"|trans }}</td>
+                        <td class="text-start">{{ "Avances sur salaires"|trans }}</td>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
+                        <td>{{ accompte|number_format(0, '', ' ')}}</td>
                         <td></td>
                         <td></td>
                     </tr>
+                    {% endif %}
                     <tr class="text-end">
                         <td class="text-start">{{ "Remboursement prêts"|trans }}</td>
                         <td></td>
@@ -606,7 +608,7 @@
                     <tr class="text-bold text-end">
                         <td class="text-start" colspan="4">{{ "TOTAL DES RETENUES"|trans }}</td>
                         <td>
-                            {% set cotisation = irpp + ca + com + pv + foncier +CRTV + totalretenue %}
+                            {% set cotisation = irpp + ca + com + pv + foncier +CRTV + totalretenue + accompte %}
                             {{ cotisation|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <td></td>

@@ -32,7 +32,6 @@
             {% for demandeExplication in demandeStatus %}
                 <tr>
                     <td>{{ demandeExplication.demande.date ? demandeExplication.demande.date|date('d/m/Y') : '' }}</td>
-                    <td>{{ demandeExplication.demande.dateIncident ? demandeExplication.demande.dateIncident|date('d/m/Y') : 'N/A' }}</td>
                     <td>{{ demandeExplication.demande.objet }}</td>
                     <td>
                         {% if demandeExplication.status %}
