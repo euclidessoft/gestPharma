@@ -412,7 +412,7 @@
                     <tr class="text-bold text-end">
                         <td class="text-start" colspan="4">TOTAL DES RETENUES</td>
                         <td>
-                            {% set cotisation = paie.irpp + paie.ca + paie.local + paie.vieil + paie.foncier + paie.CRTV + totalretenue %}
+                            {% set cotisation = paie.irpp + paie.ca + paie.local + paie.vieil + paie.foncier + paie.CRTV + totalretenue  + paie.accompte %}
                             {{ cotisation|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <td></td>
