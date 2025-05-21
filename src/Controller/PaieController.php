@@ -64,9 +64,19 @@ class PaieController extends AbstractController
                     ];
                 }
             }
-            return $this->render('paie/admin/index.html.twig', [
+         
+            $response = $this->render('paie/admin/index.html.twig', [
                 'paies' => $paies,
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -89,10 +99,20 @@ class PaieController extends AbstractController
             $bulletins = $this->paieService->bulletin();
 
             //dd($employe,$startOfMonth,$salaireDeBase,$primes,$retenues);
-            return $this->render('paie/admin/bulletin.html.twig', [
+          
+            $response = $this->render('paie/admin/bulletin.html.twig', [
                 'bulletins' => $bulletins,
                 'mois' => $this->entityManager ->getRepository(Mois::class)->find(date('m')),
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -109,13 +129,23 @@ class PaieController extends AbstractController
 
 
     #[Route("/Imprimer/Bulletin", name :"print_bulletin") ]
-    public function printBulletin(): Response
+    public function printBulletin(PaieRepository $repository): Response
     {
         if ($this->security->isGranted('ROLE_RH')) {
-            $bulletins = $this->paieService->bulletin();
-            return $this->render('paie/admin/bulletin_print.html.twig', [
+            $bulletins = $repository->findBy(['mois' => date('m'), 'payer' => false]);
+         
+            $response = $this->render('paie/admin/bulletin_print.html.twig', [
                 'bulletins' => $bulletins,
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -520,10 +550,20 @@ class PaieController extends AbstractController
                 ]);
             }
             $paie = $paieRepository->findAll();
-            return $this->render('paie/admin/historique.html.twig', [
+          
+            $response = $this->render('paie/admin/historique.html.twig', [
                 'form' => $form->createView(),
                 'paie' => $paie,
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -543,9 +583,19 @@ class PaieController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_RH')) {
         $paie = $paieRepository->findPaieCurrentMonth();
-            return $this->render('paie/admin/historique_mois_encours.html.twig', [
+           
+            $response = $this->render('paie/admin/historique_mois_encours.html.twig', [
                 'paie' => $paie,
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -581,10 +631,20 @@ class PaieController extends AbstractController
                 }
             }
 
-            return $this->render('paie/admin/historique_bulletin.html.twig', [
+          
+            $response = $this->render('paie/admin/historique_bulletin.html.twig', [
                 'paie' => $paie,
                 'detailsRetenues' => $detailsRetenues,
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -606,10 +666,20 @@ class PaieController extends AbstractController
               $indemnite = json_decode($paie->getIndemnite(), true);
 
             // dd($paie->getIndemnite());
-            return $this->render('paie/admin/historique_show.html.twig', [
+          
+            $response = $this->render('paie/admin/historique_show.html.twig', [
                 'paie' => $paie,
                 'indemnite' => $indemnite,
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
 
         } else {
             $response = $this->redirectToRoute('security_logout');
@@ -632,10 +702,20 @@ class PaieController extends AbstractController
               $indemnite = json_decode($paie->getIndemnite(), true);
 
             // dd($paie->getIndemnite());
-            return $this->render('paie/admin/historique_show_print.html.twig', [
+           
+            $response = $this->render('paie/admin/historique_show_print.html.twig', [
                 'paie' => $paie,
                 'indemnite' => $indemnite,
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
 
         } else {
             $response = $this->redirectToRoute('security_logout');
@@ -705,7 +785,8 @@ class PaieController extends AbstractController
             }
 
             $nbrjoursmois = new \DateTime();
-            return $this->render('paie/admin/show_print.html.twig', [
+           
+            $response = $this->render('paie/admin/show_print.html.twig', [
                 'employe' => $employe,
                 'primes' => $primes,
                 'nbrjoursmois' => $nbrjoursmois->format('t'),
@@ -714,6 +795,15 @@ class PaieController extends AbstractController
                 'heureSups' => $nombreHeures,
                 'mois' => $mois,
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -802,7 +892,8 @@ class PaieController extends AbstractController
             }
 
             $nbrjoursmois = new \DateTime();
-            return $this->render('paie/admin/show.html.twig', [
+           
+            $response = $this->render('paie/admin/show.html.twig', [
                 'employe' => $employe,
                 'primes' => $primes,
                 'nbrjoursmois' => $nbrjoursmois->format('t'),
@@ -815,6 +906,15 @@ class PaieController extends AbstractController
                 'conge'=> $conge,
                 'accompte'=> $totalAccompte,
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -1162,7 +1262,17 @@ class PaieController extends AbstractController
             $entityManager->persist($paie);
             $entityManager->flush();
             $this->addFlash('notice', 'Bulletin validé avec succès');
-            return $this->redirectToRoute('paie_historique_mois_en_cours');
+           
+            $response = $this->redirectToRoute('paie_historique_mois_en_cours');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -1239,11 +1349,21 @@ class PaieController extends AbstractController
         if ($this->security->isGranted('ROLE_RH')) {
             $detailsRetenues = json_decode($paie->getDetailsRetenues(), true); // Si tu as stocké en JSON, décode-le en tableau associatif
 
-            return $this->render("paie/detail_bulletin.html.twig", [
+           
+            $response = $this->render("paie/detail_bulletin.html.twig", [
                 'paie' => $paie,
                 'detailsRetenues' => $detailsRetenues,
                 'mois' => $this->entityManager->getRepository(Mois::class)->find(date('m')),
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
