@@ -455,6 +455,14 @@
                             </a>
                         </li>
                         <li class="menu-title">Paie</li>
+
+                        <li class="dropdown-item" title="{{ 'Fiche de paie'|trans }}">
+                            <a class="nav-link {% block accompte %}{% endblock %}"
+                               href="{{ path('app_accompte_index') }}">
+                                <i class="fa-solid fa-money-check-dollar"></i>
+                                {{ 'Accompte'|trans }}
+                            </a>
+                        </li>
                         <li class="dropdown-item" title="{{ 'Fiche de paie'|trans }}">
                             <a class="nav-link {% block heure_supplementaire %}{% endblock %}"
                                href="{{ path('heure_suplementaire_index') }}">
