@@ -1502,13 +1502,23 @@ class FinanceController extends AbstractController
 
             }
 
-            return $this->render('finance/brouyard_interval_banque.html.twig', [
+           
+            $response = $this->render('finance/brouyard_interval_banque.html.twig', [
                 'banque' => $banque - $debitbanque + $banqueouv - $debitbanqueouv,
                 'ecritures' => $ecritures,
                 'ouverture' => $banqueouv - $debitbanqueouv,
                 'day1' => $date1,
                 'day2' => $date2,
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -1596,10 +1606,20 @@ class FinanceController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
             $paie = $paieRepository->findBy(['payer' => false]);
-            return $this->render('finance/salaire.html.twig', [
+            
+            $response = $this->render('finance/salaire.html.twig', [
                 'paies' => $paie,
                 'banques' => $this->entityManager->getRepository(Banque::class)->findAll(),
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -1630,7 +1650,7 @@ class FinanceController extends AbstractController
             $montant = 0;
 
             $montant = $solde->montantbanque($entityManager, $banque->getCompte());
-            $montantapayer = $paie->getSalaireBrut() + $paie->getTotalChargePatronal();
+            $montantapayer = $paie->getBrut() + $paie->getTotalchargepatronal();
 
             if ($montantapayer <= $montant) {
             $paieSalaire = new PaieSalaire();
@@ -1651,7 +1671,7 @@ class FinanceController extends AbstractController
             $debitcharge->setCompte($banque->getCompte());
             $debitcharge->setType('Banque');
             $debitcharge->setSalaire($paieSalaire);
-            $debitcharge->setMontant($paie->getTotalChargeEmploye() + $paie->getTotalChargePatronal());
+            $debitcharge->setMontant($paie->getTotalChargeEmploye() + $paie->getTotalchargepatronal());
 
             $debitimpot->setCompte($banque->getCompte());
             $debitimpot->setType('Banque');

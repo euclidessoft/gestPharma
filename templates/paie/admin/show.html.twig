@@ -235,15 +235,15 @@
                             <td></td>
                             <td>
                             {% if employe.poste.heureSup is not null%}
-                                {{ employe.poste.heureSup|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                {{ employe.poste.heureSup|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                {% set totalheuresup = employe.poste.heureSup * heureSups %}
                             {% else %}
-                                {{ (employe.poste.salaire / 173.33)|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                {{ (employe.poste.salaire / 173.33)|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                {% set totalheuresup = (employe.poste.salaire / 173.33) * heureSups %}
                             {% endif %}
                             </td>
                             <td> {{ heureSups }}</td>
-                            <td>{{ totalheuresup|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                            <td>{{ totalheuresup|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                             <td></td>
                             <td></td>
                         </tr>
@@ -472,7 +472,7 @@
                         <td class="text-start">{{ "CNPS / Pension Vieillesse"|trans }}</td>
                         <td></td>
                         <td> {{ salairecotis|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
-                        <td>{{ 4.20|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                        <td>{{ 4.20|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                             %
                         </td>
                         <td>
@@ -617,29 +617,7 @@
                     </tbody>
                 </table>
             </div>
-            {#        <div class="col-12 mt-4">
-                        <table class="table table-success-light table-bordered w-100 bulletin">
-                            <thead>
-                            <tr class="text-center">
-                                <th colspan="2" class="text-start">Impôt sur le revenu</th>
-                                <th>Base</th>
-                                <th>Taux</th>
-                                <th>Montant</th>
-                                <th>Cumul annuel</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr class="text-end">
-                                <td colspan="2" class="text-start">Impôt sur le revenu prélevé à la source</td>
-                                <td>{{ net|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
-                                <td></td>
-                                <td>8 000</td>
-                                <td>24 000</td>
-                            </tr>
-
-                            </tbody>
-                        </table>
-                    </div> #}
+          
             <div class="col-6"></div>
             <div class="col-6 ">
                 <div class="row p-3">

@@ -484,11 +484,16 @@ class PaieController extends AbstractController
             }
             $paie->setTav($trav);
 
-            /** cp foncier */
-            $paie->setCpfoncier($paie->getBrut() * 0.015);
+             /** cp foncier */
+            $credfonc = $paie->getBrut() * 0.015;
+            $paie->setCpfoncier($credfonc);
 
             /** fne */
-            $paie->setFne($paie->getBrut() * 0.01);
+            $fne = $paie->getBrut() * 0.01;
+            $paie->setFne($fne);
+
+            $paie->setTotalchargepatronal($allocation + $Vieillesse + $trav + $credfonc + $fne);
+            $paie->setTotalChargeEmploye($irpp + $ca + $com + $pv + $foncier + $CRTV + $ponction * $nombreJours);
 
             // a gere plutard
             $paie->setSalaireNet($paie->getBrut() - ( $CRTV + $foncier + $pv + $com + $ca + $irpp + $ponction * $nombreJours) + $totalAccompte );
@@ -1249,10 +1254,15 @@ class PaieController extends AbstractController
             $paie->setTav($trav);
 
             /** cp foncier */
-            $paie->setCpfoncier($paie->getBrut() * 0.015);
+            $credfonc = $paie->getBrut() * 0.015;
+            $paie->setCpfoncier($credfonc);
 
             /** fne */
-            $paie->setFne($paie->getBrut() * 0.01);
+            $fne = $paie->getBrut() * 0.01;
+            $paie->setFne($fne);
+
+            $paie->setTotalchargepatronal($allocation + $Vieillesse + $trav + $credfonc + $fne);
+            $paie->setTotalChargeEmploye($irpp + $ca + $com + $pv + $foncier + $CRTV + $ponction * $nombreJours);
 
             // a gere plutard
             $paie->setSalaireNet($paie->getBrut() - ( $CRTV + $foncier + $pv + $com + $ca + $irpp + $ponction * $nombreJours + $totalAccompte) );

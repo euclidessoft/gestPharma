@@ -71,7 +71,7 @@ class FinancementController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-//                $entityManager = $this->getDoctrine()->getManager();
+               $entityManager = $this->entityManager;
 
                 $credit = new Credit();
                 $ecriture = new Ecriture();

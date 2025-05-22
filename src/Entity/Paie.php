@@ -190,6 +190,12 @@ class Paie
     #[ORM\Column(length: 255)]
     private ?string $banque = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?float $totalchargepatronal = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?float $totalChargeEmploye = null;
+
     public function __construct()
     {
         $this->date = new \DateTime();
@@ -893,6 +899,30 @@ class Paie
     public function setBanque(string $banque): static
     {
         $this->banque = $banque;
+
+        return $this;
+    }
+
+    public function getTotalchargepatronal(): ?float
+    {
+        return $this->totalchargepatronal;
+    }
+
+    public function setTotalchargepatronal(?float $totalchargepatronal): static
+    {
+        $this->totalchargepatronal = $totalchargepatronal;
+
+        return $this;
+    }
+
+    public function getTotalChargeEmploye(): ?float
+    {
+        return $this->totalChargeEmploye;
+    }
+
+    public function setTotalChargeEmploye(?float $totalChargeEmploye): static
+    {
+        $this->totalChargeEmploye = $totalChargeEmploye;
 
         return $this;
     }

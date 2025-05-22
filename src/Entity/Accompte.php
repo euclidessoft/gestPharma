@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\AccompteRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AccompteRepository::class)]
 class Accompte
@@ -15,9 +16,11 @@ class Accompte
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'accomptes')]
+    #[Assert\NotBlank(message: "Selectionnez un employé") ]
     private ?Employe $employe = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: "Montant obligatoire") ]
     private ?float $montant = null;
 
     #[ORM\Column]
