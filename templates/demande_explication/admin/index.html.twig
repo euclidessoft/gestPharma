@@ -22,7 +22,6 @@
             <thead>
             <tr>
                 <th>{{ 'Date demande d\'explication'|trans }}</th>
-                <th>{{ 'Date de l\'incident'|trans }}</th>
                 <th>{{ 'Objet demande'|trans }}</th>
                 <th>{{ 'Employés'|trans }}</th>
                 <th>{{ 'Actions'|trans }}</th>
@@ -33,9 +32,6 @@
                 <tr>
                     <td data-label="{{ 'Date demande d\'explication'|trans }}">
                         {{ demande.date ? demande.date|date('d/m/Y') : '' }}
-                    </td>
-                    <td data-label="{{ 'Date de l\'incident'|trans }}">
-                        {{ demande.dateIncident ? demande.dateIncident|date('d/m/Y') : '' }}
                     </td>
                     <td data-label="{{ 'Objet demande'|trans }}">{{ demande.objet }}</td>
 

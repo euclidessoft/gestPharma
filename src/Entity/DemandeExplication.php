@@ -27,11 +27,6 @@ class DemandeExplication
     #[ORM\Column(type:"datetime") ]
     private $date;
 
-    #[ORM\Column(type:"datetime") ]
-    #[Assert\Type(\DateTime::class)]
-    #[Assert\NotBlank(message:"Obligatoire")]
-    private $dateIncident;
-
     #[ORM\Column(type:"boolean") ]
     private $status;
 
@@ -54,6 +49,7 @@ class DemandeExplication
         $this->employe = new ArrayCollection();
         $this->reponseExplications = new ArrayCollection();
         $this->decisions = new ArrayCollection();
+        $this->date = new \Datetime();
     }
 
     public function getId(): ?int
@@ -93,18 +89,6 @@ class DemandeExplication
     public function setDate(\DateTimeInterface $date): self
     {
         $this->date = $date;
-
-        return $this;
-    }
-
-    public function getDateIncident(): ?\DateTimeInterface
-    {
-        return $this->dateIncident;
-    }
-
-    public function setDateIncident(\DateTimeInterface $dateIncident): self
-    {
-        $this->dateIncident = $dateIncident;
 
         return $this;
     }

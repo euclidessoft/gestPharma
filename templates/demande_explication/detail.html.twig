@@ -21,7 +21,6 @@
                 <h5 class="mb-4 text-bold"><i class="fa-solid fa-user"></i> Détails de la demande</h5>
                 <ul class="list-group mb-4">
                     <li class="list-group-item"><strong>Objet :</strong> {{ demandeExplications.objet }}</li>
-                    <li class="list-group-item"><strong>Date de l'incident :</strong> {{ demandeExplications.dateIncident ? demandeExplications.dateIncident|date('d/m/Y') : 'N/A' }}</li>
                     <li class="list-group-item"><strong>Date de soumission :</strong> {{ demandeExplications.date ? demandeExplications.date|date('d/m/Y') : 'N/A' }}</li>
                     <li class="list-group-item">
                         <p class="mt-2">{{ demandeExplications.details }}</p>

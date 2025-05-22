@@ -32,6 +32,7 @@ class Poste
     private $posteEmployes;
 
     #[ORM\ManyToOne(targetEntity:Departement::class, inversedBy:"postes") ]
+    #[Assert\NotBlank(message: "Selectionnez un departement") ]
     private $departement;
 
     #[ORM\Column(type:"integer") ]
@@ -39,6 +40,7 @@ class Poste
     private $salaire;
 
     #[ORM\Column(type:"boolean") ]
+    #[Assert\NotBlank(message: "Champ obligatoire") ]
     private $type;
 
     #[ORM\Column(type:"float", nullable:true) ]

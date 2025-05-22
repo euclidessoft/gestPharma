@@ -171,6 +171,12 @@ class Employe extends User implements UserInterface
     #[ORM\Column(length: 255)]
     private ?string $echelle = null;
 
+    /**
+     * @var Collection<int, Accompte>
+     */
+    #[ORM\OneToMany(targetEntity: Accompte::class, mappedBy: 'employe')]
+    private Collection $accomptes;
+
 
     public function __construct()
     {
@@ -201,6 +207,7 @@ class Employe extends User implements UserInterface
         $this->noteService = new ArrayCollection();
         $this->paieSalaires = new ArrayCollection();
         $this->primePerformances = new ArrayCollection();
+        $this->accomptes = new ArrayCollection();
     }
 
 
@@ -1176,6 +1183,36 @@ class Employe extends User implements UserInterface
     public function setEchelle(string $echelle): static
     {
         $this->echelle = $echelle;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Accompte>
+     */
+    public function getAccomptes(): Collection
+    {
+        return $this->accomptes;
+    }
+
+    public function addAccompte(Accompte $accompte): static
+    {
+        if (!$this->accomptes->contains($accompte)) {
+            $this->accomptes->add($accompte);
+            $accompte->setEmploye($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAccompte(Accompte $accompte): static
+    {
+        if ($this->accomptes->removeElement($accompte)) {
+            // set the owning side to null (unless already changed)
+            if ($accompte->getEmploye() === $this) {
+                $accompte->setEmploye(null);
+            }
+        }
 
         return $this;
     }

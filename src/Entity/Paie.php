@@ -178,6 +178,24 @@ class Paie
     #[ORM\Column]
     private ?int $anciennete = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $categorie = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $echelle = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $cnps = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $banque = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?float $totalchargepatronal = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?float $totalChargeEmploye = null;
+
     public function __construct()
     {
         $this->date = new \DateTime();
@@ -833,6 +851,78 @@ class Paie
     public function setAnciennete(int $anciennete): static
     {
         $this->anciennete = $anciennete;
+
+        return $this;
+    }
+
+    public function getCategorie(): ?string
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(string $categorie): static
+    {
+        $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    public function getEchelle(): ?string
+    {
+        return $this->echelle;
+    }
+
+    public function setEchelle(string $echelle): static
+    {
+        $this->echelle = $echelle;
+
+        return $this;
+    }
+
+    public function getCnps(): ?string
+    {
+        return $this->cnps;
+    }
+
+    public function setCnps(string $cnps): static
+    {
+        $this->cnps = $cnps;
+
+        return $this;
+    }
+
+    public function getBanque(): ?string
+    {
+        return $this->banque;
+    }
+
+    public function setBanque(string $banque): static
+    {
+        $this->banque = $banque;
+
+        return $this;
+    }
+
+    public function getTotalchargepatronal(): ?float
+    {
+        return $this->totalchargepatronal;
+    }
+
+    public function setTotalchargepatronal(?float $totalchargepatronal): static
+    {
+        $this->totalchargepatronal = $totalchargepatronal;
+
+        return $this;
+    }
+
+    public function getTotalChargeEmploye(): ?float
+    {
+        return $this->totalChargeEmploye;
+    }
+
+    public function setTotalChargeEmploye(?float $totalChargeEmploye): static
+    {
+        $this->totalChargeEmploye = $totalChargeEmploye;
 
         return $this;
     }
