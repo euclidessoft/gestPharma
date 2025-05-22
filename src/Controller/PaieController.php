@@ -200,7 +200,7 @@ class PaieController extends AbstractController
                 $paie->setDebutConge($conge->getDateDebut());
                 $paie->setFinConge($conge->getDateFin());
             }
-             $paie->setAnciennete($yearDiff);
+             $paie->setAnciennete($yearDiff.' an(s) '.$monthDiff.' mois');
             $anciennete = 0;
             if ($yearDiff >= 2){
                 $anciennete = (2 * $yearDiff) / 100;
@@ -222,24 +222,22 @@ class PaieController extends AbstractController
 
             foreach ($primes as $prime) {
                 // Vérifie si la description est "indemnité de transport" (en minuscules)
-                if (strtolower($prime->getDescription()) === 'indemnité de transport') {
+                if (strtolower($prime->getDescription()) === 'indemnité de transport' || strtolower($prime->getDescription()) === 'indemnite de transport') {
                     $transport = $prime->getMontant();
                 }
-                else if(strtolower($prime->getDescription()) === 'indemnité de logement') {
+                else if(strtolower($prime->getDescription()) === 'indemnité de logement' || strtolower($prime->getDescription()) === 'indemnite de logement') {
                     $logement = $prime->getMontant();
                 }
 
-                // Vérifie si la prime est journalière (base == true)
-                if (!empty($prime->getBase()) && $prime->getBase() === true) {
-                    $ponction += $prime->getMontant() / $nbrjoursmois->format('t');
-                    $totalprime[] = [ 'designation' => $prime->getDescription(), 
+              // Vérifie si la prime est journalière (base == true)
+                // if (!empty($prime->getBase()) && $prime->getBase() === true) {
+                //     $ponction += $prime->getMontant() / $nbrjoursmois->format('t');
+                    
+                // }
+
+                $totalprime[] = [ 'designation' => $prime->getDescription(), 
                                     'montant' => $prime->getMontant()
                                 ];
-                } else {
-                    $totalprime[] = [ 'designation' => $prime->getDescription(), 
-                                    'montant' => $prime->getMontant()
-                                ];
-                }
                 $montantprime += $prime->getMontant();
             }
             //  dd(json_encode($totalprime));
@@ -284,7 +282,7 @@ class PaieController extends AbstractController
                 if ($sanction->getTypeSanction()->getNom() === 'Ponction Salariale') {
                     $nombreJours =  $nombreJours + $sanction->getNombreJours();
 //                    $montantRetenue = $montantRetenue + $salaireJournalier * $nombreJours;
-                } elseif ($sanction->getTypeSanction()->getNom() === 'Mis a pied') {
+                } elseif ($sanction->getTypeSanction()->getNom() === 'Mis à pied'  || strtolower($sanction->getTypeSanction()->getNom()) === 'mis a pied') {
                     $dateDebut = $sanction->getDateDebut();
                     $dateFin = $sanction->getDateFin();
                     $nombreJours = $nombreJours + $dateDebut->diff($dateFin)->days + 1;
@@ -888,7 +886,7 @@ class PaieController extends AbstractController
                 if (strtolower($sanction->getTypeSanction()->getNom()) === 'ponction salariale') {
                     $nombreJours =  $nombreJours + $sanction->getNombreJours();
 //                    $montantRetenue = $montantRetenue + $salaireJournalier * $nombreJours;
-                } elseif (strtolower($sanction->getTypeSanction()->getNom()) === 'mis à pied') {
+                } elseif (strtolower($sanction->getTypeSanction()->getNom()) === 'mis à pied' || strtolower($sanction->getTypeSanction()->getNom()) === 'mis a pied') {
                     $dateDebut = $sanction->getDateDebut();
                     $dateFin = $sanction->getDateFin();
                     $nombreJours = $nombreJours + $dateDebut->diff($dateFin)->days + 1;
@@ -968,7 +966,7 @@ class PaieController extends AbstractController
                 $paie->setDebutConge($conge->getDateDebut());
                 $paie->setFinConge($conge->getDateFin());
             }
-            $paie->setAnciennete($yearDiff);
+            $paie->setAnciennete($yearDiff.' an(s) '.$monthDiff.' mois');
             $anciennete = 0;
             if ($yearDiff >= 2){
                 $anciennete = (2 * $yearDiff) / 100;
@@ -990,24 +988,22 @@ class PaieController extends AbstractController
             $ponction = $employe->getPoste()->getSalaire() / $nbrjoursmois->format('t');
             foreach ($primes as $prime) {
                 // Vérifie si la description est "indemnité de transport" (en minuscules)
-                if (strtolower($prime->getDescription()) === 'indemnité de transport') {
+                if (strtolower($prime->getDescription()) === 'indemnité de transport' || strtolower($prime->getDescription()) === 'indemnite de transport') {
                     $transport = $prime->getMontant();
                 }
-                else if(strtolower($prime->getDescription()) === 'indemnité de logement') {
+                else if(strtolower($prime->getDescription()) === 'indemnité de logement' || strtolower($prime->getDescription()) === 'indemnite de logement') {
                     $logement = $prime->getMontant();
                 }
 
                 // Vérifie si la prime est journalière (base == true)
-                if (!empty($prime->getBase()) && $prime->getBase() === true) {
-                    $ponction += $prime->getMontant() / $nbrjoursmois->format('t');
-                    $totalprime[] = [ 'designation' => $prime->getDescription(), 
+                // if (!empty($prime->getBase()) && $prime->getBase() === true) {
+                //     $ponction += $prime->getMontant() / $nbrjoursmois->format('t');
+                    
+                // }
+
+                $totalprime[] = [ 'designation' => $prime->getDescription(), 
                                     'montant' => $prime->getMontant()
                                 ];
-                } else {
-                    $totalprime[] = [ 'designation' => $prime->getDescription(), 
-                                    'montant' => $prime->getMontant()
-                                ];
-                }
                 $montantprime += $prime->getMontant();
             }
             $paie->setIndemnite(json_encode($totalprime));
@@ -1051,7 +1047,7 @@ class PaieController extends AbstractController
                 if (strtolower($sanction->getTypeSanction()->getNom()) === 'ponction salariale') {
                     $nombreJours =  $nombreJours + $sanction->getNombreJours();
 //                    $montantRetenue = $montantRetenue + $salaireJournalier * $nombreJours;
-                } elseif (strtolower($sanction->getTypeSanction()->getNom()) === 'mis à pied') {
+                } elseif (strtolower($sanction->getTypeSanction()->getNom()) === 'mis à pied' || strtolower($sanction->getTypeSanction()->getNom()) === 'mis a pied') {
                     $dateDebut = $sanction->getDateDebut();
                     $dateFin = $sanction->getDateFin();
                     $nombreJours = $nombreJours + $dateDebut->diff($dateFin)->days + 1;

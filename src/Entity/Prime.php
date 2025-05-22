@@ -30,8 +30,8 @@ class Prime
     #[ORM\Column(type:"datetime") ]
     private $createdAt;
 
-    #[ORM\Column(type:"boolean") ]
-    private $base;
+    // #[ORM\Column(type:"boolean") ]
+    // private $base;
 
     public function getId(): ?int
     {
@@ -86,15 +86,15 @@ class Prime
         return $this;
     }
 
-    public function getBase(): ?bool
-    {
-        return $this->base;
-    }
+    // public function getBase(): ?bool
+    // {
+    //     return $this->base;
+    // }
 
-    public function setBase(bool $base): self
-    {
-        $this->base = $base;
+    // public function setBase(bool $base): self
+    // {
+    //     $this->base = $base;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 }

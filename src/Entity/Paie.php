@@ -175,8 +175,8 @@ class Paie
     #[ORM\Column(type:"date", nullable:true) ]
     private $finConge;
 
-    #[ORM\Column]
-    private ?int $anciennete = null;
+    #[ORM\Column(length: 255)]
+    private ?string $anciennete = null;
 
     #[ORM\Column(length: 255)]
     private ?string $categorie = null;
@@ -843,12 +843,12 @@ class Paie
         return $this;
     }
 
-    public function getAnciennete(): ?int
+    public function getAnciennete(): ?string
     {
         return $this->anciennete;
     }
 
-    public function setAnciennete(int $anciennete): static
+    public function setAnciennete(string $anciennete): static
     {
         $this->anciennete = $anciennete;
 

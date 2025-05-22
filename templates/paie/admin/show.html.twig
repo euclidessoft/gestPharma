@@ -181,9 +181,9 @@
 
                     {% set totalprime = 0 %}
                     {% for prime in primes %}
-                        {% if prime.description|lower == "indemnité de transport" %}
+                        {% if prime.description|lower == "indemnité de transport" or prime.description|lower == "indemnite de transport"%}
                             {% set transport = prime.montant %}
-                        {% elseif prime.description|lower == "indemnité de logement" %}
+                        {% elseif prime.description|lower == "indemnité de logement" or prime.description|lower == "indemnite de logement"%}
                             {% set logement = prime.montant %}
                         {% endif %}
                         {#                  {% if prime.base == true %} <!--true si prime journalier -->
@@ -352,22 +352,7 @@
                         <td class="text-start" colspan="5">{{ "RETENUES SUR SALAIRE"|trans }}</td>
                         <th colspan="2" class="text-center"> {{ "CHARGES PATRONALES"|trans }}</th>
                     </tr>
-                    {#                    {% set totalretenue = 0 %}#}
-                    {#                    {% for retenue in retenues %}#}
-                    {#                        <tr class="text-end">#}
-                    {#                            <td class="text-start">Ponction Salariale</td>#}
-                    {#                            <td></td>#}
-                    {#                            <td>{{ retenue.montant|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>#}
-                    {#                            <td>{{ retenue.jours }}</td>#}
-                    {#                            <td></td>#}
-                    {#                            <td>#}
-                    {#                                {{ (retenue.montant * retenue.jours)|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}#}
-                    {#                            </td>#}
-                    {#                            <td></td>#}
-                    {#                        </tr>#}
-                    {#                        {% set totalretenue = totalretenue + retenue.montant * retenue.jours %}#}
-                    {#                    {% else %}#}
-                    {#                    {% endfor %}#}
+                   
                     <tr class="text-end">
                         <td class="text-start">{{ "IRPP"|trans }}</td>
                         <td></td>

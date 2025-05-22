@@ -284,7 +284,6 @@ class AbsenceController extends AbstractController
                     $demandeExplication->setObjet('Absence non justifiée');
                     $demandeExplication->setDetails($form->get('demandes')->getData());
                     $demandeExplication->setDate(new \DateTime());
-                    $demandeExplication->setDateIncident($decision->getAbsences()->getDateAbsence());
                     $demandeExplication->addEmploye($decision->getAbsences()->getEmploye());
                     $demandeExplication->setStatus(false);
                     $demandeExplication->setResponsable($responsable);
