@@ -1449,6 +1449,10 @@ select#transfert_date_time_minute {
         border-right: 1px solid var(--blanc) !important;
         background: transparent !important;
     }
+
+    .fiche {
+        zoom: 65%;
+    }
 }
 
 /*************Paiement***********/

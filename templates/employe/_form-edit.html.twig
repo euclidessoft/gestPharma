@@ -7,39 +7,40 @@
             </div>
             <div class="card-body">
                 {{ form_start(form, {'attr':{'id': 'form'}}) }}
-
-                <div class="form-group">
-                    {{ form_row(form.nom, {'attr':{'placeholder':'Nom *'}, 'label':false}) }}
-                </div>
-                <div class="form-group">
-                    {{ form_row(form.prenom, {'attr':{'placeholder':'Prénom *'}, 'label':false}) }}
-                </div>
-                <div class="form-group">
-                    {{ form_widget(form.Date_naissance, {'attr' : { 'title' : 'Date de naissance '}}) }}
-                </div>
-                <div class="form-group">
-                    {{ form_row(form.lieu_naissance, {'attr':{'placeholder':'Lieu de naissance'}, 'label':false}) }}
-                </div>
-                <div class="form-group">
-                    {{ form_row(form.nationalite, {'attr':{'placeholder':'Nationnalité'}, 'label':false}) }}
-                </div>
-                <div class="form-group">
-                    {{ form_row(form.phone, {'attr':{'placeholder':'Téléphone *'}, 'label':false}) }}
-                </div>
-                <div class="form-group">
-                    {{ form_row(form.email, {'attr':{'placeholder':'Adresse email'}, 'label':false}) }}
-                </div>
-                <div class="form-group">
-                    {{ form_row(form.sexe, {'attr':{'title':'Choisir le sexe de l\'employé'}, 'label':false}) }}
-                </div>
-                <div class="form-group">
-                    {{ form_row(form.enfant, {'attr':{'placeholder':'Nombre d\'enfant','title':'Le nombre d\'enfant de l\'employé'}, 'label':false}) }}
-                </div>
-                <div class="form-group">
-                    {{ form_row(form.civilite, {'attr':{'placeholder':'Situation matrimoniale'}, 'label':false}) }}
-                </div>
-                <div class="form-group">
-                    {{ form_row(form.adresse, {'attr':{'placeholder':'Adresse'}, 'label':false}) }}
+                <div class="row gap-3 mt-2">
+                    <div class="col-12">
+                        {{ form_row(form.nom, {'attr':{'placeholder':'Nom *'}, 'label':'Nom *'}) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(form.prenom, {'attr':{'placeholder':'Prénom *'}, 'label':'Prénom *'}) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(form.Date_naissance, {'attr' : { 'placeholder':'Date de naissance'}, 'label':'Date de naissance'}) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(form.lieu_naissance, {'attr':{'placeholder':'Lieu de naissance'}, 'label':'Lieu de naissance'}) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(form.nationalite, {'attr':{'placeholder':'Nationnalité'}, 'label':'Nationnalité'}) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(form.phone, {'attr':{'placeholder':'Téléphone *'}, 'label':'Téléphone *'}) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(form.email, {'attr':{'placeholder':'Adresse email'}, 'label':'Adresse email'}) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(form.sexe, {'attr':{'title':'Choisir le sexe de l\'employé'}, 'label':'Sexe'}) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(form.enfant, {'attr':{'placeholder':'Nombre d\'enfant','title':'Le nombre d\'enfant de l\'employé'}, 'label':'Nombre d\'enfant'}) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(form.civilite, {'attr':{'placeholder':'Situation matrimoniale'}, 'label':'Situation matrimoniale'}) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(form.adresse, {'attr':{'placeholder':'Adresse'}, 'label':'Adresse'}) }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -52,25 +53,29 @@
                 {{ 'Informations professionnelles'|trans }}
             </div>
             <div class="card-body">
-                {{ form_start(form, {'attr':{'id': 'form'}}) }}
-<div class="row gap-3">
-{#                <div class="form-group">#}
-                    {{ form_row(form.matricule, {'attr':{'placeholder':'Matricule *'}, 'label':false}) }}
-                      {{ form_row(form.categorie, {'attr':{'placeholder':'Catégorie *'}, 'label':'Catégorie *'}) }}
-                    {{ form_row(form.echelle, {'attr':{'placeholder':'Echelle *'}, 'label':'Echelle *'}) }}
-                     {{ form_row(form.cnps, {'attr':{'placeholder':'n° CNPS *'}, 'label':'n° CNPS *'}) }}
-                      {{ form_row(form.banque, {'attr':{'placeholder':'n° compte bancaire*'}, 'label':'n° compte bancaire *'}) }}
-{#                </div>#}
-{#                <div class="form-group">#}
-                    {{ form_row(form.hiredate, {'attr' : { 'title' : 'Date d\'embauche '}}) }}
-{#                </div>#}
-{#                <div class="form-group">#}
-                    {{ form_row(form.poste, {'label':false}) }}
-{#                </div>#}
-{#                <div class="form-group">#}
-{#                    {{ form_row(form.sursalaire, {'attr' : { 'title' : 'Sursalaire', 'placeholder':'Sursalaire'},'label':false}) }}#}
-{#                </div>#}
-            </div>
+                <div class="row gap-3 mt-2">
+                    <div class="col-12">
+                        {{ form_row(form.matricule, {'attr':{'placeholder':'Matricule *'}, 'label':'Matricule *'}) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(form.categorie, {'attr':{'placeholder':'Catégorie *'}, 'label':'Catégorie *'}) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(form.echelle, {'attr':{'placeholder':'Echelon *'}, 'label':'Echelon *'}) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(form.cnps, {'attr':{'placeholder':'N° CNPS *'}, 'label':'N° CNPS *'}) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(form.banque, {'attr':{'placeholder':'N° compte bancaire*'}, 'label':'N° compte bancaire *'}) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(form.hiredate, {'attr' : { 'placeholder':'Date d\'embauche '}, 'label' : 'Date d\'embauche '}) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_row(form.poste, {'label':'Poste'}) }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -82,8 +87,8 @@
             </div>
 
             <div class="card-body">
-                <div class="form-group">
-                    {{ form_row(form.bloodgroup, {'attr':{'placeholder':'Renseigner le groupe sanguin', 'class':'border-danger focus-shadow-danger'}, 'label':false}) }}
+                <div class="col-12 mt-2">
+                    {{ form_row(form.bloodgroup, {'attr':{'placeholder':'Groupe sanguin', 'class':'border-danger focus-shadow-danger'}, 'label':'Groupe sanguin'}) }}
                 </div>
                 <div role="alert" class="alert bg-danger-light border-danger mt-4 pt-4 radius-10">
                     <div class="row">
@@ -103,28 +108,32 @@
                             {{ form_widget(form.epilepsie, {'attr':{'class':'focus-shadow-danger'}, 'label':'Epileptiques'}) }}
                         </div>
                         <div class="col-6 mt-1">
-                            <input class="focus-shadow-danger" type="checkbox" id="autre" value="autre"
-                                   onclick="autretext()">
-                            <label for="autre"> {{ 'Autre'|trans }} </label>
+                            <div class="form-check">
+                                <input class="focus-shadow-danger form-check-input" type="checkbox" id="autre" value="autre"
+                                       onclick="autretext()">
+                                <label for="autre"> {{ 'Autre'|trans }} </label>
+                            </div>
                         </div>
-                        <div class="col-12 mb-1">
-                            {{ form_widget(form.remark, {'attr':{'class':'border-danger focus-shadow-danger', 'placeholder':'Autre maladie'}, 'label':false}) }}
+                        <div class="col-12 mb-1" id="autre_maladie">
+                            {{ form_row(form.remark, {'attr':{'class':'border-danger focus-shadow-danger', 'placeholder':'Autre maladie'}, 'label':'Autre maladie'}) }}
                         </div>
                     </div>
                 </div>
-                <div class="card border-danger mt-4 mb-3">
-                    <div class="card-header bg-danger-light bb-danger text-danger">
+                <div class="card border-green mt-4">
+                    <div class="card-header bg-success-light bb-green text-green">
                         {{ 'Personne à contacter'|trans }}
                     </div>
                     <div class="card-body">
-                        <div class="form-group">
-                            {{ form_row(form.famillyname, {'attr':{'placeholder':'Prénom(s) et nom', 'class':'border-danger focus-shadow-danger'}, 'label':false}) }}
-                        </div>
-                        <div class="form-group">
-                            {{ form_row(form.famillylink, {'label':false, 'attr' : {'placeholder': 'Lien de parenté', 'class':'border-danger focus-shadow-danger'}}) }}
-                        </div>
-                        <div class="form-group">
-                            {{ form_row(form.famillyphone, {'attr':{'placeholder':'Téléphone', 'class':'border-danger focus-shadow-danger'}, 'label':false}) }}
+                        <div class="row gap-3">
+                            <div class="col-12">
+                                {{ form_row(form.famillyname, {'attr' : {'placeholder':'Parent'}, 'label':'Parent'}) }}
+                            </div>
+                            <div class="col-12">
+                                {{ form_row(form.famillylink, {'attr' : {'placeholder': 'Lien de parenté'}, 'label':'Lien de parenté'}) }}
+                            </div>
+                            <div class="col-12">
+                                {{ form_row(form.famillyphone, {'attr': {'placeholder':'Téléphone'}, 'label':'Téléphone'}) }}
+                            </div>
                         </div>
                     </div>
                 </div>

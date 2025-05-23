@@ -5,7 +5,9 @@
     is_granted('ROLE_STOCK') ? 'stock.html.twig' :
     is_granted('ROLE_LIVREUR') ? 'livreur.html.twig' :
     is_granted('ROLE_EMPLOYER') ? 'employe.html.twig' :
-    'layout.html.twig' %}
+    'layout.html.twig'
+%}
+{% block title %} {{ "Fiche de paie à valider"|trans }} {{ employe.nom }} {{ employe.prenom }} - GNT Pharma{% endblock %}
 {% block paie %}active{% endblock %}
 {% block body %}
 
@@ -110,9 +112,9 @@
                         {{ employe.nom }} {{ employe.prenom }}
                     </h4>
                     <p class="mb-0">
-                        {#{{ "Fonction : "|trans }}#}{{ employe.poste.nom }}
+                        {{ "Fonction : "|trans }}{{ employe.poste.nom }}
                         <br>
-                        {#{{ "Département : "|trans }}#}{{ employe.poste.departement.nom }}
+                        {{ "Département : "|trans }}{{ employe.poste.departement.nom }}
                         <br>
                         {{ "Nº Compte banque : "|trans }} {{ employe.banque }}
                         <br>
@@ -619,14 +621,25 @@
                     </div>
                 </div>
             </div>
-            <br><br><br><br><br>
+            <p class="my-5"></p>
+            <div class="col-6 text-underline fw-bold">
+                Signature de l'employé
+            </div>
+            <div class="col-6 text-end text-underline fw-bold">
+                Signature de l'employeur
+            </div>
         </div>
     </div>
     <div class="col-8 fond-7 my-5">
-        <div class="centrer">
+        <div class="centrer gap-3">
             <a href="{{ path('paie_valider', {'id': employe.id }) }}" class="btn btn-green">
                 <i class="fa fa-save"></i>
                 {{ "Valider"|trans }}
+            </a>
+            <a id="annule" onclick="load('annule')" href="{{ path('paie_index') }}"
+               class="btn btn-shadow btn-normal btn-success-light">
+                <i class="fa fa-undo"></i>
+                {{ 'Retour'|trans }}
             </a>
         </div>
     </div>

@@ -8,13 +8,13 @@
     'layout.html.twig'
 %}
 
-{% block title %}Historique de Paie - GNT Pharma{% endblock %}
+{% block title %} {{ "Bulletin de salaire"|trans }}  - GNT Pharma{% endblock %}
 {% block paie %}active{% endblock %}
 
 {% block body %}
     {% set employe = paie.employe %}
-    <div class="container fond-7 mb-5">
-        <div class="row" style="border-bottom: 2px solid #039c4f;padding-bottom: 10px;">
+    <div class="col-8 fond-7 my-5">
+        {#<div class="row" style="border-bottom: 2px solid #039c4f;padding-bottom: 10px;">
             <div class="col-2 p-0">
                 <img src="{{ asset('images/gnt.png') }}" alt="Logo" class="w-100">
             </div>
@@ -37,15 +37,43 @@
                 </div>
             </div>
         </div>
+
         <h3 class="text-center text-uppercase font-weight-bold mt-5">
             Bulletin de Paie
+        </h3> #}
+        <div class="row" style="border-bottom: 2px solid #039c4f;padding-bottom: 10px;">
+            <div class="col-2 p-0">
+                <img src="{{ asset('images/gnt.png') }}" alt="Logo" class="w-100">
+            </div>
+            <div class="col-10 text-center">
+                <div class="row">
+                    <div class="col-12 titre text-center text-green">
+                        GNT PHARMA
+                    </div>
+                    <div class="col-12 text">
+                        N° {{ "Contribuable"|trans }} : M122217881373Q / N° Employeur : 321-0123649-000-L
+                        <br>
+                        BP : 3582 Yaoundé – Cameroun, NGOUSSO
+                        <br>
+                        Montée Éleveur Immeuble Sainte Marie
+                    </div>
+                    <div class="col-12 text">
+                        +237 69 71 49 4 12 / +237 67 52 47 865
+                    </div>
+                    <div class="col-12 text">
+                        info@gntpharma-cameroun.com / www.gnt-pharma.com
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h3 class="text-center fs-2 text-uppercase fw-bold mt-4">
+            {{ "Bulletin de Paie"|trans }}
         </h3>
         <p class="text-center mb-5">
             {{ paie.mois.nom|trans }} {{ 'now'|date('Y') }}
         </p>
-        <p class="mt-5">&nbsp;</p>
         <div class="row my-5">
-            <div class="col-7">
+            {#<div class="col-7">
                 <div class="row">
                     <div class="col-4 text-end text-bold">
                         {{ "Matricule : "|trans }}
@@ -75,7 +103,6 @@
                         {{ "Ancienneté : "|trans }}
                     </div>
                     <div class="col-8">
-                       
                         {{ paie.anciennete }}
                     </div>
                     <div class="col-4 text-end text-bold">
@@ -101,6 +128,77 @@
                         {{ employe.adresse }}
                     </p>
                 </div>
+            </div>#}
+            <div class="col-7">
+                <div class="row">
+                    <div class="col-5 text-end text-bold">
+                        {{ "Matricule : "|trans }}
+                    </div>
+                    <div class="col-7">
+                        {{ employe.matricule }}
+                    </div>
+                    <div class="col-5 text-end text-bold">
+                        {{ "Catégorie : "|trans }}
+                    </div>
+                    <div class="col-7">
+                        {{ employe.categorie }} Echelon {{ employe.echelle }}
+                    </div>
+                    <div class="col-5 text-end text-bold">
+                        {{ "N° CNPS : "|trans }}
+                    </div>
+                    <div class="col-7">
+                        {{ employe.cnps }}
+                    </div>
+                    <div class="col-5 text-end text-bold">
+                        {{ "Situation matrimoniale : "|trans }}
+                    </div>
+                    <div class="col-7">
+                        {{ employe.civilite }}
+                    </div>
+                    <div class="col-5 text-end text-bold">
+                        {{ "Date d'embauche : "|trans }}
+                    </div>
+                    <div class="col-7">
+                        {{ employe.hireDate|date('d/m/Y') }}
+                    </div>
+                    <div class="col-5 text-end text-bold">
+                        {{ "Ancienneté : "|trans }}
+                    </div>
+                    <div class="col-7">
+                        {{ paie.anciennete }}
+                    </div>
+                    <div class="col-5 text-end text-bold">
+                        {{ "Code d'ancienneté : "|trans }}
+                    </div>
+                    <div class="col-7">
+                        {% set code = 0 %}
+                        {{ paie.code }}
+                    </div>
+                    <div class="col-5 text-end text-bold">
+                        {{ "Congé : "|trans }}
+                    </div>
+                    <div class="col-7">
+                        {{ "Du"|trans }} {{ paie.debutconge ? paie.debutconge|date('d/m/Y') : '-'}}
+                        {{ "au"|trans }} {{ paie.finconge ? paie.finconge|date('d/m/Y') : '-'}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-5">
+                <div class="col-12 border-green border-2 radius-10 p-4">
+                    <h4 class="text-bold text-dark">
+                        {{ employe.nom }} {{ employe.prenom }}
+                    </h4>
+                    <p class="mb-0">
+                        {{ "Fonction : "|trans }}{{ employe.poste.nom }}
+                        <br>
+                        {{ "Département : "|trans }}{{ employe.poste.departement.nom }}
+                        <br>
+                        {{ "Nº Compte banque : "|trans }} {{ employe.banque }}
+                        <br>
+                        {{ "Période du "|trans }} 01/{{ 'now'|date('m/Y') }}
+                        {{ "au"|trans }} {#{{ nbrjoursmois }}#}/{{ 'now'|date('m/Y') }}
+                    </p>
+                </div>
             </div>
             <div class="col-12 mt-5">
                 <table class="table table-success-light table-bordered w-100 bulletin">
@@ -110,7 +208,7 @@
                         <th  rowspan="2">NOMBRE</th>
                         <th  rowspan="2">BASE</th>
                         <th>TAUX</th>
-                        <th>Montant</th>
+                        <th>MONTANT</th>
                         <th colspan="2"> </th>
                     </tr>
                     </thead>
@@ -125,7 +223,7 @@
                         <td>{% set nombre = paie.jours %} {{ nombre }}</td>
 {#                        <td>{% set nombre = nbrjoursmois - nombreJours %} {{ nombre }}</td>#}
                         <td>
-                            {% set base = paie.salairebase / paie.jours %}{{ base|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                            {% set base = paie.salairebase / nombre %}{{ base|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
 
                         </td>
                           <td></td>
@@ -362,8 +460,8 @@
                             {{ paie.crtv|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                             
                         </td>
-                        <td {# rowspan="2" #}class="text-bold text-end"> Total</td>
-                        <td {# rowspan="2" #} class="text-bold text-end"> {{ (paie.allocation + paie.Vieil + paie.tav + paie.foncier + paie.fne)|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',')}}</td>
+                        <td {# rowspan="2" #}class="text-bold text-end"> </td>
+                        <td {# rowspan="2" #} class="text-bold text-end"> </td>
                     </tr>
                     {% if paie.accompte != 0%}
                     <tr class="text-end">
@@ -416,7 +514,7 @@
                             {{ cotisation|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <td></td>
-                        <td></td>
+                        <td>{{ (paie.allocation + paie.Vieil + paie.tav + paie.foncier + paie.fne)|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',')}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -444,33 +542,58 @@
                     </tbody>
                 </table>
             </div> #}
-            <div class="col-7">&nbsp;</div>
+            <div class="col-6"></div>
+            <div class="col-6 ">
+                <div class="row p-3">
+                    <div class="col border-1 border-green border-end-0 bg-success-light p-3">
+                        <h4 class="text-dark text-bold mb-0">
+                            {{ "Net à payer"|trans }}
+                        </h4>
+                    </div>
+                    <div class="col border-1 border-green border-start-0 bg-success-light p-3">
+                        <h4 class="text-dark text-end text-bold mb-0">
+                            {{ paie.salairenet|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                        </h4>
+                    </div>
+                </div>
+            </div>
+            <p class="my-5"></p>
+            <div class="col-6 text-underline fw-bold">
+                Signature de l'employé
+            </div>
+            <div class="col-6 text-end text-underline fw-bold">
+                Signature de l'employeur
+            </div>
+            {#<div class="col-7">&nbsp;</div>
             <div class="col-5 p-4">
                 <div class="row bg-success-light p-3">
                     <div class="col-6">
                         <h3 class="text-dark text-bold">
                             Net à payer
                         </h3>
-                        {#                        <p class="mb-0"> Validé le : 29/03/2025</p>#}
+                        #}{#                        <p class="mb-0"> Validé le : 29/03/2025</p>#}{#
                     </div>
                     <div class="col-6">
                         <h3 class="text-dark text-end text-bold">
                             {{ paie.salairenet|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
 
                         </h3>
-                        {#                        <p class="text-end mb-0"> Payé le : 31/03/2025</p>#}
+                        #}{#                        <p class="text-end mb-0"> Payé le : 31/03/2025</p>#}{#
                     </div>
                 </div>
-            </div>
+            </div>#}
         </div>
-        <br><br><br><br><br>
     </div>
-    <div class="container fond-7 mb-5 p-3">
-        <div class="centrer">
-     
-                <button class="btn btn-secondary btn-lg me-2"  onclick="history.back()"><i class="fa fa-undo"></i> Retour</button>
-                <a href="{{ path('paie_historique_show_print', {'id' : paie.id})}}" class="btn btn-primary btn-lg"><i class="fa fa-print"></i> Imprimer</a>
- 
+    <div class="col-8 fond-7 my-5">
+        <div class="centrer gap-3">
+            <a href="{{ path('paie_historique_show_print', {'id' : paie.id})}}" class="btn btn-green">
+                <i class="fa fa-print"></i>
+                Imprimer
+            </a>
+                <button class="btn btn-success-light"  onclick="history.back()">
+                    <i class="fa fa-undo"></i>
+                    Retour
+                </button>
         </div>
     </div>
 {% endblock %}
