@@ -64,6 +64,19 @@ class PaieController extends AbstractController
                     ];
                 }
             }
+            if(count($paies) == 0){
+                $this->addFlash('notice', 'Tous les bulletins sont déjà validés');
+                $response = $this->redirectToRoute('paie_historique_mois_en_cours');
+                $response->setSharedMaxAge(0);
+                $response->headers->addCacheControlDirective('no-cache', true);
+                $response->headers->addCacheControlDirective('no-store', true);
+                $response->headers->addCacheControlDirective('must-revalidate', true);
+                $response->setCache([
+                    'max_age' => 0,
+                    'private' => true,
+                ]);
+                return $response; 
+            }
          
             $response = $this->render('paie/admin/index.html.twig', [
                 'paies' => $paies,
@@ -512,7 +525,7 @@ class PaieController extends AbstractController
 
             $this->addFlash('notice', 'Bulletins validés avec succès');
             // return $this->redirectToRoute('paie_historique');
-        $response = $this->redirectToRoute('print_bulletin');
+        $response = $this->redirectToRoute('paie_historique_mois_en_cours');
             $response->setSharedMaxAge(0);
             $response->headers->addCacheControlDirective('no-cache', true);
             $response->headers->addCacheControlDirective('no-store', true);
