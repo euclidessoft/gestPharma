@@ -242,9 +242,9 @@
                         <tr class="text-end">
                             <td class="text-start">{{ "Prime de Performence"|trans }}</td>
                             <td></td>
-                            <td>{{ totalPrimePerf|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                            <td>{{ bulletin.totalPrimePerf|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                             <td></td>
-                            <td>{{ totalPrimePerf|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                            <td>{{ bulletin.totalPrimePerf|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                             <td></td>
                             <td></td>
                         </tr>
@@ -295,13 +295,26 @@
                         <td></td>
                         <td></td>
                     </tr>
+                     <tr class="text-bold text-end">
+                        <td class="text-start" colspan="4">{{ "Logement FISC"|trans }}</td>
+                        <td>
+                            {% if brutinter * 0.15 <= logement %}
+                                {% set logementfisc = brutinter * 0.15 %}
+                            {% else %}
+                                {% set logementfisc = logement %}
+                            {% endif %}
+                            {{ logementfisc|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                     <tr class="text-bold text-end">
                         <td class="text-start" colspan="4">{{ "Véhicule FISC"|trans }}</td>
                         <td>
-                            {% if brutinter * 0.15 <= logement %}
-                                {% set vehiculefisc = brutinter * 0.15 %}
+                            {% if brutinter * 0.1 <= transport %}
+                                {% set vehiculefisc = brutinter * 0.1 %}
                             {% else %}
-                                {% set vehiculefisc = logement %}
+                                {% set vehiculefisc = transport %}
                             {% endif %}
 
                             {{ vehiculefisc|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
@@ -312,13 +325,20 @@
                     <tr class="text-bold text-end">
                         <td class="text-start" colspan="4">{{ "Logement CNPS"|trans }}</td>
                         <td>
-                            {% if brutinter * 0.1 > transport %}
+ {#                           {% if brutinter * 0.1 > transport %}
                                 {% set logementcnps = 0 %}
                             {% elseif brutinter * 0.1 < transport %}
                                 {% set logementcnps = transport - (brutinter * 0.1) %}
                             {% else %}
                                 {% set logementcnps = 0 %}
+                            {% endif %}                                                                        #}
+
+                            {% if brutinter * 0.15 <= logement %}
+                                {% set logementcnps = logement - (brutinter * 0.15) %}
+                            {% elseif brutinter * 0.15 >= logement %}
+                                {% set logementcnps = 0 %}
                             {% endif %}
+
 
 
                             {{ logementcnps|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
@@ -329,13 +349,20 @@
                     <tr class="text-bold text-end">
                         <td class="text-start" colspan="4">{{ "Véhicule CNPS"|trans }}</td>
                         <td>
-                            {% if brutinter * 0.15 > logement %}
+ {#                            {% if brutinter * 0.15 > logement %}
                                 {% set vehiculecnps = 0 %}
                             {% elseif brutinter * 0.15 < logement %}
                                 {% set vehiculecnps = logement - (brutinter * 0.15) %}
                             {% else %}
                                 {% set vehiculecnps = 0 %}
+                            {% endif %}                                                                                     #}
+
+                            {% if brutinter * 0.1 <= transport %}
+                                {% set vehiculecnps = transport - (brutinter * 0.1) %}
+                            {% elseif brutinter * 0.1 > transport %}
+                                {% set vehiculecnps = 0 %}
                             {% endif %}
+
 
 
                             {{ vehiculecnps|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
@@ -355,7 +382,7 @@
                     <tr class="text-bold text-end">
                         <td class="text-start" colspan="4">{{ "Salaire Brut Taxable"|trans }}</td>
                         <td>
-                            {% set  bruttaxe = brutinter + transport + vehiculefisc %}
+                            {% set  bruttaxe = brutinter + logementfisc + vehiculefisc %}
                             {{ bruttaxe|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <td></td>

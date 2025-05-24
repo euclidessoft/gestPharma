@@ -331,43 +331,42 @@ class PaieController extends AbstractController
             
             /** logement fisc */
             $logementfisc = 0;
-            if ($paie->getBrutinter() * 0.1 <= $transport) {
-                $logementfisc = $paie->getBrutinter() * 0.1;
+            if ($paie->getBrutinter() * 0.15 <= $logement) {
+                $logementfisc = $paie->getBrutinter() * 0.15;
             } else {
-                $logementfisc = $transport;
+                $logementfisc = $logement;
             }
             $paie->setLogementfisc($logementfisc);
 
             /** vehicule fisc */
-            if ($paie->getBrutinter() * 0.15 <= $logement) {
-                $vehiculefisc = $paie->getBrutinter() * 0.15;
+            if ($paie->getBrutinter() * 0.1 <= $transport) {
+                $vehiculefisc = $paie->getBrutinter() * 0.1;
             } else {
-                $vehiculefisc = $logement;
+                $vehiculefisc = $transport;
             }
+
             $paie->setVehiculefisc($vehiculefisc);
 
             /** logement cnps */
-            if ($paie->getBrutinter() * 0.1 > $transport) {
-                $logementcnps = 0;
-            } elseif ($paie->getBrutinter() * 0.1 < $transport) {
-                $logementcnps = $transport - ($paie->getBrutinter() * 0.1);
-            } else {
+            if ($paie->getBrutinter() * 0.15 <= $logement) {
+                $logementcnps = $logement - ($paie->getBrutinter() * 0.15);
+            } elseif ($paie->getBrutinter() * 0.15 >= $logement) {
                 $logementcnps = 0;
             }
+
             $paie->setLogementcnps($logementcnps);
 
             /** vehicule cnps */
-            if ($paie->getBrutinter() * 0.15 > $logement) {
-                $vehiculecnps = 0;
-            } elseif ($paie->getBrutinter() * 0.15 < $logement) {
-                $vehiculecnps = $logement - ($paie->getBrutinter() * 0.15);
-            } else {
+            if ($paie->getBrutinter() * 0.1 <= $transport) {
+                $vehiculecnps = $transport - ($paie->getBrutinter() * 0.1);
+            } elseif ($paie->getBrutinter() * 0.1 > $transport) {
                 $vehiculecnps = 0;
             }
+
             $paie->setVehiculecnps($vehiculecnps);
 
             /** salaire brut taxe brutinter + transport + vehiculefisc */
-            $paie->setBruttaxable($paie->getBrutinter() + $transport + $vehiculefisc);
+            $paie->setBruttaxable($paie->getBrutinter() + $logementfisc + $vehiculefisc);
             $paie->setSalairecotisable($paie->getBrutinter()  + $vehiculecnps);
 
             /** irpp */
@@ -1099,43 +1098,42 @@ class PaieController extends AbstractController
             
             /** logement fisc */
             $logementfisc = 0;
-            if ($paie->getBrutinter() * 0.1 <= $transport) {
-                $logementfisc = $paie->getBrutinter() * 0.1;
+            if ($paie->getBrutinter() * 0.15 <= $logement) {
+                $logementfisc = $paie->getBrutinter() * 0.15;
             } else {
-                $logementfisc = $transport;
+                $logementfisc = $logement;
             }
             $paie->setLogementfisc($logementfisc);
 
             /** vehicule fisc */
-            if ($paie->getBrutinter() * 0.15 <= $logement) {
-                $vehiculefisc = $paie->getBrutinter() * 0.15;
+            if ($paie->getBrutinter() * 0.1 <= $transport) {
+                $vehiculefisc = $paie->getBrutinter() * 0.1;
             } else {
-                $vehiculefisc = $logement;
+                $vehiculefisc = $transport;
             }
+
             $paie->setVehiculefisc($vehiculefisc);
 
             /** logement cnps */
-            if ($paie->getBrutinter() * 0.1 > $transport) {
-                $logementcnps = 0;
-            } elseif ($paie->getBrutinter() * 0.1 < $transport) {
-                $logementcnps = $transport - ($paie->getBrutinter() * 0.1);
-            } else {
+            if ($paie->getBrutinter() * 0.15 <= $logement) {
+                $logementcnps = $logement - ($paie->getBrutinter() * 0.15);
+            } elseif ($paie->getBrutinter() * 0.15 >= $logement) {
                 $logementcnps = 0;
             }
+
             $paie->setLogementcnps($logementcnps);
 
             /** vehicule cnps */
-            if ($paie->getBrutinter() * 0.15 > $logement) {
-                $vehiculecnps = 0;
-            } elseif ($paie->getBrutinter() * 0.15 < $logement) {
-                $vehiculecnps = $logement - ($paie->getBrutinter() * 0.15);
-            } else {
+            if ($paie->getBrutinter() * 0.1 <= $transport) {
+                $vehiculecnps = $transport - ($paie->getBrutinter() * 0.1);
+            } elseif ($paie->getBrutinter() * 0.1 > $transport) {
                 $vehiculecnps = 0;
             }
+
             $paie->setVehiculecnps($vehiculecnps);
 
             /** salaire brut taxe brutinter + transport + vehiculefisc */
-            $paie->setBruttaxable($paie->getBrutinter() + $transport + $vehiculefisc);
+            $paie->setBruttaxable($paie->getBrutinter() + $logementfisc + $vehiculefisc);
             $paie->setSalairecotisable($paie->getBrutinter()  + $vehiculecnps);
 
             /** irpp */
