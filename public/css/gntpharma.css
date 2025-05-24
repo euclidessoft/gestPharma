@@ -1401,6 +1401,10 @@ select#transfert_date_time_minute {
         margin: 10px 10px 0 10px !important;
     }
 
+    body:after {
+        background-image: none;
+    }
+
     .navmenu,
     .topbar {
         display: none;
@@ -1452,6 +1456,12 @@ select#transfert_date_time_minute {
 
     .fiche {
         zoom: 65%;
+    }
+
+    .bulletin-sign {
+        height: 100px;
+        position: absolute;
+        bottom: 0;
     }
 }
 
