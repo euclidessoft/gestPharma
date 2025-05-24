@@ -9,6 +9,8 @@ use App\Entity\Employe;
 use App\Entity\Poste;
 use App\Form\Type\BloodGroupType;
 use App\Form\Type\LinkType;
+use App\Form\Type\CategorieType;
+use App\Form\Type\EchelleType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -101,8 +103,8 @@ class EmployeType extends AbstractType
             ->add('famillyname')
             ->add('famillylink',LinkType::class,array('placeholder' => 'Lien de parenté'))
             ->add('famillyphone')
-            ->add('categorie')
-            ->add('echelle')
+            ->add('categorie',CategorieType::class,array('placeholder' => 'Catégorie'))
+            ->add('echelle',EchelleType::class,array('placeholder' => 'Echellon'))
             ->add('cnps')
             ->add('banque')
 //            ->add('sursalaire')
