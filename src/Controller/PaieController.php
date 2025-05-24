@@ -98,11 +98,14 @@ class PaieController extends AbstractController
         if ($this->security->isGranted('ROLE_RH')) {
             $bulletins = $this->paieService->bulletin();
 
-            //dd($employe,$startOfMonth,$salaireDeBase,$primes,$retenues);
+            $nbrjoursmois = new \DateTime();
+           
+                
           
             $response = $this->render('paie/admin/bulletin.html.twig', [
                 'bulletins' => $bulletins,
                 'mois' => $this->entityManager ->getRepository(Mois::class)->find(date('m')),
+                'nbrjoursmois' => $nbrjoursmois->format('t'),
             ]);
             $response->setSharedMaxAge(0);
             $response->headers->addCacheControlDirective('no-cache', true);
