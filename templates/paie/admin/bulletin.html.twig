@@ -391,7 +391,7 @@
                     <tr class="text-bold text-end">
                         <td class="text-start" colspan="4">{{ "Salaire Cotisable"|trans }}</td>
                         <td>
-                             {% set  salairecotis = bruttaxe + logementcnps + vehiculecnps %}
+                             {% set  salairecotis = brutinter + logementcnps + vehiculecnps %}
                             {{ salairecotis|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <td></td>

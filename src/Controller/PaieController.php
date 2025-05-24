@@ -367,7 +367,7 @@ class PaieController extends AbstractController
 
             /** salaire brut taxe brutinter + transport + vehiculefisc */
             $paie->setBruttaxable($paie->getBrutinter() + $logementfisc + $vehiculefisc);
-            $paie->setSalairecotisable($paie->setBruttaxable() + $logementcnps  + $vehiculecnps);
+            $paie->setSalairecotisable($paie->getBrutinter() + $logementcnps  + $vehiculecnps);
 
             /** irpp */
             if($paie->getBruttaxable() < 62000) {
@@ -1134,7 +1134,7 @@ class PaieController extends AbstractController
 
             /** salaire brut taxe brutinter + transport + vehiculefisc */
             $paie->setBruttaxable($paie->getBrutinter() + $logementfisc + $vehiculefisc);
-            $paie->setSalairecotisable($paie->setBruttaxable() + $logementcnps  + $vehiculecnps);
+            $paie->setSalairecotisable($paie->getBrutinter() + $logementcnps  + $vehiculecnps);
 
             /** irpp */
             if($paie->getBruttaxable() < 62000) {
