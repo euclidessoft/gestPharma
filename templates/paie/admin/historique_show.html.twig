@@ -73,62 +73,6 @@
             {{ paie.mois.nom|trans }} {{ 'now'|date('Y') }}
         </p>
         <div class="row my-5">
-            {#<div class="col-7">
-                <div class="row">
-                    <div class="col-4 text-end text-bold">
-                        {{ "Matricule : "|trans }}
-                    </div>
-                    <div class="col-8">
-                        {{ employe.matricule }}
-                    </div>
-                    <div class="col-4 text-end text-bold">
-                        {{ "Poste : "|trans }}
-                    </div>
-                    <div class="col-8">
-                        {{ employe.poste.nom }}
-                    </div>
-                    <div class="col-4 text-end text-bold">
-                        {{ "Département : "|trans }}
-                    </div>
-                    <div class="col-8">
-                        {{ employe.poste.departement.nom }}
-                    </div>
-                    <div class="col-4 text-end text-bold">
-                        {{ "Date d'embauche : "|trans }}
-                    </div>
-                    <div class="col-8">
-                        {{ employe.hireDate|date('d/m/Y') }}
-                    </div>
-                    <div class="col-4 text-end text-bold">
-                        {{ "Ancienneté : "|trans }}
-                    </div>
-                    <div class="col-8">
-                        {{ paie.anciennete }}
-                    </div>
-                    <div class="col-4 text-end text-bold">
-                        {{ "Période : "|trans }}
-                    </div>
-                    <div class="col-8">
-                       du {{ paie.debutconge ? paie.debutconge|date('d/m/Y') : '-'}} au {{ paie.finconge ? paie.finconge|date('d/m/Y') : '-'}}
-                    </div>
-                    <div class="col-4 text-end text-bold">
-                        {{ "Code : "|trans }}
-                    </div>
-                    <div class="col-8">
-                       {{ paie.code }}
-                    </div>
-                </div>
-            </div>
-            <div class="col-5 px-5">
-                <div class="col-12 border-green border-2 radius-10 p-4">
-                    <h4 class="text-bold text-dark">
-                        {{ employe.nom }} {{ employe.prenom }}
-                    </h4>
-                    <p class="">
-                        {{ employe.adresse }}
-                    </p>
-                </div>
-            </div>#}
             <div class="col-7">
                 <div class="row">
                     <div class="col-5 text-end text-bold">
@@ -189,14 +133,14 @@
                         {{ employe.nom }} {{ employe.prenom }}
                     </h4>
                     <p class="mb-0">
-                        {{ "Fonction : "|trans }}{{ employe.poste.nom }}
+                        {{ "Fonction : "|trans }}{{ paie.fonction }}
                         <br>
-                        {{ "Département : "|trans }}{{ employe.poste.departement.nom }}
+                        {{ "Département : "|trans }}{{ paie.departement }}
                         <br>
-                        {{ "Nº Compte banque : "|trans }} {{ employe.banque }}
+                        {{ "Nº Compte banque : "|trans }} {{ paie.banque }}
                         <br>
-                        {{ "Période du "|trans }} 01/{{ 'now'|date('m/Y') }}
-                        {{ "au"|trans }} {#{{ nbrjoursmois }}#}/{{ 'now'|date('m/Y') }}
+                        {{ "Période du "|trans }} 01/{{ paie.date|date('m/Y') }}
+                        {{ "au"|trans }} {{ paie.jours }}/{{ paie.date|date('m/Y') }}
                     </p>
                 </div>
             </div>

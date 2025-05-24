@@ -32,7 +32,7 @@ class PanierController extends AbstractController
     {
         $approvisionnements=[];
         $approvisionner = $approvisionnerRepository->arrivage();//recuperation des approvisioonement de moins de 7 jours
-        if(count($approvisionner) > 1){ // si plus d' un appron
+        if(count($approvisionner) > 0){ // si plus d' un appron
             $appro = [];
             foreach ($approvisionner as $item){// mettre les id approvisionner dans un tableau
                 $appro[] = $item->getId();

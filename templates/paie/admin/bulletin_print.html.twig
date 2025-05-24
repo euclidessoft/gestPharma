@@ -40,7 +40,10 @@
             Bulletin de Paie
         </h3>
         <p class="text-center mb-5">
-            {{ paie.mois.nom|trans }} {{ 'now'|date('Y') }}
+            {{ paie.mois.nom|trans }} {{ 'now'|date('Y') }} <a href="{{ path('paie_new') }}" class="btn btn-green">
+                        <i class="fa fa-save"></i>
+                        {{ "Valider tous les bulletins"|trans }}
+                    </a>
         </p>
         <p class="mt-5">&nbsp;</p>
         <div class="row my-5">

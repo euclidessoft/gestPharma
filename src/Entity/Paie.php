@@ -196,6 +196,12 @@ class Paie
     #[ORM\Column(nullable: true)]
     private ?float $totalChargeEmploye = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $fonction = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $departement = null;
+
     public function __construct()
     {
         $this->date = new \DateTime();
@@ -923,6 +929,30 @@ class Paie
     public function setTotalChargeEmploye(?float $totalChargeEmploye): static
     {
         $this->totalChargeEmploye = $totalChargeEmploye;
+
+        return $this;
+    }
+
+    public function getFonction(): ?string
+    {
+        return $this->fonction;
+    }
+
+    public function setFonction(?string $fonction): static
+    {
+        $this->fonction = $fonction;
+
+        return $this;
+    }
+
+    public function getDepartement(): ?string
+    {
+        return $this->departement;
+    }
+
+    public function setDepartement(?string $departement): static
+    {
+        $this->departement = $departement;
 
         return $this;
     }

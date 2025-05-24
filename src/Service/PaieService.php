@@ -9,6 +9,8 @@ use App\Entity\PrimePerformance;
 use App\Entity\Mois;
 use App\Entity\Prime;
 use App\Entity\Sanction;
+use App\Entity\Calendrier;
+use App\Entity\Accompte;
 use App\Repository\HeureSuplementaireRepository;
 use App\Repository\PaieRepository;
 use App\Repository\PrimeRepository;
@@ -45,6 +47,7 @@ class PaieService
         $employes = $entityManager->getRepository(Employe::class)->findBy(['status' => true]);
         $mois = $entityManager->getRepository(Mois::class)->find(date('m'));
         $bulletins = [];
+        $now = new \DateTime();
 
         foreach ($employes as $employe) {
             // Vérification si la paie existe déjà pour le mois en cours
@@ -83,29 +86,41 @@ class PaieService
                 if (strtolower($sanction->getTypeSanction()->getNom()) === 'ponction salariale') {
                     $nombreJours =  $nombreJours + $sanction->getNombreJours();
 //                    $montantRetenue = $montantRetenue + $salaireJournalier * $nombreJours;
-                } elseif (strtolower($sanction->getTypeSanction()->getNom()) === 'mis à pied') {
+                } elseif (strtolower($sanction->getTypeSanction()->getNom()) === 'mis à pied' || strtolower($sanction->getTypeSanction()->getNom()) === 'mis a pied') {
                     $dateDebut = $sanction->getDateDebut();
                     $dateFin = $sanction->getDateFin();
                     $nombreJours = $nombreJours + $dateDebut->diff($dateFin)->days + 1;
 //                    $montantRetenue = $montantRetenue + $salaireJournalier * $nombreJours;
                 }
 
-                $retenues[] = [
-//                    'type' => $sanction->getTypeSanction()->getNom(),
-                    'montant' => $salaireJournalier,
-                    'jours' => $nombreJours,//isset($nombreJours) ? "{$nombreJours}" : 'Période inconnue',
-                ];
             }
 
-            $nbrjoursmois = new \DateTime();
+           $accompte= $entityManager->getRepository(Accompte::class)->findOneBy(['employe' => $employe->getId(), 'paye' => false], ['id' =>'DESC']);
+            
+            $totalAccompte= 0;
+            if(!empty($accompte)){
+                $totalAccompte = $accompte->getMontant();
+                
+            }
+           
+            $conge = $entityManager->getRepository(Calendrier::class)->findoneBy(['employe' => $employe->getId()],['id' =>'DESC']);
+            $interval = $now->diff($employe->getHireDate());
+
+            $yearDiff = $interval->y;
+            $monthDiff = $interval->m + 1; // +1 comme dans votre code original
+
+
             $bulletins[] = [
                 'employe' => $employe,
                 'primes' => $primes,
-                'nbrjoursmois' => $nbrjoursmois->format('t'),
                 'nombreJours' => $nombreJours,
                 'totalPrimePerf' => $totalPrimePerf,
                 'heureSups' => $nombreHeures,
                 'mois' => $mois,
+                'yearDiff' => $yearDiff,
+                'monthDiff' => $monthDiff,
+                'conge' => $conge,
+                'accompte' => $totalAccompte,
             ];
         }
 

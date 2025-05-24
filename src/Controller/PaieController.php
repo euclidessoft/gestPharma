@@ -64,6 +64,19 @@ class PaieController extends AbstractController
                     ];
                 }
             }
+            if(count($paies) == 0){
+                $this->addFlash('notice', 'Tous les bulletins sont déjà validés');
+                $response = $this->redirectToRoute('paie_historique_mois_en_cours');
+                $response->setSharedMaxAge(0);
+                $response->headers->addCacheControlDirective('no-cache', true);
+                $response->headers->addCacheControlDirective('no-store', true);
+                $response->headers->addCacheControlDirective('must-revalidate', true);
+                $response->setCache([
+                    'max_age' => 0,
+                    'private' => true,
+                ]);
+                return $response; 
+            }
          
             $response = $this->render('paie/admin/index.html.twig', [
                 'paies' => $paies,
@@ -98,11 +111,14 @@ class PaieController extends AbstractController
         if ($this->security->isGranted('ROLE_RH')) {
             $bulletins = $this->paieService->bulletin();
 
-            //dd($employe,$startOfMonth,$salaireDeBase,$primes,$retenues);
+            $nbrjoursmois = new \DateTime();
+           
+                
           
             $response = $this->render('paie/admin/bulletin.html.twig', [
                 'bulletins' => $bulletins,
                 'mois' => $this->entityManager ->getRepository(Mois::class)->find(date('m')),
+                'nbrjoursmois' => $nbrjoursmois->format('t'),
             ]);
             $response->setSharedMaxAge(0);
             $response->headers->addCacheControlDirective('no-cache', true);
@@ -196,6 +212,8 @@ class PaieController extends AbstractController
             $paie->setEchelle($employe->getEchelle());
             $paie->setCnps($employe->getCnps());
             $paie->setBanque($employe->getBanque());
+            $paie->setFonction($employe->getPoste()->getNom());
+            $paie->setDepartement($employe->getPoste()->getDepartement()->getNom());
              if($conge !== null){
                 $paie->setDebutConge($conge->getDateDebut());
                 $paie->setFinConge($conge->getDateFin());
@@ -313,43 +331,42 @@ class PaieController extends AbstractController
             
             /** logement fisc */
             $logementfisc = 0;
-            if ($paie->getBrutinter() * 0.1 <= $transport) {
-                $logementfisc = $paie->getBrutinter() * 0.1;
+            if ($paie->getBrutinter() * 0.15 <= $logement) {
+                $logementfisc = $paie->getBrutinter() * 0.15;
             } else {
-                $logementfisc = $transport;
+                $logementfisc = $logement;
             }
             $paie->setLogementfisc($logementfisc);
 
             /** vehicule fisc */
-            if ($paie->getBrutinter() * 0.15 <= $logement) {
-                $vehiculefisc = $paie->getBrutinter() * 0.15;
+            if ($paie->getBrutinter() * 0.1 <= $transport) {
+                $vehiculefisc = $paie->getBrutinter() * 0.1;
             } else {
-                $vehiculefisc = $logement;
+                $vehiculefisc = $transport;
             }
+
             $paie->setVehiculefisc($vehiculefisc);
 
             /** logement cnps */
-            if ($paie->getBrutinter() * 0.1 > $transport) {
-                $logementcnps = 0;
-            } elseif ($paie->getBrutinter() * 0.1 < $transport) {
-                $logementcnps = $transport - ($paie->getBrutinter() * 0.1);
-            } else {
+            if ($paie->getBrutinter() * 0.15 <= $logement) {
+                $logementcnps = $logement - ($paie->getBrutinter() * 0.15);
+            } elseif ($paie->getBrutinter() * 0.15 >= $logement) {
                 $logementcnps = 0;
             }
+
             $paie->setLogementcnps($logementcnps);
 
             /** vehicule cnps */
-            if ($paie->getBrutinter() * 0.15 > $logement) {
-                $vehiculecnps = 0;
-            } elseif ($paie->getBrutinter() * 0.15 < $logement) {
-                $vehiculecnps = $logement - ($paie->getBrutinter() * 0.15);
-            } else {
+            if ($paie->getBrutinter() * 0.1 <= $transport) {
+                $vehiculecnps = $transport - ($paie->getBrutinter() * 0.1);
+            } elseif ($paie->getBrutinter() * 0.1 > $transport) {
                 $vehiculecnps = 0;
             }
+
             $paie->setVehiculecnps($vehiculecnps);
 
             /** salaire brut taxe brutinter + transport + vehiculefisc */
-            $paie->setBruttaxable($paie->getBrutinter() + $transport + $vehiculefisc);
+            $paie->setBruttaxable($paie->getBrutinter() + $logementfisc + $vehiculefisc);
             $paie->setSalairecotisable($paie->getBrutinter()  + $vehiculecnps);
 
             /** irpp */
@@ -507,7 +524,7 @@ class PaieController extends AbstractController
 
             $this->addFlash('notice', 'Bulletins validés avec succès');
             // return $this->redirectToRoute('paie_historique');
-        $response = $this->redirectToRoute('print_bulletin');
+        $response = $this->redirectToRoute('paie_historique_mois_en_cours');
             $response->setSharedMaxAge(0);
             $response->headers->addCacheControlDirective('no-cache', true);
             $response->headers->addCacheControlDirective('no-store', true);
@@ -962,6 +979,8 @@ class PaieController extends AbstractController
             $paie->setEchelle($employe->getEchelle());
             $paie->setCnps($employe->getCnps());
             $paie->setBanque($employe->getBanque());
+            $paie->setFonction($employe->getPoste()->getNom());
+            $paie->setDepartement($employe->getPoste()->getDepartement()->getNom());
             if($conge !== null){
                 $paie->setDebutConge($conge->getDateDebut());
                 $paie->setFinConge($conge->getDateFin());
@@ -1079,43 +1098,42 @@ class PaieController extends AbstractController
             
             /** logement fisc */
             $logementfisc = 0;
-            if ($paie->getBrutinter() * 0.1 <= $transport) {
-                $logementfisc = $paie->getBrutinter() * 0.1;
+            if ($paie->getBrutinter() * 0.15 <= $logement) {
+                $logementfisc = $paie->getBrutinter() * 0.15;
             } else {
-                $logementfisc = $transport;
+                $logementfisc = $logement;
             }
             $paie->setLogementfisc($logementfisc);
 
             /** vehicule fisc */
-            if ($paie->getBrutinter() * 0.15 <= $logement) {
-                $vehiculefisc = $paie->getBrutinter() * 0.15;
+            if ($paie->getBrutinter() * 0.1 <= $transport) {
+                $vehiculefisc = $paie->getBrutinter() * 0.1;
             } else {
-                $vehiculefisc = $logement;
+                $vehiculefisc = $transport;
             }
+
             $paie->setVehiculefisc($vehiculefisc);
 
             /** logement cnps */
-            if ($paie->getBrutinter() * 0.1 > $transport) {
-                $logementcnps = 0;
-            } elseif ($paie->getBrutinter() * 0.1 < $transport) {
-                $logementcnps = $transport - ($paie->getBrutinter() * 0.1);
-            } else {
+            if ($paie->getBrutinter() * 0.15 <= $logement) {
+                $logementcnps = $logement - ($paie->getBrutinter() * 0.15);
+            } elseif ($paie->getBrutinter() * 0.15 >= $logement) {
                 $logementcnps = 0;
             }
+
             $paie->setLogementcnps($logementcnps);
 
             /** vehicule cnps */
-            if ($paie->getBrutinter() * 0.15 > $logement) {
-                $vehiculecnps = 0;
-            } elseif ($paie->getBrutinter() * 0.15 < $logement) {
-                $vehiculecnps = $logement - ($paie->getBrutinter() * 0.15);
-            } else {
+            if ($paie->getBrutinter() * 0.1 <= $transport) {
+                $vehiculecnps = $transport - ($paie->getBrutinter() * 0.1);
+            } elseif ($paie->getBrutinter() * 0.1 > $transport) {
                 $vehiculecnps = 0;
             }
+
             $paie->setVehiculecnps($vehiculecnps);
 
             /** salaire brut taxe brutinter + transport + vehiculefisc */
-            $paie->setBruttaxable($paie->getBrutinter() + $transport + $vehiculefisc);
+            $paie->setBruttaxable($paie->getBrutinter() + $logementfisc + $vehiculefisc);
             $paie->setSalairecotisable($paie->getBrutinter()  + $vehiculecnps);
 
             /** irpp */
