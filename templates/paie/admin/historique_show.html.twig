@@ -189,14 +189,14 @@
                         {{ employe.nom }} {{ employe.prenom }}
                     </h4>
                     <p class="mb-0">
-                        {{ "Fonction : "|trans }}{{ employe.poste.nom }}
+                        {{ "Fonction : "|trans }}{{ paie.fonction }}
                         <br>
-                        {{ "Département : "|trans }}{{ employe.poste.departement.nom }}
+                        {{ "Département : "|trans }}{{ paie.departement }}
                         <br>
-                        {{ "Nº Compte banque : "|trans }} {{ employe.banque }}
+                        {{ "Nº Compte banque : "|trans }} {{ paie.banque }}
                         <br>
-                        {{ "Période du "|trans }} 01/{{ 'now'|date('m/Y') }}
-                        {{ "au"|trans }} {#{{ nbrjoursmois }}#}/{{ 'now'|date('m/Y') }}
+                        {{ "Période du "|trans }} 01/{{ paie.date|date('m/Y') }}
+                        {{ "au"|trans }} {{ paie.jours }}/{{ paie.date|date('m/Y') }}
                     </p>
                 </div>
             </div>

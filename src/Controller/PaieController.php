@@ -196,6 +196,8 @@ class PaieController extends AbstractController
             $paie->setEchelle($employe->getEchelle());
             $paie->setCnps($employe->getCnps());
             $paie->setBanque($employe->getBanque());
+            $paie->setFonction($employe->getPoste()->getNom());
+            $paie->setDepartement($employe->getPoste()->getDepartement()->getNom());
              if($conge !== null){
                 $paie->setDebutConge($conge->getDateDebut());
                 $paie->setFinConge($conge->getDateFin());
@@ -962,6 +964,8 @@ class PaieController extends AbstractController
             $paie->setEchelle($employe->getEchelle());
             $paie->setCnps($employe->getCnps());
             $paie->setBanque($employe->getBanque());
+            $paie->setFonction($employe->getPoste()->getNom());
+            $paie->setDepartement($employe->getPoste()->getDepartement()->getNom());
             if($conge !== null){
                 $paie->setDebutConge($conge->getDateDebut());
                 $paie->setFinConge($conge->getDateFin());
