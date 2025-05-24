@@ -8,6 +8,7 @@ use App\Entity\TypeSanction;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -31,12 +32,11 @@ class SanctionType extends AbstractType
             ->add('dateFin',DateType::class,[
                 'widget' => 'single_text', 
             ])
-            ->add('typeSanction', EntityType::class, [
-                'class' => TypeSanction::class,
-                'choice_label' => 'nom',
-                'placeholder' => 'Choisissez le type de sanction',
-                'required' => true,
-                'expanded' => false,
+            ->add('typeSanction', ChoiceType::class, [
+                'choices' => Sanction::type,
+                'placeholder' => 'types de sanction *',
+                'label' => false,
+                'required' => true
             ])
         ;
     }

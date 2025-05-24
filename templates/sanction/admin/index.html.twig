@@ -28,20 +28,20 @@
                 <th>Type de la sanction</th>
                 <th>Date de création</th>
                 <th>Nombre de jour(s)</th>
-                <th>actions</th>
+                {# <th>actions</th> #}
             </tr>
         </thead>
         <tbody>
             {% for sanction in sanctions %}
             <tr>
                 <td>{{ sanction.employe.nom ~ ' ' ~ sanction.employe.prenom }}</td>
-                <td>{{ sanction.typeSanction.nom }}</td>
+                <td>{{ sanction.typeSanction }}</td>
                 <td>{{ sanction.dateCreation ? sanction.dateCreation|date('d/m/Y') : '' }}</td>
                 <td>{{ sanction.nombreJours ? sanction.nombreJours : '-' }}</td>
-                <td>
+                {# <td>
                     <a href="{{ path('sanction_show', {'id': sanction.id}) }}" class="btn btn-success"><i class="fas fa-eye"></i></a>
                     <a href="{{ path('sanction_edit', {'id': sanction.id}) }}" class="btn btn-success-light"><i class="fas fa-edit"></i></a>
-                </td>
+                </td> #}
             </tr>
             {% endfor %}
         </tbody>

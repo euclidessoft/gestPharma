@@ -1,14 +1,4 @@
-{% extends
-    is_granted('ROLE_ADMIN') ? 'admin.html.twig' :
-    is_granted('ROLE_RH') ? 'rh.html.twig' :
-    is_granted('ROLE_FINANCE') ? 'finance.html.twig' :
-    is_granted('ROLE_STOCK') ? 'stock.html.twig' :
-    is_granted('ROLE_LIVREUR') ? 'livreur.html.twig' :
-    is_granted('ROLE_EMPLOYER') ? 'employe.html.twig' :
-    'layout.html.twig'
-%}
 
-{% block body %}
 {{ form_start(form, {'attr': {'id': 'form'}}) }}
 
 <div class="col-lg-5 offset-lg-2 mt-4 fond-7 pb-5 pt-3 px-5">
@@ -43,22 +33,3 @@
 
     {{ form_rest(form) }}
 </div>
-{% endblock %}
-{% block scripts %}
-<script>
-       $(document).ready(function() {
-        $('#dateDebut').hide();
-        $('#dateFin').hide();
-    $('#sanction_typeSanction').on('change', function() {
-        const selectedSanction = $(this).find('option:selected').text().trim();
-        if (selectedSanction === "Mis à pied" || selectedSanction === "Retenue sur les congés") {
-            $('#dateDebut').show();
-            $('#dateFin').show();
-        } else {
-            $('#dateDebut').hide();
-            $('#dateFin').hide();
-        }
-    });
-       });
-</script>
-{% endblock %}

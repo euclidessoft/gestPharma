@@ -28,11 +28,11 @@ class DecisionType extends AbstractType
                 'placeholder' => 'Sélectionnez le type de decision',
             ])
             ->add('demandes')
-            ->add('typeSanction', EntityType::class, [
-                'class' => TypeSanction::class,
-                'choice_label' => 'nom',
-                'required' => false,
-                'placeholder' => 'Sélectionnez la sanction',
+            ->add('typeSanction', ChoiceType::class, [
+                'choices' => Decision::sanction,
+                'placeholder' => 'types de sanction *',
+                'label' => false,
+                'required' => true
             ])
             ->add('dateDebut',DateType::class, [
                 'widget' => 'single_text',

@@ -367,9 +367,9 @@ class AbsenceController extends AbstractController
                     $sanction->setCreatedAt(new \DateTime());
                     $sanction->setTypeSanction($decision->getTypeSanction());
                     $sanction->setEmploye($employe);
-                    $typeSanction = $decision->getTypeSanction()->getNom();
+                    $typeSanction = $decision->getTypeSanction();
 
-                    if ($typeSanction === 'mis a pied') {
+                    if ($typeSanction === 'Mis à pied') {
                         $dateDebut = $decision->getDateDebut();
                         $dateFin = $decision->getDateFin();
                         $decision->setDateDebut($dateDebut);

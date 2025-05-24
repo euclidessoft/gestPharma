@@ -25,7 +25,7 @@
         <tbody>
             {% for sanction in sanctions %}
             <tr>
-                <td>{{ sanction.typeSanction.nom }}</td>
+                <td>{{ sanction.typeSanction }}</td>
                 <td>{{ sanction.dateCreation ? sanction.dateCreation|date('d/m/Y') : '' }}</td>
             </tr>
 
