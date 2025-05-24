@@ -35,9 +35,19 @@ class AbsenceController extends AbstractController
         if ($this->security->isGranted('ROLE_RH')) {
             $absences = $absenceRepository->findBy([], ['dateAbsence' => 'DESC']);
 
-            return $this->render('absence/admin/index.html.twig', [
+           
+            $response = $this->render('absence/admin/index.html.twig', [
                 'absences' => $absences,
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -117,10 +127,20 @@ class AbsenceController extends AbstractController
                 return $this->redirectToRoute('absence_index', [], Response::HTTP_SEE_OTHER);
             }
 
-            return $this->render('absence/admin/new.html.twig', [
+           
+            $response = $this->render('absence/admin/new.html.twig', [
                 'form' => $form->createView(),
                 'absence' => $absence,
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -139,9 +159,19 @@ class AbsenceController extends AbstractController
     public function show(Absence $absence): Response
     {
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
-            return $this->render('absence/admin/show.html.twig', [
+           
+            $response = $this->render('absence/admin/show.html.twig', [
                 'absences' => $absence,
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -163,9 +193,19 @@ class AbsenceController extends AbstractController
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
             $employe = $this->getUser();
             $absences = $this->entityManager->getRepository(Absence::class)->findAbsenceAll($employe);
-            return $this->render('absence/absence.html.twig', [
+           
+            $response = $this->render('absence/absence.html.twig', [
                 'absences' => $absences,
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -207,11 +247,31 @@ class AbsenceController extends AbstractController
 
                 $entityManager->persist($justificatif);
                 $entityManager->flush();
-                return $this->redirectToRoute('absence_suivi');
+               
+                $response = $this->redirectToRoute('absence_suivi');
+                $response->setSharedMaxAge(0);
+                $response->headers->addCacheControlDirective('no-cache', true);
+                $response->headers->addCacheControlDirective('no-store', true);
+                $response->headers->addCacheControlDirective('must-revalidate', true);
+                $response->setCache([
+                    'max_age' => 0,
+                    'private' => true,
+                ]);
+                return $response;
             }
-            return $this->render("absence/justificatif.html.twig", [
+           
+            $response = $this->render("absence/justificatif.html.twig", [
                 'form' => $form->createView(),
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -240,7 +300,17 @@ class AbsenceController extends AbstractController
             }
             $entityManager->persist($absence);
             $entityManager->flush();
-            return $this->redirectToRoute('absence_index');
+          
+            $response = $this->redirectToRoute('absence_index');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -347,11 +417,31 @@ class AbsenceController extends AbstractController
 
                 $entityManager->flush();
 
-                return $this->redirectToRoute('absence_index');
+               
+                $response = $this->redirectToRoute('absence_index');
+                $response->setSharedMaxAge(0);
+                $response->headers->addCacheControlDirective('no-cache', true);
+                $response->headers->addCacheControlDirective('no-store', true);
+                $response->headers->addCacheControlDirective('must-revalidate', true);
+                $response->setCache([
+                    'max_age' => 0,
+                    'private' => true,
+                ]);
+                return $response;
             }
-            return $this->render("absence/admin/decision.html.twig", [
+           
+            $response = $this->render("absence/admin/decision.html.twig", [
                 'form' => $form->createView(),
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -370,9 +460,19 @@ class AbsenceController extends AbstractController
     public function detail(Absence $absence): Response
     {
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
-            return $this->render('absence/show.html.twig', [
+           
+            $response = $this->render('absence/show.html.twig', [
                 'absence' => $absence,
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -393,9 +493,19 @@ class AbsenceController extends AbstractController
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
             $employe = $security->getUser();
             $absences = $absenceRepository->findAbsenceAttente($employe);
-            return $this->render('absence/attente.html.twig', [
+          
+            $response = $this->render('absence/attente.html.twig', [
                 'absences' => $absences,
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -416,9 +526,19 @@ class AbsenceController extends AbstractController
         if ($this->security->isGranted('ROLE_RH')) {
             $employe = $security->getUser();
             $absences = $absenceRepository->adminAttente();
-            return $this->render('absence/admin/attente.html.twig', [
+           
+            $response = $this->render('absence/admin/attente.html.twig', [
                 'absences' => $absences,
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -439,9 +559,19 @@ class AbsenceController extends AbstractController
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
             $employe = $security->getUser();
             $absences = $absenceRepository->findAbsenceRefuser($employe);
-            return $this->render('absence/refuser.html.twig', [
+            
+            $response = $this->render('absence/refuser.html.twig', [
                 'absences' => $absences,
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -461,9 +591,19 @@ class AbsenceController extends AbstractController
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
             $employe = $security->getUser();
             $absences = $absenceRepository->findBy(['status' => true, 'justifier' => true]);
-            return $this->render('absence/admin/refuser.html.twig', [
+            
+            $response = $this->render('absence/admin/refuser.html.twig', [
                 'absences' => $absences,
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -485,9 +625,19 @@ class AbsenceController extends AbstractController
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
             $employe = $security->getUser();
             $absences = $absenceRepository->findAbsenceAccepeter($employe);
-            return $this->render('absence/accepter.html.twig', [
+           
+            $response = $this->render('absence/accepter.html.twig', [
                 'absences' => $absences,
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -508,9 +658,19 @@ class AbsenceController extends AbstractController
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
             $employe = $security->getUser();
             $absences = $absenceRepository->findBy(['status' => 1, 'justifier' => true]);
-            return $this->render('absence/admin/accepter.html.twig', [
+           
+            $response = $this->render('absence/admin/accepter.html.twig', [
                 'absences' => $absences,
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);

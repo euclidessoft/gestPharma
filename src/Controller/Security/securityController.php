@@ -326,10 +326,17 @@ class securityController extends AbstractController
                     $form->addError(new FormError('Ancien mot de passe incorrecte'));
                 }
             }
-            $response = $this->render('security/security/changepassword.html.twig', [
-                'form' => $form->createView(),
-                'panier' => $panier,
-            ]);
+            if ($this->security->isGranted('ROLE_BACK'))
+                $response = $this->render('security/security/admin/changepassword.html.twig', [
+                    'form' => $form->createView(),
+                    'panier' => $panier,
+                ]);
+                else
+                $response = $this->render('security/security/changepassword.html.twig', [
+                    'form' => $form->createView(),
+                    'panier' => $panier,
+                ]);
+
             $response->setSharedMaxAge(0);
             $response->headers->addCacheControlDirective('no-cache', true);
             $response->headers->addCacheControlDirective('no-store', true);

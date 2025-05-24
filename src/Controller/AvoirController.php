@@ -40,15 +40,35 @@ class AvoirController extends AbstractController
     public function index(AvoirRepository $avoirRepository, SessionInterface $session): Response
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
-            return $this->render('avoir/admin/index.html.twig', [
+            
+            $response = $this->render('avoir/admin/index.html.twig', [
                 'avoirs' => $avoirRepository->findAll(),
 
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } elseif ($this->security->isGranted('ROLE_CLIENT')) {
-            return $this->render('avoir/index.html.twig', [
+            
+            $response = $this->render('avoir/index.html.twig', [
                 'avoirs' => $avoirRepository->findby(['client' => $this->getUser()]),
                 'panier' => $panier = $session->get("panier", []),
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -67,7 +87,17 @@ class AvoirController extends AbstractController
     public function choix(AvoirRepository $avoirRepository): Response
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
-            return $this->render('avoir/admin/choix.html.twig');
+           
+            $response = $this->render('avoir/admin/choix.html.twig');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -86,9 +116,19 @@ class AvoirController extends AbstractController
     public function reste(LivrerRepository $repository): Response
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
-            return $this->render('avoir/admin/reste.html.twig', [
+           
+            $response = $this->render('avoir/admin/reste.html.twig', [
                 'livrers' => $repository->findBy(['reste' => true]),
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -107,9 +147,19 @@ class AvoirController extends AbstractController
     public function reclamation(ReclamationRepository $repository): Response
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
-            return $this->render('avoir/admin/reclamation.html.twig', [
+           
+            $response = $this->render('avoir/admin/reclamation.html.twig', [
                 'livrers' => $repository->findBy(['cloture' => null]),
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -323,16 +373,36 @@ class AvoirController extends AbstractController
     public function show(Avoir $avoir, AvoirResteRepository $avoirResteRepository, SessionInterface $session): Response
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
-            return $this->render('avoir/admin/show.html.twig', [
+           
+            $response = $this->render('avoir/admin/show.html.twig', [
                 'avoir' => $avoir,
                 'details' => $avoirResteRepository->findBy(['avoir' => $avoir])
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } elseif ($this->security->isGranted('ROLE_CLIENT')) {
-            return $this->render('avoir/show.html.twig', [
+            
+            $response = $this->render('avoir/show.html.twig', [
                 'avoir' => $avoir,
                 'details' => $avoirResteRepository->findBy(['avoir' => $avoir]),
                 'panier' => $session->get('panier', []),
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -351,16 +421,36 @@ class AvoirController extends AbstractController
     public function showprint(Avoir $avoir, AvoirResteRepository $avoirResteRepository, SessionInterface $session): Response
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
-            return $this->render('avoir/admin/show_print.html.twig', [
+            
+            $response = $this->render('avoir/admin/show_print.html.twig', [
                 'avoir' => $avoir,
                 'details' => $avoirResteRepository->findBy(['avoir' => $avoir])
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } elseif ($this->security->isGranted('ROLE_CLIENT')) {
-            return $this->render('avoir/show_print.html.twig', [
+          
+            $response = $this->render('avoir/show_print.html.twig', [
                 'avoir' => $avoir,
                 'details' => $avoirResteRepository->findBy(['avoir' => $avoir]),
                 'panier' => $session->get('panier', []),
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -375,33 +465,33 @@ class AvoirController extends AbstractController
         }
     }
 
-    #[Route("/{id}/edit", name :"avoir_edit", methods : ["GET","POST"]) ]
-    public function edit(Request $request, Avoir $avoir): Response
-    {
-        $form = $this->createForm(AvoirType::class, $avoir);
-        $form->handleRequest($request);
+    // #[Route("/{id}/edit", name :"avoir_edit", methods : ["GET","POST"]) ]
+    // public function edit(Request $request, Avoir $avoir): Response
+    // {
+    //     $form = $this->createForm(AvoirType::class, $avoir);
+    //     $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManager->flush();
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $this->entityManager->flush();
 
-            return $this->redirectToRoute('avoir_index', [], Response::HTTP_SEE_OTHER);
-        }
+    //         return $this->redirectToRoute('avoir_index', [], Response::HTTP_SEE_OTHER);
+    //     }
 
-        return $this->render('avoir/admin/edit.html.twig', [
-            'avoir' => $avoir,
-            'form' => $form->createView(),
-        ]);
-    }
+    //     return $this->render('avoir/admin/edit.html.twig', [
+    //         'avoir' => $avoir,
+    //         'form' => $form->createView(),
+    //     ]);
+    // }
 
-    #[Route("/{id}", name :"avoir_delete", methods : ["POST"]) ]
-    public function delete(Request $request, Avoir $avoir): Response
-    {
-        if ($this->isCsrfTokenValid('delete' . $avoir->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->entityManager;
-            $entityManager->remove($avoir);
-            $entityManager->flush();
-        }
+    // #[Route("/{id}", name :"avoir_delete", methods : ["POST"]) ]
+    // public function delete(Request $request, Avoir $avoir): Response
+    // {
+    //     if ($this->isCsrfTokenValid('delete' . $avoir->getId(), $request->request->get('_token'))) {
+    //         $entityManager = $this->entityManager;
+    //         $entityManager->remove($avoir);
+    //         $entityManager->flush();
+    //     }
 
-        return $this->redirectToRoute('avoir_index', [], Response::HTTP_SEE_OTHER);
-    }
+    //     return $this->redirectToRoute('avoir_index', [], Response::HTTP_SEE_OTHER);
+    // }
 }
