@@ -55,70 +55,92 @@
                         </div>
                     </div>
                 </div>
-                <h3 class="text-center text-uppercase font-weight-bold mt-5">
-                    Bulletin de Paie
-                </h3>
-                <p class="text-center mb-5">
-                    {{ mois.nom|trans }} {{ 'now'|date('Y') }}
-                </p>
-                <p class="mt-5">&nbsp;</p>
-                <div class="row my-5">
-                    <div class="col-7">
-                        <div class="row">
-                            <div class="col-4 text-end text-bold">
-                                {{ "Matricule : "|trans }}
-                            </div>
-                            <div class="col-8">
-                                {{ employe.matricule }}
-                            </div>
-                            <div class="col-4 text-end text-bold">
-                                {{ "Poste : "|trans }}
-                            </div>
-                            <div class="col-8">
-                                {{ employe.poste.nom }}
-                            </div>
-                            <div class="col-4 text-end text-bold">
-                                {{ "Département : "|trans }}
-                            </div>
-                            <div class="col-8">
-                                {{ employe.poste.departement.nom }}
-                            </div>
-                            <div class="col-4 text-end text-bold">
-                                {{ "Date d'embauche : "|trans }}
-                            </div>
-                            <div class="col-8">
-                                {{ employe.hireDate|date('d/m/Y') }}
-                            </div>
-                            <div class="col-4 text-end text-bold">
-                                {{ "Ancienneté : "|trans }}
-                            </div>
-                            <div class="col-8">
-                                {% set yearDiff = 'now'|date('Y') - employe.hireDate|date('Y') %}
-                                {% set monthDiff = 'now'|date('m') - employe.hireDate|date('m') + 1 %}
-                                {% if yearDiff <= 0 %}
-
-                                {% elseif yearDiff > 0  and yearDiff < 2 %}
-                                    {{ yearDiff }} {{ "an"|trans }}
-                                {% else %}
-                                    {{ yearDiff }} {{ "ans"|trans }}
-                                {% endif %}
-                                {{ monthDiff }} {{ "mois"|trans }}
-                            </div>
-                            <div class="col-4 text-end text-bold">
-                                {{ "Période : "|trans }}
-                            </div>
-                            <div class="col-8">
-                                01/04/2025 au 30/04/2025
-                            </div>
-                            <div class="col-4 text-end text-bold">
-                                {{ "Code : "|trans }}
-                            </div>
-                            <div class="col-8">
-                                {% set code = 0 %}
-                                {{ code }}
-                            </div>
-                        </div>
+                <h3 class="text-center fs-2 text-uppercase fw-bold mt-4">
+            {{ "Bulletin de Paie"|trans }}
+        </h3>
+        <p class="text-center mb-5">
+            {{ mois.nom|trans }} {{ 'now'|date('Y') }}
+        </p>
+        <div class="row my-5">
+            <div class="col-7">
+                <div class="row">
+                    <div class="col-5 text-end text-bold">
+                        {{ "Matricule : "|trans }}
                     </div>
+                    <div class="col-7">
+                        {{ employe.matricule }}
+                    </div>
+                    <div class="col-5 text-end text-bold">
+                        {{ "Catégorie : "|trans }}
+                    </div>
+                    <div class="col-7">
+                        {{ employe.categorie }} Echelle {{ employe.echelle }}
+                    </div>
+                    <div class="col-5 text-end text-bold">
+                        {{ "N° CNPS : "|trans }}
+                    </div>
+                    <div class="col-7">
+                        {{ employe.cnps }}
+                    </div>
+                    <div class="col-5 text-end text-bold">
+                        {{ "Situation matrimoniale : "|trans }}
+                    </div>
+                    <div class="col-7">
+                        {{ employe.civilite }}
+                    </div>
+                    <div class="col-5 text-end text-bold">
+                        {{ "Date d'embauche : "|trans }}
+                    </div>
+                    <div class="col-7">
+                        {{ employe.hireDate|date('d/m/Y') }}
+                    </div>
+                    <div class="col-5 text-end text-bold">
+                        {{ "Ancienneté : "|trans }}
+                    </div>
+                    <div class="col-7">
+
+                     {#}   {% if yearDiff <= 0 %}
+
+                        {% elseif yearDiff > 0  and yearDiff < 2 %}
+                            {{ yearDiff }} {{ "an"|trans }}
+                        {% else %}
+                            {{ yearDiff }} {{ "ans"|trans }}
+                        {% endif %}
+                        {{ monthDiff }} {{ "mois"|trans }}#}
+                    </div>
+                    <div class="col-5 text-end text-bold">
+                        {{ "Code d'ancienneté : "|trans }}
+                    </div>
+                    <div class="col-7">
+                        {% set code = 0 %}
+                        {{ code }}
+                    </div>
+                    <div class="col-5 text-end text-bold">
+                        {{ "Congé : "|trans }}
+                    </div>
+                    <div class="col-7">
+                   {#}     {{ "Du"|trans }} {{ conge ? conge.datedebut|date('d/m/Y') : '-' }}
+                        {{ "au"|trans }} {{ conge ? conge.datefin|date('d/m/Y') : '-' }} #}
+                    </div>
+                </div>
+            </div>
+            <div class="col-5">
+                <div class="col-12 border-green border-2 radius-10 p-4">
+                    <h4 class="text-bold text-dark">
+                        {{ employe.nom }} {{ employe.prenom }}
+                    </h4>
+                    <p class="mb-0">
+                        {{ "Fonction : "|trans }}{{ employe.poste.nom }}
+                        <br>
+                        {{ "Département : "|trans }}{{ employe.poste.departement.nom }}
+                        <br>
+                        {{ "Nº Compte banque : "|trans }} {{ employe.banque }}
+                        <br>
+                        {{ "Période du "|trans }} 01/{{ 'now'|date('m/Y') }}
+                        {{ "au"|trans }} {# {{ nbrjoursmois }} #}/{{ 'now'|date('m/Y') }}
+                    </p>
+                </div>
+            </div>
                     <div class="col-5 px-5">
                         <div class="col-12 border-green border-2 radius-10 p-4">
                             <h4 class="text-bold text-dark">
@@ -152,14 +174,14 @@
                                 <td>{% set nombre = bulletin.nbrjoursmois %} {{ nombre }}</td>
                                 {#                        <td>{% set nombre = nbrjoursmois - nombreJours %} {{ nombre }}</td>#}
                                 <td>
-                                    {% set base = employe.poste.salaire / 30 %}{{ base|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                    {% set base = employe.poste.salaire / 30 %}{{ base|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
 
                                 </td>
                                 {% set ponction= ponction + base %}
-                                {#                        <td>{% set base = employe.poste.salaire / 30 %}{{ base|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>#}
+                                {#                        <td>{% set base = employe.poste.salaire / 30 %}{{ base|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>#}
                                 <td></td>
-                                <td>{{ employe.poste.salaire|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
-                                {#                        <td>{{ (nombre * base)|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>#}
+                                <td>{{ employe.poste.salaire|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                                {#                        <td>{{ (nombre * base)|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>#}
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -168,7 +190,7 @@
                                 <td class="text-start">Prime d'ancienneté</td>
                                 <td></td>
                                 <td>
-                                    {{ employe.poste.salaire|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                    {{ employe.poste.salaire|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                 </td>
                                 <td>
                                     {% if yearDiff >= 2 %}
@@ -182,7 +204,7 @@
 
                                 </td>
                                 <td>
-                                    {{ prenciennete|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                    {{ prenciennete|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                 </td>
                                 <td></td>
                                 <td></td>
@@ -200,9 +222,9 @@
                                                        <tr class="text-end">
                                                            <td class="text-start">{{ prime.description }}</td>
                                                            <td>{{ nombre }}</td>
-                                                           <td>{{ (prime.montant / nombre)|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                                                           <td>{{ (prime.montant / nombre)|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                                                            <td></td>
-                                                           <td>{{ prime.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                                                           <td>{{ prime.montant|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                                                            <td></td>
                                                            <td></td>
                                                        </tr>
@@ -211,9 +233,9 @@
                                 <tr class="text-end">
                                     <td class="text-start">{{ prime.description }}</td>
                                     <td></td>
-                                    <td>{{ prime.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                                    <td>{{ prime.montant|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                                     <td></td>
-                                    <td>{{ prime.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                                    <td>{{ prime.montant|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                                     <td></td>
                                     <td></td>
                                 </tr>
@@ -229,9 +251,9 @@
                                 <tr class="text-end">
                                     <td class="text-start">Prime de Performence</td>
                                     <td></td>
-                                    <td>{{ bulletin.totalPrimePerf|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                                    <td>{{ bulletin.totalPrimePerf|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                                     <td></td>
-                                    <td>{{ bulletin.totalPrimePerf|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                                    <td>{{ bulletin.totalPrimePerf|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                                     <td></td>
                                     <td></td>
                                 </tr>
@@ -242,9 +264,9 @@
                                 <tr class="text-end">
                                     <td class="text-start">Heures Suplementaires</td>
                                     <td></td>
-                                    <td>{{ employe.poste.heureSup|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                                    <td>{{ employe.poste.heureSup|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                                     <td> {{ bulletin.heureSups }}</td>
-                                    <td>{{ ( employe.poste.heureSup * bulletin.heureSups )|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                                    <td>{{ ( employe.poste.heureSup * bulletin.heureSups )|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                                     <td></td>
                                     <td></td>
                                 </tr>
@@ -256,7 +278,7 @@
                                 <td>
                                     {% set  brut = employe.poste.salaire + prenciennete + totalprime + totalheuresup + bulletin.totalPrimePerf %}
                                     {% set  brutinter = brut - totalprime %}
-                                    {{ brut|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                    {{ brut|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                 </td>
                                 <td></td>
                                 <td></td>
@@ -269,7 +291,7 @@
                                     {% else %}
                                         {% set logementfisc = transport %}
                                     {% endif %}
-                                    {{ logementfisc|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                    {{ logementfisc|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                 </td>
                                 <td></td>
                                 <td></td>
@@ -283,7 +305,7 @@
                                         {% set vehiculefisc = logement %}
                                     {% endif %}
 
-                                    {{ vehiculefisc|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                    {{ vehiculefisc|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                 </td>
                                 <td></td>
                                 <td></td>
@@ -300,7 +322,7 @@
                                     {% endif %}
 
 
-                                    {{ logementcnps|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                    {{ logementcnps|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                 </td>
                                 <td></td>
                                 <td></td>
@@ -317,7 +339,7 @@
                                     {% endif %}
 
 
-                                    {{ vehiculecnps|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                    {{ vehiculecnps|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                 </td>
                                 <td></td>
                                 <td></td>
@@ -326,7 +348,7 @@
                                 <td class="text-start" colspan="4">SALAIRE Brut Taxable inter</td>
                                 <td>
 
-                                    {{ brutinter|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                    {{ brutinter|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                 </td>
                                 <td></td>
                                 <td></td>
@@ -335,7 +357,7 @@
                                 <td class="text-start" colspan="4">SALAIRE Brut Taxable</td>
                                 <td>
                                     {% set  bruttaxe = brutinter + transport + vehiculefisc %}
-                                    {{ bruttaxe|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                    {{ bruttaxe|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                 </td>
                                 <td></td>
                                 <td></td>
@@ -344,7 +366,7 @@
                                 <td class="text-start" colspan="4">Salaire Cotisable</td>
                                 <td>
                                     {% set  salairecotis = brutinter + vehiculecnps %}
-                                    {{ salairecotis|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                    {{ salairecotis|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                 </td>
                                 <td></td>
                                 <td></td>
@@ -358,11 +380,11 @@
                             {#                        <tr class="text-end">#}
                             {#                            <td class="text-start">Ponction Salariale</td>#}
                             {#                            <td></td>#}
-                            {#                            <td>{{ retenue.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>#}
+                            {#                            <td>{{ retenue.montant|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>#}
                             {#                            <td>{{ retenue.jours }}</td>#}
                             {#                            <td></td>#}
                             {#                            <td>#}
-                            {#                                {{ (retenue.montant * retenue.jours)|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}#}
+                            {#                                {{ (retenue.montant * retenue.jours)|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}#}
                             {#                            </td>#}
                             {#                            <td></td>#}
                             {#                        </tr>#}
@@ -372,7 +394,7 @@
                             <tr class="text-end">
                                 <td class="text-start">IRPP</td>
                                 <td></td>
-                                <td> {{ bruttaxe|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                                <td> {{ bruttaxe|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                                 <td></td>
                                 <td>
                                     {% if bruttaxe < 62000 %}
@@ -386,7 +408,7 @@
                                     {% elseif bruttaxe > 667001 %}
                                         {% set irpp = 70830+(bruttaxe-667000)*0.7*0.35 %}
                                     {% endif %}
-                                    {{ irpp|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                    {{ irpp|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                 </td>
                                 <td>ALLOC FAM</td>
                                 <td>
@@ -400,18 +422,18 @@
                                         {% endif %}
                                     {% endif %}
 
-                                    {{ allocation|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                    {{ allocation|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
 
                                 </td>
                             </tr>
                             <tr class="text-end">
                                 <td class="text-start">centimes additionnels</td>
                                 <td></td>
-                                <td>{{ irpp|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                                <td>{{ irpp|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                                 <td>10%</td>
                                 <td>
                                     {% set ca = irpp * 0.1 %}
-                                    {{ ca|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                                    {{ ca|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                                 <td>PENS VIEIL</td>
                                 <td>
                                     {% if code == 1 %}
@@ -424,14 +446,14 @@
                                         {% endif %}
                                     {% endif %}
 
-                                    {{ Vieillesse|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                    {{ Vieillesse|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
 
                                 </td>
                             </tr>
                             <tr class="text-end">
                                 <td class="text-start">Taxe de développement local</td>
                                 <td></td>
-                                <td>{{ bruttaxe|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                                <td>{{ bruttaxe|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                                 <td>
                                     {% if bruttaxe < 62000 %}
                                         {% set com = 0 %}
@@ -454,9 +476,9 @@
                                     {% elseif bruttaxe > 500001 %}
                                         {% set com = 2500 %}
                                     {% endif %}
-                                    {{ com|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                    {{ com|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                 </td>
-                                <td>{{ com|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                                <td>{{ com|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                                 <td>ACC TRAV</td>
                                 <td>
                                     {% if code == 1 %}
@@ -465,14 +487,14 @@
                                         {% set trav = salairecotis * 0.0175 %}
                                     {% endif %}
 
-                                    {{ trav|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                    {{ trav|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
 
                                 </td>
                             </tr>
                             <tr class="text-end">
                                 <td class="text-start">CNPS / Pension Vieillesse</td>
                                 <td></td>
-                                <td> {{ salairecotis|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                                <td> {{ salairecotis|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                                 <td>4,20%</td>
                                 <td>
 
@@ -483,20 +505,20 @@
                                     {% endif %}
 
 
-                                    {{ pv|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                    {{ pv|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                 </td>
                                 <!-- partie patronale -->
                                 <td>CREDIT FONC</td>
                                 <td>
 
                                     {% set credfonc = brut * 0.015 %}
-                                    {{ credfonc|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                    {{ credfonc|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                 </td>
                             </tr>
                             <tr class="text-end">
                                 <td class="text-start">Credit foncier</td>
                                 <td></td>
-                                <td>{{ bruttaxe|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                                <td>{{ bruttaxe|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                                 <td>1%</td>
                                 <td>
                                     {% if brutinter <= 62000 %}
@@ -505,19 +527,19 @@
                                         {% set foncier = bruttaxe * 0.01 %}
                                     {% endif %}
 
-                                    {{ foncier|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                    {{ foncier|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                 </td>
                                 <!-- partie patronale -->
                                 <td>F.N.E</td>
                                 <td>
                                     {% set fne = brut * 0.01 %}
-                                    {{ fne|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                    {{ fne|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                 </td>
                             </tr>
                             <tr class="text-end">
                                 <td class="text-start">redevance audio visuelle (CRTV)</td>
                                 <td></td>
-                                <td>{{ bruttaxe|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                                <td>{{ bruttaxe|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                                 <td></td>
                                 <td>
                                     {% set CRTV = 0 %}
@@ -553,12 +575,12 @@
                                     {% endif %}
 
                                     {# Affichage du résultat #}
-                                    {{ CRTV|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                    {{ CRTV|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
 
                                 </td>
                                 <td {# rowspan="2" #}class="text-bold text-end"> Total</td>
                                 <td {# rowspan="2" #}
-                                        class="text-bold text-end"> {{ (allocation + Vieillesse + trav + credfonc + fne)|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                                        class="text-bold text-end"> {{ (allocation + Vieillesse + trav + credfonc + fne)|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                             </tr>
                             <tr class="text-end">
                                 <td class="text-start">Acomptes sur salaires</td>
@@ -583,10 +605,10 @@
                                 <tr class="text-end">
                                     <td class="text-start">ABSENCES</td>
                                     <td></td>
-                                    <td>{{ ponction|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                                    <td>{{ ponction|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                                     <td>{{ bulletin.nombreJours }}</td>
                                     <td>
-                                        {{ (ponction * bulletin.nombreJours)|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                        {{ (ponction * bulletin.nombreJours)|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                     </td>
                                     <td></td>
                                     <td></td>
@@ -606,7 +628,7 @@
                                 <td class="text-start" colspan="4">TOTAL DES RETENUES</td>
                                 <td>
                                     {% set cotisation = irpp + ca + com + pv + foncier +CRTV + totalretenue %}
-                                    {{ cotisation|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                    {{ cotisation|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                 </td>
                                 <td></td>
                                 <td></td>
@@ -628,7 +650,7 @@
                                     <tbody>
                                     <tr class="text-end">
                                         <td colspan="2" class="text-start">Impôt sur le revenu prélevé à la source</td>
-                                        <td>{{ net|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                                        <td>{{ net|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                                         <td></td>
                                         <td>8 000</td>
                                         <td>24 000</td>
@@ -649,7 +671,7 @@
                             <div class="col-6">
                                 <h3 class="text-dark text-end text-bold">
                                     {% set net = brut - cotisation %}
-                                    {{ net|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                    {{ net|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
 
                                 </h3>
                                 {#                        <p class="text-end mb-0"> Payé le : 31/03/2025</p>#}
