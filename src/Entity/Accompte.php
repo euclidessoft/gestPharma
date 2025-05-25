@@ -29,10 +29,17 @@ class Accompte
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $date = null;
 
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTime $dateverser = null;
+
+    #[ORM\Column]
+    private ?bool $verser = null;
+
 
     public function __construct()
     {
         $this->paye = false;
+        $this->verser = false;
         $this->date = new \Datetime();
     }
 
@@ -85,6 +92,30 @@ class Accompte
     public function setDate(\DateTime $date): static
     {
         $this->date = $date;
+
+        return $this;
+    }
+
+    public function getDateverser(): ?\DateTime
+    {
+        return $this->dateverser;
+    }
+
+    public function setDateverser(?\DateTime $dateverser): static
+    {
+        $this->dateverser = $dateverser;
+
+        return $this;
+    }
+
+    public function getVerser(): ?bool
+    {
+        return $this->verser;
+    }
+
+    public function setVerser(bool $verser): static
+    {
+        $this->verser = $verser;
 
         return $this;
     }

@@ -27,9 +27,19 @@ class FournisseurController extends AbstractController
     public function index(FournisseurRepository $fournisseurRepository): Response
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
-            return $this->render('fournisseur/index.html.twig', [
+          
+            $response = $this->render('fournisseur/index.html.twig', [
                 'fournisseurs' => $fournisseurRepository->findAll(),
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -62,13 +72,33 @@ class FournisseurController extends AbstractController
                 $entityManager->persist($fournisseur);
                 $entityManager->flush();
 
-                return $this->redirectToRoute('fournisseur_index', [], Response::HTTP_SEE_OTHER);
+              
+                $response = $this->redirectToRoute('fournisseur_index', [], Response::HTTP_SEE_OTHER);
+                $response->setSharedMaxAge(0);
+                $response->headers->addCacheControlDirective('no-cache', true);
+                $response->headers->addCacheControlDirective('no-store', true);
+                $response->headers->addCacheControlDirective('must-revalidate', true);
+                $response->setCache([
+                    'max_age' => 0,
+                    'private' => true,
+                ]);
+                return $response;
             }
 
-            return $this->render('fournisseur/new.html.twig', [
+           
+            $response = $this->render('fournisseur/new.html.twig', [
                 'fournisseur' => $fournisseur,
                 'form' => $form->createView(),
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -87,9 +117,19 @@ class FournisseurController extends AbstractController
     public function show(Fournisseur $fournisseur): Response
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
-            return $this->render('fournisseur/show.html.twig', [
+           
+            $response = $this->render('fournisseur/show.html.twig', [
                 'fournisseur' => $fournisseur,
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -108,10 +148,20 @@ class FournisseurController extends AbstractController
     public function produit(Fournisseur $fournisseur, ProduitRepository $repository): Response
     {/*  selection produits a affecter a un fournisseur*/
         if ($this->security->isGranted('ROLE_FINANCE')) {
-            return $this->render('fournisseur/produit.html.twig', [
+         
+            $response = $this->render('fournisseur/produit.html.twig', [
                 'fournisseur' => $fournisseur,
                 'produits' => $repository->nonAssocier($fournisseur),
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -177,13 +227,32 @@ class FournisseurController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
                 $this->entityManager->flush();
 
-                return $this->redirectToRoute('fournisseur_index', [], Response::HTTP_SEE_OTHER);
+               
+                $response = $this->redirectToRoute('fournisseur_index', [], Response::HTTP_SEE_OTHER);
+                $response->setSharedMaxAge(0);
+                $response->headers->addCacheControlDirective('no-cache', true);
+                $response->headers->addCacheControlDirective('no-store', true);
+                $response->headers->addCacheControlDirective('must-revalidate', true);
+                $response->setCache([
+                    'max_age' => 0,
+                    'private' => true,
+                ]);
+                return $response;
             }
 
-            return $this->render('fournisseur/edit.html.twig', [
+            $response = $this->render('fournisseur/edit.html.twig', [
                 'fournisseur' => $fournisseur,
                 'form' => $form->createView(),
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -215,6 +284,7 @@ class FournisseurController extends AbstractController
         }
 
             return $this->redirectToRoute('fournisseur_index', [], Response::HTTP_SEE_OTHER);
+            
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);

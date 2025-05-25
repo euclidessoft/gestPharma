@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Complement\Solde;
 use App\Entity\Banque;
+use App\Entity\Accompte;
 use App\Entity\Debit;
 use App\Entity\Depense;
 use App\Entity\Ecriture;
@@ -11,6 +12,7 @@ use App\Entity\Paie;
 use App\Entity\PaieSalaire;
 use App\Repository\EcritureRepository;
 use App\Repository\PaieRepository;
+use App\Repository\AccompteRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityManagerInterface;
@@ -1673,10 +1675,10 @@ class FinanceController extends AbstractController
             $debitcharge->setSalaire($paieSalaire);
             $debitcharge->setMontant($paie->getTotalChargeEmploye() + $paie->getTotalchargepatronal());
 
-            $debitimpot->setCompte($banque->getCompte());
-            $debitimpot->setType('Banque');
-            $debitimpot->setSalaire($paieSalaire);
-            $debitimpot->setMontant($paie->getImpot());
+            // $debitimpot->setCompte($banque->getCompte());
+            // $debitimpot->setType('Banque');
+            // $debitimpot->setSalaire($paieSalaire);
+            // $debitimpot->setMontant($paie->getIrpp());
 
             $ecriture->setType('Banque');
             $ecriture->setComptecredit("641");
@@ -1698,24 +1700,24 @@ class FinanceController extends AbstractController
             $ecriturecharge->setMontant($paie->getTotalChargeEmploye() + $paie->getTotalChargePatronal());
             $ecriturecharge->setLibelle("Versement charge sociale");
 
-            $ecritureimpot->setType('Banque');
-            $ecritureimpot->setComptecredit("4421");
-            $ecritureimpot->setLibellecomptecredit("Impot sur les revenues");
-            $ecritureimpot->setComptedebit($banque->getCompte());
-            $ecritureimpot->setLibellecomptedebit($banque->getNom());
-            $ecritureimpot->setDebit($debitimpot);
-            $ecritureimpot->setSolde(-$paie->getImpot());
-            $ecritureimpot->setMontant($paie->getImpot());
-            $ecritureimpot->setLibelle("Versement impot sur les revenues");
+            // $ecritureimpot->setType('Banque');
+            // $ecritureimpot->setComptecredit("4421");
+            // $ecritureimpot->setLibellecomptecredit("Impot sur les revenues");
+            // $ecritureimpot->setComptedebit($banque->getCompte());
+            // $ecritureimpot->setLibellecomptedebit($banque->getNom());
+            // $ecritureimpot->setDebit($debitimpot);
+            // $ecritureimpot->setSolde(-$paie->getImpot());
+            // $ecritureimpot->setMontant($paie->getImpot());
+            // $ecritureimpot->setLibelle("Versement impot sur les revenues");
 
             $entityManager->persist($paie);
             $entityManager->persist($banque);
             $entityManager->persist($debit);
             $entityManager->persist($debitcharge);
-            $entityManager->persist($debitimpot);
+            // $entityManager->persist($debitimpot);
             $entityManager->persist($ecriture);
             $entityManager->persist($ecriturecharge);
-            $entityManager->persist($ecritureimpot);
+            // $entityManager->persist($ecritureimpot);
             $entityManager->flush();
                 $this->addFlash('notice', 'Paiement effectué avec succès');
 
@@ -1785,17 +1787,17 @@ class FinanceController extends AbstractController
                     $entityManager->flush();
 
                     $montantNet = $montantNet + $paie->getSalaireNet();
-                    $montantimpot = $montantimpot + $paie->getImpot();
+                    // $montantimpot = $montantimpot + $paie->getImpot();
                     $montantcharge = $montantcharge + $paie->getTotalChargeEmploye() + $paie->getTotalChargePatronal();
 
 
                 }
                 $debitNet = new Debit();
                 $debitCharge = new Debit();
-                $debitImpot = new Debit();
+                // $debitImpot = new Debit();
                 $ecritureNet = new Ecriture();
                 $ecritureCharge = new Ecriture();
-                $ecritureImpot = new Ecriture();
+                // $ecritureImpot = new Ecriture();
 
                 $depenseNet = new Depense();
                 $depenseNet->setUser($this->getUser());
@@ -1813,13 +1815,13 @@ class FinanceController extends AbstractController
                 $depenseCharge->setStatut("Effectuée");
                 $depenseCharge->setCompte("431");
 
-                $depenseImpot = new Depense();
-                $depenseImpot->setUser($this->getUser());
-                $depenseImpot->setType("Banque");
-                $depenseImpot->setLibelle("Versement Impot les revenues");
-                $depenseImpot->setMontant($montantimpot);
-                $depenseImpot->setStatut("Effectuée");
-                $depenseImpot->setCompte("4421");
+                // $depenseImpot = new Depense();
+                // $depenseImpot->setUser($this->getUser());
+                // $depenseImpot->setType("Banque");
+                // $depenseImpot->setLibelle("Versement Impot les revenues");
+                // $depenseImpot->setMontant($montantimpot);
+                // $depenseImpot->setStatut("Effectuée");
+                // $depenseImpot->setCompte("4421");
 
                 $debitNet->setCompte($banque->getCompte());
                 $debitNet->setType('Banque');
@@ -1831,10 +1833,10 @@ class FinanceController extends AbstractController
                 $debitCharge->setDepense($depenseCharge);
                 $debitCharge->setMontant($montantcharge);
 
-                $debitImpot->setCompte($banque->getCompte());
-                $debitImpot->setType('Banque');
-                $debitImpot->setDepense($depenseImpot);
-                $debitImpot->setMontant($montantimpot);
+                // $debitImpot->setCompte($banque->getCompte());
+                // $debitImpot->setType('Banque');
+                // $debitImpot->setDepense($depenseImpot);
+                // $debitImpot->setMontant($montantimpot);
 
                 $ecritureNet->setType('Banque');
                 $ecritureNet->setComptecredit("641");
@@ -1856,27 +1858,27 @@ class FinanceController extends AbstractController
                 $ecritureCharge->setMontant($montantcharge);
                 $ecritureCharge->setLibelle("Versement charges sociales");
 
-                $ecritureImpot->setType('Banque');
-                $ecritureImpot->setComptecredit("431");
-                $ecritureImpot->setLibellecomptecredit("Impot sur les revenues");
-                $ecritureImpot->setComptedebit($banque->getCompte());
-                $ecritureImpot->setLibellecomptedebit($banque->getNom());
-                $ecritureImpot->setDebit($debitImpot);
-                $ecritureImpot->setSolde(-$montantimpot);
-                $ecritureImpot->setMontant($montantimpot);
-                $ecritureImpot->setLibelle("Versement Impot sur les revenues");
+                // $ecritureImpot->setType('Banque');
+                // $ecritureImpot->setComptecredit("431");
+                // $ecritureImpot->setLibellecomptecredit("Impot sur les revenues");
+                // $ecritureImpot->setComptedebit($banque->getCompte());
+                // $ecritureImpot->setLibellecomptedebit($banque->getNom());
+                // $ecritureImpot->setDebit($debitImpot);
+                // $ecritureImpot->setSolde(-$montantimpot);
+                // $ecritureImpot->setMontant($montantimpot);
+                // $ecritureImpot->setLibelle("Versement Impot sur les revenues");
 
                 $entityManager->persist($depenseNet);
                 $entityManager->persist($depenseCharge);
-                $entityManager->persist($depenseImpot);
+                // $entityManager->persist($depenseImpot);
                 $entityManager->persist($debitNet);
                 $entityManager->persist($debitCharge);
-                $entityManager->persist($debitImpot);
+                // $entityManager->persist($debitImpot);
                 $entityManager->persist($ecritureNet);
                 $entityManager->persist($ecritureCharge);
-                $entityManager->persist($ecritureImpot);
+                // $entityManager->persist($ecritureImpot);
                 $entityManager->flush();
-                $this->addFlash('notice', 'Paiement effectué avec succès');
+                $this->addFlash('notice', 'Paiements effectués avec succès');
 //                    return $this->redirectToRoute('depense_index', [], Response::HTTP_SEE_OTHER);
             } else {
                 $this->addFlash('danger', 'Montant non disponible');
@@ -1907,6 +1909,117 @@ class FinanceController extends AbstractController
         }
     }
 
+    #[Route("/Accompte", name :"accompte", methods : ["GET"]) ]
+    public function accompte(AccompteRepository $repository): Response
+    {
+        if ($this->security->isGranted('ROLE_FINANCE')) {
+            $accomptes = $repository->findBy(['verser' => false]);
+            
+            $response = $this->render('finance/accompte.html.twig', [
+                'accomptes' => $accomptes,
+                'banques' => $this->entityManager->getRepository(Banque::class)->findAll(),
+            ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        } else {
+            $response = $this->redirectToRoute('security_logout');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        }
+    }
+
+    #[Route("/payeraccompte", name :"payeraccompte", methods : ["POST"]) ]
+    public function payeraccompte(Solde $solde, Request $request): Response
+    {
+        if ($this->security->isGranted('ROLE_FINANCE')) {
+            $debit = new Debit();
+            $ecriture = new Ecriture();
+            $entityManager = $this->entityManager;
+
+            $banque = $entityManager->getRepository(Banque::class)->find($request->get('banque'));
+            $accompte = $entityManager->getRepository(Accompte::class)->find($request->get('accompte'));
+           
+
+            $montant = $solde->montantbanque($entityManager, $banque->getCompte());
+
+            if ($accompte->getMontant() <= $montant) {
+
+            $depenseNet = new Depense();
+            $depenseNet->setUser($this->getUser());
+            $depenseNet->setType("Banque");
+            $depenseNet->setLibelle("Accompte sur Salaire");
+            $depenseNet->setMontant($accompte->getMontant());
+            $depenseNet->setStatut("Effectuée");
+            $depenseNet->setCompte("641");
+
+            $debit->setCompte($banque->getCompte());
+            $debit->setType('Banque');
+            $debit->setDepense($depenseNet);
+            $debit->setMontant($accompte->getMontant());
+
+
+            $ecriture->setType('Banque');
+            $ecriture->setComptecredit("641");
+            $ecriture->setLibellecomptecredit("Salaire Personnel");
+            $ecriture->setComptedebit($banque->getCompte());
+            $ecriture->setLibellecomptedebit($banque->getNom());
+            $ecriture->setDebit($debit);
+            $ecriture->setSolde(-$accompte->getMontant());
+            $ecriture->setMontant($accompte->getMontant());
+            $ecriture->setLibelle("Accompte sur salaire ".$accompte->getEmploye()->getNom(). " ".$accompte->getEmploye()->getPrenom());
+
+            $accompte->setVerser(true);
+            $entityManager->persist($accompte);
+
+            $entityManager->persist($depenseNet);
+            $entityManager->persist($debit);
+            $entityManager->persist($ecriture);
+            $entityManager->flush();
+                $this->addFlash('notice', 'Paiement effectué avec succès');
+
+//                    return $this->redirectToRoute('depense_index', [], Response::HTTP_SEE_OTHER);
+                } else {
+                    $this->addFlash('danger', 'Montant non disponible');
+                }
+
+
+
+
+            $res['id'] = 'ok';
+
+
+            $response = new Response();
+            $response->headers->set('content-type', 'application/json');
+            $re = json_encode($res);
+            $response->setContent($re);
+            return $response;
+        } else {
+            $response = $this->redirectToRoute('security_logout');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        }
+    }
 
 
 }

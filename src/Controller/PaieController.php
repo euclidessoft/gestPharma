@@ -297,10 +297,10 @@ class PaieController extends AbstractController
             foreach ($sanctions as $sanction) {
                 // calcul nombre jours
 
-                if ($sanction->getTypeSanction()->getNom() === 'Ponction Salariale') {
+                if (strtolower($sanction->getTypeSanction()) === 'ponction salariale') {
                     $nombreJours =  $nombreJours + $sanction->getNombreJours();
 //                    $montantRetenue = $montantRetenue + $salaireJournalier * $nombreJours;
-                } elseif ($sanction->getTypeSanction()->getNom() === 'Mis à pied'  || strtolower($sanction->getTypeSanction()->getNom()) === 'mis a pied') {
+                } elseif (strtolower($sanction->getTypeSanction()) === 'mis à pied'  || strtolower($sanction->getTypeSanction()) === 'mis a pied') {
                     $dateDebut = $sanction->getDateDebut();
                     $dateFin = $sanction->getDateFin();
                     $nombreJours = $nombreJours + $dateDebut->diff($dateFin)->days + 1;
@@ -314,7 +314,7 @@ class PaieController extends AbstractController
             $paie->setBrut($employe->getPoste()->getSalaire() + $montantprime + $montantheureSup + $totalPrimePerf);
             $paie->setBrutinter($paie->getBrut() - $montantprime);
 
-            $accompte= $entityManager->getRepository(Accompte::class)->findOneBy(['employe' => $employe->getId(), 'paye' => false], ['id' =>'DESC']);
+            $accompte= $entityManager->getRepository(Accompte::class)->findOneBy(['employe' => $employe->getId(), 'paye' => false, 'verser' => true], ['id' =>'DESC']);
             
             $totalAccompte= 0;
              // foreach ($accomptes as $accompte) {
@@ -793,10 +793,10 @@ class PaieController extends AbstractController
             foreach ($sanctions as $sanction) {
                 // calcul nombre jours
 
-                if (strtolower($sanction->getTypeSanction()->getNom()) === 'ponction salariale') {
+                if (strtolower($sanction->getTypeSanction()) === 'ponction salariale') {
                     $nombreJours =  $nombreJours + $sanction->getNombreJours();
 //                    $montantRetenue = $montantRetenue + $salaireJournalier * $nombreJours;
-                } elseif (strtolower($sanction->getTypeSanction()->getNom()) === 'mis à pied') {
+                } elseif (strtolower($sanction->getTypeSanction()) === 'mis à pied') {
                     $dateDebut = $sanction->getDateDebut();
                     $dateFin = $sanction->getDateFin();
                     $nombreJours = $nombreJours + $dateDebut->diff($dateFin)->days + 1;
@@ -877,7 +877,7 @@ class PaieController extends AbstractController
                 $totalPrimePerf = $totalPrimePerf + $primeP->getMontant();
             }
 
-            $accompte= $entityManager->getRepository(Accompte::class)->findOneBy(['employe' => $employe->getId(), 'paye' => false], ['id' =>'DESC']);
+            $accompte= $entityManager->getRepository(Accompte::class)->findOneBy(['employe' => $employe->getId(), 'paye' => false, 'verser' => true], ['id' =>'DESC']);
             
             $totalAccompte= 0;
              // foreach ($accomptes as $accompte) {
@@ -900,10 +900,10 @@ class PaieController extends AbstractController
             foreach ($sanctions as $sanction) {
                 // calcul nombre jours
 
-                if (strtolower($sanction->getTypeSanction()->getNom()) === 'ponction salariale') {
+                if (strtolower($sanction->getTypeSanction()) === 'ponction salariale') {
                     $nombreJours =  $nombreJours + $sanction->getNombreJours();
 //                    $montantRetenue = $montantRetenue + $salaireJournalier * $nombreJours;
-                } elseif (strtolower($sanction->getTypeSanction()->getNom()) === 'mis à pied' || strtolower($sanction->getTypeSanction()->getNom()) === 'mis a pied') {
+                } elseif (strtolower($sanction->getTypeSanction()) === 'mis à pied' || strtolower($sanction->getTypeSanction()) === 'mis a pied') {
                     $dateDebut = $sanction->getDateDebut();
                     $dateFin = $sanction->getDateFin();
                     $nombreJours = $nombreJours + $dateDebut->diff($dateFin)->days + 1;
@@ -1063,10 +1063,10 @@ class PaieController extends AbstractController
             foreach ($sanctions as $sanction) {
                 // calcul nombre jours
 
-                if (strtolower($sanction->getTypeSanction()->getNom()) === 'ponction salariale') {
+                if (strtolower($sanction->getTypeSanction()) === 'ponction salariale') {
                     $nombreJours =  $nombreJours + $sanction->getNombreJours();
 //                    $montantRetenue = $montantRetenue + $salaireJournalier * $nombreJours;
-                } elseif (strtolower($sanction->getTypeSanction()->getNom()) === 'mis à pied' || strtolower($sanction->getTypeSanction()->getNom()) === 'mis a pied') {
+                } elseif (strtolower($sanction->getTypeSanction()) === 'mis à pied' || strtolower($sanction->getTypeSanction()) === 'mis a pied') {
                     $dateDebut = $sanction->getDateDebut();
                     $dateFin = $sanction->getDateFin();
                     $nombreJours = $nombreJours + $dateDebut->diff($dateFin)->days + 1;
@@ -1081,7 +1081,7 @@ class PaieController extends AbstractController
             $paie->setBrut($employe->getPoste()->getSalaire() + $montantprime + $montantheureSup + $totalPrimePerf);
             $paie->setBrutinter($paie->getBrut() - $montantprime);
 
-            $accompte= $entityManager->getRepository(Accompte::class)->findOneBy(['employe' => $employe->getId(), 'paye' => false], ['id' =>'DESC']);
+            $accompte= $entityManager->getRepository(Accompte::class)->findOneBy(['employe' => $employe->getId(), 'paye' => false, 'verser' => true], ['id' =>'DESC']);
             
             $totalAccompte= 0;
              // foreach ($accomptes as $accompte) {

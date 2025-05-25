@@ -57,8 +57,10 @@
                 <td>{{ accompte.employe.prenom }} {{ accompte.employe.nom }}</td>
                 <td>{{ accompte.montant|number_format(0, '', ' ') }}</td>
                 <td>
+                {% if accompte.verser == 0 %}
                     <a class="btn btn-success" href="{{ path('app_accompte_edit', {'id': accompte.id}) }}"> <i class="fa fa-edit"></i> </a>
                      {{ include('accompte/_delete_form.html.twig') }}
+                {% endif%}
                 </td>
             </tr>
         {% else %}
