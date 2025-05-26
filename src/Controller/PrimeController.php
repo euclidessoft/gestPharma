@@ -23,9 +23,19 @@ class PrimeController extends AbstractController
     public function index(PrimeRepository $primeRepository): Response
     {
         if ($this->security->isGranted('ROLE_RH')) {
-            return $this->render('prime/admin/index.html.twig', [
+            
+            $response = $this->render('prime/admin/index.html.twig', [
                 'primes' => $primeRepository->findAll(),
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -47,9 +57,19 @@ class PrimeController extends AbstractController
             $entityManager = $this->entityManager;
             $employe = $security->getUser();
             $primes = $entityManager->getRepository(Prime::class)->findBy(['employe' => $employe]);
-            return $this->render('prime/index.html.twig', [
+           
+            $response = $this->render('prime/index.html.twig', [
                 'primes' => $primes,
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -78,13 +98,31 @@ class PrimeController extends AbstractController
                 $entityManager->persist($prime);
                 $entityManager->flush();
 
-                return $this->redirectToRoute('prime_index', [], Response::HTTP_SEE_OTHER);
+                $response = $this->redirectToRoute('prime_index', [], Response::HTTP_SEE_OTHER);
+                $response->setSharedMaxAge(0);
+                $response->headers->addCacheControlDirective('no-cache', true);
+                $response->headers->addCacheControlDirective('no-store', true);
+                $response->headers->addCacheControlDirective('must-revalidate', true);
+                $response->setCache([
+                    'max_age' => 0,
+                    'private' => true,
+                ]);
+                return $response;
             }
 
-            return $this->render('prime/admin/new.html.twig', [
+            $response = $this->render('prime/admin/new.html.twig', [
                 'prime' => $prime,
                 'form' => $form->createView(),
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -103,9 +141,19 @@ class PrimeController extends AbstractController
     public function show(Prime $prime): Response
     {
         if ($this->security->isGranted('ROLE_RH')) {
-            return $this->render('prime/admin/show.html.twig', [
+           
+            $response = $this->render('prime/admin/show.html.twig', [
                 'prime' => $prime,
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -130,13 +178,31 @@ class PrimeController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
                 $this->entityManager->flush();
 
-                return $this->redirectToRoute('prime_index', [], Response::HTTP_SEE_OTHER);
+                $response = $this->redirectToRoute('prime_index', [], Response::HTTP_SEE_OTHER);
+                $response->setSharedMaxAge(0);
+                $response->headers->addCacheControlDirective('no-cache', true);
+                $response->headers->addCacheControlDirective('no-store', true);
+                $response->headers->addCacheControlDirective('must-revalidate', true);
+                $response->setCache([
+                    'max_age' => 0,
+                    'private' => true,
+                ]);
+                return $response;
             }
 
-            return $this->render('prime/admin/edit.html.twig', [
+            $response = $this->render('prime/admin/edit.html.twig', [
                 'prime' => $prime,
                 'form' => $form->createView(),
             ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);
@@ -161,7 +227,16 @@ class PrimeController extends AbstractController
                 $entityManager->flush();
             }
 
-            return $this->redirectToRoute('prime_index', [], Response::HTTP_SEE_OTHER);
+            $response =  $this->redirectToRoute('prime_index', [], Response::HTTP_SEE_OTHER);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);

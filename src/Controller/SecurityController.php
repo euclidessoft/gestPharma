@@ -22,7 +22,16 @@ class SecurityController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('security/security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        $response = $this->render('security/security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        $response->setSharedMaxAge(0);
+        $response->headers->addCacheControlDirective('no-cache', true);
+        $response->headers->addCacheControlDirective('no-store', true);
+        $response->headers->addCacheControlDirective('must-revalidate', true);
+        $response->setCache([
+            'max_age' => 0,
+            'private' => true,
+        ]);
+        return $response;
     }
 
     #[Route(path: '/logout', name: 'security_logout')]

@@ -54,7 +54,7 @@
             <tr>
                 <td>{{ paies.employe.matricule }}</td>
                     <td>{{ paies.employe.nom }} {{ paies.employe.prenom }}</td>
-                    <td>{{ paies.datepaye ? paie.datepaye|date('d/m/Y') : ''}}</td>
+                    <td>{{ paies.datepaye ? paies.datepaye|date('d/m/Y') : ''}}</td>
                     <td>{{ paies.salaireBase|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} FCFA</td>
                     <td>{{ paies.salaireNet|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} FCFA</td>
                     <td>
