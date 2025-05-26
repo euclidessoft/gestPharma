@@ -45,7 +45,9 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        {{ form_row(form.recipients, {'label': 'Choisir destinataire(s)'}) }}
+                                        {# {{ form_row(form.recipients, {'label': 'Choisir destinataire(s)'}) }} #}
+                                         {{ form_widget(form.recipients) }}
+                                        {# {{ form_label(form.recipients) }} #}
 {#                                        <table class="table table-success-light table-bordered table-hover table-striped my-3" id="liste">#}
 {#                                            <thead>#}
 {#                                            <tr>#}
