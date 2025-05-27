@@ -86,7 +86,7 @@
                         <i class="fa fa-edit"></i>
                     </a>
                     <form action="{{ path('employe_toggle_status', { 'id': employe.id }) }}" method="post"
-                          class="d-inline">
+                          class="d-inline" onsubmit="return confirm('{% if employe.status %} Êtes-vous sûr de vouloir désactiver cet employé ? {% else %} Êtes-vous sûr de vouloir activer cet employé ? {% endif %}');">
                         <input type="hidden" name="_token" value="{{ csrf_token('toggle' ~ employe.id) }}">
                         <button type="submit" class="btn btn-{% if employe.status %}danger{% else %}success{% endif %}">
                             {% if employe.status %}
