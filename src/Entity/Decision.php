@@ -3,11 +3,19 @@
 namespace App\Entity;
 
 use App\Repository\DecisionRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass:DecisionRepository::class) ]
 class Decision
 {
+    const sanction = [
+
+        'Ponction Salariale' => 'Ponction Salariale',
+        'Mis à pied' => 'Mis à pied' ,
+        'Retenue sur les congès' => 'Retenue sur les congès' ,
+    ];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -35,9 +43,12 @@ class Decision
     #[ORM\Column(type:"text", nullable:true) ]
     private $demandes;
 
-    #[ORM\ManyToOne(targetEntity:TypeSanction::class, inversedBy:"decisions") ]
-#[ORM\JoinColumn(nullable:true) ]
+    #[ORM\Column(type:"string", length:255) ]
     private $typeSanction;
+
+    // #[ORM\ManyToOne(targetEntity:TypeSanction::class, inversedBy:"decisions") ]
+    // #[ORM\JoinColumn(nullable:true) ]
+    // private $typeSanction;
 
     #[ORM\Column(type:"string", length:255) ]
     private $type;
@@ -137,17 +148,17 @@ class Decision
         return $this;
     }
 
-    public function getTypeSanction(): ?TypeSanction
-    {
-        return $this->typeSanction;
-    }
+    // public function getTypeSanction(): ?TypeSanction
+    // {
+    //     return $this->typeSanction;
+    // }
 
-    public function setTypeSanction(?TypeSanction $typeSanction): self
-    {
-        $this->typeSanction = $typeSanction;
+    // public function setTypeSanction(?TypeSanction $typeSanction): self
+    // {
+    //     $this->typeSanction = $typeSanction;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getType(): ?string
     {
@@ -181,6 +192,18 @@ class Decision
     public function setDateFin(?\DateTimeInterface $dateFin): self
     {
         $this->dateFin = $dateFin;
+
+        return $this;
+    }
+
+    public function getTypeSanction(): ?string
+    {
+        return $this->typeSanction;
+    }
+
+    public function setTypeSanction(string $typeSanction): static
+    {
+        $this->typeSanction = $typeSanction;
 
         return $this;
     }

@@ -9,6 +9,13 @@ use symfony\component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass:SanctionRepository::class) ]
 class Sanction
 {
+    const type = [
+
+        'Ponction Salariale' => 'Ponction Salariale',
+        'Mis à pied' => 'Mis à pied' ,
+        'Retenue sur les congés' => 'Retenue sur les congés' ,
+    ];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -17,7 +24,11 @@ class Sanction
     #[ORM\Column(type:"datetime") ]
     private $dateCreation;
 
-    #[ORM\ManyToOne(targetEntity:TypeSanction::class, inversedBy:"sanctions") ]
+    // #[ORM\ManyToOne(targetEntity:TypeSanction::class, inversedBy:"sanctions") ]
+    // #[Assert\NotBlank(message: "Champ obligatoire") ]
+    // private $typeSanction;
+
+    #[ORM\Column(type:"string", length:255) ]
     #[Assert\NotBlank(message: "Champ obligatoire") ]
     private $typeSanction;
 
@@ -56,17 +67,17 @@ class Sanction
     }
 
 
-    public function getTypeSanction(): ?TypeSanction
-    {
-        return $this->typeSanction;
-    }
+    // public function getTypeSanction(): ?TypeSanction
+    // {
+    //     return $this->typeSanction;
+    // }
 
-    public function setTypeSanction(?TypeSanction $typeSanction): self
-    {
-        $this->typeSanction = $typeSanction;
+    // public function setTypeSanction(?TypeSanction $typeSanction): self
+    // {
+    //     $this->typeSanction = $typeSanction;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getEmploye(): ?Employe
     {
@@ -124,6 +135,19 @@ class Sanction
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+
+    public function getTypeSanction(): ?string
+    {
+        return $this->typeSanction;
+    }
+
+    public function setTypeSanction(string $typeSanction): static
+    {
+        $this->typeSanction = $typeSanction;
 
         return $this;
     }

@@ -367,9 +367,9 @@ class AbsenceController extends AbstractController
                     $sanction->setCreatedAt(new \DateTime());
                     $sanction->setTypeSanction($decision->getTypeSanction());
                     $sanction->setEmploye($employe);
-                    $typeSanction = $decision->getTypeSanction()->getNom();
+                    $typeSanction = $decision->getTypeSanction();
 
-                    if ($typeSanction === 'mis a pied') {
+                    if ($typeSanction === 'Mis à pied') {
                         $dateDebut = $decision->getDateDebut();
                         $dateFin = $decision->getDateFin();
                         $decision->setDateDebut($dateDebut);
@@ -488,7 +488,7 @@ class AbsenceController extends AbstractController
     }
 
     #[Route("/Suivi/Attente", name :"absence_employe_attente") ]
-    public function accepter(Security $security, AbsenceRepository $absenceRepository): Response
+    public function employeattente(Security $security, AbsenceRepository $absenceRepository): Response
     {
         if ($this->security->isGranted('ROLE_EMPLOYER')) {
             $employe = $security->getUser();

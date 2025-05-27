@@ -43,21 +43,21 @@
                     <ul class=" dropdown-menu" aria-labelledby="mes_affaires">
                         <li class="dropdown-item" title="{{ 'Mon contrat'|trans }}">
                             <a class="nav-link {% block mon_contrat %}{% endblock %}"
-                               href="{{ path('contrat_index') }}">
+                               href="{{ path('contrat_index_suivi') }}">
                                 <i class="fa-solid fa-address-card"></i>
                                 {{ 'Mon contrat'|trans }}
                             </a>
                         </li>
                         <li class="dropdown-item" title="{{ 'Mes fiches de paie'|trans }}">
                             <a class="nav-link {% block bulletiins %}{% endblock %}"
-                               href="{#{{ path('heure_suivi') }}#}">
+                               href="{{ path('mes_bulletins') }}">
                                 <i class="fa-solid fa-money-check-dollar"></i>
                                 {{ 'Mes fiches de paie'|trans }}
                             </a>
                         </li>
                         <li class="dropdown-item" title="{{ 'Mes primes et avantages'|trans }}">
                             <a class="nav-link {% block mes_primes %}{% endblock %}"
-                               href="{{ path('prime_index') }}">
+                               href="{{ path('prime_suivi') }}">
                                 <i class="fa-solid fa-money-bill-wheat"></i>
                                 {{ 'Primes et avantages'|trans }}
                             </a>
@@ -71,14 +71,14 @@
                         </li>
                         <li class="dropdown-item" title="{{ 'Mes absences'|trans }}">
                             <a class="nav-link {% block mes_absence %}{% endblock %}"
-                               href="{{ path('absence_index') }}">
+                               href="{{ path('absence_employe_attente') }}">
                                 <i class="fa fa-user-slash"></i>
                                 {{ 'Absences'|trans }}
                             </a>
                         </li>
                         <li class="dropdown-item" title="{{ 'Mes demande d\'explication'|trans }}">
                             <a class="nav-link {% block mes_explications %}{% endblock %}"
-                               href="{{ path('demande_index') }}">
+                               href="{{ path('demande_explication_index') }}">
                                 <i class="fa-solid fa-user-pen"></i>
                                 {{ "Demande d'explication"|trans }}
                             </a>
@@ -92,7 +92,7 @@
                         </li>
                         <li class="dropdown-item" title="{{ 'Mes performance'|trans }}">
                             <a class="nav-link {% block mes_performance %}{% endblock %}"
-                               href="{{ path('evaluation_index') }}">
+                               href="{{ path('evaluation_suivi') }}">
                                 <i class="fa-solid fa-chart-line"></i>
                                 {{ 'Performance'|trans }}
                             </a>
@@ -218,13 +218,7 @@
                     </a>
                     <ul class=" dropdown-menu" aria-labelledby="paie">
 
-                        <li class="dropdown-item" title="{{ 'Fiche de paie'|trans }}">
-                            <a class="nav-link {% block bulletin %}{% endblock %}"
-                               href="{{ path('mes_bulletins') }}">
-                                <i class="fa-solid fa-money-check-dollar"></i>
-                                {{ 'Bulletins de salaire'|trans }}
-                            </a>
-                        </li>
+                       
                         <li class="dropdown-item" title="{{ 'Fiche de paie'|trans }}">
                             <a class="nav-link {% block accompte %}{% endblock %}"
                                href="{{ path('app_accompte_index') }}">

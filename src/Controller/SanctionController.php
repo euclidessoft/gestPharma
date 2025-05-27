@@ -77,13 +77,13 @@ class SanctionController extends AbstractController
                 $sanction->setCreatedAt(new \DateTime());
                 $employe = $sanction->getEmploye();
                 $nbreJoursConges = $employe->getNombreJoursConges();
-                $typeSanction = $sanction->getTypeSanction()->getNom();
-                if ($typeSanction === 'mis a pied') {
+                $typeSanction = $sanction->getTypeSanction();
+                if ($typeSanction === 'Mis à pied') {
                     $dateDebut = $sanction->getDateDebut();
                     $dateFin = $sanction->getDateFin();
                     $nombreJours = $dateDebut->diff($dateFin)->days + 1;
                     $sanction->setNombreJours($nombreJours);
-                } elseif ($typeSanction === 'ponction salarial') {
+                } elseif ($typeSanction === 'Ponction Salariale') {
                     $sanction->setNombreJours('1');
                 } elseif ($typeSanction === 'Retenue sur les congés') {
                     $dateDebut = $sanction->getDateDebut();

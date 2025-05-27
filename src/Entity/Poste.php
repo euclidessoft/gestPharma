@@ -11,6 +11,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass:PosteRepository::class) ]
 class Poste
 {
+    const jobs = [
+
+        'ADMINISTRATEUR' => 'ADMINISTRATEUR',
+        'FINANCE' => 'FINANCE' ,
+        'RH' => 'RH' ,
+        'STOCK' => 'STOCK' ,
+        'LIVREUR' => 'LIVREUR' ,
+        'EMPLOYE' => 'EMPLOYE' ,
+    ];
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]

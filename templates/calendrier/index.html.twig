@@ -14,7 +14,9 @@
             <i class="fa fa-money-bill me-2"></i>
             {{ "Planning des congés"|trans }}
         </h3>
-        <a href="{{ path('calendrier_new') }}" class="btn btn-success"><i class="fas fa-plus"></i>Nouveau</a>
+        {% if is_granted("ROLE_RH")%}
+            <a href="{{ path('calendrier_new') }}" class="btn btn-success"><i class="fas fa-plus"></i>Nouveau</a>
+        {% endif %}
         <table class="table table-success-light table-bordered table-hover table-striped my-3" id="liste">
             <thead>
             <tr>
