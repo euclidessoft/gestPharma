@@ -992,6 +992,7 @@ class PaieController extends AbstractController
             }
             $paie->setTauxenciennete($anciennete);
             $paie->setBaseenciennete($employe->getPoste()->getSalaire());
+            $prenciennete = $employe->getPoste()->getSalaire() * $anciennete;
             $paie->setCode($yearDiff);
             $paie->setSalaireBase($employe->getPoste()->getSalaire());
             $paie->setEmploye($employe);
@@ -1078,7 +1079,7 @@ class PaieController extends AbstractController
             
             $paie->setBaseponction($ponction);
             $paie->setTauxponction($nombreJours);
-            $paie->setBrut($employe->getPoste()->getSalaire() + $montantprime + $montantheureSup + $totalPrimePerf);
+            $paie->setBrut($employe->getPoste()->getSalaire() + $prenciennete + $montantprime + $montantheureSup + $totalPrimePerf);
             $paie->setBrutinter($paie->getBrut() - $montantprime);
 
             $accompte= $entityManager->getRepository(Accompte::class)->findOneBy(['employe' => $employe->getId(), 'paye' => false, 'verser' => true], ['id' =>'DESC']);
@@ -1279,7 +1280,8 @@ class PaieController extends AbstractController
             $paie->setTotalChargeEmploye($irpp + $ca + $com + $pv + $foncier + $CRTV + $ponction * $nombreJours);
 
             // a gere plutard
-            $paie->setSalaireNet($paie->getBrut() - ( $CRTV + $foncier + $pv + $com + $ca + $irpp + $ponction * $nombreJours + $totalAccompte) );
+            $cotisationRetenue =  $CRTV + $foncier + $pv + $com + $ca + $irpp + $ponction * $nombreJours + $totalAccompte;
+            $paie->setSalaireNet($paie->getBrut() -  $cotisationRetenue);
 
             // Enregistrement dans la table paie
             

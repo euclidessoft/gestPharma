@@ -22,37 +22,37 @@ class Paie
     #[ORM\Column(type:"date") ]
     private $date;
 
-    #[ORM\Column(type:"integer") ]
+    #[ORM\Column(type:"float") ]
     private $salaireBase;
 
-    #[ORM\Column(type:"integer") ]
+    #[ORM\Column(type:"float") ]
     private $code;
 
-    #[ORM\Column(type:"integer") ]
+    #[ORM\Column(type:"float") ]
     private $jours;
    
-    #[ORM\Column(type:"integer") ]
+    #[ORM\Column(type:"float") ]
     private $baseenciennete;
 
-    #[ORM\Column(type:"integer") ]
+    #[ORM\Column(type:"float") ]
     private $tauxenciennete;
     
     #[ORM\Column(type:"text", nullable:true) ] 
     protected $indemnite;
     
-    #[ORM\Column(type:"integer", nullable:true) ] 
+    #[ORM\Column(type:"float", nullable:true) ] 
     protected $performance;
 
-    #[ORM\Column(type:"integer") ]
+    #[ORM\Column(type:"float") ]
     private $baseheuresup;
 
-    #[ORM\Column(type:"integer") ]
+    #[ORM\Column(type:"float") ]
     private $tauxheuresup;
 
-    #[ORM\Column(type:"integer") ]
+    #[ORM\Column(type:"float") ]
     private $baseponction;
 
-    #[ORM\Column(type:"integer") ]
+    #[ORM\Column(type:"float") ]
     private $tauxponction;
 
     #[ORM\Column(type:"float", nullable:true) ]
@@ -148,16 +148,16 @@ class Paie
     #[ORM\Column(type:"float", nullable:true) ]
     private $fne;
 
-    #[ORM\Column(type:"integer") ]
+    #[ORM\Column(type:"float") ]
     private $salaireNet;
 
-    #[ORM\Column(type:"integer", nullable:true) ]
+    #[ORM\Column(type:"float", nullable:true) ]
     private $accompte;
 
-    #[ORM\Column(type:"integer", nullable:true) ]
+    #[ORM\Column(type:"float", nullable:true) ]
     private $pret;
 
-    #[ORM\Column(type:"integer", nullable:true) ]
+    #[ORM\Column(type:"float", nullable:true) ]
     private $autres;
 
     #[ORM\ManyToOne(targetEntity:Mois::class, inversedBy:"paies") ]
@@ -225,60 +225,60 @@ class Paie
         return $this;
     }
 
-    public function getSalaireBase(): ?int
+    public function getSalaireBase(): ?float
     {
         return $this->salaireBase;
     }
 
-    public function setSalaireBase(int $salaireBase): static
+    public function setSalaireBase(float $salaireBase): static
     {
         $this->salaireBase = $salaireBase;
 
         return $this;
     }
 
-    public function getCode(): ?int
+    public function getCode(): ?float
     {
         return $this->code;
     }
 
-    public function setCode(int $code): static
+    public function setCode(float $code): static
     {
         $this->code = $code;
 
         return $this;
     }
 
-    public function getJours(): ?int
+    public function getJours(): ?float
     {
         return $this->jours;
     }
 
-    public function setJours(int $jours): static
+    public function setJours(float $jours): static
     {
         $this->jours = $jours;
 
         return $this;
     }
 
-    public function getBaseenciennete(): ?int
+    public function getBaseenciennete(): ?float
     {
         return $this->baseenciennete;
     }
 
-    public function setBaseenciennete(int $baseenciennete): static
+    public function setBaseenciennete(float $baseenciennete): static
     {
         $this->baseenciennete = $baseenciennete;
 
         return $this;
     }
 
-    public function getTauxenciennete(): ?int
+    public function getTauxenciennete(): ?float
     {
         return $this->tauxenciennete;
     }
 
-    public function setTauxenciennete(int $tauxenciennete): static
+    public function setTauxenciennete(float $tauxenciennete): static
     {
         $this->tauxenciennete = $tauxenciennete;
 
@@ -297,60 +297,60 @@ class Paie
         return $this;
     }
 
-    public function getPerformance(): ?int
+    public function getPerformance(): ?float
     {
         return $this->performance;
     }
 
-    public function setPerformance(?int $performance): static
+    public function setPerformance(?float $performance): static
     {
         $this->performance = $performance;
 
         return $this;
     }
 
-    public function getBaseheuresup(): ?int
+    public function getBaseheuresup(): ?float
     {
         return $this->baseheuresup;
     }
 
-    public function setBaseheuresup(int $baseheuresup): static
+    public function setBaseheuresup(float $baseheuresup): static
     {
         $this->baseheuresup = $baseheuresup;
 
         return $this;
     }
 
-    public function getTauxheuresup(): ?int
+    public function getTauxheuresup(): ?float
     {
         return $this->tauxheuresup;
     }
 
-    public function setTauxheuresup(int $tauxheuresup): static
+    public function setTauxheuresup(float $tauxheuresup): static
     {
         $this->tauxheuresup = $tauxheuresup;
 
         return $this;
     }
 
-    public function getBaseponction(): ?int
+    public function getBaseponction(): ?float
     {
         return $this->baseponction;
     }
 
-    public function setBaseponction(int $baseponction): static
+    public function setBaseponction(float $baseponction): static
     {
         $this->baseponction = $baseponction;
 
         return $this;
     }
 
-    public function getTauxponction(): ?int
+    public function getTauxponction(): ?float
     {
         return $this->tauxponction;
     }
 
-    public function setTauxponction(int $tauxponction): static
+    public function setTauxponction(float $tauxponction): static
     {
         $this->tauxponction = $tauxponction;
 
@@ -729,12 +729,12 @@ class Paie
         return $this;
     }
 
-    public function getSalaireNet(): ?int
+    public function getSalaireNet(): ?float
     {
         return $this->salaireNet;
     }
 
-    public function setSalaireNet(int $salaireNet): static
+    public function setSalaireNet(float $salaireNet): static
     {
         $this->salaireNet = $salaireNet;
 
