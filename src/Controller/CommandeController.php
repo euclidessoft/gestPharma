@@ -955,10 +955,10 @@ class CommandeController extends AbstractController
                     if($paiement->getType() == 'Espece'){
 
                         $credit->setType('Espece');
-                        $credit->setCompte(54);
+                        $credit->setCompte(571);
 
                         $ecriture->setType('Espece');
-                        $ecriture->setComptecredit(54);
+                        $ecriture->setComptecredit(571);
                         $ecriture->setLibellecomptecredit("Caisse");
                     }else{
                         $credit->setType('Banque');
@@ -1077,10 +1077,10 @@ class CommandeController extends AbstractController
                     if($versement->getType() == 'Espece'){
 
                         $credit->setType('Espece');
-                        $credit->setCompte(54);
+                        $credit->setCompte(571);
 
                         $ecriture->setType('Espece');
-                        $ecriture->setComptecredit(54);
+                        $ecriture->setComptecredit(571);
                         $ecriture->setLibellecomptecredit("Caisse");
                     }else{
                         $credit->setType('Banque');

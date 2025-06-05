@@ -81,13 +81,13 @@ class FinancementController extends AbstractController
                 $financement->setCompte('1651' . str_pad($financement->getCompte(), 2, '0', STR_PAD_LEFT));
                 $financement->setLibellecompte("Apport Exploitant");
                 if ($financement->getType() == 'Espece') {
-                    $credit->setCompte(54);
+                    $credit->setCompte(571);
                     $credit->setType('Espece');
 
 
                     $ecriture->setCredit($credit);
                     $ecriture->setType('Espece');
-                    $ecriture->setComptecredit(54);
+                    $ecriture->setComptecredit(571);
                     $ecriture->setLibellecomptecredit("Caisse");
                     $ecriture->setComptedebit($financement->getCompte());
                     $ecriture->setLibellecomptedebit($financement->getLibellecompte());

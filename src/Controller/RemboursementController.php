@@ -82,15 +82,15 @@ class RemboursementController extends AbstractController
             $montant = 0;
 
             if($remboursement->getType() == 'Espece') {
-                $montant = $solde->montantcaisse($entityManager, 54);
+                $montant = $solde->montantcaisse($entityManager, 571);
 
                     $remboursement->setType('Espece');
 
                     $debit->setType('Espece');
-                    $debit->setCompte('54');
+                    $debit->setCompte('571');
 
                     $ecriture->setType('Espece');
-                    $ecriture->setComptedebit('54');
+                    $ecriture->setComptedebit('571');
                     $ecriture->setLibellecomptedebit("Caisse");
                     $ecriture->setComptecredit($remboursement->getFinancement()->getCompte());
                     $ecriture->setLibeellecomptecredit($remboursement->getFinancement()->getLibellecompte());
@@ -254,15 +254,15 @@ class RemboursementController extends AbstractController
             $montant = 0;
 
             if($remboursement->getType() == 'Espece') {
-                $montant = $solde->montantcaisse($entityManager, 54);
+                $montant = $solde->montantcaisse($entityManager, 571);
 
                 $remboursement->setType('Espece');
 
                 $debit->setType('Espece');
-                $debit->setCompte('54');
+                $debit->setCompte('571');
 
                 $ecriture->setType('Espece');
-                $ecriture->setComptedebit('54');
+                $ecriture->setComptedebit('571');
                 $ecriture->setLibellecomptedebit('Caisse');
                 $ecriture->setComptecredit($avoir->getClient()->getCompte());
                 $ecriture->setLibellecomptecredit("Compte Client");

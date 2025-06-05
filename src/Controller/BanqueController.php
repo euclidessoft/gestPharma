@@ -134,13 +134,29 @@ class BanqueController extends AbstractController
     public function delete(Request $request, Banque $banque): Response
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
-        if ($this->isCsrfTokenValid('delete'.$banque->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->entityManager;
-            $entityManager->remove($banque);
-            $entityManager->flush();
-        }
+            try{
+                if ($this->isCsrfTokenValid('delete'.$banque->getId(), $request->request->get('_token'))) {
+                    $entityManager = $this->entityManager;
+                    $entityManager->remove($banque);
+                    $entityManager->flush();
+                }
+            }
+            catch (\Exception $exception){
+                $this->addFlash('notice', 'Impossible de supprimer pour des raisons de traçabilité');
+                return $this->redirectToRoute('banque_index', [], Response::HTTP_SEE_OTHER);
 
-        return $this->redirectToRoute('banque_index', [], Response::HTTP_SEE_OTHER);
+            }
+
+        $response = $this->redirectToRoute('banque_index', [], Response::HTTP_SEE_OTHER);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
          } else {
             $response = $this->redirectToRoute('security_logout');
             $response->setSharedMaxAge(0);

@@ -80,16 +80,16 @@ class AchatController extends AbstractController
             $achat->setUser($this->getUser());
             $montant = 0;
             if($achat->getType() == 'Espece'){
-                $montant = $solde->montantcaisse($entityManager, 54);
+                $montant = $solde->montantcaisse($entityManager, 571);
                 $achat->setCompte($achat->getFournisseur()->getCompte());
 
                 $debit->setType('Espece');
-                $debit->setCompte(54);
+                $debit->setCompte(571);
 
                 $ecriture->setType('Espece');
                 $ecriture->setComptecredit($achat->getFournisseur()->getCompte());
                 $ecriture->setLibellecomptecredit($achat->getFournisseur()->getNom());
-                $ecriture->setComptedebit(54);
+                $ecriture->setComptedebit(571);
                 $ecriture->setLibellecomptedebit("Caisse");
             }
             else{
