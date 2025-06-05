@@ -609,11 +609,11 @@
                     <tr class="text-bold text-end">
                         <td class="text-start" colspan="4">{{ "TOTAL DES RETENUES"|trans }}</td>
                         <td>
-                            {% set cotisation = irpp + ca + com + pv + foncier +CRTV + totalretenue + accompte %}
+                            {% set cotisation = irpp|round  + ca|round  + com|round  + pv|round  + foncier|round  + CRTV|round  + totalretenue + accompte %}
                             {{ cotisation|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <td></td>
-                        <td>{{ (allocation + Vieillesse + trav + credfonc + fne)|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                        <td>{{ (allocation|round  + Vieillesse|round  + trav|round  + credfonc|round  + fne|round )|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -629,7 +629,7 @@
                     </div>
                     <div class="col border-1 border-green border-start-0 bg-success-light p-3">
                         <h4 class="text-dark text-end text-bold mb-0">
-                            {% set net = brut - cotisation %}
+                            {% set net = brut|round  - cotisation %}
                             {{ net|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </h4>
                     </div>

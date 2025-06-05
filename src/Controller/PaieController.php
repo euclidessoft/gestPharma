@@ -225,7 +225,8 @@ class PaieController extends AbstractController
             }
             $paie->setTauxenciennete($anciennete);
             $paie->setBaseenciennete($employe->getPoste()->getSalaire());
-            $paie->setCode($yearDiff);
+            $paie->setCode(0);
+            $paie->setCodeanciennete($yearDiff);
             $paie->setSalaireBase($employe->getPoste()->getSalaire());
             $paie->setEmploye($employe);
             $paie->setMois($mois);
@@ -993,7 +994,8 @@ class PaieController extends AbstractController
             $paie->setTauxenciennete($anciennete);
             $paie->setBaseenciennete($employe->getPoste()->getSalaire());
             $prenciennete = $employe->getPoste()->getSalaire() * $anciennete;
-            $paie->setCode($yearDiff);
+            $paie->setCode(0);
+            $paie->setCodeanciennete($yearDiff);
             $paie->setSalaireBase($employe->getPoste()->getSalaire());
             $paie->setEmploye($employe);
             $paie->setMois($mois);

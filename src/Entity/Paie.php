@@ -202,6 +202,9 @@ class Paie
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $departement = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $codeanciennete = null;
+
     public function __construct()
     {
         $this->date = new \DateTime();
@@ -953,6 +956,18 @@ class Paie
     public function setDepartement(?string $departement): static
     {
         $this->departement = $departement;
+
+        return $this;
+    }
+
+    public function getCodeanciennete(): ?string
+    {
+        return $this->codeanciennete;
+    }
+
+    public function setCodeanciennete(string $codeanciennete): static
+    {
+        $this->codeanciennete = $codeanciennete;
 
         return $this;
     }
