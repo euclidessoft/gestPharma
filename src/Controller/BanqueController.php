@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Banque;
+use App\Entity\Compte;
 use App\Form\BanqueType;
 use App\Repository\BanqueRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -50,13 +51,19 @@ class BanqueController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->entityManager;
-            $totalbanque = $entityManager->getRepository(Banque::class)->findAll();
+           
+            // $banque->setCompte('52'.$banque->getCompte());
+            $compte= new Compte();
+            $compte->setNumero($banque->getCompte());
+            $compte->setIntitule($banque->getNom());
 
-            $banque->setCompte('52'.$banque->getCompte());
+            $entityManager->persist($compte);
             $entityManager->persist($banque);
             $entityManager->flush();
-
             return $this->redirectToRoute('banque_index', [], Response::HTTP_SEE_OTHER);
+           
+
+            
         }
 
         return $this->render('banque/new.html.twig', [

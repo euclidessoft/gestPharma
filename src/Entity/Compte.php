@@ -19,8 +19,8 @@ class Compte
     #[ORM\Column(type:"string", length:255) ]
     private $intitule;
 
-    #[ORM\Column(type:"string", length:255) ]
-    private $classe;
+    // #[ORM\Column(type:"string", length:255, nullable:"true") ]
+    // private $classe;
 
     public function getId(): ?int
     {
@@ -51,15 +51,15 @@ class Compte
         return $this;
     }
 
-    public function getClasse(): ?string
-    {
-        return $this->classe;
-    }
+    // public function getClasse(): ?string
+    // {
+    //     return $this->classe;
+    // }
 
-    public function setClasse(string $classe): self
-    {
-        $this->classe = $classe;
+    // public function setClasse(string $classe): self
+    // {
+    //     $this->classe = $classe;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 }

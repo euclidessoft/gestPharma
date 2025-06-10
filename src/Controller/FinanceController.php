@@ -1964,7 +1964,7 @@ class FinanceController extends AbstractController
             $depenseNet->setLibelle("Accompte sur Salaire");
             $depenseNet->setMontant($accompte->getMontant());
             $depenseNet->setStatut("Effectuée");
-            $depenseNet->setCompte("641");
+            $depenseNet->setCompte("421100");
 
             $debit->setCompte($banque->getCompte());
             $debit->setType('Banque');
@@ -1973,8 +1973,8 @@ class FinanceController extends AbstractController
 
 
             $ecriture->setType('Banque');
-            $ecriture->setComptecredit("641");
-            $ecriture->setLibellecomptecredit("Salaire Personnel");
+            $ecriture->setComptecredit("421100");
+            $ecriture->setLibellecomptecredit("Personnel Avances");
             $ecriture->setComptedebit($banque->getCompte());
             $ecriture->setLibellecomptedebit($banque->getNom());
             $ecriture->setDebit($debit);

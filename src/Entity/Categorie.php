@@ -33,7 +33,7 @@ class Categorie
     #[ORM\Column(type:"string", length:255) ]
     private $compte;
 
-    #[ORM\Column(type:"boolean") ]
+    #[ORM\Column(type:"boolean", nullable:true) ]
     private $actif = true;
 
     public function __construct()

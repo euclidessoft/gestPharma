@@ -7,8 +7,19 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass:FinancementRepository::class) ]
+
+#[UniqueEntity(
+fields: ['compte'],
+    message: 'Ce compte de pret existe déjà.'
+)]
+ 
+#[UniqueEntity(
+fields: ['compteinteret'],
+    message: 'Ce compte d\'interet existe déjà.'
+)]
 class Financement
 {
     #[ORM\Id]
