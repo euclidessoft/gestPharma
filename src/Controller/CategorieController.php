@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Categorie;
+use App\Entity\Compte;
 use App\Form\CategorieType;
 use App\Repository\CategorieRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -52,8 +53,8 @@ return $response;
             $entityManager = $this->entityManager;
             // $categorie->setCompte('605'.str_pad($categorie->getCompte(), 3, '0', STR_PAD_LEFT));
             $compte = new Compte();
-            $compte->setNumero($banque->getCompte());
-            $compte->setIntitule($banque->getNom());
+            $compte->setNumero($categorie->getCompte());
+            $compte->setIntitule($categorie->getNom());
 
             $entityManager->persist($compte);
             $entityManager->persist($categorie);

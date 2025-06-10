@@ -93,11 +93,11 @@ class RemboursementController extends AbstractController
                     $ecriture->setComptedebit('571');
                     $ecriture->setLibellecomptedebit("Caisse");
                     $ecriture->setComptecredit($remboursement->getFinancement()->getCompte());
-                    $ecriture->setLibeellecomptecredit($remboursement->getFinancement()->getLibellecompte());
+                    $ecriture->setLibellecomptecredit($remboursement->getFinancement()->getLibellecompte());
 
 
             }else{
-                    $montant = $solde->montantcaisse($entityManager, $remboursement->getBanque()->getCompte());
+                    $montant = $solde->montantbanque($entityManager, $remboursement->getBanque()->getCompte());
 
                     $remboursement->setType('Banque');
 
@@ -179,6 +179,7 @@ class RemboursementController extends AbstractController
 
 
             $remboursement->setType('Banque');
+            $remboursement->setBanque($remboursement->getFinancement()->getBanque());
 
             $debit->setType('Banque');
             $debit->setCompte($remboursement->getFinancement()->getBanque()->getCompte());

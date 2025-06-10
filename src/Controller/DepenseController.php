@@ -59,7 +59,7 @@ class DepenseController extends AbstractController
                 $depense->setUser($this->getUser());
                 $montant = 0;
                 if ($depense->getType() == 'Espece') {
-                    $montant = $solde->montantcaisse($entityManager, 571);
+                    $montant = $solde->montantcaisse($this->entityManager, 571);
                     $depense->setCompte($depense->getCategorie()->getCompte());
 
                     $debit->setType('Espece');
@@ -80,7 +80,7 @@ class DepenseController extends AbstractController
 
                     $ecriture->setType('Banque');
                     $ecriture->setComptecredit($depense->getCategorie()->getCompte());
-                    $ecriture->setLibelleomptecredit($depense->getCategorie()->getNom());
+                    $ecriture->setLibellecomptecredit($depense->getCategorie()->getNom());
                     $ecriture->setComptedebit($depense->getBanque()->getCompte());
                     $ecriture->setLibellecomptedebit($depense->getBanque()->getNom());
                 }

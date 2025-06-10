@@ -108,7 +108,7 @@ class FinancementController extends AbstractController
                 }
 
                 $compte = new Compte();
-                $compte->setNumero($banque->getCompte());
+                $compte->setNumero($financement->getCompte());
                 $compte->setIntitule($financement->getLibellecompte());
     
                 $entityManager->persist($compte);
