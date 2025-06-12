@@ -2020,6 +2020,35 @@ class FinanceController extends AbstractController
             return $response;
         }
     }
+    
+    #[Route("/CompteResultat", name :"Compteresultat", methods : ["POST", "GET"]) ]
+    public function CompteResultat(Solde $solde, Request $request): Response
+    {
+        if ($this->security->isGranted('ROLE_FINANCE')) {
+
+            $response = $this->render('finance/resultat.html.twig');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        } else {
+            $response = $this->redirectToRoute('security_logout');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        }
+    }
 
 
 }
