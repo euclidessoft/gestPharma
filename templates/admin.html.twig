@@ -288,6 +288,13 @@
                                 {{ 'Journal'|trans }}
                             </a>
                         </li>
+                         <li class="dropdown-item">
+                            <a class="nav-link {% block resultat %}{% endblock %}"
+                               href="{{ path('finance_Compteresultat') }}">
+                                <i class="fa-solid fa-money-bill-transfer"></i>
+                                {{ 'Compte Resultat'|trans }}
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item dropend" title="{{ 'Commande et Promotion'|trans }}">

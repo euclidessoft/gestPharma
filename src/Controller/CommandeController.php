@@ -189,6 +189,7 @@ class CommandeController extends AbstractController
 
                     $commandeproduit = new CommandeProduit($produit, $commande, $produit->getPrix(), $produit->getPrixpublic(), $product['produit']->getQuantite());
                     $commandeproduit->setTva(ceil($tva));
+                    $commandeproduit->setPght($produit->getPght());
                     if (!empty($produit->getPromotion())) {
 
                         $commandeproduit->setPromotion($produit->getPromotion());
@@ -270,6 +271,7 @@ class CommandeController extends AbstractController
 
                     $commandeproduit = new CommandeProduit($produit, $commande, $produit->getPrix(), $produit->getPrixpublic(), $product['produit']->getQuantite());
                     $commandeproduit->setTva(ceil($tva));
+                    $commandeproduit->setPght($produit->getPght());
                     if (!empty($produit->getPromotion())) {
 
                         $commandeproduit->setPromotion($produit->getPromotion());
@@ -428,7 +430,7 @@ class CommandeController extends AbstractController
 //            $panier = $session->get("panier", []);
 
             $response = $this->render('commande/admin/history.html.twig', [
-                'commandes' => $repository->findBy(['suivi' => true]),
+                'commandes' => $repository->findBy(['suivi' => true, 'payer' => true]),
 //                'panier' => $panier,
             ]);
             $response->setSharedMaxAge(0);

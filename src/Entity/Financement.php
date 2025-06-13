@@ -84,6 +84,12 @@ class Financement
     #[ORM\Column(type:"string", length:255, nullable:true) ]
     private $libellecompte;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $rembourser = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $duree = null;
+
 
     /**
      * Set motif
@@ -141,6 +147,7 @@ class Financement
         $this->date = new \Datetime();
         $this->remboursements = new ArrayCollection();
         $this->apport = true;
+        $this->rembourser = false;
         $this->taux = 0;
     }
 
@@ -291,6 +298,30 @@ class Financement
     public function setLibellecompte(?string $libellecompte): self
     {
         $this->libellecompte = $libellecompte;
+
+        return $this;
+    }
+
+    public function isRembourser(): ?bool
+    {
+        return $this->rembourser;
+    }
+
+    public function setRembourser(?bool $rembourser): static
+    {
+        $this->rembourser = $rembourser;
+
+        return $this;
+    }
+
+    public function getDuree(): ?int
+    {
+        return $this->duree;
+    }
+
+    public function setDuree(?int $duree): static
+    {
+        $this->duree = $duree;
 
         return $this;
     }

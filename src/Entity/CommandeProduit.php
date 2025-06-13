@@ -39,6 +39,9 @@ class CommandeProduit
     #[ORM\Column(type:"float") ]
     private $tva;
 
+    #[ORM\Column]
+    private ?float $pght = null;
+
     /**
      * Constructor
      */
@@ -156,6 +159,18 @@ class CommandeProduit
     public function setTva(float $tva): self
     {
         $this->tva = $tva;
+
+        return $this;
+    }
+
+    public function getPght(): ?float
+    {
+        return $this->pght;
+    }
+
+    public function setPght(float $pght): static
+    {
+        $this->pght = $pght;
 
         return $this;
     }

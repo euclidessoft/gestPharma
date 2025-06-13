@@ -57,17 +57,17 @@
                     <tr>
                         <td>RA</td>
                         <td>Ventes de marchandises</td>
-                        <td>-</td>
+                        <td>+</td>
                         <td>22</td>
-                        <td> 400 000</td>
+                        <td> {{ vente|number_format(0, '', ' ') }}</td>
                         <td>-</td>
                     </tr>
                     <tr>
                         <td>TA</td>
                         <td>Achat de marchandises</td>
-                        <td>+</td>
+                        <td>-</td>
                         <td>21</td>
-                        <td> 950 000</td>
+                        <td> {{ achat|number_format(0, '', ' ') }} </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -75,7 +75,9 @@
                         <td>Variations de stocks de marchandise</td>
                         <td>-/+</td>
                         <td>6</td>
-                        <td> </td>
+                        <td> 
+                        {{ variation|number_format(0, '', ' ') }}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -83,7 +85,10 @@
                         <th class="text-center">MARGE COMMERCIALE</th>
                         <td></td>
                         <td></td>
-                        <th> 550 000</th>
+                        <th> 
+                        {% set xa = vente - achat - variation %}
+                        {{ xa|number_format(0, '', ' ') }}
+                        </th>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -91,7 +96,9 @@
                         <td>Ventes de produits fabriqués</td>
                         <td>+</td>
                         <td>21</td>
-                        <td> </td>
+                        <td> 
+                        {% set tb = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -99,7 +106,9 @@
                         <td>Travaux, services vendus</td>
                         <td>+</td>
                         <td>21</td>
-                        <td> </td>
+                        <td> 
+                        {% set tc = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -107,15 +116,19 @@
                         <td>Produits accessoires</td>
                         <td>+</td>
                         <td>21</td>
-                        <td> </td>
+                       <td> 
+                        {% set td = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
                         <td>XB</td>
                         <th class="text-center">CHIFFRE D'AFFAIRES (A+B+C+D)</th>
                         <td></td>
-                        <td></td>
-                        <th> 950 000</th>
+                       <td> 
+                        {% set xb = vente + tb + tc + td  %}
+                        </td>
+                        <th> {{ vente|number_format(0, '', ' ') }} </th>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -123,7 +136,9 @@
                         <td>Production stockée (ou déstockage)</td>
                         <td>-/+</td>
                         <td>6</td>
-                        <td> </td>
+                        <td> 
+                        {% set te = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -131,7 +146,9 @@
                         <td>Production immobilisée</td>
                         <td>+</td>
                         <td>21</td>
-                        <td>-</td>
+                        <td> 
+                        {% set tf = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -139,7 +156,9 @@
                         <td>Subventions d'exploitation</td>
                         <td>+</td>
                         <td>21</td>
-                        <td>-</td>
+                        <td> 
+                        {% set tg = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -147,7 +166,9 @@
                         <td>Autres produits</td>
                         <td>+</td>
                         <td>21</td>
-                        <td>-</td>
+                        <td> 
+                        {% set th = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -155,7 +176,9 @@
                         <td>Transferts de charges d'exploitation</td>
                         <td>+</td>
                         <td>12</td>
-                        <td>-</td>
+                       <td> 
+                        {% set ti = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -163,7 +186,9 @@
                         <td>Achats de matières premières et fournitures liées</td>
                         <td>-</td>
                         <td>22</td>
-                        <td></td>
+                        <td> 
+                        {% set rc = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -171,7 +196,9 @@
                         <td>Variations de stocks de matières premières et fournitures liées</td>
                         <td>-/+</td>
                         <td>6</td>
-                        <td></td>
+                       <td> 
+                        {% set rd = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -179,7 +206,9 @@
                         <td>Reprises d'amortissements, provisions et dépreciations et subvention d'investissements</td>
                         <td>-</td>
                         <td>22</td>
-                        <td></td>
+                        <td> 
+                        {% set re = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -187,7 +216,9 @@
                         <td>Variation de stocks d'autres approvisionnements</td>
                         <td>-/=</td>
                         <td>6</td>
-                        <td></td>
+                        <td> 
+                        {% set rf = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -195,7 +226,9 @@
                         <td>Transports</td>
                         <td>-</td>
                         <td>23</td>
-                        <td></td>
+                        <td> 
+                        {% set rg = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -203,7 +236,9 @@
                         <td>Services extérieurs</td>
                         <td>-</td>
                         <td>24</td>
-                        <td></td>
+                       <td> 
+                        {% set rh = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -211,7 +246,9 @@
                         <td>Impôts et taxes</td>
                         <td>-</td>
                         <td>25</td>
-                        <td></td>
+                        <td> 
+                        {% set ri = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -219,7 +256,9 @@
                         <td>Autres charges</td>
                         <td>-</td>
                         <td>26</td>
-                        <td></td>
+                        <td> 
+                        {% set rj = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -227,7 +266,10 @@
                         <th class="text-center">VALEUR AJOUTEE  (XB+RA+RB)+Somme (TE à RJ)</th>
                         <td></td>
                         <td></td>
-                        <th> 550 000</th>
+                        <th>
+                        {% set xc = xa + tb + tc + td + te + tf + tg + th + ti - (rc + rd + re + rf + rg + rh + ri + rj ) %}
+                         {{ xc|number_format(0, '', ' ')}}
+                         </th>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -235,7 +277,7 @@
                         <td>Charges de personnel</td>
                         <td>-</td>
                         <td>27</td>
-                        <td>240 000</td>
+                        <td>{{ chargepersonnel|number_format(0,'', ' ') }}</td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -243,7 +285,10 @@
                         <th class="text-center">EXCEDENT BRUT D'EXPLOITATION (XC-RK)</th>
                         <td></td>
                         <td>28</td>
-                        <th> 310 000</th>
+                        <th> 
+                        {% set xd = xc - chargepersonnel %}
+                        {{ xd|number_format(0,'', ' ') }}
+                        </th>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -251,7 +296,9 @@
                         <td>Reprises d'amortissements, provisions et dépreciations et subvention d'investissements</td>
                         <td>+</td>
                         <td>28</td>
-                        <td>-</td>
+                       <td> 
+                        {% set tj = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -259,7 +306,9 @@
                         <td>Dotations aux amortissements et aux  provisions et dépréciations</td>
                         <td>-</td>
                         <td>3C&28</td>
-                        <td>-</td>
+                        <td> 
+                        {% set rl = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -267,7 +316,10 @@
                         <th class="text-center">RESULTAT D'EXPLOITATION (XD+TJ+RL)</th>
                         <td></td>
                         <td></td>
-                        <th> 310 000</th>
+                        <th>
+                        {% set xe = xd + tj + rl %}
+                        {{ xe|number_format(0,'', ' ') }}
+                        </th>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -275,7 +327,9 @@
                         <td>Revenus financiers et assimilés</td>
                         <td>+</td>
                         <td>29</td>
-                        <td></td>
+                        <td> 
+                        {% set tk = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -283,7 +337,9 @@
                         <td>Reprises de provisions et dépréciations financières</td>
                         <td>+</td>
                         <td>28</td>
-                        <td></td>
+                        <td> 
+                        {% set tl = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -291,7 +347,9 @@
                         <td>Transferts de charges financières</td>
                         <td>+</td>
                         <td>12</td>
-                        <td></td>
+                        <td> 
+                        {% set tm = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -299,7 +357,7 @@
                         <td>Frais financiers et charges assimilées</td>
                         <td>-</td>
                         <td>29</td>
-                        <td>1 500</td>
+                        <td>{{interet|number_format(0, '', ' ')}}</td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -307,7 +365,7 @@
                         <td>Dotations aux provisions et aux dépréciations financières</td>
                         <td>-</td>
                         <td>3C&28</td>
-                        <td>2 083</td>
+                        <td>{{ amortissement|number_format(0, '', ' ')}} </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -315,7 +373,10 @@
                         <th class="text-center">RESULTAT FINANCIER (somme TK à RN)</th>
                         <td></td>
                         <td></td>
-                        <th> (3 583)</th>
+                        <th> 
+                        {% set xf = tk + tl + tm - (interet + amortissement) %}
+                        {{ xf|number_format(0, '', ' ') }}
+                        </th>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -323,7 +384,10 @@
                         <th class="text-center">RESULTAT DES ACTIVITES ORDINAIRES (XE+XF)</th>
                         <td></td>
                         <td></td>
-                        <th> 306 417</th>
+                        <th> 
+                        {% set xg = xe + xf %}
+                        {{ xg|number_format(0, '', ' ') }}
+                        </th>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -331,7 +395,9 @@
                         <td>Produits des cessions d'immobilisations</td>
                         <td>+</td>
                         <td>3D</td>
-                        <td></td>
+                        <td> 
+                        {% set tn = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -339,7 +405,9 @@
                         <td>Autres Produits H.A.O.</td>
                         <td>+</td>
                         <td>30</td>
-                        <td></td>
+                       <td> 
+                        {% set to = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -347,7 +415,9 @@
                         <td>Valeurs comptables des cessions d'immobilisations</td>
                         <td>-</td>
                         <td>3D</td>
-                        <td></td>
+                       <td> 
+                        {% set ro = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -355,7 +425,9 @@
                         <td>Autres Charges H.A.O</td>
                         <td>-</td>
                         <td>30</td>
-                        <td></td>
+                        <td> 
+                        {% set rp = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -363,7 +435,9 @@
                         <th class="text-center">RESULTAT HORS ACTIVITES ORDINAIRES (somme TN à RP)</th>
                         <td></td>
                         <td></td>
-                        <th>-</th>
+                        <td> 
+                        {% set xh = ( tn + to ) - ( ro + rp) %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -371,7 +445,9 @@
                         <td>Participation des travailleurs</td>
                         <td>-</td>
                         <td>30</td>
-                        <td></td>
+                        <td> 
+                        {% set rq = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -379,7 +455,9 @@
                         <td>Impôts sur le résultat</td>
                         <td>-</td>
                         <td></td>
-                        <td></td>
+                        <td> 
+                        {% set rs = 0 %}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -387,7 +465,10 @@
                         <th class="text-center">RESULTAT NET (XG+XH+RQ+RS)</th>
                         <td></td>
                         <td></td>
-                        <th>306 417</th>
+                        <th>
+                        {% set xi = xg + xh - rq - rs %}
+                        {{ xi|number_format(0, '', ' ')}}
+                        </th>
                         <td>-</td>
                     </tr>
                     
