@@ -16,10 +16,6 @@ fields: ['compte'],
     message: 'Ce compte de pret existe déjà.'
 )]
  
-#[UniqueEntity(
-fields: ['compteinteret'],
-    message: 'Ce compte d\'interet existe déjà.'
-)]
 class Financement
 {
     #[ORM\Id]

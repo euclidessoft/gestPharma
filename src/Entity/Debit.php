@@ -22,7 +22,7 @@ class Debit
 
 
 
-    #[ORM\Column(type:"integer") ]
+    #[ORM\Column(type:"float") ]
     private $montant;
 
     #[ORM\Column(type:"string", length:255) ]
@@ -81,12 +81,12 @@ class Debit
         return $this;
     }
 
-    public function getMontant(): ?int
+    public function getMontant(): ?float
     {
         return $this->montant;
     }
 
-    public function setMontant(int $montant): self
+    public function setMontant(float $montant): self
     {
         $this->montant = $montant;
 
