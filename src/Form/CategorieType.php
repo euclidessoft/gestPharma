@@ -16,6 +16,7 @@ class CategorieType extends AbstractType
             ->add('nom')
             ->add('compte')
             ->add('description')
+            ->add('amortissement')
             // ->add('actif', ChoiceType::class, [
             //     'label' => 'Categorie de la ligne',
             //     'choices' => [

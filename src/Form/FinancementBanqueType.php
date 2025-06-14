@@ -16,7 +16,6 @@ class FinancementBanqueType extends AbstractType
     {
         $builder
             ->add('compte')
-            ->add('compteinteret')
             ->add('motif')
             ->add('montant')
             ->add('taux')

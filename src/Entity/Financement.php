@@ -78,8 +78,8 @@ class Financement
     #[ORM\Column(type:"float") ]
     private $taux;
 
-    #[ORM\Column(type:"integer", nullable:true) ]
-    private $compteinteret;
+    // #[ORM\Column(type:"integer", nullable:true) ]
+    // private $compteinteret;
 
     #[ORM\Column(type:"string", length:255, nullable:true) ]
     private $libellecompte;
@@ -278,17 +278,17 @@ class Financement
         return $this;
     }
 
-    public function getCompteinteret(): ?int
-    {
-        return $this->compteinteret;
-    }
+    // public function getCompteinteret(): ?int
+    // {
+    //     return $this->compteinteret;
+    // }
 
-    public function setCompteinteret(int $compteinteret): self
-    {
-        $this->compteinteret = $compteinteret;
+    // public function setCompteinteret(int $compteinteret): self
+    // {
+    //     $this->compteinteret = $compteinteret;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getLibellecompte(): ?string
     {

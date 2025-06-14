@@ -319,7 +319,6 @@ class ApprovisionnementController extends AbstractController
                         $fact[$idfourn] =[
                             "montant" => $fact[$idfourn]["montant"] + $produit->getPght() * $quantite,
                         ];
-                        $listfournisseur[]= $idfourn;
 
                     }else{
                         $fact[$idfourn] =[

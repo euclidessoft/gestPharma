@@ -46,6 +46,8 @@
             </thead>
             <tbody>
             {% set montant = 0 %}
+            {% set chargeSalarial = 0 %}
+            {% set chargePatronal = 0 %}
             {% for paie in paies %}
                 <tr id="tr{{ paie.id }}">
                     <td>{{ paie.employe.matricule }}</td>
@@ -53,7 +55,7 @@
                     <td>{{ paie.date|date('d/m/Y') }}</td>
                     <td>{{ paie.salaireBase|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} FCFA</td>
                     <td>{{ paie.salaireNet|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} FCFA</td>
-                    <td>{{ paie.totalChargeEMploye|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} FCFA</td>
+                    <td>{{ paie.totalChargeEmploye|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} FCFA</td>
                     <td>{{ paie.totalchargepatronal|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} FCFA</td>
                     <td>
                         <button type="button" class="btn btn-green" data-bs-toggle="modal" data-bs-target="#modal{{ paie.id }}" id="btn{{ paie.id }}">
@@ -101,7 +103,9 @@
                         </div>
 
                     </td>
-                    {% set montant = montant + paie.salairenet + paie.totalchargepatronal %}
+                    {% set montant = montant + paie.salairenet %}
+                    {% set chargeSalarial = chargeSalarial + paie.totalChargeEmploye %}
+                    {% set chargePatronal = chargePatronal + paie.totalchargepatronal %}
                 </tr>
             {% endfor %}
          
@@ -111,15 +115,19 @@
            <table class="table table-success-light table-bordered table-hover table-striped my-3">
              <tr>
           <th class="text-center">
-                 {{ "Salaires"|trans }}: {{ montant|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} FCFA
+                 {{ "Salaires Nets"|trans }}: {{ montant|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} FCFA
                    
                 </th>
           <th class="text-center">
-                   {{ "Charges Salariales"|trans }}: {{ montant|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} FCFA
+                   {{ "Charges Salariales"|trans }}: {{ chargeSalarial|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} FCFA
                    
                 </th>
                 <th class="text-center">
-                   {{ "Charges Patronales"|trans }}: {{ montant|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} FCFA
+                   {{ "Charges Patronales"|trans }}: {{ chargePatronal|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} FCFA
+                   
+                </th>
+                 <th class="text-center">
+                   {{ "Total"|trans }}: {{ ( montant + chargePatronal + chargeSalarial)|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} FCFA
                    
                 </th>
                 <th>

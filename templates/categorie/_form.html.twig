@@ -11,23 +11,26 @@
     <div class="row">
  
         <div class="col-12 mb-4">
-            {{ form_row(form.nom, {'attr': {'placeholder': 'Nom ligne de dépense *'}, 'label': false}) }}
+            {{ form_row(form.nom, {'attr': {'placeholder': 'libele ligne de dépense *'}, 'label': 'libele ligne de dépense *'}) }}
         </div>
 
         <div class="col-12 mb-4">
-{#            {{ form_row(form.compte, {'attr': {'placeholder': 'Numéro de compte  *'}, 'label': false}) }}#}
-            <div class="input-group">
+           {{ form_row(form.compte, {'attr': {'placeholder': 'Numéro de compte  *'}, 'label': 'Numéro compte *'}) }}
+            {# <div class="input-group">
                 {# <div class="input-group-prepend">
                     <span class="input-group-text">
                         605
                     </span>
-                </div> #}
-                {{form_widget(form.compte, {'attr':{'placeholder':'Numéro compte *'}, 'label':false}) }}
+                </div>
+                {{form_widget(form.compte, {'attr':{'placeholder':'Numéro compte *'}, 'label':'Numéro compte *'}) }} #}
             </div>
         </div>
 
         <div class="col-12 mb-4">
-            {{ form_row(form.description, {'attr': {'placeholder': 'Description *'}, 'label': false}) }}
+            {{ form_row(form.description, {'attr': {'placeholder': 'Description *'}, 'label': 'Description *'}) }}
+        </div>
+        <div class="col-12 mb-4">
+            {{ form_row(form.amortissement, {'attr': {'placeholder': 'Amortissement en annee'}, 'label': 'Amortissement en annee' }) }}
         </div>
     </div>
 
