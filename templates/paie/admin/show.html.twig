@@ -149,7 +149,7 @@
                             {% set base = employe.poste.salaire / 30 %}{{ base|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
 
                         </td>
-                        {% set ponction= ponction + base %}
+                        {% set ponction = ponction + base %}
                         {#                        <td>{% set base = employe.poste.salaire / 30 %}{{ base|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>#}
                         <td></td>
                         <td>{{ employe.poste.salaire|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
@@ -171,7 +171,7 @@
                                 {% set anciennete = 0 %}
                             {% endif %}
                             {{ anciennete }}%
-                            {% set prenciennete = employe.poste.salaire * anciennete %}
+                            {% set prenciennete = employe.poste.salaire|round * anciennete %}
 
                         </td>
                         <td>
@@ -238,10 +238,10 @@
                             <td>
                             {% if employe.poste.heureSup is not null%}
                                 {{ employe.poste.heureSup|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
-                               {% set totalheuresup = employe.poste.heureSup * heureSups %}
+                               {% set totalheuresup = employe.poste.heureSup|round * heureSups %}
                             {% else %}
                                 {{ (employe.poste.salaire / 173.33)|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
-                               {% set totalheuresup = (employe.poste.salaire / 173.33) * heureSups %}
+                               {% set totalheuresup = (employe.poste.salaire / 173.33)|round * heureSups %}
                             {% endif %}
                             </td>
                             <td> {{ heureSups }}</td>
@@ -255,8 +255,8 @@
                     <tr class="text-bold text-end">
                         <td class="text-start" colspan="4">{{ "SALAIRE BRUT"|trans }}</td>
                         <td>
-                            {% set  brut = employe.poste.salaire + prenciennete + totalprime + totalheuresup + totalPrimePerf %}
-                            {% set  brutinter = brut - totalprime %}
+                            {% set  brut = (employe.poste.salaire + prenciennete + totalprime + totalheuresup + totalPrimePerf)|round %}
+                            {% set  brutinter = (brut - totalprime)|round %}
                             {{ brut|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <td></td>
@@ -266,9 +266,9 @@
                         <td class="text-start" colspan="4">{{ "Logement FISC"|trans }}</td>
                         <td>
                             {% if brutinter * 0.15 <= logement %}
-                                {% set logementfisc = brutinter * 0.15 %}
+                                {% set logementfisc = (brutinter * 0.15)|round %}
                             {% else %}
-                                {% set logementfisc = logement %}
+                                {% set logementfisc = logement|round %}
                             {% endif %}
                             {{ logementfisc|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
@@ -279,9 +279,9 @@
                         <td class="text-start" colspan="4">{{ "Véhicule FISC"|trans }}</td>
                         <td>
                             {% if brutinter * 0.1 <= transport %}
-                                {% set vehiculefisc = brutinter * 0.1 %}
+                                {% set vehiculefisc = (brutinter * 0.1)|round %}
                             {% else %}
-                                {% set vehiculefisc = transport %}
+                                {% set vehiculefisc = transport|round %}
                             {% endif %}
 
                             {{ vehiculefisc|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
@@ -301,7 +301,7 @@
                             {% endif %}                                                                        #}
 
                             {% if brutinter * 0.15 <= logement %}
-                                {% set logementcnps = logement - (brutinter * 0.15) %}
+                                {% set logementcnps = (logement - (brutinter * 0.15))|round %}
                             {% elseif brutinter * 0.15 >= logement %}
                                 {% set logementcnps = 0 %}
                             {% endif %}
@@ -325,7 +325,7 @@
                             {% endif %}                                                                                     #}
 
                             {% if brutinter * 0.1 <= transport %}
-                                {% set vehiculecnps = transport - (brutinter * 0.1) %}
+                                {% set vehiculecnps = (transport - (brutinter * 0.1))|round %}
                             {% elseif brutinter * 0.1 > transport %}
                                 {% set vehiculecnps = 0 %}
                             {% endif %}
@@ -386,6 +386,7 @@
                             {% elseif bruttaxe > 667001 %}
                                 {% set irpp = 70830+(bruttaxe-667000)*0.7*0.35 %}
                             {% endif %}
+                            {% set irpp = irpp|round %}
                             {{ irpp|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <td>ALLOC FAM</td>
@@ -399,7 +400,7 @@
                                     {% set allocation = 750000 * 0.07 %}
                                 {% endif %}
                             {% endif %}
-
+                            {% set allocation = allocation|round %}
                             {{ allocation|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
 
                         </td>
@@ -410,7 +411,7 @@
                         <td>{{ irpp|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                         <td>10%</td>
                         <td>
-                            {% set ca = irpp * 0.1 %}
+                            {% set ca = (irpp * 0.1)|round %}
                             {{ ca|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                         <td>PENS VIEIL</td>
                         <td>
@@ -423,7 +424,7 @@
                                     {% set Vieillesse = 750000 * 0.042 %}
                                 {% endif %}
                             {% endif %}
-
+                            {% set Vieillesse = Vieillesse|round %}
                             {{ Vieillesse|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
 
                         </td>
@@ -465,6 +466,8 @@
                                 {% set trav = salairecotis * 0.0175 %}
                             {% endif %}
 
+                            {% set trav = trav|round %}
+
                             {{ trav|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
 
                         </td>
@@ -484,14 +487,14 @@
                                 {% set pv = 750000 * 0.042 %}
                             {% endif %}
 
-
+                            {% set pv = pv|round %}
                             {{ pv|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <!-- partie patronale -->
                         <td>{{ "CREDIT FONC"|trans }}</td>
                         <td>
 
-                            {% set credfonc = brut * 0.015 %}
+                            {% set credfonc = (brut * 0.015)|round %}
                             {{ credfonc|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                     </tr>
@@ -506,13 +509,14 @@
                             {% else %}
                                 {% set foncier = bruttaxe * 0.01 %}
                             {% endif %}
+                            {% set foncier = foncier|round %}
 
                             {{ foncier|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <!-- partie patronale -->
                         <td>F.N.E</td>
                         <td>
-                            {% set fne = brut * 0.01 %}
+                            {% set fne = (brut * 0.01)|round %}
                             {{ fne|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                     </tr>
@@ -595,7 +599,7 @@
                             <td></td>
                             <td></td>
                         </tr>
-                        {% set totalretenue = ponction * nombreJours %}
+                        {% set totalretenue = ponction|round * nombreJours %}
                     {% endif %}
                     <tr class="text-end">
                         <td class="text-start">{{ "Autres Retenus"|trans }}</td>
@@ -609,11 +613,11 @@
                     <tr class="text-bold text-end">
                         <td class="text-start" colspan="4">{{ "TOTAL DES RETENUES"|trans }}</td>
                         <td>
-                            {% set cotisation = irpp|round  + ca|round  + com|round  + pv|round  + foncier|round  + CRTV|round  + totalretenue + accompte %}
+                            {% set cotisation = irpp  + ca  + com  + pv  + foncier  + CRTV  + totalretenue + accompte %}
                             {{ cotisation|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <td></td>
-                        <td>{{ (allocation|round  + Vieillesse|round  + trav|round  + credfonc|round  + fne|round )|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                        <td>{{ (allocation  + Vieillesse  + trav  + credfonc  + fne )|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -629,7 +633,7 @@
                     </div>
                     <div class="col border-1 border-green border-start-0 bg-success-light p-3">
                         <h4 class="text-dark text-end text-bold mb-0">
-                            {% set net = brut|round  - cotisation %}
+                            {% set net = brut  - cotisation %}
                             {{ net|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </h4>
                     </div>
