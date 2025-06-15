@@ -83,10 +83,10 @@
                     <tr>
                         <td>XA</td>
                         <th class="text-center">MARGE COMMERCIALE</th>
-                        <td></td>
+                        <td>{{ charge }}</td>
                         <td></td>
                         <th> 
-                        {% set xa = vente - achat - variation %}
+                        {% set xa = vente - (achat - variation) %}
                         {{ xa|number_format(0, '', ' ') }}
                         </th>
                         <td>-</td>
@@ -357,7 +357,10 @@
                         <td>Frais financiers et charges assimilées</td>
                         <td>-</td>
                         <td>29</td>
-                        <td>{{interet|number_format(0, '', ' ')}}</td>
+                        <td>
+                        {% set rm = interet + charge %}
+                        {{rm|number_format(0, '', ' ')}}
+                        </td>
                         <td>-</td>
                     </tr>
                     <tr>
@@ -374,7 +377,7 @@
                         <td></td>
                         <td></td>
                         <th> 
-                        {% set xf = tk + tl + tm - (interet + amortissement) %}
+                        {% set xf = tk + tl + tm - (rm + amortissement) %}
                         {{ xf|number_format(0, '', ' ') }}
                         </th>
                         <td>-</td>
