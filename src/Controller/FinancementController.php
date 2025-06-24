@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Credit;
+use App\Entity\Compte;
 use App\Entity\Ecriture;
 use App\Entity\Financement;
 use App\Form\FinancementType;
@@ -78,16 +79,16 @@ class FinancementController extends AbstractController
                 $credit->setFinancement($financement);// ecriture comptable
                 $credit->setMontant($financement->getMontant());
 
-                $financement->setCompte('1651' . str_pad($financement->getCompte(), 2, '0', STR_PAD_LEFT));
+                // $financement->setCompte('1651' . str_pad($financement->getCompte(), 2, '0', STR_PAD_LEFT));
                 $financement->setLibellecompte("Apport Exploitant");
                 if ($financement->getType() == 'Espece') {
-                    $credit->setCompte(54);
+                    $credit->setCompte(571);
                     $credit->setType('Espece');
 
 
                     $ecriture->setCredit($credit);
                     $ecriture->setType('Espece');
-                    $ecriture->setComptecredit(54);
+                    $ecriture->setComptecredit(571);
                     $ecriture->setLibellecomptecredit("Caisse");
                     $ecriture->setComptedebit($financement->getCompte());
                     $ecriture->setLibellecomptedebit($financement->getLibellecompte());
@@ -106,6 +107,11 @@ class FinancementController extends AbstractController
                     $ecriture->setLibellecomptedebit($financement->getLibellecompte());
                 }
 
+                $compte = new Compte();
+                $compte->setNumero($financement->getCompte());
+                $compte->setIntitule($financement->getLibellecompte());
+    
+                $entityManager->persist($compte);
 
                 $ecriture->setMontant($financement->getMontant());
                 $ecriture->setLibelle($financement->getMotif());
@@ -152,10 +158,10 @@ class FinancementController extends AbstractController
                 $credit = new Credit();
                 $credit->setFinancement($financement);// ecriture comptable
                 $credit->setMontant($financement->getMontant());
-                $num = $financement->getCompte();
-                $financement->setCompte('162' . str_pad($num, 2, '0', STR_PAD_LEFT));
+                // $num = $financement->getCompte();
+                // $financement->setCompte('162' . str_pad($num, 2, '0', STR_PAD_LEFT));
                 $financement->setLibellecompte("Pret Bancaire");
-                $financement->setCompteinteret('674' . str_pad($num, 2, '0', STR_PAD_LEFT));
+                // $financement->setCompteinteret('674' . str_pad($num, 2, '0', STR_PAD_LEFT));
                 $financement->setApport(false);
                 $financement->setType('Banque');
 

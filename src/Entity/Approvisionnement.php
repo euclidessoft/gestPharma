@@ -39,6 +39,9 @@ class Approvisionnement
     #[ORM\ManyToOne(targetEntity:Fournisseur::class, inversedBy:"approvisionnements") ]
     private $fournisseur;
 
+    #[ORM\Column]
+    private ?float $pght = null;
+
     /**
      * Constructor
      */
@@ -150,6 +153,18 @@ class Approvisionnement
     public function setFournisseur(?Fournisseur $fournisseur): self
     {
         $this->fournisseur = $fournisseur;
+
+        return $this;
+    }
+
+    public function getPght(): ?float
+    {
+        return $this->pght;
+    }
+
+    public function setPght(float $pght): static
+    {
+        $this->pght = $pght;
 
         return $this;
     }

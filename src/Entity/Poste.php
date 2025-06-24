@@ -50,7 +50,6 @@ class Poste
     private $salaire;
 
     #[ORM\Column(type:"boolean") ]
-    #[Assert\NotBlank(message: "Champ obligatoire") ]
     private $type;
 
     #[ORM\Column(type:"float", nullable:true) ]

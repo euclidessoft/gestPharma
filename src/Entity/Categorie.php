@@ -33,8 +33,11 @@ class Categorie
     #[ORM\Column(type:"string", length:255) ]
     private $compte;
 
-    #[ORM\Column(type:"boolean") ]
+    #[ORM\Column(type:"boolean", nullable:true) ]
     private $actif = true;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $amortissement = null;
 
     public function __construct()
     {
@@ -119,6 +122,18 @@ class Categorie
     public function setActif(bool $actif): self
     {
         $this->actif = $actif;
+
+        return $this;
+    }
+
+    public function getAmortissement(): ?int
+    {
+        return $this->amortissement;
+    }
+
+    public function setAmortissement(?int $amortissement): static
+    {
+        $this->amortissement = $amortissement;
 
         return $this;
     }

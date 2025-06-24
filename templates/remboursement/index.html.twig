@@ -22,6 +22,7 @@
     <table class="table table-success-light table-bordered table-hover table-striped my-3" id="liste">
         <thead>
             <tr>
+                <th>Financement</th>
                 <th>Montant</th>
                 <th>Compte</th>
                 <th>Date</th>
@@ -32,10 +33,11 @@
         <tbody>
         {% for remboursement in remboursements %}
             <tr>
+                <td>{{ remboursement.financement.motif}}</td>
                 <td>{{ remboursement.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',')}}</td>
                 <td>{{ remboursement.compte }}</td>
                 <td>{{ remboursement.date ? remboursement.date|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ remboursement.type }}</td>
+                <td>{{ remboursement.banque ?  remboursement.banque.nom : remboursement.type }}</td>
                 <td>
                     <!-- <a title="{{ 'Voir'|trans }}" id="{{ remboursement.id }}" onclick="load({{ remboursement.id }})" href="{{ path('remboursement_show', {'id': remboursement.id}) }}" class="btn btn-success"><i class="fas fa-eye"></i></a> -->
                     <a title="{{ 'Modifier'|trans }}" href="{{ path('remboursement_edit', {'id': remboursement.id}) }}" class="btn btn-success-light"><i class="fas fa-edit"></i></a>

@@ -214,30 +214,32 @@ class PaieController extends AbstractController
             $paie->setBanque($employe->getBanque());
             $paie->setFonction($employe->getPoste()->getNom());
             $paie->setDepartement($employe->getPoste()->getDepartement()->getNom());
-             if($conge !== null){
+            if($conge !== null){
                 $paie->setDebutConge($conge->getDateDebut());
                 $paie->setFinConge($conge->getDateFin());
             }
-             $paie->setAnciennete($yearDiff.' an(s) '.$monthDiff.' mois');
+            $paie->setAnciennete($yearDiff.' an(s) '.$monthDiff.' mois');
             $anciennete = 0;
             if ($yearDiff >= 2){
                 $anciennete = (2 * $yearDiff) / 100;
             }
             $paie->setTauxenciennete($anciennete);
-            $paie->setBaseenciennete($employe->getPoste()->getSalaire());
-            $paie->setCode($yearDiff);
+            $paie->setBaseenciennete(round($employe->getPoste()->getSalaire()));
+            $prenciennete = $employe->getPoste()->getSalaire() * $anciennete;
+            $paie->setCode(0);
+            $paie->setCodeanciennete($yearDiff);
             $paie->setSalaireBase($employe->getPoste()->getSalaire());
             $paie->setEmploye($employe);
             $paie->setMois($mois);
+            
+
 
             $primes = $entityManager->getRepository(Prime::class)->findBy(['employe' => $employe->getId()]);
 
                         
             
             $nbrjoursmois = new \DateTime();
-            $ponction = $employe->getPoste()->getSalaire() / $nbrjoursmois->format('t');
-            $paie->setJours($nbrjoursmois->format('t'));
-
+            $ponction = round($employe->getPoste()->getSalaire() / $nbrjoursmois->format('t'));
             foreach ($primes as $prime) {
                 // Vérifie si la description est "indemnité de transport" (en minuscules)
                 if (strtolower($prime->getDescription()) === 'indemnité de transport' || strtolower($prime->getDescription()) === 'indemnite de transport') {
@@ -247,7 +249,7 @@ class PaieController extends AbstractController
                     $logement = $prime->getMontant();
                 }
 
-              // Vérifie si la prime est journalière (base == true)
+                // Vérifie si la prime est journalière (base == true)
                 // if (!empty($prime->getBase()) && $prime->getBase() === true) {
                 //     $ponction += $prime->getMontant() / $nbrjoursmois->format('t');
                     
@@ -258,11 +260,10 @@ class PaieController extends AbstractController
                                 ];
                 $montantprime += $prime->getMontant();
             }
-            //  dd(json_encode($totalprime));
-             $paie->setIndemnite(json_encode($totalprime));
+            $paie->setIndemnite(json_encode($totalprime));
 
 
-            $heureSups = $heureSuplementaireRepository->findBy(['employe' => $employe->getId(), 'paye' => false]);
+           $heureSups = $heureSuplementaireRepository->findBy(['employe' => $employe->getId(), 'paye' => false]);
             $nombreHeures = 0;
             $montantheureSup = 0;
             foreach ($heureSups as $heureSup) {
@@ -271,7 +272,7 @@ class PaieController extends AbstractController
                 $heureSup->setPaye(true);
                 $entityManager->persist($heureSup);
             }
-            $employe->getPoste()->getHeureSup() != null ? $paie->setBaseheureSup($employe->getPoste()->getHeureSup()) : $paie->setBaseheureSup($employe->getPoste()->getSalaire()/173.33) ;
+           $employe->getPoste()->getHeureSup() != null ? $paie->setBaseheureSup(round($employe->getPoste()->getHeureSup())) : $paie->setBaseheureSup(round($employe->getPoste()->getSalaire()/173.33)) ;
             $paie->setTauxheureSup($nombreHeures);
             
             $montantheureSup = $employe->getPoste()->getHeureSup() * $nombreHeures;
@@ -300,7 +301,7 @@ class PaieController extends AbstractController
                 if (strtolower($sanction->getTypeSanction()) === 'ponction salariale') {
                     $nombreJours =  $nombreJours + $sanction->getNombreJours();
 //                    $montantRetenue = $montantRetenue + $salaireJournalier * $nombreJours;
-                } elseif (strtolower($sanction->getTypeSanction()) === 'mis à pied'  || strtolower($sanction->getTypeSanction()) === 'mis a pied') {
+                } elseif (strtolower($sanction->getTypeSanction()) === 'mis à pied' || strtolower($sanction->getTypeSanction()) === 'mis a pied') {
                     $dateDebut = $sanction->getDateDebut();
                     $dateFin = $sanction->getDateFin();
                     $nombreJours = $nombreJours + $dateDebut->diff($dateFin)->days + 1;
@@ -308,11 +309,12 @@ class PaieController extends AbstractController
                 }
 
             }
-
+            $paie->setJours($nbrjoursmois->format('t'));
+            
             $paie->setBaseponction($ponction);
             $paie->setTauxponction($nombreJours);
-            $paie->setBrut($employe->getPoste()->getSalaire() + $montantprime + $montantheureSup + $totalPrimePerf);
-            $paie->setBrutinter($paie->getBrut() - $montantprime);
+            $paie->setBrut(round($employe->getPoste()->getSalaire() + $prenciennete + $montantprime + $montantheureSup + $totalPrimePerf));
+            $paie->setBrutinter(round($paie->getBrut() - $montantprime));
 
             $accompte= $entityManager->getRepository(Accompte::class)->findOneBy(['employe' => $employe->getId(), 'paye' => false, 'verser' => true], ['id' =>'DESC']);
             
@@ -336,7 +338,7 @@ class PaieController extends AbstractController
             } else {
                 $logementfisc = $logement;
             }
-            $paie->setLogementfisc($logementfisc);
+            $paie->setLogementfisc(round($logementfisc));
 
             /** vehicule fisc */
             if ($paie->getBrutinter() * 0.1 <= $transport) {
@@ -345,7 +347,7 @@ class PaieController extends AbstractController
                 $vehiculefisc = $transport;
             }
 
-            $paie->setVehiculefisc($vehiculefisc);
+            $paie->setVehiculefisc(round($vehiculefisc));
 
             /** logement cnps */
             if ($paie->getBrutinter() * 0.15 <= $logement) {
@@ -354,7 +356,7 @@ class PaieController extends AbstractController
                 $logementcnps = 0;
             }
 
-            $paie->setLogementcnps($logementcnps);
+            $paie->setLogementcnps(round($logementcnps));
 
             /** vehicule cnps */
             if ($paie->getBrutinter() * 0.1 <= $transport) {
@@ -363,11 +365,11 @@ class PaieController extends AbstractController
                 $vehiculecnps = 0;
             }
 
-            $paie->setVehiculecnps($vehiculecnps);
+            $paie->setVehiculecnps(round($vehiculecnps));
 
             /** salaire brut taxe brutinter + transport + vehiculefisc */
-            $paie->setBruttaxable($paie->getBrutinter() + $logementfisc + $vehiculefisc);
-            $paie->setSalairecotisable($paie->getBrutinter() + $logementcnps  + $vehiculecnps);
+            $paie->setBruttaxable($paie->getBrutinter() + $paie->getLogementfisc() + $paie->getVehiculefisc());
+            $paie->setSalairecotisable($paie->getBrutinter() + $paie->getLogementcnps()  + $paie->getVehiculecnps());
 
             /** irpp */
             if($paie->getBruttaxable() < 62000) {
@@ -381,12 +383,14 @@ class PaieController extends AbstractController
             } elseif ($paie->getBruttaxable() > 667001) {
                 $irpp = 70830 + ($paie->getBruttaxable() - 667000) * 0.7 * 0.35;
             }
+            $irpp = round($irpp);
             $paie->setBaseirpp($paie->getBruttaxable());
             // $paie->setTauxirpp($irpp);
             $paie->setIrpp($irpp); 
+
             $paie->setBaseca($irpp);
             $paie->setTauxca(10);
-            $ca = $irpp * 0.1;
+            $ca = round($irpp * 0.1);
             $paie->setca($ca);
            
             /** dve local */
@@ -421,6 +425,7 @@ class PaieController extends AbstractController
             } else {
                 $pv = 750000 * 0.042;
             }
+            $pv = round($pv);
             $paie->setBasevieil($paie->getSalairecotisable());
             $paie->setTauxvieil(4.2);
             $paie->setVieil($pv);
@@ -431,11 +436,13 @@ class PaieController extends AbstractController
             } else {
                 $foncier = $paie->getBruttaxable() * 0.01;
             }
+            $foncier = round($foncier);
             $paie->setBasefoncier($paie->getBruttaxable());
             $paie->setTauxfoncier(1);
             $paie->setFoncier($foncier);
             
             /** crtv */
+            $CRTV = 0;
             if ($paie->getBruttaxable() <= 52000) {
                 $CRTV = 0;
             } elseif ($paie->getBruttaxable() <= 100000) {
@@ -448,9 +455,9 @@ class PaieController extends AbstractController
                 $CRTV = 4550;
             } elseif ($paie->getBruttaxable() <= 500000) {
                 $CRTV = 5850;
-            } elseif ($paie->getBruttaxable() < 600000) {
+            } elseif ($paie->getBruttaxable() <= 600000) {
                 $CRTV = 7150;
-            } elseif ($paie->getBruttaxable() <= 700000) {
+            } elseif ($paie->getBruttaxable() >= 700000) {
                 $CRTV = 8450;
             }
 
@@ -477,6 +484,7 @@ class PaieController extends AbstractController
                     $allocation = 750000 * 0.07;
                 }
             }
+            $allocation = round($allocation);
             $paie->setAllocation($allocation);
             
             /** cp vieil */
@@ -489,6 +497,7 @@ class PaieController extends AbstractController
                     $Vieillesse = 750000 * 0.042;          // 4.2% plafonné à 750,000
                 }
             }
+            $Vieillesse = round($Vieillesse);
             $paie->setCpvieil($Vieillesse);
 
             /** trav */
@@ -497,21 +506,23 @@ class PaieController extends AbstractController
             } else {
                 $trav = $paie->getSalairecotisable() * 0.0175;
             }
+            $trav = round($trav);
             $paie->setTav($trav);
 
-             /** cp foncier */
-            $credfonc = $paie->getBrut() * 0.015;
+            /** cp foncier */
+            $credfonc = round($paie->getBrut() * 0.015);
             $paie->setCpfoncier($credfonc);
 
             /** fne */
-            $fne = $paie->getBrut() * 0.01;
+            $fne = round($paie->getBrut() * 0.01);
             $paie->setFne($fne);
 
             $paie->setTotalchargepatronal($allocation + $Vieillesse + $trav + $credfonc + $fne);
             $paie->setTotalChargeEmploye($irpp + $ca + $com + $pv + $foncier + $CRTV + $ponction * $nombreJours);
 
             // a gere plutard
-            $paie->setSalaireNet($paie->getBrut() - ( $CRTV + $foncier + $pv + $com + $ca + $irpp + $ponction * $nombreJours) + $totalAccompte );
+            $cotisationRetenue =  $CRTV + $foncier + $pv + $com + $ca + $irpp + $ponction * $nombreJours + $totalAccompte;
+            $paie->setSalaireNet($paie->getBrut() -  $cotisationRetenue);
 
             // Enregistrement dans la table paie
             
@@ -991,8 +1002,10 @@ class PaieController extends AbstractController
                 $anciennete = (2 * $yearDiff) / 100;
             }
             $paie->setTauxenciennete($anciennete);
-            $paie->setBaseenciennete($employe->getPoste()->getSalaire());
-            $paie->setCode($yearDiff);
+            $paie->setBaseenciennete(round($employe->getPoste()->getSalaire()));
+            $prenciennete = $employe->getPoste()->getSalaire() * $anciennete;
+            $paie->setCode(0);
+            $paie->setCodeanciennete($yearDiff);
             $paie->setSalaireBase($employe->getPoste()->getSalaire());
             $paie->setEmploye($employe);
             $paie->setMois($mois);
@@ -1004,7 +1017,7 @@ class PaieController extends AbstractController
                         
             
             $nbrjoursmois = new \DateTime();
-            $ponction = $employe->getPoste()->getSalaire() / $nbrjoursmois->format('t');
+            $ponction = round($employe->getPoste()->getSalaire() / $nbrjoursmois->format('t'));
             foreach ($primes as $prime) {
                 // Vérifie si la description est "indemnité de transport" (en minuscules)
                 if (strtolower($prime->getDescription()) === 'indemnité de transport' || strtolower($prime->getDescription()) === 'indemnite de transport') {
@@ -1037,7 +1050,7 @@ class PaieController extends AbstractController
                 $heureSup->setPaye(true);
                 $entityManager->persist($heureSup);
             }
-           $employe->getPoste()->getHeureSup() != null ? $paie->setBaseheureSup($employe->getPoste()->getHeureSup()) : $paie->setBaseheureSup($employe->getPoste()->getSalaire()/173.33) ;
+           $employe->getPoste()->getHeureSup() != null ? $paie->setBaseheureSup(round($employe->getPoste()->getHeureSup())) : $paie->setBaseheureSup(round($employe->getPoste()->getSalaire()/173.33)) ;
             $paie->setTauxheureSup($nombreHeures);
             
             $montantheureSup = $employe->getPoste()->getHeureSup() * $nombreHeures;
@@ -1078,8 +1091,8 @@ class PaieController extends AbstractController
             
             $paie->setBaseponction($ponction);
             $paie->setTauxponction($nombreJours);
-            $paie->setBrut($employe->getPoste()->getSalaire() + $montantprime + $montantheureSup + $totalPrimePerf);
-            $paie->setBrutinter($paie->getBrut() - $montantprime);
+            $paie->setBrut(round($employe->getPoste()->getSalaire() + $prenciennete + $montantprime + $montantheureSup + $totalPrimePerf));
+            $paie->setBrutinter(round($paie->getBrut() - $montantprime));
 
             $accompte= $entityManager->getRepository(Accompte::class)->findOneBy(['employe' => $employe->getId(), 'paye' => false, 'verser' => true], ['id' =>'DESC']);
             
@@ -1103,7 +1116,7 @@ class PaieController extends AbstractController
             } else {
                 $logementfisc = $logement;
             }
-            $paie->setLogementfisc($logementfisc);
+            $paie->setLogementfisc(round($logementfisc));
 
             /** vehicule fisc */
             if ($paie->getBrutinter() * 0.1 <= $transport) {
@@ -1112,7 +1125,7 @@ class PaieController extends AbstractController
                 $vehiculefisc = $transport;
             }
 
-            $paie->setVehiculefisc($vehiculefisc);
+            $paie->setVehiculefisc(round($vehiculefisc));
 
             /** logement cnps */
             if ($paie->getBrutinter() * 0.15 <= $logement) {
@@ -1121,7 +1134,7 @@ class PaieController extends AbstractController
                 $logementcnps = 0;
             }
 
-            $paie->setLogementcnps($logementcnps);
+            $paie->setLogementcnps(round($logementcnps));
 
             /** vehicule cnps */
             if ($paie->getBrutinter() * 0.1 <= $transport) {
@@ -1130,11 +1143,11 @@ class PaieController extends AbstractController
                 $vehiculecnps = 0;
             }
 
-            $paie->setVehiculecnps($vehiculecnps);
+            $paie->setVehiculecnps(round($vehiculecnps));
 
             /** salaire brut taxe brutinter + transport + vehiculefisc */
-            $paie->setBruttaxable($paie->getBrutinter() + $logementfisc + $vehiculefisc);
-            $paie->setSalairecotisable($paie->getBrutinter() + $logementcnps  + $vehiculecnps);
+            $paie->setBruttaxable($paie->getBrutinter() + $paie->getLogementfisc() + $paie->getVehiculefisc());
+            $paie->setSalairecotisable($paie->getBrutinter() + $paie->getLogementcnps()  + $paie->getVehiculecnps());
 
             /** irpp */
             if($paie->getBruttaxable() < 62000) {
@@ -1148,12 +1161,14 @@ class PaieController extends AbstractController
             } elseif ($paie->getBruttaxable() > 667001) {
                 $irpp = 70830 + ($paie->getBruttaxable() - 667000) * 0.7 * 0.35;
             }
+            $irpp = round($irpp);
             $paie->setBaseirpp($paie->getBruttaxable());
             // $paie->setTauxirpp($irpp);
             $paie->setIrpp($irpp); 
+
             $paie->setBaseca($irpp);
             $paie->setTauxca(10);
-            $ca = $irpp * 0.1;
+            $ca = round($irpp * 0.1);
             $paie->setca($ca);
            
             /** dve local */
@@ -1188,6 +1203,7 @@ class PaieController extends AbstractController
             } else {
                 $pv = 750000 * 0.042;
             }
+            $pv = round($pv);
             $paie->setBasevieil($paie->getSalairecotisable());
             $paie->setTauxvieil(4.2);
             $paie->setVieil($pv);
@@ -1198,6 +1214,7 @@ class PaieController extends AbstractController
             } else {
                 $foncier = $paie->getBruttaxable() * 0.01;
             }
+            $foncier = round($foncier);
             $paie->setBasefoncier($paie->getBruttaxable());
             $paie->setTauxfoncier(1);
             $paie->setFoncier($foncier);
@@ -1245,6 +1262,7 @@ class PaieController extends AbstractController
                     $allocation = 750000 * 0.07;
                 }
             }
+            $allocation = round($allocation);
             $paie->setAllocation($allocation);
             
             /** cp vieil */
@@ -1257,6 +1275,7 @@ class PaieController extends AbstractController
                     $Vieillesse = 750000 * 0.042;          // 4.2% plafonné à 750,000
                 }
             }
+            $Vieillesse = round($Vieillesse);
             $paie->setCpvieil($Vieillesse);
 
             /** trav */
@@ -1265,21 +1284,23 @@ class PaieController extends AbstractController
             } else {
                 $trav = $paie->getSalairecotisable() * 0.0175;
             }
+            $trav = round($trav);
             $paie->setTav($trav);
 
             /** cp foncier */
-            $credfonc = $paie->getBrut() * 0.015;
+            $credfonc = round($paie->getBrut() * 0.015);
             $paie->setCpfoncier($credfonc);
 
             /** fne */
-            $fne = $paie->getBrut() * 0.01;
+            $fne = round($paie->getBrut() * 0.01);
             $paie->setFne($fne);
 
             $paie->setTotalchargepatronal($allocation + $Vieillesse + $trav + $credfonc + $fne);
             $paie->setTotalChargeEmploye($irpp + $ca + $com + $pv + $foncier + $CRTV + $ponction * $nombreJours);
 
             // a gere plutard
-            $paie->setSalaireNet($paie->getBrut() - ( $CRTV + $foncier + $pv + $com + $ca + $irpp + $ponction * $nombreJours + $totalAccompte) );
+            $cotisationRetenue =  $CRTV + $foncier + $pv + $com + $ca + $irpp + $ponction * $nombreJours + $totalAccompte;
+            $paie->setSalaireNet($paie->getBrut() -  $cotisationRetenue);
 
             // Enregistrement dans la table paie
             

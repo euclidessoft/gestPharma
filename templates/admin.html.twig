@@ -259,12 +259,29 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="dropdown-item">
-                            <a class="nav-link {% block salaire %}{% endblock %}"
-                               href="{{ path('finance_salaire') }}">
-                                <i class="fa-solid fa-money-bill-trend-up"></i>
-                                {{ 'Paiement Salaire'|trans }}
+                        <li class="dropdown-item submenu">
+                            <a class="nav-link dropdown-toggle {% block salaire %}{% endblock %}" href="#"
+                               id="paiement_salaire"
+                               data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                               <i class="fa-solid fa-money-bill-trend-up"></i>
+                                {{ 'Salaire'|trans }}
                             </a>
+                            <ul class="dropdown-submenu" aria-labelledby="paiement_salaire">
+                                <li class="dropdown-item">
+                                    <a class="nav-link {% block Acompte %}{% endblock %}"
+                                       href="{{ path('finance_accompte') }}">
+                                        <i class="fa-solid fa-receipt"></i>
+                                        {{ 'Paiement Accompte'|trans }}
+                                    </a>
+                                </li>
+                                <li class="dropdown-item">
+                                    <a class="nav-link {% block paie_salaire %}{% endblock %}"
+                                       href="{{ path('finance_salaire') }}">
+                                        <i class="fa-solid fa-money-bill-trend-up"></i>
+                                        {{ 'Paiement Salaire'|trans }}
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                         <li class="dropdown-item">
                             <a class="nav-link {% block banque %}{% endblock %}" href="{{ path('banque_index') }}"
@@ -286,6 +303,13 @@
                                href="{{ path('finance_index') }}">
                                 <i class="fa-solid fa-money-bill-transfer"></i>
                                 {{ 'Journal'|trans }}
+                            </a>
+                        </li>
+                         <li class="dropdown-item">
+                            <a class="nav-link {% block resultat %}{% endblock %}"
+                               href="{{ path('finance_Compteresultat') }}">
+                                <i class="fa-solid fa-money-bill-transfer"></i>
+                                {{ 'Compte Resultat'|trans }}
                             </a>
                         </li>
                     </ul>

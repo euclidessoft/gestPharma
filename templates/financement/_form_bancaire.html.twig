@@ -14,35 +14,38 @@
     {% endfor %}
     <div class="row">
         <div class="col-12 mb-4">
-            {{ form_row(form.compte, {'attr': {'placeholder': 'compte *'}, 'label': false}) }}
+            {{ form_row(form.compte, {'attr': {'placeholder': 'compte *'}, 'label': 'compte *'}) }}
         </div>
 
         <div class="col-12 mb-4">
-            {{ form_row(form.motif, {'attr': {'placeholder': 'Motif *'}, 'label': false}) }}
+            {{ form_row(form.motif, {'attr': {'placeholder': 'Motif *'}, 'label': 'Motif *'}) }}
         </div>
 
         <div class="col-12 mb-4">
-            {{ form_row(form.montant, {'attr': {'placeholder': 'Montant *'}, 'label': false}) }}
+            {{ form_row(form.montant, {'attr': {'placeholder': 'Montant *'}, 'label': 'Montant *'}) }}
         </div>
 
         <div class="col-12 mb-4">
-            {{ form_row(form.taux, {'attr': {'placeholder': 'taux interet *'}, 'label': false}) }}
+            {{ form_row(form.taux, {'attr': {'placeholder': 'taux interet *'}, 'label': 'taux interet *'}) }}
         </div>
         <div class="col-12 mb-4">
-            {{ form_row(form.banque, {'attr': {'placeholder': 'taux interet *'}, 'label': false}) }}
+            {{ form_row(form.duree, {'attr': {'placeholder': 'dure en mois'}, 'label': 'dure en mois'}) }}
         </div>
         <div class="col-12 mb-4">
-            {{ form_row(form.numero, {'attr': {'placeholder': 'Numéro transaction *'}, 'label': false}) }}
+            {{ form_row(form.banque, {'attr': {'placeholder': 'Banque *'}, 'label': 'Banque *'}) }}
+        </div>
+        <div class="col-12 mb-4">
+            {{ form_row(form.numero, {'attr': {'placeholder': 'Numéro transaction *'}, 'label': 'Numéro transaction *'}) }}
         </div>
     </div>
-    <!-- <div id="versement">
+    {#} <div id="versement">
         <div class="form-group">
             {{ form_row(form.banque, {'label':false, 'attr' : {'placeholder':'Banque'}}) }}
         </div>
         <div class="form-group mt-4">
             {{ form_row(form.numero, {'label':false, 'attr' : {'placeholder':'Numéro'}}) }}
         </div>
-    </div> -->
+    </div> #}
     {{ form_rest(form) }}
 </div>
 

@@ -40,7 +40,7 @@ class TransfertController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->entityManager;
-            $montant = $solde->montantcaisse($entityManager,54);
+            $montant = $solde->montantcaisse($entityManager,571);
             if($transfert->getMontant() <= $montant){
             $transfert->setSource('Caisse');
             $transfert->setDestination('Banque');
@@ -49,7 +49,7 @@ class TransfertController extends AbstractController
             $debit = new Debit();
             $debit->setTransfert($transfert);
             $debit->setType('Espece');
-            $debit->setCompte(54);
+            $debit->setCompte(571);
             $debit->setMontant($transfert->getMontant());
             $debitecriture = new Ecriture();
             $debitecriture->setDebit($debit);
@@ -57,7 +57,7 @@ class TransfertController extends AbstractController
             $debitecriture->setLibelle('Transfert caisse → banque');
             $debitecriture->setSolde(-$transfert->getMontant());
             $debitecriture->setMontant($transfert->getMontant());
-            $debitecriture->setComptedebit('54');
+            $debitecriture->setComptedebit('571');
             $debitecriture->setLibellecomptedebit("Caisse");
             $debitecriture->setComptecredit($transfert->getBanque()->getCompte());
             $debitecriture->setLibellecomptecredit($transfert->getBanque()->getNom());
@@ -75,7 +75,7 @@ class TransfertController extends AbstractController
             $creditecriture->setLibelle('Transfert caisse → banque');
             $creditecriture->setSolde($transfert->getMontant());
             $creditecriture->setMontant($transfert->getMontant());
-            $creditecriture->setComptedebit('54');
+            $creditecriture->setComptedebit('571');
             $creditecriture->setLibellecomptedebit('Caisse');
             $creditecriture->setComptecredit($transfert->getBanque()->getCompte());
             $creditecriture->setLibellecomptecredit($transfert->getBanque()->getNom());
@@ -127,14 +127,14 @@ class TransfertController extends AbstractController
             $debitecriture->setMontant($transfert->getMontant());
             $debitecriture->setComptedebit($transfert->getBanque()->getCompte());
             $debitecriture->setLibellecomptedebit($transfert->getBanque()->getNom());
-            $debitecriture->setComptecredit('54');
+            $debitecriture->setComptecredit('571');
             $debitecriture->setLibellecomptecredit('Caisse');
 
 
             $credit = new Credit();
             $credit->setTransfert($transfert);
             $credit->setType('Espece');
-            $credit->setCompte(54);
+            $credit->setCompte(571);
             $credit->setMontant($transfert->getMontant());
             $creditecriture = new Ecriture();
             $creditecriture->setCredit($credit);
@@ -144,7 +144,7 @@ class TransfertController extends AbstractController
             $creditecriture->setMontant($transfert->getMontant());
             $creditecriture->setComptedebit($transfert->getBanque()->getCompte());
             $creditecriture->setLibellecomptedebit($transfert->getBanque()->getNom());
-            $creditecriture->setComptecredit('54');
+            $creditecriture->setComptecredit('571');
             $creditecriture->setLibellecomptecredit('Caisse');
 
 

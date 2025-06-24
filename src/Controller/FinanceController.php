@@ -4,15 +4,23 @@ namespace App\Controller;
 
 use App\Complement\Solde;
 use App\Entity\Banque;
+use App\Entity\Stock;
 use App\Entity\Accompte;
+use App\Entity\Avoir;
+use App\Entity\Categorie;
 use App\Entity\Debit;
 use App\Entity\Depense;
 use App\Entity\Ecriture;
+use App\Entity\Financement;
 use App\Entity\Paie;
 use App\Entity\PaieSalaire;
+use App\Entity\LivrerReste;
 use App\Repository\EcritureRepository;
 use App\Repository\PaieRepository;
 use App\Repository\AccompteRepository;
+use App\Repository\CommandeRepository;
+use App\Repository\CommandeProduitRepository;
+use App\Repository\ApprovisionnementRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityManagerInterface;
@@ -1640,91 +1648,437 @@ class FinanceController extends AbstractController
     public function payer(PaieRepository $paieRepository, Solde $solde, Request $request): Response
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
-            $debit = new Debit();
-            $debitcharge = new Debit();
-            $debitimpot = new Debit();
-            $ecriture = new Ecriture();
-            $ecriturecharge = new Ecriture();
-            $ecritureimpot = new Ecriture();
+            
             $entityManager = $this->entityManager;
             $paie = $paieRepository->find($request->get('paie'));
             $banque = $entityManager->getRepository(Banque::class)->find($request->get('banque'));
+
+
             $montant = 0;
 
             $montant = $solde->montantbanque($entityManager, $banque->getCompte());
             $montantapayer = $paie->getBrut() + $paie->getTotalchargepatronal();
 
             if ($montantapayer <= $montant) {
-            $paieSalaire = new PaieSalaire();
-            $paieSalaire->setUser($this->getUser());
-            $paieSalaire->setMontant($paie->getSalaireNet());
-            $paieSalaire->setEmploye($paie->getEmploye());
-            $paieSalaire->setCompte($banque->getCompte());
-            $entityManager->persist($paieSalaire);
-            $paie->setPayer(true);
-            $paie->setDatepaye(new \DateTime());
+               
+                $paieSalaire = new PaieSalaire();
 
 
-            $debit->setCompte($banque->getCompte());
-            $debit->setType('Banque');
-            $debit->setSalaire($paieSalaire);
-            $debit->setMontant($paie->getSalaireNet());
+            $debitbase = new Debit();
+            $debitbase->setCompte($banque->getCompte());
+            $debitbase->setType('Banque');
+            $debitbase->setSalaire($paieSalaire);
+            $debitbase->setMontant($paie->getSalaireBase());
 
-            $debitcharge->setCompte($banque->getCompte());
-            $debitcharge->setType('Banque');
-            $debitcharge->setSalaire($paieSalaire);
-            $debitcharge->setMontant($paie->getTotalChargeEmploye() + $paie->getTotalchargepatronal());
+            $ecriturebase = new Ecriture();
+            $ecriturebase->setType('Banque');
+            $ecriturebase->setComptecredit("661100");
+            $ecriturebase->setLibellecomptecredit("Salaire de base");
+            $ecriturebase->setComptedebit($banque->getCompte());
+            $ecriturebase->setLibellecomptedebit($banque->getNom());
+            $ecriturebase->setDebit($debitbase);
+            $ecriturebase->setSolde(-$paie->getSalaireBase());
+            $ecriturebase->setMontant($paie->getSalaireBase());
+            $ecriturebase->setLibelle("Salaire de base".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+            $entityManager->persist($debitbase);
+            $entityManager->persist($ecriturebase);
 
-            // $debitimpot->setCompte($banque->getCompte());
-            // $debitimpot->setType('Banque');
-            // $debitimpot->setSalaire($paieSalaire);
-            // $debitimpot->setMontant($paie->getIrpp());
+            // anciennete 
+            $ancien = $paie->getTauxenciennete() * $paie->getBaseenciennete();
+            if( $ancien != 0){
+                $debitanciennete = new Debit();
+                $debitanciennete->setCompte($banque->getCompte());
+                $debitanciennete->setType('Banque');
+                $debitanciennete->setSalaire($paieSalaire);
+                $debitanciennete->setMontant($ancien);
 
-            $ecriture->setType('Banque');
-            $ecriture->setComptecredit("641");
-            $ecriture->setLibellecomptecredit("Salaire Personnel");
-            $ecriture->setComptedebit($banque->getCompte());
-            $ecriture->setLibellecomptedebit($banque->getNom());
-            $ecriture->setDebit($debit);
-            $ecriture->setSolde(-$paie->getSalaireNet());
-            $ecriture->setMontant($paie->getSalaireNet());
-            $ecriture->setLibelle("Paiement de salaire ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                $ecritureanciennete = new Ecriture();
+                $ecritureanciennete->setType('Banque');
+                $ecritureanciennete->setComptecredit("661200");
+                $ecritureanciennete->setLibellecomptecredit("Prime d'anciennete");
+                $ecritureanciennete->setComptedebit($banque->getCompte());
+                $ecritureanciennete->setLibellecomptedebit($banque->getNom());
+                $ecritureanciennete->setDebit($debitanciennete);
+                $ecritureanciennete->setSolde(-$ancien);
+                $ecritureanciennete->setMontant($ancien);
+                $ecritureanciennete->setLibelle("Prime d'anciennete ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                $entityManager->persist($debitanciennete);
+                $entityManager->persist($ecritureanciennete);
+            }
+           
+            
 
-            $ecriturecharge->setType('Banque');
-            $ecriturecharge->setComptecredit("431");
-            $ecriturecharge->setLibellecomptecredit("Charge Sociale");
-            $ecriturecharge->setComptedebit($banque->getCompte());
-            $ecriturecharge->setLibellecomptedebit($banque->getNom());
-            $ecriturecharge->setDebit($debitcharge);
-            $ecriturecharge->setSolde(-($paie->getTotalChargeEmploye() + $paie->getTotalChargePatronal()));
-            $ecriturecharge->setMontant($paie->getTotalChargeEmploye() + $paie->getTotalChargePatronal());
-            $ecriturecharge->setLibelle("Versement charge sociale");
 
-            // $ecritureimpot->setType('Banque');
-            // $ecritureimpot->setComptecredit("4421");
-            // $ecritureimpot->setLibellecomptecredit("Impot sur les revenues");
-            // $ecritureimpot->setComptedebit($banque->getCompte());
-            // $ecritureimpot->setLibellecomptedebit($banque->getNom());
-            // $ecritureimpot->setDebit($debitimpot);
-            // $ecritureimpot->setSolde(-$paie->getImpot());
-            // $ecritureimpot->setMontant($paie->getImpot());
-            // $ecritureimpot->setLibelle("Versement impot sur les revenues");
+            $primes = json_decode($paie->getIndemnite(), true);
+            $i= 1; $j= 100;
+            foreach ($primes as $prime) {
 
-            $entityManager->persist($paie);
-            $entityManager->persist($banque);
-            $entityManager->persist($debit);
-            $entityManager->persist($debitcharge);
-            // $entityManager->persist($debitimpot);
-            $entityManager->persist($ecriture);
-            $entityManager->persist($ecriturecharge);
-            // $entityManager->persist($ecritureimpot);
-            $entityManager->flush();
+                $$i = new Debit();
+                $$i->setCompte($banque->getCompte());
+                $$i->setType('Banque');
+                $$i->setSalaire($paieSalaire);
+                $$i->setMontant($prime['montant']);
+
+                $$j = new Ecriture();
+                $$j->setType('Banque');
+                $$j->setComptecredit("661200");
+                $$j->setLibellecomptecredit($prime['designation']);
+                $$j->setComptedebit($banque->getCompte());
+                $$j->setLibellecomptedebit($banque->getNom());
+                $$j->setDebit($$i);
+                $$j->setSolde(-$prime['montant']);
+                $$j->setMontant($prime['montant']);
+                $$j->setLibelle($prime['designation']. " " .$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                $entityManager->persist($$i);
+                $entityManager->persist($$j);
+               $i +=1;
+               $j +=1;
+            }
+
+
+            $heureSup =  $paie->getTauxheureSup() * $paie->getBaseheureSup();
+            if( $heureSup != 0){
+                $debitheursup = new Debit();
+                $debitheursup->setCompte($banque->getCompte());
+                $debitheursup->setType('Banque');
+                $debitheursup->setSalaire($paieSalaire);
+                $debitheursup->setMontant($heureSup);
+
+                $ecritureheursup = new Ecriture();
+                $ecritureheursup->setType('Banque');
+                $ecritureheursup->setComptecredit("661200");
+                $ecritureheursup->setLibellecomptecredit("Heures Suplementaires");
+                $ecritureheursup->setComptedebit($banque->getCompte());
+                $ecritureheursup->setLibellecomptedebit($banque->getNom());
+                $ecritureheursup->setDebit($debitheuresup);
+                $ecritureheursup->setSolde(-$heureSup);
+                $ecritureheursup->setMontant($heureSup);
+                $ecritureheursup->setLibelle("Heures Suplementaires ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                $entityManager->persist($debitheursup);
+                $entityManager->persist($ecritureheursup);
+
+            }
+            if($paie->getPerformance() != 0){
+                $debitperform = new Debit();
+                $debitperform->setCompte($banque->getCompte());
+                $debitperform->setType('Banque');
+                $debitperform->setSalaire($paieSalaire);
+                $debitperform->setMontant($paie->getPerformance());
+
+                $ecritureperform = new Ecriture();
+                $ecritureperform->setType('Banque');
+                $ecritureperform->setComptecredit("661200");
+                $ecritureperform->setLibellecomptecredit("prime de performance");
+                $ecritureperform->setComptedebit($banque->getCompte());
+                $ecritureperform->setLibellecomptedebit($banque->getNom());
+                $ecritureperform->setDebit($debitperform);
+                $ecritureperform->setSolde(-$paie->getPerformance());
+                $ecritureperform->setMontant($paie->getPerformance());
+                $ecritureperform->setLibelle("prime de performance ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                $entityManager->persist($debitperform);
+                $entityManager->persist($ecritureperform);
+            }
+
+
+          
+
+   //         $paie->getBrut();
+// salaire brut
+            
+
+            // $ecritureperform = new Ecriture();
+            // $ecritureperform->setType('Banque');
+            // $ecritureperform->setComptecredit("661200");
+            // $ecritureperform->setLibellecomptecredit("prime de performance");
+            // $ecritureperform->setComptedebit($banque->getCompte());
+            // $ecritureperform->setLibellecomptedebit($banque->getNom());
+            // $ecritureperform->setDebit($debit);
+            // $ecritureperform->setSolde(-$paie->getPerformance());
+            // $ecritureperform->setMontant($paie->getPerformance());
+            // $ecritureperform->setLibelle("prime de performance ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+            // $entityManager->persist($debitperform);
+            // $entityManager->persist($ecritureperform);
+           
+
+          
+
+            /** irpp */
+           
+            
+            $debitirpp = new Debit();
+            $debitirpp->setCompte($banque->getCompte());
+            $debitirpp->setType('Banque');
+            $debitirpp->setSalaire($paieSalaire);
+            $debitirpp->setMontant($paie->getIrpp());
+
+            $ecritureirpp = new Ecriture();
+            $ecritureirpp->setType('Banque');
+            $ecritureirpp->setComptecredit("447210");
+            $ecritureirpp->setLibellecomptecredit("IRPP");
+            $ecritureirpp->setComptedebit($banque->getCompte());
+            $ecritureirpp->setLibellecomptedebit($banque->getNom());
+            $ecritureirpp->setDebit($debitirpp);
+            $ecritureirpp->setSolde(-$paie->getIrpp());
+            $ecritureirpp->setMontant($paie->getIrpp());
+            $ecritureirpp->setLibelle("IRPP ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+            $entityManager->persist($debitirpp);
+            $entityManager->persist($ecritureirpp);
+
+          //CA
+            ;
+
+            $debitca = new Debit();
+            $debitca->setCompte($banque->getCompte());
+            $debitca->setType('Banque');
+            $debitca->setSalaire($paieSalaire);
+            $debitca->setMontant($paie->getCa());
+
+            $ecritureca = new Ecriture();
+            $ecritureca->setType('Banque');
+            $ecritureca->setComptecredit("447220");
+            $ecritureca->setLibellecomptecredit("Centimes additionnels");
+            $ecritureca->setComptedebit($banque->getCompte());
+            $ecritureca->setLibellecomptedebit($banque->getNom());
+            $ecritureca->setDebit($debitca);
+            $ecritureca->setSolde(-$paie->getCa());
+            $ecritureca->setMontant($paie->getCa());
+            $ecritureca->setLibelle("Centimes additionnels ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+            $entityManager->persist($debitca);
+            $entityManager->persist($ecritureca);
+           
+            /** dve local */
+           
+            $debitlocal = new Debit();
+            $debitlocal->setCompte($banque->getCompte());
+            $debitlocal->setType('Banque');
+            $debitlocal->setSalaire($paieSalaire);
+            $debitlocal->setMontant($paie->getLocal());
+
+            $ecriturelocal = new Ecriture();
+            $ecriturelocal->setType('Banque');
+            $ecriturelocal->setComptecredit("447240");
+            $ecriturelocal->setLibellecomptecredit("Taxe de développement local");
+            $ecriturelocal->setComptedebit($banque->getCompte());
+            $ecriturelocal->setLibellecomptedebit($banque->getNom());
+            $ecriturelocal->setDebit($debitlocal);
+            $ecriturelocal->setSolde(-$paie->getLocal());
+            $ecriturelocal->setMontant($paie->getLocal());
+            $ecriturelocal->setLibelle("Taxe de développement local ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+            $entityManager->persist($debitlocal);
+            $entityManager->persist($ecriturelocal);
+           
+            /** vcnps viel */
+           
+            
+
+            $debitviel = new Debit();
+            $debitviel->setCompte($banque->getCompte());
+            $debitviel->setType('Banque');
+            $debitviel->setSalaire($paieSalaire);
+            $debitviel->setMontant($paie->getVieil());
+
+            $ecritureviel = new Ecriture();
+            $ecritureviel->setType('Banque');
+            $ecritureviel->setComptecredit("431300");
+            $ecritureviel->setLibellecomptecredit("CNPS / Pension Vieillesse");
+            $ecritureviel->setComptedebit($banque->getCompte());
+            $ecritureviel->setLibellecomptedebit($banque->getNom());
+            $ecritureviel->setDebit($debitviel);
+            $ecritureviel->setSolde(-$paie->getVieil());
+            $ecritureviel->setMontant($paie->getVieil());
+            $ecritureviel->setLibelle("CNPS / Pension Vieillesse ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+            $entityManager->persist($debitviel);
+            $entityManager->persist($ecritureviel);
+            
+            /** fonfoncier */
+           
+            
+            if($paie->getFoncier() != 0){
+                $debifoncier = new Debit();
+                $debifoncier->setCompte($banque->getCompte());
+                $debifoncier->setType('Banque');
+                $debifoncier->setSalaire($paieSalaire);
+                $debifoncier->setMontant($paie->getFoncier());
+
+                $ecriturfoncier = new Ecriture();
+                $ecriturfoncier->setType('Banque');
+                $ecriturfoncier->setComptecredit("431200");
+                $ecriturfoncier->setLibellecomptecredit("Credit foncier");
+                $ecriturfoncier->setComptedebit($banque->getCompte());
+                $ecriturfoncier->setLibellecomptedebit($banque->getNom());
+                $ecriturfoncier->setDebit($debifoncier);
+                $ecriturfoncier->setSolde(-$paie->getFoncier());
+                $ecriturfoncier->setMontant($paie->getFoncier());
+                $ecriturfoncier->setLibelle("Credit foncier ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                $entityManager->persist($debifoncier);
+                $entityManager->persist($ecriturfoncier);
+            }
+            
+            /** crtv */
+           
+            
+            if($paie->getCrtv() != 0){
+                $debicrtv = new Debit();
+                $debicrtv->setCompte($banque->getCompte());
+                $debicrtv->setType('Banque');
+                $debicrtv->setSalaire($paieSalaire);
+                $debicrtv->setMontant($paie->getCrtv());
+
+                $ecriturcrtv = new Ecriture();
+                $ecriturcrtv->setType('Banque');
+                $ecriturcrtv->setComptecredit("447250");
+                $ecriturcrtv->setLibellecomptecredit("Redevance audio visuelle (CRTV)");
+                $ecriturcrtv->setComptedebit($banque->getCompte());
+                $ecriturcrtv->setLibellecomptedebit($banque->getNom());
+                $ecriturcrtv->setDebit($debicrtv);
+                $ecriturcrtv->setSolde(-$paie->getCrtv());
+                $ecriturcrtv->setMontant($paie->getCrtv());
+                $ecriturcrtv->setLibelle("Redevance audio visuelle (CRTV) ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                $entityManager->persist($debicrtv);
+                $entityManager->persist($ecriturcrtv);
+            }
+
+            /** allocation */
+           
+            
+            if($paie->getAllocation() != 0){
+                $debiallocation = new Debit();
+                $debiallocation->setCompte($banque->getCompte());
+                $debiallocation->setType('Banque');
+                $debiallocation->setSalaire($paieSalaire);
+                $debiallocation->setMontant($paie->getAllocation());
+
+                $ecriturallocation = new Ecriture();
+                $ecriturallocation->setType('Banque');
+                $ecriturallocation->setComptecredit("431100");
+                $ecriturallocation->setLibellecomptecredit("ALLOC FAM");
+                $ecriturallocation->setComptedebit($banque->getCompte());
+                $ecriturallocation->setLibellecomptedebit($banque->getNom());
+                $ecriturallocation->setDebit($debiallocation);
+                $ecriturallocation->setSolde(-$paie->getAllocation());
+                $ecriturallocation->setMontant($paie->getAllocation());
+                $ecriturallocation->setLibelle("ALLOC FAM ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                $entityManager->persist($debiallocation);
+                $entityManager->persist($ecriturallocation);
+            }
+            
+            /** cp vieil */
+           
+            
+            if($paie->getCpvieil() != 0){
+                $debiallocation = new Debit();
+                $debiallocation->setCompte($banque->getCompte());
+                $debiallocation->setType('Banque');
+                $debiallocation->setSalaire($paieSalaire);
+                $debiallocation->setMontant($paie->getCpvieil());
+
+                $ecriturallocation = new Ecriture();
+                $ecriturallocation->setType('Banque');
+                $ecriturallocation->setComptecredit("431300");
+                $ecriturallocation->setLibellecomptecredit("PENS VIEIL");
+                $ecriturallocation->setComptedebit($banque->getCompte());
+                $ecriturallocation->setLibellecomptedebit($banque->getNom());
+                $ecriturallocation->setDebit($debiallocation);
+                $ecriturallocation->setSolde(-$paie->getCpvieil());
+                $ecriturallocation->setMontant($paie->getCpvieil());
+                $ecriturallocation->setLibelle("PENS VIEIL ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                $entityManager->persist($debiallocation);
+                $entityManager->persist($ecriturallocation);
+            }
+
+            /** trav */
+          
+            
+            if($paie->getTav() != 0){
+                $debitav = new Debit();
+                $debitav->setCompte($banque->getCompte());
+                $debitav->setType('Banque');
+                $debitav->setSalaire($paieSalaire);
+                $debitav->setMontant($paie->getTav());
+
+                $ecriturtav = new Ecriture();
+                $ecriturtav->setType('Banque');
+                $ecriturtav->setComptecredit("431200");
+                $ecriturtav->setLibellecomptecredit("ACC TRAV");
+                $ecriturtav->setComptedebit($banque->getCompte());
+                $ecriturtav->setLibellecomptedebit($banque->getNom());
+                $ecriturtav->setDebit($debitav);
+                $ecriturtav->setSolde(-$paie->getTav());
+                $ecriturtav->setMontant($paie->getTav());
+                $ecriturtav->setLibelle("ACC TRAV ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                $entityManager->persist($debitav);
+                $entityManager->persist($ecriturtav);
+            }
+
+            /** cp foncier */
+           
+            
+            if($paie->getCpfoncier() != 0){
+                $debitav = new Debit();
+                $debitav->setCompte($banque->getCompte());
+                $debitav->setType('Banque');
+                $debitav->setSalaire($paieSalaire);
+                $debitav->setMontant($paie->getCpfoncier());
+
+                $ecriturtav = new Ecriture();
+                $ecriturtav->setType('Banque');
+                $ecriturtav->setComptecredit("431200");
+                $ecriturtav->setLibellecomptecredit("CREDIT FONC");
+                $ecriturtav->setComptedebit($banque->getCompte());
+                $ecriturtav->setLibellecomptedebit($banque->getNom());
+                $ecriturtav->setDebit($debitav);
+                $ecriturtav->setSolde(-$paie->getCpfoncier());
+                $ecriturtav->setMontant($paie->getCpfoncier());
+                $ecriturtav->setLibelle("CREDIT FONC ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                $entityManager->persist($debitav);
+                $entityManager->persist($ecriturtav);
+            }
+
+            /** fne */
+           
+            
+            if($paie->getFne() != 0){
+                $debifne = new Debit();
+                $debifne->setCompte($banque->getCompte());
+                $debifne->setType('Banque');
+                $debifne->setSalaire($paieSalaire);
+                $debifne->setMontant($paie->getFne());
+
+                $ecriturfne = new Ecriture();
+                $ecriturfne->setType('Banque');
+                $ecriturfne->setComptecredit("431300");
+                $ecriturfne->setLibellecomptecredit("F.N.E");
+                $ecriturfne->setComptedebit($banque->getCompte());
+                $ecriturfne->setLibellecomptedebit($banque->getNom());
+                $ecriturfne->setDebit($debifne);
+                $ecriturfne->setSolde(-$paie->getFne());
+                $ecriturfne->setMontant($paie->getFne());
+                $ecriturfne->setLibelle("F.N.E ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                $entityManager->persist($debifne);
+                $entityManager->persist($ecriturfne);
+            }
+
+           
+
+
+          
+               
+                $paieSalaire->setUser($this->getUser());
+                $paieSalaire->setMontant($paie->getSalaireNet());
+                $paieSalaire->setEmploye($paie->getEmploye());
+                $paieSalaire->setCompte($banque->getCompte());
+                $entityManager->persist($paieSalaire);
+                $paie->setPayer(true);
+                $paie->setDatepaye(new \DateTime());
+                $entityManager->persist($paie);
+
+               $entityManager->flush();
                 $this->addFlash('notice', 'Paiement effectué avec succès');
 
 //                    return $this->redirectToRoute('depense_index', [], Response::HTTP_SEE_OTHER);
-                } else {
-                    $this->addFlash('notice', 'Montant non disponible');
-                }
+            } else {
+                $this->addFlash('notice', 'Montant non disponible');
+            }
 
 
 
@@ -1771,114 +2125,424 @@ class FinanceController extends AbstractController
                 $montantcharge = 0;
                 $montantimpot = 0;
                 foreach ($paies as $paie) {
-
-
-                    $paieSalaire = new PaieSalaire();
-                    $paieSalaire->setUser($this->getUser());
-                    $paieSalaire->setMontant($paie->getSalaireNet());
-                    $paieSalaire->setEmploye($paie->getEmploye());
-                    $paieSalaire->setCompte($banque->getCompte());
-                    $entityManager->persist($paieSalaire);
-                    $paie->setPayer(true);
-                    $paie->setDatepaye(new \DateTime());
-
-
-                    $entityManager->persist($paie);
-                    $entityManager->flush();
-
-                    $montantNet = $montantNet + $paie->getSalaireNet();
-                    // $montantimpot = $montantimpot + $paie->getImpot();
-                    $montantcharge = $montantcharge + $paie->getTotalChargeEmploye() + $paie->getTotalChargePatronal();
+                       
+                        $paieSalaire = new PaieSalaire();
+        
+        
+                    $debitbase = new Debit();
+                    $debitbase->setCompte($banque->getCompte());
+                    $debitbase->setType('Banque');
+                    $debitbase->setSalaire($paieSalaire);
+                    $debitbase->setMontant($paie->getSalaireBase());
+        
+                    $ecriturebase = new Ecriture();
+                    $ecriturebase->setType('Banque');
+                    $ecriturebase->setComptecredit("661100");
+                    $ecriturebase->setLibellecomptecredit("Salaire de base");
+                    $ecriturebase->setComptedebit($banque->getCompte());
+                    $ecriturebase->setLibellecomptedebit($banque->getNom());
+                    $ecriturebase->setDebit($debitbase);
+                    $ecriturebase->setSolde(-$paie->getSalaireBase());
+                    $ecriturebase->setMontant($paie->getSalaireBase());
+                    $ecriturebase->setLibelle("Salaire de base".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                    $entityManager->persist($debitbase);
+                    $entityManager->persist($ecriturebase);
+        
+                    // anciennete 
+                    $ancien = $paie->getTauxenciennete() * $paie->getBaseenciennete();
+                    if( $ancien != 0){
+                        $debitanciennete = new Debit();
+                        $debitanciennete->setCompte($banque->getCompte());
+                        $debitanciennete->setType('Banque');
+                        $debitanciennete->setSalaire($paieSalaire);
+                        $debitanciennete->setMontant($ancien);
+        
+                        $ecritureanciennete = new Ecriture();
+                        $ecritureanciennete->setType('Banque');
+                        $ecritureanciennete->setComptecredit("661200");
+                        $ecritureanciennete->setLibellecomptecredit("Prime d'anciennete");
+                        $ecritureanciennete->setComptedebit($banque->getCompte());
+                        $ecritureanciennete->setLibellecomptedebit($banque->getNom());
+                        $ecritureanciennete->setDebit($debitanciennete);
+                        $ecritureanciennete->setSolde(-$ancien);
+                        $ecritureanciennete->setMontant($ancien);
+                        $ecritureanciennete->setLibelle("Prime d'anciennete ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                        $entityManager->persist($debitanciennete);
+                        $entityManager->persist($ecritureanciennete);
+                    }
+                   
+                    
+        
+        
+                    $primes = json_decode($paie->getIndemnite(), true);
+                    $i= 1; $j= 100;
+                    foreach ($primes as $prime) {
+        
+                        $$i = new Debit();
+                        $$i->setCompte($banque->getCompte());
+                        $$i->setType('Banque');
+                        $$i->setSalaire($paieSalaire);
+                        $$i->setMontant($prime['montant']);
+        
+                        $$j = new Ecriture();
+                        $$j->setType('Banque');
+                        $$j->setComptecredit("661200");
+                        $$j->setLibellecomptecredit($prime['designation']);
+                        $$j->setComptedebit($banque->getCompte());
+                        $$j->setLibellecomptedebit($banque->getNom());
+                        $$j->setDebit($$i);
+                        $$j->setSolde(-$prime['montant']);
+                        $$j->setMontant($prime['montant']);
+                        $$j->setLibelle($prime['designation']. " " .$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                        $entityManager->persist($$i);
+                        $entityManager->persist($$j);
+                       $i +=1;
+                       $j +=1;
+                    }
+        
+        
+                    $heureSup =  $paie->getTauxheureSup() * $paie->getBaseheureSup();
+                    if( $heureSup != 0){
+                        $debitheursup = new Debit();
+                        $debitheursup->setCompte($banque->getCompte());
+                        $debitheursup->setType('Banque');
+                        $debitheursup->setSalaire($paieSalaire);
+                        $debitheursup->setMontant($heureSup);
+        
+                        $ecritureheursup = new Ecriture();
+                        $ecritureheursup->setType('Banque');
+                        $ecritureheursup->setComptecredit("661200");
+                        $ecritureheursup->setLibellecomptecredit("Heures Suplementaires");
+                        $ecritureheursup->setComptedebit($banque->getCompte());
+                        $ecritureheursup->setLibellecomptedebit($banque->getNom());
+                        $ecritureheursup->setDebit($debitheuresup);
+                        $ecritureheursup->setSolde(-$heureSup);
+                        $ecritureheursup->setMontant($heureSup);
+                        $ecritureheursup->setLibelle("Heures Suplementaires ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                        $entityManager->persist($debitheursup);
+                        $entityManager->persist($ecritureheursup);
+        
+                    }
+                    if($paie->getPerformance() != 0){
+                        $debitperform = new Debit();
+                        $debitperform->setCompte($banque->getCompte());
+                        $debitperform->setType('Banque');
+                        $debitperform->setSalaire($paieSalaire);
+                        $debitperform->setMontant($paie->getPerformance());
+        
+                        $ecritureperform = new Ecriture();
+                        $ecritureperform->setType('Banque');
+                        $ecritureperform->setComptecredit("661200");
+                        $ecritureperform->setLibellecomptecredit("prime de performance");
+                        $ecritureperform->setComptedebit($banque->getCompte());
+                        $ecritureperform->setLibellecomptedebit($banque->getNom());
+                        $ecritureperform->setDebit($debitperform);
+                        $ecritureperform->setSolde(-$paie->getPerformance());
+                        $ecritureperform->setMontant($paie->getPerformance());
+                        $ecritureperform->setLibelle("prime de performance ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                        $entityManager->persist($debitperform);
+                        $entityManager->persist($ecritureperform);
+                    }
+        
+        
+                  
+        
+                        //         $paie->getBrut();
+                     // salaire brut
+                    
+        
+                    // $ecritureperform = new Ecriture();
+                    // $ecritureperform->setType('Banque');
+                    // $ecritureperform->setComptecredit("661200");
+                    // $ecritureperform->setLibellecomptecredit("prime de performance");
+                    // $ecritureperform->setComptedebit($banque->getCompte());
+                    // $ecritureperform->setLibellecomptedebit($banque->getNom());
+                    // $ecritureperform->setDebit($debit);
+                    // $ecritureperform->setSolde(-$paie->getPerformance());
+                    // $ecritureperform->setMontant($paie->getPerformance());
+                    // $ecritureperform->setLibelle("prime de performance ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                    // $entityManager->persist($debitperform);
+                    // $entityManager->persist($ecritureperform);
+                   
+        
+                  
+        
+                    /** irpp */
+                   
+                    
+                    $debitirpp = new Debit();
+                    $debitirpp->setCompte($banque->getCompte());
+                    $debitirpp->setType('Banque');
+                    $debitirpp->setSalaire($paieSalaire);
+                    $debitirpp->setMontant($paie->getIrpp());
+        
+                    $ecritureirpp = new Ecriture();
+                    $ecritureirpp->setType('Banque');
+                    $ecritureirpp->setComptecredit("447210");
+                    $ecritureirpp->setLibellecomptecredit("IRPP");
+                    $ecritureirpp->setComptedebit($banque->getCompte());
+                    $ecritureirpp->setLibellecomptedebit($banque->getNom());
+                    $ecritureirpp->setDebit($debitirpp);
+                    $ecritureirpp->setSolde(-$paie->getIrpp());
+                    $ecritureirpp->setMontant($paie->getIrpp());
+                    $ecritureirpp->setLibelle("IRPP ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                    $entityManager->persist($debitirpp);
+                    $entityManager->persist($ecritureirpp);
+        
+                  //CA
+                    ;
+        
+                    $debitca = new Debit();
+                    $debitca->setCompte($banque->getCompte());
+                    $debitca->setType('Banque');
+                    $debitca->setSalaire($paieSalaire);
+                    $debitca->setMontant($paie->getCa());
+        
+                    $ecritureca = new Ecriture();
+                    $ecritureca->setType('Banque');
+                    $ecritureca->setComptecredit("447220");
+                    $ecritureca->setLibellecomptecredit("Centimes additionnels");
+                    $ecritureca->setComptedebit($banque->getCompte());
+                    $ecritureca->setLibellecomptedebit($banque->getNom());
+                    $ecritureca->setDebit($debitca);
+                    $ecritureca->setSolde(-$paie->getCa());
+                    $ecritureca->setMontant($paie->getCa());
+                    $ecritureca->setLibelle("Centimes additionnels ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                    $entityManager->persist($debitca);
+                    $entityManager->persist($ecritureca);
+                   
+                    /** dve local */
+                   
+                    $debitlocal = new Debit();
+                    $debitlocal->setCompte($banque->getCompte());
+                    $debitlocal->setType('Banque');
+                    $debitlocal->setSalaire($paieSalaire);
+                    $debitlocal->setMontant($paie->getLocal());
+        
+                    $ecriturelocal = new Ecriture();
+                    $ecriturelocal->setType('Banque');
+                    $ecriturelocal->setComptecredit("447240");
+                    $ecriturelocal->setLibellecomptecredit("Taxe de développement local");
+                    $ecriturelocal->setComptedebit($banque->getCompte());
+                    $ecriturelocal->setLibellecomptedebit($banque->getNom());
+                    $ecriturelocal->setDebit($debitlocal);
+                    $ecriturelocal->setSolde(-$paie->getLocal());
+                    $ecriturelocal->setMontant($paie->getLocal());
+                    $ecriturelocal->setLibelle("Taxe de développement local ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                    $entityManager->persist($debitlocal);
+                    $entityManager->persist($ecriturelocal);
+                   
+                    /** vcnps viel */
+                   
+                    
+        
+                    $debitviel = new Debit();
+                    $debitviel->setCompte($banque->getCompte());
+                    $debitviel->setType('Banque');
+                    $debitviel->setSalaire($paieSalaire);
+                    $debitviel->setMontant($paie->getVieil());
+        
+                    $ecritureviel = new Ecriture();
+                    $ecritureviel->setType('Banque');
+                    $ecritureviel->setComptecredit("431300");
+                    $ecritureviel->setLibellecomptecredit("CNPS / Pension Vieillesse");
+                    $ecritureviel->setComptedebit($banque->getCompte());
+                    $ecritureviel->setLibellecomptedebit($banque->getNom());
+                    $ecritureviel->setDebit($debitviel);
+                    $ecritureviel->setSolde(-$paie->getVieil());
+                    $ecritureviel->setMontant($paie->getVieil());
+                    $ecritureviel->setLibelle("CNPS / Pension Vieillesse ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                    $entityManager->persist($debitviel);
+                    $entityManager->persist($ecritureviel);
+                    
+                    /** fonfoncier */
+                   
+                    
+                    if($paie->getFoncier() != 0){
+                        $debifoncier = new Debit();
+                        $debifoncier->setCompte($banque->getCompte());
+                        $debifoncier->setType('Banque');
+                        $debifoncier->setSalaire($paieSalaire);
+                        $debifoncier->setMontant($paie->getFoncier());
+        
+                        $ecriturfoncier = new Ecriture();
+                        $ecriturfoncier->setType('Banque');
+                        $ecriturfoncier->setComptecredit("431200");
+                        $ecriturfoncier->setLibellecomptecredit("Credit foncier");
+                        $ecriturfoncier->setComptedebit($banque->getCompte());
+                        $ecriturfoncier->setLibellecomptedebit($banque->getNom());
+                        $ecriturfoncier->setDebit($debifoncier);
+                        $ecriturfoncier->setSolde(-$paie->getFoncier());
+                        $ecriturfoncier->setMontant($paie->getFoncier());
+                        $ecriturfoncier->setLibelle("Credit foncier ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                        $entityManager->persist($debifoncier);
+                        $entityManager->persist($ecriturfoncier);
+                    }
+                    
+                    /** crtv */
+                   
+                    
+                    if($paie->getCrtv() != 0){
+                        $debicrtv = new Debit();
+                        $debicrtv->setCompte($banque->getCompte());
+                        $debicrtv->setType('Banque');
+                        $debicrtv->setSalaire($paieSalaire);
+                        $debicrtv->setMontant($paie->getCrtv());
+        
+                        $ecriturcrtv = new Ecriture();
+                        $ecriturcrtv->setType('Banque');
+                        $ecriturcrtv->setComptecredit("447250");
+                        $ecriturcrtv->setLibellecomptecredit("Redevance audio visuelle (CRTV)");
+                        $ecriturcrtv->setComptedebit($banque->getCompte());
+                        $ecriturcrtv->setLibellecomptedebit($banque->getNom());
+                        $ecriturcrtv->setDebit($debicrtv);
+                        $ecriturcrtv->setSolde(-$paie->getCrtv());
+                        $ecriturcrtv->setMontant($paie->getCrtv());
+                        $ecriturcrtv->setLibelle("Redevance audio visuelle (CRTV) ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                        $entityManager->persist($debicrtv);
+                        $entityManager->persist($ecriturcrtv);
+                    }
+        
+                    /** allocation */
+                   
+                    
+                    if($paie->getAllocation() != 0){
+                        $debiallocation = new Debit();
+                        $debiallocation->setCompte($banque->getCompte());
+                        $debiallocation->setType('Banque');
+                        $debiallocation->setSalaire($paieSalaire);
+                        $debiallocation->setMontant($paie->getAllocation());
+        
+                        $ecriturallocation = new Ecriture();
+                        $ecriturallocation->setType('Banque');
+                        $ecriturallocation->setComptecredit("431100");
+                        $ecriturallocation->setLibellecomptecredit("ALLOC FAM");
+                        $ecriturallocation->setComptedebit($banque->getCompte());
+                        $ecriturallocation->setLibellecomptedebit($banque->getNom());
+                        $ecriturallocation->setDebit($debiallocation);
+                        $ecriturallocation->setSolde(-$paie->getAllocation());
+                        $ecriturallocation->setMontant($paie->getAllocation());
+                        $ecriturallocation->setLibelle("ALLOC FAM ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                        $entityManager->persist($debiallocation);
+                        $entityManager->persist($ecriturallocation);
+                    }
+                    
+                    /** cp vieil */
+                   
+                    
+                    if($paie->getCpvieil() != 0){
+                        $debiallocation = new Debit();
+                        $debiallocation->setCompte($banque->getCompte());
+                        $debiallocation->setType('Banque');
+                        $debiallocation->setSalaire($paieSalaire);
+                        $debiallocation->setMontant($paie->getCpvieil());
+        
+                        $ecriturallocation = new Ecriture();
+                        $ecriturallocation->setType('Banque');
+                        $ecriturallocation->setComptecredit("431300");
+                        $ecriturallocation->setLibellecomptecredit("PENS VIEIL");
+                        $ecriturallocation->setComptedebit($banque->getCompte());
+                        $ecriturallocation->setLibellecomptedebit($banque->getNom());
+                        $ecriturallocation->setDebit($debiallocation);
+                        $ecriturallocation->setSolde(-$paie->getCpvieil());
+                        $ecriturallocation->setMontant($paie->getCpvieil());
+                        $ecriturallocation->setLibelle("PENS VIEIL ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                        $entityManager->persist($debiallocation);
+                        $entityManager->persist($ecriturallocation);
+                    }
+        
+                    /** trav */
+                  
+                    
+                    if($paie->getTav() != 0){
+                        $debitav = new Debit();
+                        $debitav->setCompte($banque->getCompte());
+                        $debitav->setType('Banque');
+                        $debitav->setSalaire($paieSalaire);
+                        $debitav->setMontant($paie->getTav());
+        
+                        $ecriturtav = new Ecriture();
+                        $ecriturtav->setType('Banque');
+                        $ecriturtav->setComptecredit("431200");
+                        $ecriturtav->setLibellecomptecredit("ACC TRAV");
+                        $ecriturtav->setComptedebit($banque->getCompte());
+                        $ecriturtav->setLibellecomptedebit($banque->getNom());
+                        $ecriturtav->setDebit($debitav);
+                        $ecriturtav->setSolde(-$paie->getTav());
+                        $ecriturtav->setMontant($paie->getTav());
+                        $ecriturtav->setLibelle("ACC TRAV ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                        $entityManager->persist($debitav);
+                        $entityManager->persist($ecriturtav);
+                    }
+        
+                    /** cp foncier */
+                   
+                    
+                    if($paie->getCpfoncier() != 0){
+                        $debitav = new Debit();
+                        $debitav->setCompte($banque->getCompte());
+                        $debitav->setType('Banque');
+                        $debitav->setSalaire($paieSalaire);
+                        $debitav->setMontant($paie->getCpfoncier());
+        
+                        $ecriturtav = new Ecriture();
+                        $ecriturtav->setType('Banque');
+                        $ecriturtav->setComptecredit("431200");
+                        $ecriturtav->setLibellecomptecredit("CREDIT FONC");
+                        $ecriturtav->setComptedebit($banque->getCompte());
+                        $ecriturtav->setLibellecomptedebit($banque->getNom());
+                        $ecriturtav->setDebit($debitav);
+                        $ecriturtav->setSolde(-$paie->getCpfoncier());
+                        $ecriturtav->setMontant($paie->getCpfoncier());
+                        $ecriturtav->setLibelle("CREDIT FONC ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                        $entityManager->persist($debitav);
+                        $entityManager->persist($ecriturtav);
+                    }
+        
+                    /** fne */
+                   
+                    
+                    if($paie->getFne() != 0){
+                        $debifne = new Debit();
+                        $debifne->setCompte($banque->getCompte());
+                        $debifne->setType('Banque');
+                        $debifne->setSalaire($paieSalaire);
+                        $debifne->setMontant($paie->getFne());
+        
+                        $ecriturfne = new Ecriture();
+                        $ecriturfne->setType('Banque');
+                        $ecriturfne->setComptecredit("431300");
+                        $ecriturfne->setLibellecomptecredit("F.N.E");
+                        $ecriturfne->setComptedebit($banque->getCompte());
+                        $ecriturfne->setLibellecomptedebit($banque->getNom());
+                        $ecriturfne->setDebit($debifne);
+                        $ecriturfne->setSolde(-$paie->getFne());
+                        $ecriturfne->setMontant($paie->getFne());
+                        $ecriturfne->setLibelle("F.N.E ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
+                        $entityManager->persist($debifne);
+                        $entityManager->persist($ecriturfne);
+                    }
+        
+                   
+        
+        
+                  
+                       
+                        $paieSalaire->setUser($this->getUser());
+                        $paieSalaire->setMontant($paie->getSalaireNet());
+                        $paieSalaire->setEmploye($paie->getEmploye());
+                        $paieSalaire->setCompte($banque->getCompte());
+                        $entityManager->persist($paieSalaire);
+                        $paie->setPayer(true);
+                        $paie->setDatepaye(new \DateTime());
+                        $entityManager->persist($paie);
+        
+                       $entityManager->flush();
 
 
                 }
-                $debitNet = new Debit();
-                $debitCharge = new Debit();
-                // $debitImpot = new Debit();
-                $ecritureNet = new Ecriture();
-                $ecritureCharge = new Ecriture();
-                // $ecritureImpot = new Ecriture();
-
-                $depenseNet = new Depense();
-                $depenseNet->setUser($this->getUser());
-                $depenseNet->setType("Banque");
-                $depenseNet->setLibelle("Paiement salaire");
-                $depenseNet->setMontant($montantNet);
-                $depenseNet->setStatut("Effectuée");
-                $depenseNet->setCompte("641");
-
-                $depenseCharge = new Depense();
-                $depenseCharge->setUser($this->getUser());
-                $depenseCharge->setType("Banque");
-                $depenseCharge->setLibelle("Versement charge sociale");
-                $depenseCharge->setMontant($montantcharge);
-                $depenseCharge->setStatut("Effectuée");
-                $depenseCharge->setCompte("431");
-
-                // $depenseImpot = new Depense();
-                // $depenseImpot->setUser($this->getUser());
-                // $depenseImpot->setType("Banque");
-                // $depenseImpot->setLibelle("Versement Impot les revenues");
-                // $depenseImpot->setMontant($montantimpot);
-                // $depenseImpot->setStatut("Effectuée");
-                // $depenseImpot->setCompte("4421");
-
-                $debitNet->setCompte($banque->getCompte());
-                $debitNet->setType('Banque');
-                $debitNet->setDepense($depenseNet);
-                $debitNet->setMontant($montantNet);
-
-                $debitCharge->setCompte($banque->getCompte());
-                $debitCharge->setType('Banque');
-                $debitCharge->setDepense($depenseCharge);
-                $debitCharge->setMontant($montantcharge);
-
-                // $debitImpot->setCompte($banque->getCompte());
-                // $debitImpot->setType('Banque');
-                // $debitImpot->setDepense($depenseImpot);
-                // $debitImpot->setMontant($montantimpot);
-
-                $ecritureNet->setType('Banque');
-                $ecritureNet->setComptecredit("641");
-                $ecritureNet->setLibellecomptecredit("Salaire Personnel");
-                $ecritureNet->setComptedebit($banque->getCompte());
-                $ecritureNet->setLibellecomptedebit($banque->getNom());
-                $ecritureNet->setDebit($debitNet);
-                $ecritureNet->setSolde(-$montantNet);
-                $ecritureNet->setMontant($montantNet);
-                $ecritureNet->setLibelle("Paiement des salaires aux employes");
-
-                $ecritureCharge->setType('Banque');
-                $ecritureCharge->setComptecredit("431");
-                $ecritureCharge->setLibellecomptecredit("Charge Sociale");
-                $ecritureCharge->setComptedebit($banque->getCompte());
-                $ecritureCharge->setLibellecomptedebit($banque->getNom());
-                $ecritureCharge->setDebit($debitCharge);
-                $ecritureCharge->setSolde(-$montantcharge);
-                $ecritureCharge->setMontant($montantcharge);
-                $ecritureCharge->setLibelle("Versement charges sociales");
-
-                // $ecritureImpot->setType('Banque');
-                // $ecritureImpot->setComptecredit("431");
-                // $ecritureImpot->setLibellecomptecredit("Impot sur les revenues");
-                // $ecritureImpot->setComptedebit($banque->getCompte());
-                // $ecritureImpot->setLibellecomptedebit($banque->getNom());
-                // $ecritureImpot->setDebit($debitImpot);
-                // $ecritureImpot->setSolde(-$montantimpot);
-                // $ecritureImpot->setMontant($montantimpot);
-                // $ecritureImpot->setLibelle("Versement Impot sur les revenues");
-
-                $entityManager->persist($depenseNet);
-                $entityManager->persist($depenseCharge);
-                // $entityManager->persist($depenseImpot);
-                $entityManager->persist($debitNet);
-                $entityManager->persist($debitCharge);
-                // $entityManager->persist($debitImpot);
-                $entityManager->persist($ecritureNet);
-                $entityManager->persist($ecritureCharge);
-                // $entityManager->persist($ecritureImpot);
-                $entityManager->flush();
                 $this->addFlash('notice', 'Paiements effectués avec succès');
+            
 //                    return $this->redirectToRoute('depense_index', [], Response::HTTP_SEE_OTHER);
             } else {
                 $this->addFlash('danger', 'Montant non disponible');
@@ -1964,7 +2628,7 @@ class FinanceController extends AbstractController
             $depenseNet->setLibelle("Accompte sur Salaire");
             $depenseNet->setMontant($accompte->getMontant());
             $depenseNet->setStatut("Effectuée");
-            $depenseNet->setCompte("641");
+            $depenseNet->setCompte("421100");
 
             $debit->setCompte($banque->getCompte());
             $debit->setType('Banque');
@@ -1973,8 +2637,8 @@ class FinanceController extends AbstractController
 
 
             $ecriture->setType('Banque');
-            $ecriture->setComptecredit("641");
-            $ecriture->setLibellecomptecredit("Salaire Personnel");
+            $ecriture->setComptecredit("421100");
+            $ecriture->setLibellecomptecredit("Personnel Avances");
             $ecriture->setComptedebit($banque->getCompte());
             $ecriture->setLibellecomptedebit($banque->getNom());
             $ecriture->setDebit($debit);
@@ -2006,6 +2670,145 @@ class FinanceController extends AbstractController
             $response->headers->set('content-type', 'application/json');
             $re = json_encode($res);
             $response->setContent($re);
+            return $response;
+        } else {
+            $response = $this->redirectToRoute('security_logout');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        }
+    }
+    
+    #[Route("/CompteResultat", name :"Compteresultat", methods : ["POST", "GET"]) ]
+    public function CompteResultat(Solde $solde, Request $request, CommandeRepository $repository, CommandeProduitRepository $Produitrepository, ApprovisionnementRepository $Approrepository, PaieRepository $paieRepository): Response
+    {
+        if ($this->security->isGranted('ROLE_FINANCE')) {
+            $commandes = $repository->findBy(['suivi' => true, 'payer' => true ]);// achat deja paye
+            $vente = 0;
+            $achat = 0;
+            $reapprro = 0;
+            $chargepersonnel= 0;
+            $charge = 0;
+            $approvisionnements = $Approrepository->findAll();
+
+            // variation stock produit
+            $variation = 0;
+            $stocks = $this->entityManager->getRepository(Stock::class)->findAll();
+            foreach($stocks as $stock){
+                $variation += $stock->getQuantite() * $stock->getProduit()->getPght();
+                //$approvs = $Approrepository->findBy(['produit' => $stock->getProduit()->getId()]);
+
+            }
+
+            foreach($approvisionnements as $approvisionnement){
+               
+               // $reapprro = $reapprro + $approvisionnement->getQuantite() * $approvisionnement->getPght();
+                $achat = $achat  + $approvisionnement->getQuantite() * $approvisionnement->getPght();
+                
+            }
+
+            
+
+            foreach($commandes as $commande){
+                if($commande->getLivraison() == true){
+                $vente = $vente + $commande->getMontant();
+                }else{// commande non livrer
+                    $commandeproduits = $repository->findBy(['commande' => $commande->getId()]);
+                    foreach($commandeproduits as $commandeproduit){
+                        $stoc = $this->entityManager->getRepository(Stock::class)->find($commandeproduit->getProduit());
+                        if(!empty($stoc)){
+                            $quant = $stoc->getQuantite() - $commandeproduit->getQuantite();
+                            if($quant < 0){
+                                $charge += -1 * $commandeproduit->getPght() * $quant;// -1 * la quatite 
+                            }
+                        }else{
+                            $charge += $commandeproduit->getQuantite() * $commandeproduit->getPght();
+                        }
+                    }
+                    
+                }
+            }
+            
+
+            $restes = $this->entityManager->getRepository(LivrerReste::class)->findAll();
+            foreach($restes as $reste){    
+                $stoc = $this->entityManager->getRepository(Stock::class)->find($reste->getProduit());
+                if(!empty($stoc)){
+                    $quant = $stoc->getQuantite() - ($reste->getQuantite() - $reste->getQuantitelivre());
+                    if($quant < 0){
+                        $charge += -1 * $$reste->getProduit()->getPght() * $quant;// -1 * la quatite 
+                    }
+                }else{
+                    $charge += ($reste->getQuantite() - $reste->getQuantitelivre()) * $reste->getProduit()->getPght();
+                }    
+            }
+            
+            $avoirs = $this->entityManager->getRepository(Avoir::class)->findAll();
+            foreach($avoirs as $avoir){    
+                $charge += $avoir->getMontant(); 
+            }
+
+            // $credits = $repository->findBy(['paiement' => null, 'credit' => true, 'suivi' => true, 'payer' => false]);// achat a credit
+            // foreach($credits as $commande){
+            //     $vente = $vente + $commande->getMontant();
+            //     $commandesproduits = $Produitrepository->findBy(['commande' => $commande->getid()]);
+            //     foreach($commandesproduits as $commandeproduit){
+            //         $achat = $achat + $commandeproduit->getQuantite() * $commandeproduit->getPght();
+            //     }
+            // }
+
+
+            //charge personnel
+            $salaires = $paieRepository->compteResultat(date('Y'));
+            foreach($salaires as $salaire){
+                $chargepersonnel = $chargepersonnel + $salaire->getSalaireNet() + $salaire->getTotalchargepatronal() + $salaire->getTotalChargeEmploye();
+
+                
+            }
+
+            // interet pret bancaire
+            $interet = 0;
+             $prets = $this->entityManager->getRepository(Financement::class)->findBy(['rembourser' => false, 'apport' => false]);
+             foreach($prets as $pret){
+                
+
+                $interet = $interet + ((($pret->getMontant() * $pret->getTaux()/100) / $pret->getDuree()) * count($pret->getRemboursements()));    
+            }
+            
+            // amortissement
+            $amortissement = 0;
+             $amortis = $this->entityManager->getRepository(Categorie::class)->amortissement();
+             foreach($amortis as $amorti){
+                $depenses = $this->entityManager->getRepository(Depense::class)->findBy(['categorie' => $amorti->getId()]);
+                foreach($depenses as $depense){
+
+                    $amortissement = $amortissement + ($depense->getMontant() / ( $amorti->getAmortissement() * 12)) ;    
+                }
+            }
+
+            $response = $this->render('finance/resultat.html.twig',[
+                'vente' => $vente,
+                'achat' => $achat,
+                'chargepersonnel' => $chargepersonnel,
+                'interet' => $interet,
+                'amortissement' => $amortissement,
+                'variation' => $variation,
+                'charge' => $charge,
+            ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
             return $response;
         } else {
             $response = $this->redirectToRoute('security_logout');

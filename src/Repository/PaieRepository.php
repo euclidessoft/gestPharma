@@ -84,6 +84,18 @@ class PaieRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function compteResultat($annee)
+    {
+        $start = new \DateTime("$annee-01-01");
+        $end = new \DateTime("$annee-12-31");
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.date BETWEEN :start AND :end')
+            ->setParameter('start' , $start)
+            ->setParameter('end' , $end)
+            ->getQuery()
+            ->getResult();
+    }
+
     /*
     public function findOneBySomeField($value): ?Paie
     {

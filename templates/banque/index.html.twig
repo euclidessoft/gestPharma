@@ -17,7 +17,15 @@
         <i class="fa fa-money-bill me-2"></i>
         {{ "Liste des banques"|trans }}
     </h3>
+     {% for message in app.flashes('notice') %}
+            <div role="alert" class="alert alert-success alert-dismissible fade show radius-10 shadow-black">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                {{ message|trans }}
+            </div>
+        {% endfor %}
+
     <a href="{{ path('banque_new') }}" class="btn btn-success mb-4"><i class="fas fa-plus"></i> Ajouter banque</a>
+    
     <table class="table table-success-light table-bordered table-hover table-striped my-3" id="liste">
         <thead>
             <tr>

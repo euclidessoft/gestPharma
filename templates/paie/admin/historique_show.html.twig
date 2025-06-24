@@ -115,8 +115,7 @@
                         {{ "Code d'ancienneté : "|trans }}
                     </div>
                     <div class="col-7">
-                        {% set code = 0 %}
-                        {{ paie.code }}
+                        {{ paie.codeanciennete }}
                     </div>
                     <div class="col-5 text-end text-bold">
                         {{ "Congé : "|trans }}
@@ -454,11 +453,11 @@
                     <tr class="text-bold text-end">
                         <td class="text-start" colspan="4">TOTAL DES RETENUES</td>
                         <td>
-                            {% set cotisation = paie.irpp + paie.ca + paie.local + paie.vieil + paie.foncier + paie.CRTV + totalretenue  + paie.accompte %}
+                            {% set cotisation = paie.irpp|round  + paie.ca|round  + paie.local|round  + paie.vieil|round  + paie.foncier|round  + paie.CRTV|round  + totalretenue|round   + paie.accompte|round  %}
                             {{ cotisation|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <td></td>
-                        <td>{{ (paie.allocation + paie.Vieil + paie.tav + paie.foncier + paie.fne)|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',')}}</td>
+                        <td>{{ (paie.allocation|round  + paie.cpvieil|round  + paie.tav|round  + paie.cpfoncier|round  + paie.fne|round )|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',')}}</td>
                     </tr>
                     </tbody>
                 </table>

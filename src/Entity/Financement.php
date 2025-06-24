@@ -7,8 +7,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass:FinancementRepository::class) ]
+
+#[UniqueEntity(
+fields: ['compte'],
+    message: 'Ce compte de pret existe déjà.'
+)]
+ 
 class Financement
 {
     #[ORM\Id]
@@ -67,11 +74,17 @@ class Financement
     #[ORM\Column(type:"float") ]
     private $taux;
 
-    #[ORM\Column(type:"integer", nullable:true) ]
-    private $compteinteret;
+    // #[ORM\Column(type:"integer", nullable:true) ]
+    // private $compteinteret;
 
     #[ORM\Column(type:"string", length:255, nullable:true) ]
     private $libellecompte;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $rembourser = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $duree = null;
 
 
     /**
@@ -130,6 +143,7 @@ class Financement
         $this->date = new \Datetime();
         $this->remboursements = new ArrayCollection();
         $this->apport = true;
+        $this->rembourser = false;
         $this->taux = 0;
     }
 
@@ -260,17 +274,17 @@ class Financement
         return $this;
     }
 
-    public function getCompteinteret(): ?int
-    {
-        return $this->compteinteret;
-    }
+    // public function getCompteinteret(): ?int
+    // {
+    //     return $this->compteinteret;
+    // }
 
-    public function setCompteinteret(int $compteinteret): self
-    {
-        $this->compteinteret = $compteinteret;
+    // public function setCompteinteret(int $compteinteret): self
+    // {
+    //     $this->compteinteret = $compteinteret;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getLibellecompte(): ?string
     {
@@ -280,6 +294,30 @@ class Financement
     public function setLibellecompte(?string $libellecompte): self
     {
         $this->libellecompte = $libellecompte;
+
+        return $this;
+    }
+
+    public function isRembourser(): ?bool
+    {
+        return $this->rembourser;
+    }
+
+    public function setRembourser(?bool $rembourser): static
+    {
+        $this->rembourser = $rembourser;
+
+        return $this;
+    }
+
+    public function getDuree(): ?int
+    {
+        return $this->duree;
+    }
+
+    public function setDuree(?int $duree): static
+    {
+        $this->duree = $duree;
 
         return $this;
     }

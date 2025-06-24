@@ -26,6 +26,7 @@ class FinancementBanqueType extends AbstractType
                 'required' => true,
             ])
             ->add('numero')
+            ->add('duree')
         ;
     }
 
