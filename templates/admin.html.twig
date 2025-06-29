@@ -312,6 +312,13 @@
                                 {{ 'Compte Resultat'|trans }}
                             </a>
                         </li>
+                        <li class="dropdown-item">
+                            <a class="nav-link {% block bilan %}{% endblock %}"
+                               href="{{ path('finance_bilan') }}">
+                                <i class="fa-solid fa-money-bill-transfer"></i>
+                                {{ 'Bilan'|trans }}
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item dropend" title="{{ 'Commande et Promotion'|trans }}">

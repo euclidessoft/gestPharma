@@ -89,9 +89,11 @@ class PaieRepository extends ServiceEntityRepository
         $start = new \DateTime("$annee-01-01");
         $end = new \DateTime("$annee-12-31");
         return $this->createQueryBuilder('p')
+            ->Where('p.payer = :payer')
             ->andWhere('p.date BETWEEN :start AND :end')
             ->setParameter('start' , $start)
             ->setParameter('end' , $end)
+            ->setParameter('payer' , true)
             ->getQuery()
             ->getResult();
     }

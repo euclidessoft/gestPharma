@@ -40,6 +40,10 @@
                 <td rowspan="5" class="text-center text-bolder w-25">{{ produit.stock|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
             </tr>
             <tr>
+                <th>{{ 'PGHT'|trans }}</th>
+                <td>{{ produit.pght|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+            </tr>
+            <tr>
                 <th>{{ 'Prix cession'|trans }}</th>
                 <td>{{ produit.prix|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
             </tr>

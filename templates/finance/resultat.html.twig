@@ -83,7 +83,7 @@
                     <tr>
                         <td>XA</td>
                         <th class="text-center">MARGE COMMERCIALE</th>
-                        <td>{{ charge }}</td>
+                        <td></td>
                         <td></td>
                         <th> 
                         {% set xa = vente - (achat - variation) %}
@@ -134,7 +134,7 @@
                     <tr>
                         <td>TE</td>
                         <td>Production stockée (ou déstockage)</td>
-                        <td>-/+</td>
+                        <td>+/-</td>
                         <td>6</td>
                         <td> 
                         {% set te = 0 %}
@@ -194,7 +194,7 @@
                     <tr>
                         <td>RD</td>
                         <td>Variations de stocks de matières premières et fournitures liées</td>
-                        <td>-/+</td>
+                        <td>+/-</td>
                         <td>6</td>
                        <td> 
                         {% set rd = 0 %}
@@ -203,7 +203,7 @@
                     </tr>
                     <tr>
                         <td>RE</td>
-                        <td>Reprises d'amortissements, provisions et dépreciations et subvention d'investissements</td>
+                        <td>Autres Achats</td>
                         <td>-</td>
                         <td>22</td>
                         <td> 
@@ -214,7 +214,7 @@
                     <tr>
                         <td>RF</td>
                         <td>Variation de stocks d'autres approvisionnements</td>
-                        <td>-/=</td>
+                        <td>+/-</td>
                         <td>6</td>
                         <td> 
                         {% set rf = 0 %}
@@ -267,7 +267,10 @@
                         <td></td>
                         <td></td>
                         <th>
-                        {% set xc = xa + tb + tc + td + te + tf + tg + th + ti - (rc + rd + re + rf + rg + rh + ri + rj ) %}
+                        {# {% set xc = xa + tb + tc + td + te + tf + tg + th + ti - (rc + rd + re + rf + rg + rh + ri + rj ) %} #}
+                        {% set xc = xa + (tb + tc + td)+ (te + tf + tg + th + ti) - (rc + rd + re + rf + rg + rh + ri + rj ) %}
+
+                          {# {% set xc = xa + vente + variation + (te + tf + tg + th + ti)  - (rc + rd + re + rf + rg + rh + ri + rj ) %} #}
                          {{ xc|number_format(0, '', ' ')}}
                          </th>
                         <td>-</td>

@@ -49,4 +49,23 @@ class Solde
 
     }
 
+    public function banque($em){
+
+        $credits = $em->getRepository(Ecriture::class)->findby(['type' => 'Banque']);
+        $debits = $em->getRepository(Ecriture::class)->findby(['type' => 'Banque']);
+        $caisse = 0;
+        $debitcaisse = 0;
+        foreach($credits as $ecriture) {
+            $caisse = $caisse + $ecriture->getMontant();
+
+        }
+        foreach($debits as $ecriture) {
+            $debitcaisse = $debitcaisse + $ecriture->getMontant();
+
+        }
+        $result = $caisse - $debitcaisse;
+        return $result;
+
+    }
+
 }
