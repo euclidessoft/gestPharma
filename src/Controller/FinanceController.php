@@ -2887,6 +2887,12 @@ class FinanceController extends AbstractController
                 }
             }
 
+            $detteavoir = 0;
+            $avoirs = $this->entityManager->getRepository(Avoir::class)->findAll();
+            foreach($avoirs as $avoir){    
+                $detteavoir += $avoir->getMontant(); 
+            }
+
             // capital
             $capital = 0;
              $prets = $this->entityManager->getRepository(Financement::class)->findBy(['apport' => true]);
@@ -2958,6 +2964,7 @@ class FinanceController extends AbstractController
             $response = $this->render('finance/bilan.html.twig',[
                
                 'amortissement' => $amortissement,
+                'detteavoir' => $detteavoir,
                 'solde' => $solde,
                 'stock' => $stockfinal,
                 'capital' => $capital,

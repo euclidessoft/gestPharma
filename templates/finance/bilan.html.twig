@@ -681,7 +681,7 @@
                 16
             </td>
             <td>
-                {% set da = pret %}
+                {% set da = pret + detteavoir %}
                  {{ da != 0 ? da|number_format(0, '', ' ') : ''}}                                                                 
             </td>
             <td>
