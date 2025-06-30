@@ -18,7 +18,8 @@
             <tr>
                 <td data-label="Date">{{ financement.date ? financement.date|date('d/m/Y') }}</td>
                 <td data-label="Provenance">{{ financement.compte }}</td>
-                <td data-label="Provenance">{{ financement.compteinteret }}</td>
+                <td data-label="Taux d'interet">{{ financement.taux }} %</td>
+                <td data-label="Duree">{{ financement.duree }} mois</td>
                 <td data-label="Motif">{{ financement.motif }}</td>
                 <td data-label="Montant">{{ financement.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                 <td data-label="Type">{{ financement.Type }}</td>
