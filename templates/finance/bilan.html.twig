@@ -319,8 +319,9 @@
             <th>Créances et emplois assimilés</th>
             <td></td>
             <td>
-            {% set bg = 0 %}
+            {% set bg = creance %}
             {% set bgr = 0 %}
+            {{ bg != 0 ? bg|number_format(0, '', ' ') : ''}}
             </td>
             <td></td>
             <td></td>
@@ -345,6 +346,7 @@
             <td>
             {% set bi = 0 %}
             {% set bir = 0 %}
+            {{ bi != 0 ? bi|number_format(0, '', ' ') : ''}}
             </td>
             <td></td>
             <td></td>

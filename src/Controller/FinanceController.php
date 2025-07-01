@@ -2693,6 +2693,7 @@ class FinanceController extends AbstractController
     {
         if ($this->security->isGranted('ROLE_FINANCE')) {
             $commandes = $repository->findBy(['suivi' => true, 'payer' => true ]);// achat deja paye
+            $credits = $repository->findBy(['suivi' => true, 'payer' => false, 'livraison' => true, 'credit' => true ]);// achat a credit
             $vente = 0;
             $achat = 0;
             $reapprro = 0;
@@ -2736,6 +2737,12 @@ class FinanceController extends AbstractController
                     }
                     
                 }
+            }           
+
+            foreach($credits as $credit){
+             
+                $vente = $vente + $credit->getMontant();
+                
             }
             
 
@@ -2951,6 +2958,16 @@ class FinanceController extends AbstractController
             }
             // fin avance client
 
+            // creaces clients
+            $creance= 0;
+            $credits = $this->entityManager->getRepository(Commande::class)->findBy(['suivi' => true, 'payer' => false, 'livraison' => true, 'credit' => true ]);// achat a credit
+            foreach($credits as $credit){
+               
+                
+                $creance = $creance + $credit->getMontant();
+                
+            }
+
             // dtte fournisseur
             $dettefournisseur = 0;
             $factures = $this->entityManager->getRepository(Facture::class)->findBy(['payer' => false]);
@@ -2970,6 +2987,7 @@ class FinanceController extends AbstractController
                 'capital' => $capital,
                 'pret' => $montantpret - $remboursement,
                 'avanceclient' => $avanceclient,
+                'creance' => $creance,
                 'dettefournisseur' => $dettefournisseur,
                 'resultat' => $this->ResultatInterne(),
             ]);
@@ -3001,6 +3019,7 @@ class FinanceController extends AbstractController
         
         if ($this->security->isGranted('ROLE_FINANCE')) {
             $commandes = $this->entityManager->getRepository(Commande::class)->findBy(['suivi' => true, 'payer' => true ]);// achat deja paye
+            $credits = $this->entityManager->getRepository(Commande::class)->findBy(['suivi' => true, 'payer' => false, 'livraison' => true, 'credit' => true ]);// achat a credit
             $vente = 0;
             $achat = 0;
             $reapprro = 0;
@@ -3044,6 +3063,13 @@ class FinanceController extends AbstractController
                     }
                     
                 }
+            }
+           
+            foreach($credits as $credit){
+               
+                
+                $vente = $vente + $credit->getMontant();
+                
             }
             
 
