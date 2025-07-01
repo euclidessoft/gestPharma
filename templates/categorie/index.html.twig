@@ -33,7 +33,7 @@
             <tr>
                 <td data-label="Compte">{{ categorie.compte }}</td>
                 <td data-label="Nom">{{ categorie.nom }}</td>
-                <td data-label="Amortissement" class="text-center">{{ categorie.amortissement }} {{ "ans"|trans }}</td>
+                <td data-label="Amortissement" class="text-center">{{ categorie.amortissement ?  categorie.amortissement ~ "ans"|trans : ''}}</td>
                 <td data-label="Description">{{ categorie.description }}</td>
                 <td data-label="Actions">
                     <!-- <a href="{{ path('categorie_show', {'id': categorie.id}) }}" class="btn btn-success"><i class="fas fa-eye"></i></a> -->

@@ -29,7 +29,7 @@ class CommandeRepository extends ServiceEntityRepository
             ->setParameter('suivi', true)
         ;
         return $query;
-    }
+    }  
 
     public function extranet($user)
     {
@@ -73,6 +73,25 @@ class CommandeRepository extends ServiceEntityRepository
             ->setParameter('val', true)
             ->getQuery();
         return $query->getResult();
+    }
+
+    public function creditAvance()
+    {
+        // achat a credit non livrer avec avance recu
+        $query = $this ->createQueryBuilder('a')
+            ->Where('a.payer = :payer')
+            ->AndWhere('a.suivi = :suivi')
+            ->AndWhere('a.livraison = :livraison')
+            ->AndWhere('a.credit = :credit')
+            ->AndWhere('a.versement > :versement')
+            ->setParameter('payer', false)
+            ->setParameter('suivi', true)
+            ->setParameter('livraison', false)
+            ->setParameter('credit', true)
+            ->setParameter('versement', 0)
+        ;
+        return $query->getQuery()
+            ->getResult();
     }
 
 
