@@ -2739,14 +2739,19 @@ class FinanceController extends AbstractController
                 }
             }           
 
-            foreach($credits as $credit){
+            foreach($credits as $credit){// ne tient pas compte des versement
+                $rest = 0;
+                $restes = $this->entityManager->getRepository(LivrerReste::class)->findby(['commande' => $credit]);
+                foreach($restes as $reste){
+                    $rest += ($reste->getQuantite()- $reste->getQuantitelivre()) * $reste->getSession();
+                }
              
-                $vente = $vente + $credit->getMontant();
+                $vente = $vente + $credit->getMontant() - $rest;
                 
             }
             
 
-            $restes = $this->entityManager->getRepository(LivrerReste::class)->findAll();
+            $restes = $this->entityManager->getRepository(LivrerReste::class)->findBy(['credit' => false]);
             foreach($restes as $reste){    
                 $stoc = $this->entityManager->getRepository(Stock::class)->find($reste->getProduit());
                 if(!empty($stoc)){
@@ -2944,7 +2949,7 @@ class FinanceController extends AbstractController
             }
             
 
-            $restes = $this->entityManager->getRepository(LivrerReste::class)->findAll();
+            $restes = $this->entityManager->getRepository(LivrerReste::class)->findBy(['credit' => false]);
             foreach($restes as $reste){    
                 $stoc = $this->entityManager->getRepository(Stock::class)->find($reste->getProduit());
                 if(!empty($stoc)){
@@ -2962,9 +2967,12 @@ class FinanceController extends AbstractController
             $creance= 0;
             $credits = $this->entityManager->getRepository(Commande::class)->findBy(['suivi' => true, 'payer' => false, 'livraison' => true, 'credit' => true ]);// achat a credit
             foreach($credits as $credit){
-               
-                
-                $creance = $creance + $credit->getMontant();
+               $rest = 0;
+                $restes = $this->entityManager->getRepository(LivrerReste::class)->findby(['commande' => $credit]);
+                foreach($restes as $reste){
+                    $rest += ($reste->getQuantite()- $reste->getQuantitelivre()) * $reste->getSession();
+                }
+                $creance = $creance + $credit->getMontant() - $credit->getVersement() - $rest;
                 
             }
 
@@ -3065,15 +3073,19 @@ class FinanceController extends AbstractController
                 }
             }
            
-            foreach($credits as $credit){
+            foreach($credits as $credit){// ne tient pas compte des versemet effectue sur le credit
                
-                
-                $vente = $vente + $credit->getMontant();
+                $rest = 0;
+                $restes = $this->entityManager->getRepository(LivrerReste::class)->findby(['commande' => $credit]);
+                foreach($restes as $reste){
+                    $rest += ($reste->getQuantite()- $reste->getQuantitelivre()) * $reste->getSession();
+                }
+                $vente = $vente + $credit->getMontant() - $rest;
                 
             }
             
 
-            $restes = $this->entityManager->getRepository(LivrerReste::class)->findAll();
+            $restes = $this->entityManager->getRepository(LivrerReste::class)->findby(['credit' => false]);
             foreach($restes as $reste){    
                 $stoc = $this->entityManager->getRepository(Stock::class)->find($reste->getProduit());
                 if(!empty($stoc)){

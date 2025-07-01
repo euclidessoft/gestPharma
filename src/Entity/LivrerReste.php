@@ -43,6 +43,9 @@ class LivrerReste
     #[ORM\Column(type:"float") ]
     private $session;
 
+    #[ORM\Column]
+    private ?bool $credit = null;// tamp creance pour comppte de resultat et bilan
+
     /**
      * Constructor
      */
@@ -55,6 +58,7 @@ class LivrerReste
         $this->quantite = $quantite;
         $this->livrer = $livrer;
         $this->client = $client;
+        $this->credit = false;
     }
 
     public function getDate(): ?\DateTimeInterface
@@ -173,6 +177,18 @@ class LivrerReste
     public function setSession(float $session): self
     {
         $this->session = $session;
+
+        return $this;
+    }
+
+    public function isCredit(): ?bool
+    {
+        return $this->credit;
+    }
+
+    public function setCredit(bool $credit): static
+    {
+        $this->credit = $credit;
 
         return $this;
     }
