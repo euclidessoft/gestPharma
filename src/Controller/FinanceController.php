@@ -49,20 +49,22 @@ class FinanceController extends AbstractController
             $debitbanque = 0;
             $debitcaisse = 0;
             foreach ($ecritures as $ecriture) {
-                $credit = null;
-                $debit = null;
-                if ($ecriture->getCredit() != null) {
-                    $credit = $ecriture->getCredit();
-                    $credit->getType() == 'Espece' ?
-                        $caisse = $caisse + $credit->getMontant() :
-                        $banque = $banque + $credit->getMontant();
-                } else {
+                if($ecriture->getType() != null){
+                    $credit = null;
+                    $debit = null;
+                    if ($ecriture->getCredit() != null) {
+                        $credit = $ecriture->getCredit();
+                        $credit->getType() == 'Espece' ?
+                            $caisse = $caisse + $credit->getMontant() :
+                            $banque = $banque + $credit->getMontant();
+                    } else {
 
-                    $debit = $ecriture->getDebit();
-                    $debit->getType() == 'Espece' ?
-                        $debitcaisse = $debitcaisse + $debit->getMontant() :
-                        $debitbanque = $debitbanque + $debit->getMontant();
+                        $debit = $ecriture->getDebit();
+                        $debit->getType() == 'Espece' ?
+                            $debitcaisse = $debitcaisse + $debit->getMontant() :
+                            $debitbanque = $debitbanque + $debit->getMontant();
 
+                    }
                 }
 
             }
@@ -1688,7 +1690,7 @@ class FinanceController extends AbstractController
             $entityManager->persist($ecriturebase);
 
             // anciennete 
-            $ancien = $paie->getTauxenciennete() * $paie->getBaseenciennete();
+          /*  $ancien = $paie->getTauxenciennete() * $paie->getBaseenciennete();
             if( $ancien != 0){
                 $debitanciennete = new Debit();
                 $debitanciennete->setCompte($banque->getCompte());
@@ -1737,7 +1739,7 @@ class FinanceController extends AbstractController
                 $entityManager->persist($$j);
                $i +=1;
                $j +=1;
-            }
+            }*/
 
 
             $heureSup =  $paie->getTauxheureSup() * $paie->getBaseheureSup();
@@ -1906,7 +1908,7 @@ class FinanceController extends AbstractController
 
                 $ecriturfoncier = new Ecriture();
                 $ecriturfoncier->setType('Banque');
-                $ecriturfoncier->setComptecredit("431200");
+                $ecriturfoncier->setComptecredit("442802");
                 $ecriturfoncier->setLibellecomptecredit("Credit foncier");
                 $ecriturfoncier->setComptedebit($banque->getCompte());
                 $ecriturfoncier->setLibellecomptedebit($banque->getNom());
@@ -2026,7 +2028,7 @@ class FinanceController extends AbstractController
 
                 $ecriturtav = new Ecriture();
                 $ecriturtav->setType('Banque');
-                $ecriturtav->setComptecredit("431200");
+                $ecriturtav->setComptecredit("442802");
                 $ecriturtav->setLibellecomptecredit("CREDIT FONC");
                 $ecriturtav->setComptedebit($banque->getCompte());
                 $ecriturtav->setLibellecomptedebit($banque->getNom());
@@ -2050,7 +2052,7 @@ class FinanceController extends AbstractController
 
                 $ecriturfne = new Ecriture();
                 $ecriturfne->setType('Banque');
-                $ecriturfne->setComptecredit("431300");
+                $ecriturfne->setComptecredit("442801");
                 $ecriturfne->setLibellecomptecredit("F.N.E");
                 $ecriturfne->setComptedebit($banque->getCompte());
                 $ecriturfne->setLibellecomptedebit($banque->getNom());
@@ -2153,7 +2155,7 @@ class FinanceController extends AbstractController
                     $entityManager->persist($ecriturebase);
         
                     // anciennete 
-                    $ancien = $paie->getTauxenciennete() * $paie->getBaseenciennete();
+                  /*  $ancien = $paie->getTauxenciennete() * $paie->getBaseenciennete();
                     if( $ancien != 0){
                         $debitanciennete = new Debit();
                         $debitanciennete->setCompte($banque->getCompte());
@@ -2202,7 +2204,7 @@ class FinanceController extends AbstractController
                         $entityManager->persist($$j);
                        $i +=1;
                        $j +=1;
-                    }
+                    }*/
         
         
                     $heureSup =  $paie->getTauxheureSup() * $paie->getBaseheureSup();
@@ -2371,7 +2373,7 @@ class FinanceController extends AbstractController
         
                         $ecriturfoncier = new Ecriture();
                         $ecriturfoncier->setType('Banque');
-                        $ecriturfoncier->setComptecredit("431200");
+                        $ecriturfoncier->setComptecredit("442802");
                         $ecriturfoncier->setLibellecomptecredit("Credit foncier");
                         $ecriturfoncier->setComptedebit($banque->getCompte());
                         $ecriturfoncier->setLibellecomptedebit($banque->getNom());
@@ -2491,7 +2493,7 @@ class FinanceController extends AbstractController
         
                         $ecriturtav = new Ecriture();
                         $ecriturtav->setType('Banque');
-                        $ecriturtav->setComptecredit("431200");
+                        $ecriturtav->setComptecredit("442802");
                         $ecriturtav->setLibellecomptecredit("CREDIT FONC");
                         $ecriturtav->setComptedebit($banque->getCompte());
                         $ecriturtav->setLibellecomptedebit($banque->getNom());
@@ -2515,7 +2517,7 @@ class FinanceController extends AbstractController
         
                         $ecriturfne = new Ecriture();
                         $ecriturfne->setType('Banque');
-                        $ecriturfne->setComptecredit("431300");
+                        $ecriturfne->setComptecredit("442801");
                         $ecriturfne->setLibellecomptecredit("F.N.E");
                         $ecriturfne->setComptedebit($banque->getCompte());
                         $ecriturfne->setLibellecomptedebit($banque->getNom());
@@ -2815,12 +2817,23 @@ class FinanceController extends AbstractController
                     $amortissement = $amortissement + ($depense->getMontant() / ( $amorti->getAmortissement() * 12)) ;    
                 }
             }
-
+            $servicesexternes = 0;
+            $autreschrages = 0;
+            $impotettaxe = 0;
             $depenses = $this->entityManager->getRepository(Depense::class)->compteResultat(date('Y'));
              foreach($depenses as $depense){
                 if($depense->getCategorie()->getAmortissement() == null){
 
-                    $charge += $depense->getMontant(); 
+                    if (substr($depense->getCategorie()->getCompte(), 0, 2) === "62") {
+                        $servicesexternes += $depense->getMontant(); 
+                    } elseif (substr($depense->getCategorie()->getCompte(), 0, 2) === "63") {
+                        $autreschrages += $depense->getMontant(); 
+                    } elseif (substr($depense->getCategorie()->getCompte(), 0, 2) === "64") {
+                        $impotettaxe += $depense->getMontant(); 
+                    } else {
+                        $charge += $depense->getMontant(); 
+                    }
+                    
                 } 
             }
 
@@ -2832,6 +2845,9 @@ class FinanceController extends AbstractController
                 'amortissement' => $amortissement,
                 'variation' => $variation,
                 'charge' => $charge,
+                'servicesexternes' => $servicesexternes,
+                'autreschrages' => $autreschrages,
+                'impotettaxe' => $impotettaxe,
             ]);
             $response->setSharedMaxAge(0);
             $response->headers->addCacheControlDirective('no-cache', true);
@@ -2867,20 +2883,22 @@ class FinanceController extends AbstractController
             $debitbanque = 0;
             $debitcaisse = 0;
             foreach ($ecritures as $ecriture) {
-                $credit = null;
-                $debit = null;
-                if ($ecriture->getCredit() != null) {
-                    $credit = $ecriture->getCredit();
-                    $credit->getType() == 'Espece' ?
-                        $caisse = $caisse + $credit->getMontant() :
-                        $banque = $banque + $credit->getMontant();
-                } else {
+                if($ecriture->getType() != null){
+                    $credit = null;
+                    $debit = null;
+                    if ($ecriture->getCredit() != null) {
+                        $credit = $ecriture->getCredit();
+                        $credit->getType() == 'Espece' ?
+                            $caisse = $caisse + $credit->getMontant() :
+                            $banque = $banque + $credit->getMontant();
+                    } else {
 
-                    $debit = $ecriture->getDebit();
-                    $debit->getType() == 'Espece' ?
-                        $debitcaisse = $debitcaisse + $debit->getMontant() :
-                        $debitbanque = $debitbanque + $debit->getMontant();
+                        $debit = $ecriture->getDebit();
+                        $debit->getType() == 'Espece' ?
+                            $debitcaisse = $debitcaisse + $debit->getMontant() :
+                            $debitbanque = $debitbanque + $debit->getMontant();
 
+                    }
                 }
 
             }
@@ -3236,6 +3254,38 @@ class FinanceController extends AbstractController
             return $xi;
         } 
     }
+/*
+<?php
 
+// Informations de l'immobilisation
+$description = "Mobilier de bureau";
+$valeurAquisition = 1200000; // en FCFA
+$duree = 5; // en années
+$dateAcquisition = new DateTime("2021-01-01");
+$anneeActuelle = (int)date("Y");
+
+// Calcul de la dotation annuelle
+$dotationAnnuelle = $valeurAquisition / $duree;
+
+// Affichage du plan d'amortissement
+echo "Plan d’amortissement de l’immobilisation : $description\n";
+echo "Valeur d’acquisition : " . number_format($valeurAquisition, 0, ',', ' ') . " FCFA\n";
+echo "Durée : $duree ans\n";
+echo "Dotation annuelle : " . number_format($dotationAnnuelle, 0, ',', ' ') . " FCFA\n\n";
+
+echo "Année\tDotation\tCumul amortissement\n";
+$cumul = 0;
+
+for ($i = 0; $i < $duree; $i++) {
+    $annee = (int)$dateAcquisition->format("Y") + $i;
+    if ($annee <= $anneeActuelle) {
+        $cumul += $dotationAnnuelle;
+        echo "$annee\t" . number_format($dotationAnnuelle, 0, ',', ' ') . "\t" . number_format($cumul, 0, ',', ' ') . "\n";
+    }
+}
+
+?>
+
+*/
 
 }

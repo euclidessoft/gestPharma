@@ -237,7 +237,8 @@
                         <td>-</td>
                         <td>24</td>
                        <td> 
-                        {% set rh = 0 %}
+                        {% set rh = servicesexternes %}
+                        {{ rh != 0 ? rh|number_format(0,'',' ')}}
                         </td>
                         <td>-</td>
                     </tr>
@@ -247,7 +248,9 @@
                         <td>-</td>
                         <td>25</td>
                         <td> 
-                        {% set ri = 0 %}
+                        {% set ri = impotettaxe %}
+                        {{ ri != 0 ? ri|number_format(0,'',' ')}}
+                         
                         </td>
                         <td>-</td>
                     </tr>
@@ -257,7 +260,8 @@
                         <td>-</td>
                         <td>26</td>
                         <td> 
-                        {% set rj = 0 %}
+                        {% set rj = autreschrages %}
+                        {{ rj != 0 ? rj|number_format(0,'',' ')}}
                         </td>
                         <td>-</td>
                     </tr>
