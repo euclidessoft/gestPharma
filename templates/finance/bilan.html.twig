@@ -78,13 +78,19 @@
             <th>AD</th>
             <th>Immobilisations incorporelles</th>
             <td></td>
-            <td>
-            {% set ad = 0 %}
-            {% set adr = 0 %}
-            </td>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
+            <th>
+            {% set ad = brevet %}
+            {% set adr = amortbrevet %}
+            {% set add = ad - adr %}
+            {{ ad != 0 ? ad|number_format(0, '', ' ') : ''}}
+            </th>
+            <th>
+            {{ adr != 0 ? adr|number_format(0, '', ' ') : ''}}
+            </th>
+            <th>
+            {{ add != 0 ? add|number_format(0, '', ' ') : ''}}
+            </th>
+            <th></th>
             </tr>
             <tr>
             <td>AE</td>
@@ -102,12 +108,17 @@
             <td>AF</td>
             <td>Brevets, licences, logiciels</td>
             <td></td>
-            <td></td>
             <td>
-            {% set af = 0 %}
-            {% set afr = 0 %}
+            {% set af = brevet %}
+            {% set afr = amortbrevet %}
+            {{ af != 0 ? af|number_format(0, '', ' ') : ''}}
             </td>
-            <td></td>
+            <td>
+            {{ afr != 0 ? afr|number_format(0, '', ' ') : ''}}
+            </td>
+            <td>
+            {{ (af-afr) != 0 ? (af-afr)|number_format(0, '', ' ') : ''}}
+            </td>
             <td></td>
             </tr>
             <tr>
@@ -137,18 +148,19 @@
             <tr>
             <th>AI</th>
             <th>Immobilisations corporelles</th>
-            <td>3</td>
-            <td>
-            {% set ai = amortissement['montant'] + terrain %}
+            <th>3</th>
+            <th>
+            {% set ai =  terrain + mobilier + transport %}
             {{ ai != 0 ? ai|number_format(0, '', ' ') : ''}}
-            </td>
-            <td>
-            {% set air = amortissement['amorti'] %}
-            {{ amortissement['amorti']|number_format(0, '', ' ') }}</td>
-            <td>
-            {% set difamortissement = amortissement['montant'] - amortissement['amorti'] %}
-            {{ difamortissement|number_format(0, '', ' ')}}
-            </td>
+            </th>
+            <th>
+            {% set air = amortmobilier + amorttransport  %}
+            {{ air != 0 ? air|number_format(0, '', ' ') : ''}}
+            </th>
+            <th>
+            {% set aid = ai - air %}
+            {{ aid != 0 ? aid|number_format(0, '', ' ') : ''}}
+            </th>
             <td></td>
             </tr>
             <tr>
@@ -195,14 +207,16 @@
             <td>Matériel, mobilier et actifs biologiques</td>
             <td></td>
                 <td>
-                {% set am = amortissement['montant'] %}
-                {{ amortissement['montant']|number_format(0, '', ' ') }}</td>
+                {% set am = mobilier %}
+                {{ am != 0 ? am|number_format(0, '', ' ') : ''}}
+                </td>
             <td>
-            {% set amr = amortissement['amorti'] %}
-            {{ amortissement['amorti']|number_format(0, '', ' ') }}</td>
+            {% set amr = amortmobilier %}
+            {{ amr != 0 ? amr|number_format(0, '', ' ') : ''}}
+            </td>
             <td>
-            {% set difamortissement = amortissement['montant'] - amortissement['amorti'] %}
-            {{ difamortissement|number_format(0, '', ' ')}}
+            {% set amd = am - amr %}
+            {{ amd != 0 ? amd|number_format(0, '', ' ') : ''}}
             </td>
             <td></td>
             </tr>
@@ -211,12 +225,17 @@
             <td>Matériel de transport</td>
             <td></td>
             <td>
+             {% set  an = transport %}
+            {% set  anr = amorttransport %}
+            {% set  andd = an - anr %}
+            {{ an != 0 ? an|number_format(0, '', ' ') : ''}}
             </td>
             <td>
-            {% set  an = 0 %}
-            {% set  anr = 0 %}
+           {{ anr != 0 ? anr|number_format(0, '', ' ') : ''}}
             </td>
-            <td></td>
+            <td>
+            {{ andd != 0 ? andd|number_format(0, '', ' ') : ''}}
+            </td>
             <td></td>
             </tr>
             <tr>

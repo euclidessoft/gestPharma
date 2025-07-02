@@ -2929,22 +2929,41 @@ class FinanceController extends AbstractController
            $solde = ($caisse - $debitcaisse) + ($banque - $debitbanque);
             // amortissement
             $terrain  = 0;
+            $brevet = 0;
+            $amortbrevet = 0;
+            $mobilier = 0;
+            $amortmobilier = 0;
+            $transport = 0;
+            $amorttransport = 0;
             $amortissement = [];
-            $amortissement['amorti'] = 0;
-            $amortissement['montant'] = 0;
              $amortis = $this->entityManager->getRepository(Categorie::class)->bilan();
              foreach($amortis as $amorti){
                 $depenses = $this->entityManager->getRepository(Depense::class)->findBy(['categorie' => $amorti->getId()]);
                 foreach($depenses as $depense){
-                    if($amorti->getAmortissement() != 0){
+                  
                         
-                            $amortissement['amorti'] = $amortissement['amorti'] + ($depense->getMontant() / ( $amorti->getAmortissement() * 12)) ;    
-                            $amortissement['montant'] = $amortissement['montant'] + $depense->getMontant();    
-                        
-                    }else{
-                            $terrain += $depense->getMontant();   
+                    if (substr($depense->getCategorie()->getCompte(), 0, 3) === "222" ) {
+
+                        $terrain += $depense->getMontant(); 
+                    
+                    } elseif (substr($depense->getCategorie()->getCompte(), 0, 3) === "212" 
+                            || substr($depense->getCategorie()->getCompte(), 0, 3) === "213") {
+
+                        $amortbrevet += $depense->getMontant() / ( $amorti->getAmortissement() * 12) ;    
+                        $brevet += $depense->getMontant(); 
+                    
+                    } elseif (substr($depense->getCategorie()->getCompte(), 0, 3) === "245") {
+
+                        $amorttransport += $depense->getMontant() / ( $amorti->getAmortissement() * 12) ;    
+                        $transport += $depense->getMontant(); 
+                    
+                    } elseif (substr($depense->getCategorie()->getCompte(), 0, 3) === "244") {
+
+                        $amortmobilier += $depense->getMontant() / ( $amorti->getAmortissement() * 12) ;    
+                        $mobilier += $depense->getMontant(); 
                     
                     }
+                 
                     
                 }
             }
@@ -3059,6 +3078,12 @@ class FinanceController extends AbstractController
                 'creance' => $creance,
                 'dettefournisseur' => $dettefournisseur,
                 'terrain' => $terrain,
+                'mobilier' => $mobilier,
+                'transport' => $transport,
+                'brevet' => $brevet,
+                'amortmobilier' => $amortmobilier,
+                'amorttransport' => $amorttransport,
+                'amortbrevet' => $amortbrevet,
                 'resultat' => $this->ResultatInterne(),
             ]);
             $response->setSharedMaxAge(0);
