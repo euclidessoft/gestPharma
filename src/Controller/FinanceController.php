@@ -155,7 +155,11 @@ class FinanceController extends AbstractController
                 if ($compte == $ecriture->getComptecredit() || $compte == $ecriture->getComptedebit()) {
                     $credit = null;
                     $debit = null;
-                    if ($ecriture->getCredit() != null) {
+                    if ($ecriture->getType() == null) {
+                        
+                        $debitbanque += $ecriture->getMontant();
+                        $bank = $bank + $ecriture->getMontant();
+                    } else if ($ecriture->getCredit() != null) {
                         $credit = $ecriture->getCredit();
 
                         $bank = $bank + $credit->getMontant();
@@ -1690,25 +1694,19 @@ class FinanceController extends AbstractController
             $entityManager->persist($ecriturebase);
 
             // anciennete 
-          /*  $ancien = $paie->getTauxenciennete() * $paie->getBaseenciennete();
+            $ancien = $paie->getTauxenciennete() * $paie->getBaseenciennete();
             if( $ancien != 0){
-                $debitanciennete = new Debit();
-                $debitanciennete->setCompte($banque->getCompte());
-                $debitanciennete->setType('Banque');
-                $debitanciennete->setSalaire($paieSalaire);
-                $debitanciennete->setMontant($ancien);
+              
 
                 $ecritureanciennete = new Ecriture();
-                $ecritureanciennete->setType('Banque');
-                $ecritureanciennete->setComptecredit("661200");
+                $ecritureanciennete->setComptecredit("663000");
                 $ecritureanciennete->setLibellecomptecredit("Prime d'anciennete");
-                $ecritureanciennete->setComptedebit($banque->getCompte());
-                $ecritureanciennete->setLibellecomptedebit($banque->getNom());
-                $ecritureanciennete->setDebit($debitanciennete);
-                $ecritureanciennete->setSolde(-$ancien);
+                $ecritureanciennete->setComptedebit("422000");
+                $ecritureanciennete->setLibellecomptedebit("PERSONNEL REMUNERATION");
+                $ecritureanciennete->setSolde(0);
                 $ecritureanciennete->setMontant($ancien);
                 $ecritureanciennete->setLibelle("Prime d'anciennete ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
-                $entityManager->persist($debitanciennete);
+               
                 $entityManager->persist($ecritureanciennete);
             }
            
@@ -1716,33 +1714,27 @@ class FinanceController extends AbstractController
 
 
             $primes = json_decode($paie->getIndemnite(), true);
-            $i= 1; $j= 100;
+             $j= 1;
             foreach ($primes as $prime) {
 
-                $$i = new Debit();
-                $$i->setCompte($banque->getCompte());
-                $$i->setType('Banque');
-                $$i->setSalaire($paieSalaire);
-                $$i->setMontant($prime['montant']);
+               
 
                 $$j = new Ecriture();
-                $$j->setType('Banque');
-                $$j->setComptecredit("661200");
+                $$j->setComptecredit("663000");
                 $$j->setLibellecomptecredit($prime['designation']);
-                $$j->setComptedebit($banque->getCompte());
-                $$j->setLibellecomptedebit($banque->getNom());
-                $$j->setDebit($$i);
-                $$j->setSolde(-$prime['montant']);
+                $$j->setComptedebit("422000");
+                $$j->setLibellecomptedebit("PERSONNEL REMUNERATION DUES");
+                $$j->setSolde(0);
                 $$j->setMontant($prime['montant']);
                 $$j->setLibelle($prime['designation']. " " .$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
-                $entityManager->persist($$i);
+               
                 $entityManager->persist($$j);
-               $i +=1;
+               
                $j +=1;
-            }*/
+            }
 
 
-            $heureSup =  $paie->getTauxheureSup() * $paie->getBaseheureSup();
+        /*    $heureSup =  $paie->getTauxheureSup() * $paie->getBaseheureSup();
             if( $heureSup != 0){
                 $debitheursup = new Debit();
                 $debitheursup->setCompte($banque->getCompte());
@@ -1783,7 +1775,7 @@ class FinanceController extends AbstractController
                 $ecritureperform->setLibelle("prime de performance ".$paie->getEmploye()->getNom(). " ".$paie->getEmploye()->getPrenom());
                 $entityManager->persist($debitperform);
                 $entityManager->persist($ecritureperform);
-            }
+            }*/
 
 
           

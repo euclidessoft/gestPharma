@@ -93,7 +93,84 @@
                     {% for ecriture in ecritures %}
                         {% set first = 0 %}
                         {% if transfert == 0 %}
-                            {% if ecriture.credit is not null %}
+                            {% if ecriture.type is null %}
+                                 <tr>
+                                    <td data-label="{{ 'Date'|trans }}" class="text-center">
+                                        {% if first == 0 %} {{ i }} {% set i = i + 1 %} {% endif %}
+                                    </td>
+                                    <td data-label="{{ 'Date'|trans }}" class="text-center">
+                                        {% if first == 0 %}
+                                            {{ ecriture.date|date('d/m/Y') }}
+                                            {% set first = 1 %}
+                                        {% endif %}
+                                    </td>
+                                    <td data-label="{{ 'Débit'|trans }}">
+                                        <a href="{{ path('finance_journal_compte',{ 'compte': ecriture.comptecredit  }) }}">
+                                            {#                                    {{ ecriture.debit ? ecriture.comptedebit : '' }}#}
+                                            {{ ecriture.comptecredit ~" - "~ ecriture.libellecomptecredit }}
+                                        </a>
+                                    </td>
+                                    {#                                    <td data-label="{{ 'Référence'|trans }}">#}
+
+                                    {#                                    </td>#}
+                                    <td data-label="{{ 'Libellé'|trans }}">
+                                        {#                                        {{ ecriture.debit ? ecriture.libelle : '' }}#}
+                                                                                {{  ecriture.libelle }}
+
+                                    </td>
+                                    <td data-label="{{ 'Crédit'|trans }}" class="text-end">
+                                        {#                                    {{ ecriture.debit ? ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') : '' }}#}
+                                        {{ ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
+                                    </td>
+                                    <td data-label="{{ 'Débit'|trans }}" class="text-end">
+                                        {#                                    {{ ecriture.debit ? ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') : '' }}#}
+                                        {#                                    {{ ecriture.credit ? ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') : '' }}#}
+
+                                    </td>
+                                    {#                                <td data-label="{{ 'solde'|trans }}"  class="text-center">#}
+
+
+                                    {#                                {% set montant2 = montant2 + debit.depense.montant %}#}
+                                </tr>
+                                <tr>
+                                    <td data-label="{{ 'Date'|trans }}" class="text-center">
+                                        {% if first == 0 %} {{ i }} {% set i = i + 1 %} {% endif %}
+                                    </td>
+                                    <td data-label="{{ 'Date'|trans }}" class="text-center">
+                                        {% if first == 0 %}
+                                            {{ ecriture.date|date('d/m/Y') }}
+                                            {% set first = 1 %}
+                                        {% endif %}
+                                    </td>
+                                    <td data-label="{{ 'Compte'|trans }}" class="credit">
+                                        <a href="{{ path('finance_journal_compte',{ 'compte': ecriture.comptedebit  }) }}">
+                                        {#                                    {{ ecriture.debit ? ecriture.comptecredit : '' }}#}
+                                        {{ ecriture.comptedebit~" - "~ ecriture.libellecomptedebit  }}
+                                        </a>
+                                    </td>
+{#                                    <td data-label="{{ 'Référence'|trans }}">#}
+
+{#                                    </td>#}
+                                    <td data-label="{{ 'Libellé'|trans }}">
+                                        {#                                    {{ ecriture.debit ? ecriture.libelle : '' }}#}
+                                        {{  ecriture.libelle  }}
+
+                                    </td>
+                                    <td data-label="{{ 'Crédit'|trans }}" class="text-end">
+                                        {#                                                                        {{ ecriture.debit ? ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') : '' }}#}
+                                        {#                                    {{ ecriture.credit ? ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') : '' }}#}
+                                    </td>
+                                    <td data-label="{{ 'Débit'|trans }}" class="text-end">
+                                        {#                                    {{ ecriture.debit ? ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') : '' }}#}
+                                        {{ ecriture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',')  }}
+
+                                    </td>
+                                    {#                                <td data-label="{{ 'solde'|trans }}"  class="text-center">#}
+
+
+                                    {#                                {% set montant2 = montant2 + debit.depense.montant %}#}
+                                </tr>
+                            {% elseif ecriture.credit is not null %}
                                 {% if ecriture.credit.transfert is not null %}
                                     {% set transfert = 1 %}
                                 {% endif %}

@@ -1195,19 +1195,19 @@ class CommandeController extends AbstractController
             }
             $em = $this->entityManager;
 
-            // $ecriture = new Ecriture();
+            $ecriture = new Ecriture();
 
-            // $ecriture->setComptecredit($commande->getUser()->getCompte());
-            // $ecriture->setLibellecomptecredit("Vente à crédit");
-            // $ecriture->setComptedebit("7011");
-            // $ecriture->setLibellecomptedebit("Vente de marchandise");
-            // $ecriture->setSolde(0);
-            // $ecriture->setMontant($commande->getMontant());
-            // $ecriture->setLibelle("Vente à crédit". $commande->getUser()->getNom());
+            $ecriture->setComptecredit($commande->getUser()->getCompte());
+            $ecriture->setLibellecomptecredit("Vente à crédit");
+            $ecriture->setComptedebit("7011");
+            $ecriture->setLibellecomptedebit("Vente de marchandise");
+            $ecriture->setSolde(0);
+            $ecriture->setMontant($commande->getMontant());
+            $ecriture->setLibelle("Vente à crédit ". $commande->getUser()->getNom());
 
 
             $commande->setSuivi(true);
-            //$em->persist($ecriture);
+            $em->persist($ecriture);
             $em->persist($commande);
             $em->flush();
             $response = $this->redirectToRoute('commande_panier_credit', [], Response::HTTP_SEE_OTHER);
