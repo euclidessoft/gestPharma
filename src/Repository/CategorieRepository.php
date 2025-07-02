@@ -37,10 +37,21 @@ class CategorieRepository extends ServiceEntityRepository
     */
 
     
-    public function amortissement()
+    public function resultat()
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.amortissement IS NOT NULL')
+            ->andWhere('c.amortissement != 0')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    
+    public function bilan()
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.amortissement IS NOT NULL')
+            ->orWhere('c.amortissement = 0')
             ->getQuery()
             ->getResult()
         ;

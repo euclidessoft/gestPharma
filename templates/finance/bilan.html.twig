@@ -139,8 +139,9 @@
             <th>Immobilisations corporelles</th>
             <td>3</td>
             <td>
-            {% set ai = amortissement['montant']%}
-            {{ amortissement['montant']|number_format(0, '', ' ') }}</td>
+            {% set ai = amortissement['montant'] + terrain %}
+            {{ ai != 0 ? ai|number_format(0, '', ' ') : ''}}
+            </td>
             <td>
             {% set air = amortissement['amorti'] %}
             {{ amortissement['amorti']|number_format(0, '', ' ') }}</td>
@@ -156,11 +157,12 @@
     (1) dont en placement Net ………… / ………………</td>
             <td></td>
             <td>
-            {% set aj = 0 %}
+            {% set aj = terrain %}
             {% set ajr = 0 %}
+             {{ aj != 0 ? aj|number_format(0, '', ' ') : ''}}
             </td>
             <td></td>
-            <td></td>
+            <td> {{ aj != 0 ? aj|number_format(0, '', ' ') : ''}}</td>
             <td></td>
             </tr>
             <tr>

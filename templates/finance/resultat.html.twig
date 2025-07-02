@@ -207,7 +207,8 @@
                         <td>-</td>
                         <td>22</td>
                         <td> 
-                        {% set re = 0 %}
+                        {% set re = autresachats %}
+                         {{ re != 0 ? re|number_format(0,'',' ')}}
                         </td>
                         <td>-</td>
                     </tr>
@@ -366,7 +367,7 @@
                         <td>29</td>
                         <td>
                         {% set rm = interet + charge %}
-                        {{rm|number_format(0, '', ' ')}}
+                         {{ rm != 0 ? rm|number_format(0,'',' ')}}
                         </td>
                         <td>-</td>
                     </tr>
