@@ -79,8 +79,8 @@
             <th>Immobilisations incorporelles</th>
             <td></td>
             <th>
-            {% set ad = brevet %}
-            {% set adr = amortbrevet %}
+            {% set ad = fond + brevet + developpement + autresincorp %}
+            {% set adr = amortfond + amortbrevet + amortdeveloppement + amortautresincorp %}
             {% set add = ad - adr %}
             {{ ad != 0 ? ad|number_format(0, '', ' ') : ''}}
             </th>
@@ -98,11 +98,17 @@
             <td></td>
             <td></td>
             <td>
-            {% set ae = 0 %}
-            {% set aer = 0 %}
+            {% set ae = developpement %}
+            {% set aer = amortdeveloppement %}
+            {% set aed = ae - aer %}
+            {{ ae != 0 ? ae|number_format(0, '', ' ') : ''}}
             </td>
-            <td></td>
-            <td></td>
+            <td>
+            {{ aer != 0 ? aer|number_format(0, '', ' ') : ''}}
+            </td>
+            <td>
+            {{ aed != 0 ? aed|number_format(0, '', ' ') : ''}}
+            </td>
             </tr>
             <tr>
             <td>AF</td>
@@ -125,12 +131,18 @@
             <td>AG</td>
             <td>Fonds commercial</td>
             <td></td>
-            <td></td>
             <td>
-            {%  set ag = 0 %}
-            {%  set agr = 0 %}
+            {%  set ag = fond %}
+            {%  set agr = amortfond %}
+            {%  set agd = ag - agr %}
+            {{ ag != 0 ? ag|number_format(0, '', ' ') : ''}}
             </td>
-            <td></td>
+            <td>
+            {{ agr != 0 ? agr|number_format(0, '', ' ') : ''}}
+            </td>
+            <td>
+            {{ agd != 0 ? agd|number_format(0, '', ' ') : ''}}
+            </td>
             <td></td>
             </tr>
             <tr>
@@ -138,11 +150,17 @@
             <td>Autres immobilisations incorporelles</td>
             <td></td>
             <td>
-            {% set ah = 0 %}
-            {% set ahr = 0 %}
+            {% set ah = autresincorp %}
+            {% set ahr = amortautresincorp %}
+            {% set ahd = ah - ahr %}
+            {{ ah != 0 ? ah|number_format(0, '', ' ') : ''}}
             </td>
-            <td></td>
-            <td></td>
+            <td>
+             {{ ahr != 0 ? ahr|number_format(0, '', ' ') : ''}}
+            </td>
+            <td>
+             {{ ahd != 0 ? ahd|number_format(0, '', ' ') : ''}}
+            </td>
             <td></td>
             </tr>
             <tr>
@@ -150,11 +168,11 @@
             <th>Immobilisations corporelles</th>
             <th>3</th>
             <th>
-            {% set ai =  terrain + mobilier + transport %}
+            {% set ai =  terrain + mobilier + transport + batiment + amenagement %}
             {{ ai != 0 ? ai|number_format(0, '', ' ') : ''}}
             </th>
             <th>
-            {% set air = amortmobilier + amorttransport  %}
+            {% set air =  amortterrain + amortmobilier + amorttransport + amortbatiment + amortamenagement  %}
             {{ air != 0 ? air|number_format(0, '', ' ') : ''}}
             </th>
             <th>
@@ -183,22 +201,34 @@
     (1) dont en placement Net ………… / ………………</td>
             <td></td>
             <td>
-            {% set ak = 0 %}
-            {% set akr = 0 %}
+            {% set ak = batiment %}
+            {% set akr = amortbatiment %}
+            {% set akd = ak - akr %}
+            {{ ak != 0 ? ak|number_format(0, '', ' ') : ''}}
             </td>
-            <td></td>
-            <td></td>
+            <td>
+            {{ akr != 0 ? akr|number_format(0, '', ' ') : ''}}
+            </td>
+            <td>
+            {{ akd != 0 ? akd|number_format(0, '', ' ') : ''}}
+            </td>
             <td></td>
             </tr>
             <tr>
             <td>AL</td>
             <td>Aménagements, agencements et installations</td>
             <td></td>
-            <td></td>
-            <td></td>
             <td>
-            {% set al = 0 %}
-            {% set alr = 0 %}
+             {% set al = amenagement %}
+            {% set alr = amortamenagement %}
+            {% set ald = al - alr %}
+             {{ al != 0 ? al|number_format(0, '', ' ') : ''}}
+            </td>
+            <td>
+             {{ alr != 0 ? alr|number_format(0, '', ' ') : ''}}
+            </td>
+            <td>
+            {{ ald != 0 ? ald|number_format(0, '', ' ') : ''}}
             </td>
             <td></td>
             </tr>
@@ -243,23 +273,36 @@
             <th>Avances et acomptes versés sur immobilisations</th>
             <td>3</td>
             <td>
-            {% set  ap = 0 %}
-            {% set  apr = 0 %}
+            {% set  ap = avanceimmo %}
+            {% set  apr = amortavanceimmo %}
+            {% set  apd = ap - apr %}
+            {{ ap != 0 ? ap|number_format(0, '', ' ') : ''}}
             </td>
-            <td></td>
-            <td></td>
+            <td>
+            {{ apr != 0 ? apr|number_format(0, '', ' ') : ''}}
+            </td>
+            <td>
+            {{ apd != 0 ? apd|number_format(0, '', ' ') : ''}}
+            </td>
             <td></td>
             </tr>
             <tr>
             <th>AQ</th>
             <th>Immobilisations financières</th>
             <td>4</td>
-            <td></td>
             <td>
-            {% set aq = 0 %}
-            {% set aqr = 0 %}
+             {% set aq = titre + autresimmofin %}
+            {% set aqr = amorttitre + amortautresimmofin %}
+            {% set aqd = aq - aqr %}
+            {{ aq != 0 ? aq|number_format(0, '', ' ') : ''}}
             </td>
-            <td></td>
+            <td>
+           
+            {{ aqr != 0 ? aqr|number_format(0, '', ' ') : ''}}
+            </td>
+            <td>
+            {{ aqd != 0 ? aqd|number_format(0, '', ' ') : ''}}
+            </td>
             <td></td>
             </tr>
             <tr>
@@ -267,23 +310,37 @@
             <td>Titres de participation</td>
             <td></td>
             <td>
-            {% set  ar = 0 %}
-            {% set  arr = 0 %}
+             {% set ar = titre  %}
+            {% set arr = amorttitre %}
+            {% set ard = ar - arr %}
+            {{ ar != 0 ? ar|number_format(0, '', ' ') : ''}}
             </td>
-            <td></td>
-            <td></td>
+            <td>
+           
+            {{ arr != 0 ? arr|number_format(0, '', ' ') : ''}}
+            </td>
+            <td>
+            {{ ard != 0 ? ard|number_format(0, '', ' ') : ''}}
+            </td>
             <td></td>
             </tr>
             <tr>
             <td>AS</td>
             <td>Autres immobilisations financières</td>
             <td></td>
-            <td>
-            {% set ass = 0 %}
-            {% set assr = 0 %}
+             <td>
+            {% set ass = autresimmofin %}
+            {% set assr = amortautresimmofin %}
+            {% set assd = ass - assr %}
+            {{ ass != 0 ? ass|number_format(0, '', ' ') : ''}}
             </td>
-            <td></td>
-            <td></td>
+            <td>
+           
+            {{ assr != 0 ? assr|number_format(0, '', ' ') : ''}}
+            </td>
+            <td>
+            {{ assd != 0 ? assd|number_format(0, '', ' ') : ''}}
+            </td>
             <td></td>
             </tr>
             <tr>
@@ -313,8 +370,8 @@
             <th>Actif circulant H.A.O</th>
             <td>5</td>
             <td>
-            {% set ba = 0 %}
-            {% set bar = 0 %}
+            {% set ba = hao %}
+            {{ ba != 0 ? ba|number_format(0, '', ' ') : ''}}
             </td>
             <td></td>
             <td></td>
@@ -340,12 +397,14 @@
             <th>Créances et emplois assimilés</th>
             <td></td>
             <td>
-            {% set bg = creance %}
+            {% set bg = creance + avancefournisseur + autrecreance %}
             {% set bgr = 0 %}
             {{ bg != 0 ? bg|number_format(0, '', ' ') : ''}}
             </td>
             <td></td>
-            <td></td>
+            <td>
+            {{ bg != 0 ? bg|number_format(0, '', ' ') : ''}}
+            </td>
             <td></td>
             </tr>
             <tr>
@@ -353,11 +412,13 @@
             <td>Fournisseurs, avances versées</td>
             <td>17</td>
             <td>
-            {% set bh = 0 %}
-            {% set bhr = 0 %}
+            {% set bh = avancefournisseur %}
+           {{ bh != 0 ? bh|number_format(0, '', ' ') : ''}}
             </td>
             <td></td>
-            <td></td>
+            <td>
+            {{ bh != 0 ? bh|number_format(0, '', ' ') : ''}}
+            </td>
             <td></td>
             </tr>
             <tr>
@@ -365,12 +426,13 @@
             <td>Clients</td>
             <td>7</td>
             <td>
-            {% set bi = 0 %}
-            {% set bir = 0 %}
+            {% set bi = creance %}
             {{ bi != 0 ? bi|number_format(0, '', ' ') : ''}}
             </td>
             <td></td>
-            <td></td>
+            <td>
+            {{ bi != 0 ? bi|number_format(0, '', ' ') : ''}}
+            </td>
             <td></td>
             </tr>
             <tr>
@@ -378,11 +440,13 @@
             <td>Autres créances</td>
             <td>8</td>
             <td>
-            {% set bj = 0 %}
-            {% set bjr = 0 %}
+            {% set bj = autrecreance %}
+             {{ bj != 0 ? bj|number_format(0, '', ' ') : ''}}
             </td>
             <td></td>
-            <td></td>
+            <td>
+            {{ bj != 0 ? bj|number_format(0, '', ' ') : ''}}
+            </td>
             <td></td>
             </tr>
             <tr>
@@ -405,11 +469,13 @@
             <td>Titres de placement</td>
             <td>9</td>
             <td>
-            {% set bq = 0 %}
-            {% set bqr = 0 %}
+            {% set bq = placement %}
+             {{ bq != 0 ? bq|number_format(0, '', ' ') : ''}}
             </td>
             <td></td>
-            <td></td>
+            <td>
+             {{ bq != 0 ? bq|number_format(0, '', ' ') : ''}}
+            </td>
             <td></td>
             </tr>
             <tr>
@@ -417,11 +483,13 @@
             <td>Valeurs à encaisser</td>
             <td>10</td>
             <td>
-            {% set br = 0 %}
-            {% set brr = 0 %}
+            {% set br = encaisser %}
+             {{ br != 0 ? br|number_format(0, '', ' ') : ''}}
             </td>
             <td></td>
-            <td></td>
+            <td>
+             {{ br != 0 ? br|number_format(0, '', ' ') : ''}}
+            </td>
             <td></td>
             </tr>
             <tr>
@@ -445,7 +513,6 @@
             <td></td>
             <tH>
             {% set bt = bq + br + bs %}
-            {% set btr = bkr + bqr + brr + bsr %}
             {{ bt|number_format(0, '', ' ')}}
             </tH>
             <tH></tH>
@@ -459,11 +526,13 @@
             <th>Ecarts de conversion-Actif </th>
             <td>12</td>
             <td>
-            {% set bu = 0 %}
-            {% set bur = 0 %}
+            {% set bu = ecartactif %}
+            {{ bu != 0 ? bu|number_format(0, '', ' ') : ''}}
             </td>
             <td></td>
-            <td></td>
+            <td>
+             {{ bu != 0 ? bu|number_format(0, '', ' ') : ''}}
+            </td>
             <td></td>
             </tr>
 
@@ -473,7 +542,7 @@
             <td></td>
             <tH>
             {% set bz = az + ba + bk + bt + bu %}
-            {% set bzr = azr + bar + bkr + btr + bur %}
+            {% set bzr = azr  %}
                 {{ bz|number_format(0, '', ' ')}}
             </tH>
             <tH>
