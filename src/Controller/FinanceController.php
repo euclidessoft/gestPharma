@@ -2799,49 +2799,74 @@ class FinanceController extends AbstractController
                 $interet = $interet + ((($pret->getMontant() * $pret->getTaux()/100) / $pret->getDuree()) * count($pret->getRemboursements()));    
             }
             
-            // amortissement
+            // amortissement et charge
             $amortissement = 0;
-             $amortis = $this->entityManager->getRepository(Categorie::class)->resultat();
-             foreach($amortis as $amorti){
-                $depenses = $this->entityManager->getRepository(Depense::class)->findBy(['categorie' => $amorti->getId()]);
-                foreach($depenses as $depense){
 
-                    $amortissement = $amortissement + ($depense->getMontant() / ( $amorti->getAmortissement() * 12)) ;    
-                }
-            }
             $servicesexternes = 0;
             $autreschrages = 0;
             $impotettaxe = 0;
             $autresachats = 0;
+
             $depenses = $this->entityManager->getRepository(Depense::class)->compteResultat(date('Y'));
-             foreach($depenses as $depense){
-                if($depense->getCategorie()->getAmortissement() === null){
+            
+                foreach($depenses as $depense){
 
-                    if (substr($depense->getCategorie()->getCompte(), 0, 3) === "604" 
-                    || substr($depense->getCategorie()->getCompte(), 0, 3) === "605" 
-                    || substr($depense->getCategorie()->getCompte(), 0, 3) === "608") {
+                    $lignedepense = $depense->getCategorie();
+                    if($lignedepense->getAmortissement() !== null){
 
-                        $autresachats += $depense->getMontant(); 
+                        if (substr($lignedepense->getCompte(), 0, 3) === "222" ) {
+
+                            //terrain pas amortissement
+                        
+                        } elseif (substr($lignedepense->getCompte(), 0, 3) === "212" 
+                                || substr($lignedepense->getCompte(), 0, 3) === "213") {
+
+                                    $amortissement = $amortissement + ($depense->getMontant() / ( $lignedepense->getAmortissement() * 12)) ; 
+                        
+                        } elseif (substr($lignedepense->getCompte(), 0, 3) === "245") {
+
+                            $amortissement = $amortissement + ($depense->getMontant() / ( $lignedepense->getAmortissement() * 12)) ; 
+                        
+                        } elseif (substr($lignedepense->getCompte(), 0, 3) === "244") {
+
+                            $amortissement = $amortissement + ($depense->getMontant() / ( $lignedepense->getAmortissement() * 12)) ; 
+                        
+                        }
+                    }else{
+
+                        if (substr($lignedepense->getCompte(), 0, 3) === "222" ) {
+
+                        //terrain pas amortissement
+                        
+                        } elseif (substr($lignedepense->getCompte(), 0, 3) === "604" 
+                        || substr($lignedepense->getCompte(), 0, 3) === "605" 
+                        || substr($lignedepense->getCompte(), 0, 3) === "608") {
+
+                            $autresachats += $depense->getMontant(); 
+                        
+                        } elseif (substr($lignedepense->getCompte(), 0, 2) === "62"
+                        || substr($lignedepense->getCompte(), 0, 2) === "63") {
+
+                            $servicesexternes += $depense->getMontant(); 
+                        
+                        } elseif (substr($lignedepense->getCompte(), 0, 2) === "65") {
+
+                            $autreschrages += $depense->getMontant(); 
+                        
+                        } elseif (substr($lignedepense->getCompte(), 0, 2) === "64") {
+
+                            $impotettaxe += $depense->getMontant(); 
                     
-                    } elseif (substr($depense->getCategorie()->getCompte(), 0, 2) === "62"
-                    || substr($depense->getCategorie()->getCompte(), 0, 2) === "63") {
-
-                        $servicesexternes += $depense->getMontant(); 
+                        } else {
+                            $charge += $depense->getMontant(); 
+                        }
                     
-                    } elseif (substr($depense->getCategorie()->getCompte(), 0, 2) === "65") {
-
-                        $autreschrages += $depense->getMontant(); 
-                    
-                    } elseif (substr($depense->getCategorie()->getCompte(), 0, 2) === "64") {
-
-                        $impotettaxe += $depense->getMontant(); 
-                   
-                    } else {
-                        $charge += $depense->getMontant(); 
                     }
-                    
-                } 
-            }
+
+                      
+                }
+            
+           
 
             $response = $this->render('finance/resultat.html.twig',[
                 'vente' => $vente,
@@ -2927,38 +2952,38 @@ class FinanceController extends AbstractController
             $amortmobilier = 0;
             $transport = 0;
             $amorttransport = 0;
-            $amortissement = [];
-             $amortis = $this->entityManager->getRepository(Categorie::class)->bilan();
-             foreach($amortis as $amorti){
-                $depenses = $this->entityManager->getRepository(Depense::class)->findBy(['categorie' => $amorti->getId()]);
-                foreach($depenses as $depense){
-                  
-                        
-                    if (substr($depense->getCategorie()->getCompte(), 0, 3) === "222" ) {
+           
+            $depenses = $this->entityManager->getRepository(Depense::class)->compteResultat(date('Y'));
+            foreach($depenses as $depense){
+                
+                    $lignedepense = $depense->getCategorie();
+                if($lignedepense->getAmortissement() !== null || substr($lignedepense->getCompte(), 0, 3) === "222"){
+                    if (substr($lignedepense->getCompte(), 0, 3) === "222" ) {
 
                         $terrain += $depense->getMontant(); 
                     
-                    } elseif (substr($depense->getCategorie()->getCompte(), 0, 3) === "212" 
-                            || substr($depense->getCategorie()->getCompte(), 0, 3) === "213") {
+                    } elseif (substr($lignedepense->getCompte(), 0, 3) === "212" 
+                            || substr($lignedepense->getCompte(), 0, 3) === "213") {
 
-                        $amortbrevet += $depense->getMontant() / ( $amorti->getAmortissement() * 12) ;    
+                        $amortbrevet += $depense->getMontant() / ( $lignedepense->getAmortissement() * 12) ;    
                         $brevet += $depense->getMontant(); 
                     
-                    } elseif (substr($depense->getCategorie()->getCompte(), 0, 3) === "245") {
+                    } elseif (substr($lignedepense->getCompte(), 0, 3) === "245") {
 
-                        $amorttransport += $depense->getMontant() / ( $amorti->getAmortissement() * 12) ;    
+                        $amorttransport += $depense->getMontant() / ( $lignedepense->getAmortissement() * 12) ;    
                         $transport += $depense->getMontant(); 
                     
-                    } elseif (substr($depense->getCategorie()->getCompte(), 0, 3) === "244") {
+                    } elseif (substr($lignedepense->getCompte(), 0, 3) === "244") {
 
-                        $amortmobilier += $depense->getMontant() / ( $amorti->getAmortissement() * 12) ;    
+                        $amortmobilier += $depense->getMontant() / ( $lignedepense->getAmortissement() * 12) ;    
                         $mobilier += $depense->getMontant(); 
                     
                     }
-                 
-                    
                 }
+                
+                
             }
+            
 
             $detteavoir = 0;
             $avoirs = $this->entityManager->getRepository(Avoir::class)->findAll();
@@ -3059,8 +3084,7 @@ class FinanceController extends AbstractController
            
 
             $response = $this->render('finance/bilan.html.twig',[
-               
-                'amortissement' => $amortissement,
+              
                 'detteavoir' => $detteavoir,
                 'solde' => $solde,
                 'stock' => $stockfinal,
@@ -3237,22 +3261,40 @@ class FinanceController extends AbstractController
             
             // amortissement
             $amortissement = 0;
-             $amortis = $this->entityManager->getRepository(Categorie::class)->resultat();
-             foreach($amortis as $amorti){
-                $depenses = $this->entityManager->getRepository(Depense::class)->findBy(['categorie' => $amorti->getId()]);
-                foreach($depenses as $depense){
-
-                    $amortissement = $amortissement + ($depense->getMontant() / ( $amorti->getAmortissement() * 12)) ;    
-                }
-            }
-
             $depenses = $this->entityManager->getRepository(Depense::class)->compteResultat(date('Y'));
-             foreach($depenses as $depense){
-                if($depense->getCategorie()->getAmortissement() === null){
+            
+            foreach($depenses as $depense){
 
-                    $charge += $depense->getMontant(); 
-                } 
+                $lignedepense = $depense->getCategorie();
+                if (substr($lignedepense->getCompte(), 0, 3) !== "222" ) {
+
+                    if($lignedepense->getAmortissement() !== null){
+                        $amortissement = $amortissement + ($depense->getMontant() / ( $lignedepense->getAmortissement() * 12)) ;     
+                    }else{
+                        $charge += $depense->getMontant();    
+                    }
+                
+                }
+               
+
+                  
             }
+            //  $amortis = $this->entityManager->getRepository(Categorie::class)->resultat();
+            //  foreach($amortis as $amorti){
+            //     $depenses = $this->entityManager->getRepository(Depense::class)->findBy(['categorie' => $amorti->getId()]);
+            //     foreach($depenses as $depense){
+
+            //         $amortissement = $amortissement + ($depense->getMontant() / ( $amorti->getAmortissement() * 12)) ;    
+            //     }
+            // }
+
+            // $depenses = $this->entityManager->getRepository(Depense::class)->compteResultat(date('Y'));
+            //  foreach($depenses as $depense){
+            //     if($depense->getCategorie()->getAmortissement() === null){
+
+            //         $charge += $depense->getMontant(); 
+            //     } 
+            // }
 
             $xa = $vente - ($achat - $variation);
             $tb = 0;
