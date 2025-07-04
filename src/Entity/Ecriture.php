@@ -19,7 +19,7 @@ class Ecriture
     #[ORM\ManyToOne(targetEntity:Credit::class) ]
     private $credit;
 
-    #[ORM\Column(type:"integer") ]
+    #[ORM\Column(type:"float") ]
     private $solde;
 
     #[ORM\Column(type:"date") ]
@@ -84,12 +84,12 @@ class Ecriture
         return $this;
     }
 
-    public function getSolde(): ?int
+    public function getSolde(): ?float
     {
         return $this->solde;
     }
 
-    public function setSolde(int $solde): self
+    public function setSolde(float $solde): self
     {
         $this->solde = $this->getSolde() + $solde;
 
