@@ -1735,6 +1735,10 @@ class FinanceController extends AbstractController
                 || strtolower($prime['designation']) === 'indemnite de deplacement') {
                     $$j->setComptecredit("663800");   
                 }
+                else if(strtolower($prime['designation']) === 'allocation de congé' 
+                || strtolower($prime['designation']) === 'allocation de conge') {
+                    $$j->setComptecredit("661300");   
+                }
 
                 $$j->setLibellecomptecredit($prime['designation']);
                 $$j->setComptedebit("422100");
@@ -2164,6 +2168,10 @@ class FinanceController extends AbstractController
                 || strtolower($prime['designation']) === 'indemnite de déplacement'
                 || strtolower($prime['designation']) === 'indemnite de deplacement') {
                     $$j->setComptecredit("663800");   
+                }
+                else if(strtolower($prime['designation']) === 'allocation de congé' 
+                || strtolower($prime['designation']) === 'allocation de conge') {
+                    $$j->setComptecredit("661300");   
                 }
 
                 $$j->setLibellecomptecredit($prime['designation']);
