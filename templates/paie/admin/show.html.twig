@@ -182,11 +182,14 @@
                     </tr>
 
                     {% set totalprime = 0 %}
+                    {% set allocationconge = 0 %}
                     {% for prime in primes %}
                         {% if prime.description|lower == "indemnité de transport" or prime.description|lower == "indemnite de transport"%}
                             {% set transport = prime.montant %}
                         {% elseif prime.description|lower == "indemnité de logement" or prime.description|lower == "indemnite de logement"%}
                             {% set logement = prime.montant %}
+                        {% elseif prime.description|lower == "allocation de conge" or prime.description|lower == "allocation de congé"%}
+                            {% set allocationconge = prime.montant %}
                         {% endif %}
                         {#                  {% if prime.base == true %} <!--true si prime journalier -->
                                                {% set ponction = ponction + prime.montant / nombre %}
@@ -243,7 +246,7 @@
                                 {{ (employe.poste.salaire / 173.33)|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                                {% set totalheuresup = (employe.poste.salaire / 173.33)|round * heureSups %}
                             {% endif %}
-                            </td>
+                            </td>$employe->getPoste()->getSalaire()
                             <td> {{ heureSups }}</td>
                             <td>{{ totalheuresup|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
                             <td></td>
@@ -256,7 +259,7 @@
                         <td class="text-start" colspan="4">{{ "SALAIRE BRUT"|trans }}</td>
                         <td>
                             {% set  brut = (employe.poste.salaire + prenciennete + totalprime + totalheuresup + totalPrimePerf)|round %}
-                            {% set  brutinter = (brut - totalprime)|round %}
+                            {% set  brutinter = (employe.poste.salaire + prenciennete + allocationconge)|round %}
                             {{ brut|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}
                         </td>
                         <td></td>

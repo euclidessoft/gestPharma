@@ -194,6 +194,7 @@ class PaieController extends AbstractController
              $conge = $entityManager->getRepository(Calendrier::class)->findoneBy(['employe' => $employe->getId()],['id' =>'DESC']);
             $transport = 0;
             $logement = 0;
+            $allocationconge = 0;
             $ponction = 0;
             $totalprime = [];
             $montantprime = 0;
@@ -247,6 +248,9 @@ class PaieController extends AbstractController
                 }
                 else if(strtolower($prime->getDescription()) === 'indemnité de logement' || strtolower($prime->getDescription()) === 'indemnite de logement') {
                     $logement = $prime->getMontant();
+                }
+                else if(strtolower($prime->getDescription()) === 'allocation de congé' || strtolower($prime->getDescription()) === 'allocation de conge') {
+                    $allocationconge = $prime->getMontant();
                 }
 
                 // Vérifie si la prime est journalière (base == true)
@@ -314,7 +318,7 @@ class PaieController extends AbstractController
             $paie->setBaseponction($ponction);
             $paie->setTauxponction($nombreJours);
             $paie->setBrut(round($employe->getPoste()->getSalaire() + $prenciennete + $montantprime + $montantheureSup + $totalPrimePerf));
-            $paie->setBrutinter(round($paie->getBrut() - $montantprime));
+            $paie->setBrutinter(round($employe->getPoste()->getSalaire() + $allocationconge + $prenciennete));
 
             $accompte= $entityManager->getRepository(Accompte::class)->findOneBy(['employe' => $employe->getId(), 'paye' => false, 'verser' => true], ['id' =>'DESC']);
             
@@ -1092,7 +1096,7 @@ class PaieController extends AbstractController
             $paie->setBaseponction($ponction);
             $paie->setTauxponction($nombreJours);
             $paie->setBrut(round($employe->getPoste()->getSalaire() + $prenciennete + $montantprime + $montantheureSup + $totalPrimePerf));
-            $paie->setBrutinter(round($paie->getBrut() - $montantprime));
+            $paie->setBrutinter(round($employe->getPoste()->getSalaire() + $allocationconge + $prenciennete));
 
             $accompte= $entityManager->getRepository(Accompte::class)->findOneBy(['employe' => $employe->getId(), 'paye' => false, 'verser' => true], ['id' =>'DESC']);
             
