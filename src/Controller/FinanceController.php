@@ -3588,38 +3588,211 @@ class FinanceController extends AbstractController
             return $xi;
         } 
     }
-/*
-<?php
 
-// Informations de l'immobilisation
-$description = "Mobilier de bureau";
-$valeurAquisition = 1200000; // en FCFA
-$duree = 5; // en années
-$dateAcquisition = new DateTime("2021-01-01");
-$anneeActuelle = (int)date("Y");
+    #[Route("/Amortissement/{depense}", name :"amortissement", methods : ["POST", "GET"]) ]
+    public function amortissement(Depense $depense): Response
+    {
+        if ($this->security->isGranted('ROLE_FINANCE')) {
+            
+           // Informations de l'immobilisation
+        $description = "Mobilier de bureau";
+        $valeurAquisition = $depense->getMontant(); // en FCFA
+        $duree = $depense->getCategorie()->getAmortissement(); // en années
+        $dateAcquisition = $depense->getDate();
+        $dernierAnnee = (int)$dateAcquisition->format("Y") + $duree;
 
-// Calcul de la dotation annuelle
-$dotationAnnuelle = $valeurAquisition / $duree;
+        // Calcul de la dotation annuelle
+        $dotationAnnuelle = $valeurAquisition / $duree;
+        $dotationMensuelle = $valeurAquisition / ($duree * 12);
 
-// Affichage du plan d'amortissement
-echo "Plan d’amortissement de l’immobilisation : $description\n";
-echo "Valeur d’acquisition : " . number_format($valeurAquisition, 0, ',', ' ') . " FCFA\n";
-echo "Durée : $duree ans\n";
-echo "Dotation annuelle : " . number_format($dotationAnnuelle, 0, ',', ' ') . " FCFA\n\n";
+        // // Affichage du plan d'amortissement
+        // echo "Plan d’amortissement de l’immobilisation : $description\n";
+        // echo "Valeur d’acquisition : " . number_format($valeurAquisition, 0, ',', ' ') . " FCFA\n";
+        // echo "Durée : $duree ans\n";
+        // echo "Dotation annuelle : " . number_format($dotationAnnuelle, 0, ',', ' ') . " FCFA\n\n";
 
-echo "Année\tDotation\tCumul amortissement\n";
-$cumul = 0;
+        // echo "Année\tDotation\tCumul amortissement\n";
+       $cumul = 0;
+       $now = new \Datetime();
+        $interval = $now->diff($dateAcquisition);
 
-for ($i = 0; $i < $duree; $i++) {
-    $annee = (int)$dateAcquisition->format("Y") + $i;
-    if ($annee <= $anneeActuelle) {
-        $cumul += $dotationAnnuelle;
-        echo "$annee\t" . number_format($dotationAnnuelle, 0, ',', ' ') . "\t" . number_format($cumul, 0, ',', ' ') . "\n";
+        $yearDiff = $interval->y;
+        $monthDiff = $interval->m +1; 
+        $yearDiff >= $duree ? $yearDiff = $duree : $duree ;
+            $j = 0;
+        for ($i = 0; $i < $yearDiff+1; $i++) {
+            $annee = (int)$dateAcquisition->format("Y") + $j;
+            if($yearDiff <= 0){
+            
+           
+                $cumul += $monthDiff * $dotationMensuelle;
+               // echo "$annee\t" . number_format($dotationAnnuelle, 0, ',', ' ') . "\t" . number_format($cumul, 0, ',', ' ') . "\n";
+            
+        }
+        }
+           
+
+            $response = $this->render('finance/amortissement.html.twig',[
+              'annee' => (int)$dateAcquisition->format("Y"),
+              'dernierAnnee' => $dernierAnnee,
+              'monthDiff' => $monthDiff,
+              'yearDiff' => $yearDiff,
+              'duree' => $duree,
+              'depense' => $depense,
+              'dotationAnnuelle' => $dotationAnnuelle,
+              'dotationMensuelle' => $dotationMensuelle,
+               
+            ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        } else {
+            $response = $this->redirectToRoute('security_logout');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        }
     }
-}
 
-?>
 
-*/
+    #[Route("/Immobilisation/", name :"immobilisation", methods : ["POST", "GET"]) ]
+    public function immobilisation(): Response
+    {
+        if ($this->security->isGranted('ROLE_FINANCE')) {
+            
+           // Informations de l'immobilisation
+        $depenses = $this->entityManager->getRepository(Depense::class)->findAll();
+        $listdepenses = [];
+            
+            foreach($depenses as $depense){
+
+                $lignedepense = $depense->getCategorie();
+                if (substr($lignedepense->getCompte(), 0, 2) === "22" ) {
+
+                    $lignedepense->getAmortissement() != null ?  $listdepenses[] = $depense : null ; 
+                    
+                } elseif (substr($lignedepense->getCompte(), 0, 3) === "211" 
+                        || substr($lignedepense->getCompte(), 0, 4) === "2181"
+                        || substr($lignedepense->getCompte(), 0, 4) === "2191") {
+
+                    $lignedepense->getAmortissement() != null ?  $listdepenses[] = $depense : null ;    
+                   
+                
+                } elseif (substr($lignedepense->getCompte(), 0, 3) === "212" 
+                        || substr($lignedepense->getCompte(), 0, 3) === "213"
+                        || substr($lignedepense->getCompte(), 0, 3) === "214"
+                        || substr($lignedepense->getCompte(), 0, 4) === "2193") {
+
+                    $lignedepense->getAmortissement() != null ?  $listdepenses[] = $depense : null;    
+                   
+                
+                } elseif (substr($lignedepense->getCompte(), 0, 3) === "215"
+                         ||   substr($lignedepense->getCompte(), 0, 3) === "216") {
+
+                    $lignedepense->getAmortissement() != null ?  $listdepenses[] = $depense : null;    
+                   
+                
+                } elseif ((substr($lignedepense->getCompte(), 0, 3) === "217"
+                         ||   substr($lignedepense->getCompte(), 0, 3) === "218"
+                         ||   substr($lignedepense->getCompte(), 0, 4) === "2198")
+                         &&   substr($lignedepense->getCompte(), 0, 4) !== "2181") {
+
+                    $lignedepense->getAmortissement() != null ?  $listdepenses[] = $depense : null ;    
+                   
+                
+                }elseif (substr($lignedepense->getCompte(), 0, 3) === "231" 
+                        || substr($lignedepense->getCompte(), 0, 3) === "232"
+                        || substr($lignedepense->getCompte(), 0, 3) === "233"
+                        || substr($lignedepense->getCompte(), 0, 3) === "237"
+                        || substr($lignedepense->getCompte(), 0, 4) === "2391") {
+
+                    $lignedepense->getAmortissement() != null ?  $listdepenses[] = $depense : null ;    
+                   
+                
+                }elseif (substr($lignedepense->getCompte(), 0, 3) === "234" 
+                        || substr($lignedepense->getCompte(), 0, 3) === "235"
+                        || substr($lignedepense->getCompte(), 0, 3) === "238"
+                        || substr($lignedepense->getCompte(), 0, 4) === "2392"
+                        || substr($lignedepense->getCompte(), 0, 4) === "2393") {
+
+                    $lignedepense->getAmortissement() != null ?  $listdepenses[] = $depense : null ;    
+                   
+                
+                } elseif (substr($lignedepense->getCompte(), 0, 2) === "24"
+                         &&   substr($lignedepense->getCompte(), 0, 3) !== "245"
+                         &&   substr($lignedepense->getCompte(), 0, 4) !== "2495") {
+
+                    $lignedepense->getAmortissement() != null ?  $listdepenses[] = $depense : null ;    
+                   
+                
+                } elseif (substr($lignedepense->getCompte(), 0, 3) === "245"
+                          || substr($lignedepense->getCompte(), 0, 4) === "2495") {
+
+                    $lignedepense->getAmortissement() != null ?  $listdepenses[] = $depense : null;    
+                   
+                
+                }elseif (substr($lignedepense->getCompte(), 0, 3) === "251"
+                          || substr($lignedepense->getCompte(), 0, 3) === "252") {
+
+                    $lignedepense->getAmortissement() != null ? $ $listdepenses[] = $depens: null ;   
+                    
+                
+                }elseif (substr($lignedepense->getCompte(), 0, 2) === "26") {
+
+                    $lignedepense->getAmortissement() != null ?  $listdepenses[] = $depense : null ;    
+                   
+                
+                }elseif (substr($lignedepense->getCompte(), 0, 2) === "27") {
+
+                    $lignedepense->getAmortissement() != null ?  $listdepenses[] = $depense : null ;    
+                   
+                
+                }
+                
+                
+               
+
+                  
+            }
+           
+
+            $response = $this->render('finance/immobilisation.html.twig',[
+              'depenses' => $listdepenses,
+               
+            ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        } else {
+            $response = $this->redirectToRoute('security_logout');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        }
+    }
 
 }
