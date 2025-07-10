@@ -33,7 +33,7 @@
             <div class="card-header bg-success-light bb-success">
                 <h5 class="text-success text-bold">
                     <i class="fa-solid fa-money-bill-trend-up"></i>
-                     {{ depense.libelle }} | {{"acquis le : "|trans}} {{ depense.date|date('d/m/Y')}}
+                     {{ depense.libelle }} | {{"acquis le : "|trans}} {{ depense.date|date('d/m/Y')}} | {{"Montant"|trans}} : {{ depense.montant|number_format(0, '', ' ')}}
                 </h5>
             </div>
             <div class="card-body">
@@ -42,55 +42,116 @@
                     <tr>
                         <th class="text-center"> {{ 'Annee'|trans }}</th>
                         <th class="text-center"> {{ 'Dotation Mensulle'|trans }}</th>
-                        <th class="text-center"> {{ 'Nobre de mois'|trans }}</th>
+                        <th class="text-center"> {{ 'Nombre de mois'|trans }}</th>
                         <th>{{ 'Cumul'|trans }}</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% set cumul = 0 %}
                     {% set ref = 0 %}
-                    {% if yearDiff != 0 %}
-                        {% for i in 0 .. yearDiff-1 %}
-                            {% set ref = annee + i %}
-                            {# {% if ref <= dernierAnnee %} #}
-                            
-                                {% set cumul = cumul + (dotationMensuelle * 12) %}
-                                <tr>
-                                    <td>{{ ref }}</td>
-                                    <td>{{ dotationMensuelle|number_format(0, ',', ' ') }}</td>
-                                    <td>12</td>
-                                    <td>{{ cumul|number_format(0, ',', ' ') }}</td>
-                                </tr>
-                            
-                        
+                    {% set cumulmois = 0 %}
+                        {% for i in 0 .. yearDiff %}
+                            {% if yearDiff == 0 %} {#  moin d'un an #}
+                                {% if annee == "now"|date('Y')%}{# cas ou on n'est dans la meme annee #}
+                                    {% set ref = annee + i %}
+                                
+                                    {% set cumul = cumul + (dotationMensuelle * monthDiff) %}
+                                    <tr>
+                                        <td>{{ ref }}</td>
+                                        <td>{{ dotationMensuelle|number_format(0, ',', ' ') }}</td>
+                                        <td>{{monthDiff}}</td>
+                                        <td>{{ cumul|number_format(0, ',', ' ') }}</td>
+                                    </tr>
+                                {% else %}
+                                    {# cas ou deux annees differentes et moin dun an #}
+                                    {% set firstmois = monthDiff - "now"|date("m") %}
+                                    {% if firstmois != 0%}
+                                    {% set cumul = cumul + (dotationMensuelle * firstmois) %}
+                                    <tr>
+                                        <td>{{ annee }}</td>
+                                        <td>{{ dotationMensuelle|number_format(0, ',', ' ') }}</td>
+                                        <td>{{firstmois}}</td>
+                                        <td>{{ cumul|number_format(0, ',', ' ') }}</td>
+                                    </tr>
+                                    {% endif %}
+                                    {% set cumul = cumul + (dotationMensuelle * "now"|date("m")) %}
+                                    <tr>
+                                        <td>{{ annee + 1}}</td>
+                                        <td>{{ dotationMensuelle|number_format(0, ',', ' ') }}</td>
+                                        <td>{{"now"|date("m")}}</td>
+                                        <td>{{ cumul|number_format(0, ',', ' ') }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% elseif loop.first %}
+                                {% set ref = annee + i %}
+                                {# {% if ref <= dernierAnnee %} #}
+                                     {% set nbrmois = 1+ moisfirstyear %}
+                                    {% set cumul = cumul + (dotationMensuelle * nbrmois) %}
+                                    {% set cumulmois = cumulmois + nbrmois %}
+                                    <tr>
+                                        <td>{{ ref }}</td>
+                                        <td>{{ dotationMensuelle|number_format(0, ',', ' ') }}</td>
+                                        <td>{{ nbrmois }} (1) {{moisfirstyear}}</td>
+                                        <td>{{ cumul|number_format(0, ',', ' ') }}</td>
+                                    </tr>
+                            {% elseif loop.last and duree <= yearDiff %}{# dernier iteration avec delai depasse #}
+                                {% set ref = annee + i %}
+                                {% set nbrmois = 12 - moisfirstyear -1 %}
+                                {# {% if ref <= dernierAnnee %} #}
+                                
+                                    {% set cumul = cumul + (dotationMensuelle * nbrmois) %}
+                                    <tr>
+                                        <td>{{ ref }}</td>
+                                        <td>{{ dotationMensuelle|number_format(0, ',', ' ') }}</td>
+                                        <td>{{ nbrmois }} (2)</td>
+                                        <td>{{ cumul|number_format(0, ',', ' ') }}</td>
+                                    </tr>
+                            {% elseif loop.last %}{# dernier iteration mais tj en cours #}
+                                {% set ref = annee + i %}
+                                {% if ref == 'now'|date('Y')%}
+                                    {% set nbrmois = 'now'|date('m') %}
+                                {# {% if ref <= dernierAnnee %} #}
+                                
+                                    {% set cumul = cumul + (dotationMensuelle * nbrmois) %}
+                                    <tr>
+                                        <td>{{ ref }}</td>
+                                        <td>{{ dotationMensuelle|number_format(0, ',', ' ') }}</td>
+                                        <td>{{ nbrmois }}  (3)</td>
+                                        <td>{{ cumul|number_format(0, ',', ' ') }}</td>
+                                    </tr>
+                                {% else %}{# cas trois annes chevauche mais mois de deux ans de calcul#}
+                                    {% set cumul = cumul + (dotationMensuelle * 12) %}
+                                    <tr>
+                                        <td>{{ ref }}</td>
+                                        <td>{{ dotationMensuelle|number_format(0, ',', ' ') }}</td>
+                                        <td>{{ 12 }}  (3')</td>
+                                        <td>{{ cumul|number_format(0, ',', ' ') }}</td>
+                                    </tr>
+                                     {% set nbrmois = 'now'|date('m') %}
+                                    {% set cumul = cumul + (dotationMensuelle * nbrmois) %}
+                                    <tr>
+                                        <td>{{ ref+1 }}</td>
+                                        <td>{{ dotationMensuelle|number_format(0, ',', ' ') }}</td>
+                                        <td>{{ nbrmois }}  (3'')</td>
+                                        <td>{{ cumul|number_format(0, ',', ' ') }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% else %}
+                                {% set ref = annee + i %}
+                                {# {% if ref <= dernierAnnee %} #}
+                                
+                                    {% set cumul = cumul + (dotationMensuelle * 12) %}
+
+                                     {% set cumulmois = cumulmois + 12 %}
+                                    <tr>
+                                        <td>{{ ref }}</td>
+                                        <td>{{ dotationMensuelle|number_format(0, ',', ' ') }}</td>
+                                        <td>12(4)</td>
+                                        <td>{{ cumul|number_format(0, ',', ' ') }}</td>
+                                    </tr>
+                              
+                            {% endif %}
                         {% endfor %}
-                    {% endif %}
-                    {% if yearDiff == 0%}
-                           
-                            {# {% if ref <= dernierAnnee %} #}
-                            
-                                {% set cumul = cumul + (dotationMensuelle * 1) %}
-                                <tr>
-                                    <td>{{ annee }}</td>
-                                    <td>{{ dotationMensuelle|number_format(0, ',', ' ') }}</td>
-                                    <td>1</td>
-                                    <td>{{ cumul|number_format(0, ',', ' ') }}</td>
-                                </tr>
-                    {% else%}
-                        {% if yearDiff < duree %}
-                            {% set ref = ref + 1 %}
-                            {# {% if ref <= dernierAnnee %} #}
-                            
-                                {% set cumul = cumul + (dotationMensuelle * monthDiff) %}
-                                <tr>
-                                    <td>{{ ref }}</td>
-                                    <td>{{ dotationMensuelle|number_format(0, ',', ' ') }}</td>
-                                    <td>{{monthDiff}}</td>
-                                    <td>{{ cumul|number_format(0, ',', ' ') }}</td>
-                                </tr>
-                       
-                        {% endif %}
-                    {% endif %}
                     </tbody>
                 </table>
             </div>

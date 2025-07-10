@@ -3599,6 +3599,7 @@ class FinanceController extends AbstractController
         $valeurAquisition = $depense->getMontant(); // en FCFA
         $duree = $depense->getCategorie()->getAmortissement(); // en années
         $dateAcquisition = $depense->getDate();
+        $firstyear = new \DateTime($dateAcquisition->format("Y").'-12-31');
         $dernierAnnee = (int)$dateAcquisition->format("Y") + $duree;
 
         // Calcul de la dotation annuelle
@@ -3615,21 +3616,23 @@ class FinanceController extends AbstractController
        $cumul = 0;
        $now = new \Datetime();
         $interval = $now->diff($dateAcquisition);
+        $inter = $firstyear->diff($dateAcquisition);
+        $moisfirstyear = $inter->m;
 
         $yearDiff = $interval->y;
         $monthDiff = $interval->m +1; 
-        $yearDiff >= $duree ? $yearDiff = $duree : $duree ;
-            $j = 0;
-        for ($i = 0; $i < $yearDiff+1; $i++) {
-            $annee = (int)$dateAcquisition->format("Y") + $j;
-            if($yearDiff <= 0){
+        $yearDiff >= $duree ? $yearDiff = $duree : null ;
+        //     $j = 0;
+        // for ($i = 0; $i < $yearDiff+1; $i++) {
+        //     $annee = (int)$dateAcquisition->format("Y") + $j;
+        //     if($yearDiff <= 0){
             
            
-                $cumul += $monthDiff * $dotationMensuelle;
-               // echo "$annee\t" . number_format($dotationAnnuelle, 0, ',', ' ') . "\t" . number_format($cumul, 0, ',', ' ') . "\n";
+        //         $cumul += $monthDiff * $dotationMensuelle;
+        //        // echo "$annee\t" . number_format($dotationAnnuelle, 0, ',', ' ') . "\t" . number_format($cumul, 0, ',', ' ') . "\n";
             
-        }
-        }
+        // }
+        // }
            
 
             $response = $this->render('finance/amortissement.html.twig',[
@@ -3637,6 +3640,7 @@ class FinanceController extends AbstractController
               'dernierAnnee' => $dernierAnnee,
               'monthDiff' => $monthDiff,
               'yearDiff' => $yearDiff,
+              'moisfirstyear' => $moisfirstyear,
               'duree' => $duree,
               'depense' => $depense,
               'dotationAnnuelle' => $dotationAnnuelle,
