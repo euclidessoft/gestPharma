@@ -16,12 +16,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
  #[ORM\Entity(repositoryClass: UserRepository::class) ]
  #[ORM\Table(name:"user") ]
- #[ORM\InheritanceType("JOINED") ]
- #[ORM\DiscriminatorColumn(name:"typeuser", type:"string") ]
- #[ORM\DiscriminatorMap([
-    'client' => Client::class,
-    'employe' => Employe::class,
-])]
 #[UniqueEntity(
     fields: ['email'],
     message: 'Cet email existe déjà.'
@@ -32,11 +26,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
     const jobs = [
 
         'ADMINISTRATEUR' => 'ADMINISTRATEUR',
-        'FINANCE' => 'FINANCE' ,
-        'RH' => 'RH' ,
-        'STOCK' => 'STOCK' ,
-        'LIVREUR' => 'LIVREUR' ,
-        'EMPLOYE' => 'EMPLOYE' ,
+        'Caissier' => 'Caissier' ,
+        'Vendeur' => 'Vendeur' ,
     ];
 
    #[ORM\Id]
@@ -90,35 +81,27 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
    #[ORM\Column(type:"boolean") ]
     private $enabled;
 
-   #[ORM\Column(type:"boolean") ]
-    private $client;
 
-   #[ORM\Column(type:"boolean") ]
-    private $livreur;
+//    #[ORM\OneToMany(targetEntity:Transfert::class, mappedBy:"user") ]
+//     private $transferts;
 
+//    #[ORM\OneToMany(targetEntity:Depense::class, mappedBy:"user") ]
+//     private $depenses;
 
-   #[ORM\OneToMany(targetEntity:Transfert::class, mappedBy:"user") ]
-    private $transferts;
+//    #[ORM\OneToMany(targetEntity:Message::class, mappedBy:"sender", orphanRemoval:true) ]
+//     private $sent;
 
-   #[ORM\OneToMany(targetEntity:Depense::class, mappedBy:"user") ]
-    private $depenses;
-
-   #[ORM\OneToMany(targetEntity:Message::class, mappedBy:"sender", orphanRemoval:true) ]
-    private $sent;
-
-   #[ORM\OneToMany(targetEntity:MessageRecipient::class, mappedBy:"recipient", orphanRemoval:true) ]
-    private $received;
+//    #[ORM\OneToMany(targetEntity:MessageRecipient::class, mappedBy:"recipient", orphanRemoval:true) ]
+//     private $received;
 
 
     public function __construct()
     {
         $this->enabled = false;
-        $this->client = false;
-        $this->livreur = false;
-        $this->transferts = new ArrayCollection();
-        $this->depenses = new ArrayCollection();
-        $this->sent = new ArrayCollection();
-        $this->received = new ArrayCollection();
+        // $this->transferts = new ArrayCollection();
+        // $this->depenses = new ArrayCollection();
+        // $this->sent = new ArrayCollection();
+        // $this->received = new ArrayCollection();
     }
 
     public function getUsername(): ?string
@@ -290,141 +273,117 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
         return $this;
     }
 
-    public function getClient(): ?bool
-    {
-        return $this->client;
-    }
+// /*    /*  #[return Collection|Transfert[] ] */
+//     public function getTransferts(): Collection
+//     {
+//         return $this->transferts;
+//     }
 
-    public function setClient(bool $client): self
-    {
-        $this->client = $client;
+//     public function addTransfert(Transfert $transfert): self
+//     {
+//         if (!$this->transferts->contains($transfert)) {
+//             $this->transferts[] = $transfert;
+//             $transfert->setUser($this);
+//         }
 
-        return $this;
-    }
+//         return $this;
+//     }
 
-    public function getLivreur(): ?bool
-    {
-        return $this->livreur;
-    }
+//     public function removeTransfert(Transfert $transfert): self
+//     {
+//         if ($this->transferts->removeElement($transfert)) {
+//             // set the owning side to null (unless already changed)
+//             if ($transfert->getUser() === $this) {
+//                 $transfert->setUser(null);
+//             }
+//         }
 
-    public function setLivreur(bool $livreur): self
-    {
-        $this->livreur = $livreur;
-
-        return $this;
-    }
-
-/*    /*  #[return Collection|Transfert[] ] */
-    public function getTransferts(): Collection
-    {
-        return $this->transferts;
-    }
-
-    public function addTransfert(Transfert $transfert): self
-    {
-        if (!$this->transferts->contains($transfert)) {
-            $this->transferts[] = $transfert;
-            $transfert->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTransfert(Transfert $transfert): self
-    {
-        if ($this->transferts->removeElement($transfert)) {
-            // set the owning side to null (unless already changed)
-            if ($transfert->getUser() === $this) {
-                $transfert->setUser(null);
-            }
-        }
-
-        return $this;
-    }
+//         return $this;
+//     }
 
 /*    /*  #[return Collection|Depense[] */
-    public function getDepenses(): Collection
-    {
-        return $this->depenses;
-    }
+//     public function getDepenses(): Collection
+//     {
+//         return $this->depenses;
+//     }
 
-    public function addDepense(Depense $depense): self
-    {
-        if (!$this->depenses->contains($depense)) {
-            $this->depenses[] = $depense;
-            $depense->setUser($this);
-        }
+//     public function addDepense(Depense $depense): self
+//     {
+//         if (!$this->depenses->contains($depense)) {
+//             $this->depenses[] = $depense;
+//             $depense->setUser($this);
+//         }
 
-        return $this;
-    }
+//         return $this;
+//     }
 
-    public function removeDepense(Depense $depense): self
-    {
-        if ($this->depenses->removeElement($depense)) {
-            // set the owning side to null (unless already changed)
-            if ($depense->getUser() === $this) {
-                $depense->setUser(null);
-            }
-        }
+//     public function removeDepense(Depense $depense): self
+//     {
+//         if ($this->depenses->removeElement($depense)) {
+//             // set the owning side to null (unless already changed)
+//             if ($depense->getUser() === $this) {
+//                 $depense->setUser(null);
+//             }
+//         }
 
-        return $this;
-    }
+//         return $this;
+//     }
 
 
-/*    /*  #[return Collection|MessageRecipient[] */
-    public function getReceived(): Collection
-    {
-        return $this->received;
-    }
+// /*    /*  #[return Collection|MessageRecipient[] */
+//     public function getReceived(): Collection
+//     {
+//         return $this->received;
+//     }
 
-    public function addReceived(MessageRecipient $received): self
-    {
-        if (!$this->received->contains($received)) {
-            $this->received[] = $received;
-            $received->setRecipient($this);
-        }
+//     public function addReceived(MessageRecipient $received): self
+//     {
+//         if (!$this->received->contains($received)) {
+//             $this->received[] = $received;
+//             $received->setRecipient($this);
+//         }
 
-        return $this;
-    }
+//         return $this;
+//     }
 
-    public function removeReceived(MessageRecipient $received): self
-    {
-        if ($this->received->removeElement($received)) {
-            // set the owning side to null (unless already changed)
-            if ($received->getRecipient() === $this) {
-                $received->setRecipient(null);
-            }
-        }
+//     public function removeReceived(MessageRecipient $received): self
+//     {
+//         if ($this->received->removeElement($received)) {
+//             // set the owning side to null (unless already changed)
+//             if ($received->getRecipient() === $this) {
+//                 $received->setRecipient(null);
+//             }
+//         }
 
-        return $this;
-    }
+//         return $this;
+//     }
 
-/*   /*  #[return Collection|Message[] */
-    public function getSent(): Collection
-    {
-        return $this->sent;
-    }
+// /*   /*  #[return Collection|Message[] */
+//     public function getSent(): Collection
+//     {
+//         return $this->sent;
+//     }
 
-    public function addSent(Message $sent): self
-    {
-        if (!$this->sent->contains($sent)) {
-            $this->sent[] = $sent;
-            $sent->setSender($this);
-        }
+//     public function addSent(Message $sent): self
+//     {
+//         if (!$this->sent->contains($sent)) {
+//             $this->sent[] = $sent;
+//             $sent->setSender($this);
+//         }
 
-        return $this;
-    }
+//         return $this;
+//     }
 
-    public function removeSent(Message $sent): self
-    {
-        if ($this->sent->removeElement($sent)) {
-            // set the owning side to null (unless already changed)
-            if ($sent->getSender() === $this) {
-                $sent->setSender(null);
-            }
-        }
+//     public function removeSent(Message $sent): self
+//     {
+//         if ($this->sent->removeElement($sent)) {
+//             // set the owning side to null (unless already changed)
+//             if ($sent->getSender() === $this) {
+//                 $sent->setSender(null);
+//             }
+//         }
 
-        return $this;
-    }
+//         return $this;
+//     }
 
 }

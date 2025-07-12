@@ -21,14 +21,38 @@ class MutuelController extends
     #[Route("/", name:"mutuel_index", methods:["GET"])]
     public function index(MutuelRepository $mutuelRepository): Response
     {
-        return $this->render('mutuel/index.html.twig', [
+        if ($this->security->isGranted('ROLE_USER')) {
+       
+        $response = $this->render('mutuel/index.html.twig', [
             'mutuels' => $mutuelRepository->findAll(),
         ]);
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+   } else {
+           $response = $this->redirectToRoute('security_logout');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
     }
 
     #[Route("/new", name:"mutuel_new", methods:["GET","POST"])]
     public function new(Request $request): Response
     {
+        if ($this->security->isGranted('ROLE_USER')) {
         $mutuel = new Mutuel();
         $form = $this->createForm(MutuelType::class, $mutuel);
         $form->handleRequest($request);
@@ -38,50 +62,156 @@ class MutuelController extends
             $entityManager->persist($mutuel);
             $entityManager->flush();
 
-            return $this->redirectToRoute('mutuel_index', [], Response::HTTP_SEE_OTHER);
+          
+            $response = $this->redirectToRoute('mutuel_index', [], Response::HTTP_SEE_OTHER);
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
         }
 
-        return $this->render('mutuel/new.html.twig', [
+        $response = $this->render('mutuel/new.html.twig', [
             'mutuel' => $mutuel,
             'form' => $form->createView(),
         ]);
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+    } else {
+           $response = $this->redirectToRoute('security_logout');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
     }
 
     #[Route("/{id}", name:"mutuel_show", methods:["GET"])]
     public function show(Mutuel $mutuel): Response
     {
-        return $this->render('mutuel/show.html.twig', [
-            'mutuel' => $mutuel,
-        ]);
+        if ($this->security->isGranted('ROLE_USER')) {
+       
+        $response = $this->redirectToRoute('security_logout');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+    } else {
+           $response = $this->redirectToRoute('security_logout');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
     }
 
     #[Route("/{id}/edit", name:"mutuel_edit", methods:["GET","POST"])]
     public function edit(Request $request, Mutuel $mutuel): Response
     {
+        if ($this->security->isGranted('ROLE_USER')) {
         $form = $this->createForm(MutuelType::class, $mutuel);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->flush();
 
-            return $this->redirectToRoute('mutuel_index', [], Response::HTTP_SEE_OTHER);
+
+            $response = $this->redirectToRoute('mutuel_index', [], Response::HTTP_SEE_OTHER);
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
         }
 
-        return $this->render('mutuel/edit.html.twig', [
+        $response = $this->render('mutuel/edit.html.twig', [
             'mutuel' => $mutuel,
             'form' => $form->createView(),
         ]);
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+    } else {
+           $response = $this->redirectToRoute('security_logout');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
     }
 
     #[Route("/{id}", name:"mutuel_delete", methods:["POST"])]
     public function delete(Request $request, Mutuel $mutuel): Response
     {
+        if ($this->security->isGranted('ROLE_USER')) {
         if ($this->isCsrfTokenValid('delete'.$mutuel->getId(), $request->request->get('_token'))) {
             $entityManager = $this->entityManager;
             $entityManager->remove($mutuel);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('mutuel_index', [], Response::HTTP_SEE_OTHER);
+         $response = $this->redirectToRoute('mutuel_index', [], Response::HTTP_SEE_OTHER);
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+    } else {
+           $response = $this->redirectToRoute('security_logout');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
     }
 }

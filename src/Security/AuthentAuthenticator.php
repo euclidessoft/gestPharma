@@ -53,7 +53,7 @@ class AuthentAuthenticator extends AbstractLoginFormAuthenticator
 //            return new RedirectResponse($this->router->generate('admin_home'));
 //        }
         // For example:
-         return new RedirectResponse($this->urlGenerator->generate('commande_index'));
+         return new RedirectResponse($this->urlGenerator->generate('vente_new'));
 //        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 

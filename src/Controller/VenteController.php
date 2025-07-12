@@ -25,14 +25,38 @@ class VenteController extends
     #[Route("/", name:"vente_index", methods:["GET"])]
     public function index(VenteRepository $venteRepository): Response
     {
-        return $this->render('vente/index.html.twig', [
+        if ($this->security->isGranted('ROLE_USER')) {
+       
+        $response = $this->render('vente/index.html.twig', [
             'ventes' => $venteRepository->findAll(),
         ]);
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+         } else {
+           $response = $this->redirectToRoute('security_logout');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
     }
 
     #[Route("/new", name:"vente_new", methods:["GET","POST"])]
     public function new(Request $request, ProduitRepository $produitRepository,SessionInterface $session): Response
     {
+        if ($this->security->isGranted('ROLE_USER')) {
         $entityManager =$this->entityManager;
         $vente = new Vente();
         $montantvente = 0;
@@ -167,12 +191,25 @@ class VenteController extends
             'private' => true,
         ]);
         return $response;
+     } else {
+           $response = $this->redirectToRoute('security_logout');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
     }
 
 
     #[Route("/Add", name:"commande_produit_add", methods:["GET","POST"])]
     public function add(Request $request, ProduitRepository $produitRepository, SessionInterface $session)
     {
+        if ($this->security->isGranted('ROLE_USER')) {
         // On récupère le panier actuel
         $commande = $session->get("commande", []);
         if ($request->isXmlHttpRequest()) {// traitement de la requete ajax
@@ -212,12 +249,25 @@ class VenteController extends
             return $response;
         }
 
+     } else {
+           $response = $this->redirectToRoute('security_logout');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
     }
 
 
     #[Route("/Delete", name:"commande_produit_delete", methods:["GET","POST"])]
     public function deleteproduit(Request $request, ProduitRepository $repository, SessionInterface $session)
     {
+        if ($this->security->isGranted('ROLE_USER')) {
         // On récupère le panier actuel
         $commande = $session->get("commande", []);
         $id = $request->get('produit');
@@ -242,43 +292,134 @@ class VenteController extends
         $re = json_encode($res);
         $response->setContent($re);
         return $response;
+    } else {
+           $response = $this->redirectToRoute('security_logout');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
     }
 
     #[Route("/{id}", name:"vente_show", methods:["GET"])]
     public function show(Vente $vente): Response
     {
-        return $this->render('vente/show.html.twig', [
+        if ($this->security->isGranted('ROLE_USER')) {
+        
+        $response = $this->render('vente/show.html.twig', [
             'vente' => $vente,
         ]);
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+     } else {
+           $response = $this->redirectToRoute('security_logout');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
     }
 
     #[Route("/{id}/edit", name:"vente_edit", methods:["GET","POST"])]
     public function edit(Request $request, Vente $vente): Response
     {
+        if ($this->security->isGranted('ROLE_USER')) {
         $form = $this->createForm(VenteType::class, $vente);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->flush();
 
-            return $this->redirectToRoute('vente_index', [], Response::HTTP_SEE_OTHER);
+          
+             $response = $this->redirectToRoute('vente_index', [], Response::HTTP_SEE_OTHER);
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+            
+            
         }
 
-        return $this->render('vente/edit.html.twig', [
+         $response = $this->render('vente/edit.html.twig', [
             'vente' => $vente,
             'form' => $form->createView(),
         ]);
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+        } else {
+           $response = $this->redirectToRoute('security_logout');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
     }
 
     #[Route("/{id}", name:"vente_delete", methods:["POST"])]
     public function delete(Request $request, Vente $vente): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$vente->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->entityManager;
-            $entityManager->remove($vente);
-            $entityManager->flush();
-        }
+        if ($this->security->isGranted('ROLE_USER')) {
+            if ($this->isCsrfTokenValid('delete'.$vente->getId(), $request->request->get('_token'))) {
+                $entityManager = $this->entityManager;
+                $entityManager->remove($vente);
+                $entityManager->flush();
+            }
 
-        return $this->redirectToRoute('vente_index', [], Response::HTTP_SEE_OTHER);
+            $response = $this->redirectToRoute('vente_index', [], Response::HTTP_SEE_OTHER);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+     } else {
+           $response = $this->redirectToRoute('security_logout');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
     }
 }

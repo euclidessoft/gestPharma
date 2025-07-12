@@ -21,14 +21,38 @@ class SpecialiteController extends
     #[Route("/", name:"specialite_index", methods:["GET"])]
     public function index(SpecialiteRepository $specialiteRepository): Response
     {
-        return $this->render('specialite/index.html.twig', [
-            'specialites' => $specialiteRepository->findAll(),
-        ]);
+      if ($this->security->isGranted('ROLE_USER')) {
+        
+        $response = $this->redirectToRoute('security_logout');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+     } else {
+           $response = $this->redirectToRoute('security_logout');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
     }
 
     #[Route("/new", name:"specialite_new", methods:["GET","POST"])]
     public function new(Request $request): Response
     {
+        if ($this->security->isGranted('ROLE_USER')) {
+        
+        
         $specialite = new Specialite();
         $form = $this->createForm(SpecialiteType::class, $specialite);
         $form->handleRequest($request);
@@ -39,25 +63,87 @@ class SpecialiteController extends
             $entityManager->flush();
 
             return $this->redirectToRoute('specialite_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('specialite/new.html.twig', [
+            $response = $this->render('specialite/new.html.twig', [
             'specialite' => $specialite,
             'form' => $form->createView(),
         ]);
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+            
+        }
+
+         $response = $this->render('specialite/new.html.twig', [
+            'specialite' => $specialite,
+            'form' => $form->createView(),
+        ]);
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+        
+     } else {
+           $response = $this->redirectToRoute('security_logout');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
     }
 
     #[Route("/{id}", name:"specialite_show", methods:["GET"])]
     public function show(Specialite $specialite): Response
     {
-        return $this->render('specialite/show.html.twig', [
+        if ($this->security->isGranted('ROLE_USER')) {
+        
+        $response = $this->render('specialite/show.html.twig', [
             'specialite' => $specialite,
         ]);
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+     } else {
+           $response = $this->redirectToRoute('security_logout');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
     }
 
     #[Route("/{id}/edit", name:"specialite_edit", methods:["GET","POST"])]
     public function edit(Request $request, Specialite $specialite): Response
     {
+        if ($this->security->isGranted('ROLE_USER')) {
+        
+        
         $form = $this->createForm(SpecialiteType::class, $specialite);
         $form->handleRequest($request);
 
@@ -67,15 +153,48 @@ class SpecialiteController extends
             return $this->redirectToRoute('specialite_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('specialite/edit.html.twig', [
+        $response = $this->render('specialite/edit.html.twig', [
             'specialite' => $specialite,
             'form' => $form->createView(),
         ]);
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+     } else {
+           $response = $this->redirectToRoute('security_logout');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
     }
 
     #[Route("/{id}", name:"specialite_delete", methods:["POST"])]
     public function delete(Request $request, Specialite $specialite): Response
     {
+        if ($this->security->isGranted('ROLE_USER')) {
+        
+        $response = $this->redirectToRoute('security_logout');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
         if ($this->isCsrfTokenValid('delete'.$specialite->getId(), $request->request->get('_token'))) {
             $entityManager = $this->entityManager;
             $entityManager->remove($specialite);
@@ -83,5 +202,17 @@ class SpecialiteController extends
         }
 
         return $this->redirectToRoute('specialite_index', [], Response::HTTP_SEE_OTHER);
+     } else {
+           $response = $this->redirectToRoute('security_logout');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
     }
 }

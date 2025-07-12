@@ -27,7 +27,7 @@ class ApprovisionnementController extends AbstractController
     #[Route("/Approvisionnement/", name:"appro_index", methods:["GET"])]
     public function index(SessionInterface $session, ApprovisionnementRepository $approvisionnementRepository, ProduitRepository $produitRepository): Response
     {
-//        if ($this->get('security.authorization_checker')->isGranted('ROLE_STOCK')) {
+        if ($this->security->isGranted('ROLE_USER')) {
             $produits = $produitRepository->findAll();
 
             $approv = $session->get("approv", []);
@@ -54,45 +54,63 @@ class ApprovisionnementController extends AbstractController
                     ];
             }
 
-
-            return $this->render('approvisionnement/index.html.twig', [
+            $response = $this->render('approvisionnement/index.html.twig', [
                 'approvisionnements' => $approvisionnementRepository->findAll(),
                 'produits' => $produits,
                 'panier' => $dataPanier,
             ]);
-//        } else {
-//            $response = $this->redirectToRoute('security_login');
-//            $response->setSharedMaxAge(0);
-//            $response->headers->addCacheControlDirective('no-cache', true);
-//            $response->headers->addCacheControlDirective('no-store', true);
-//            $response->headers->addCacheControlDirective('must-revalidate', true);
-//            $response->setCache([
-//                'max_age' => 0,
-//                'private' => true,
-//            ]);
-//            return $response;
-//        }
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       } else {
+           $response = $this->redirectToRoute('security_login');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
     }
 
     #[Route("/Historique/", name:"historique", methods:["GET"])]
     public function historique(ApprovisionnerRepository $repository): Response
     {
-//        if ($this->get('security.authorization_checker')->isGranted('ROLE_STOCK')) {
-            return $this->render('approvisionnement/historique.html.twig', [
+       if ($this->security->isGranted('ROLE_USER')) {
+          
+             $response = $this->render('approvisionnement/historique.html.twig', [
                 'approvisionnements' => $repository->findAll(),
             ]);
-//        } else {
-//            $response = $this->redirectToRoute('security_login');
-//            $response->setSharedMaxAge(0);
-//            $response->headers->addCacheControlDirective('no-cache', true);
-//            $response->headers->addCacheControlDirective('no-store', true);
-//            $response->headers->addCacheControlDirective('must-revalidate', true);
-//            $response->setCache([
-//                'max_age' => 0,
-//                'private' => true,
-//            ]);
-//            return $response;
-//        }
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       } else {
+           $response = $this->redirectToRoute('security_login');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
     }
 
 
@@ -234,7 +252,7 @@ class ApprovisionnementController extends AbstractController
     #[Route("/valider/", name:"valider")]
     public function valider(SessionInterface $session, ProduitRepository $produitRepository)
     {
-//        if ($this->get('security.authorization_checker')->isGranted('ROLE_STOCK')) {
+       if ($this->security->isGranted('ROLE_USER')) {
 //            $produits = $produitRepository->findAll();
             $approv = $session->get("approv", []);
             $em = $this->entityManager;
@@ -278,25 +296,25 @@ class ApprovisionnementController extends AbstractController
                 'private' => true,
             ]);
             return $response;
-//        } else {
-//            $response = $this->redirectToRoute('security_login');
-//            $response->setSharedMaxAge(0);
-//            $response->headers->addCacheControlDirective('no-cache', true);
-//            $response->headers->addCacheControlDirective('no-store', true);
-//            $response->headers->addCacheControlDirective('must-revalidate', true);
-//            $response->setCache([
-//                'max_age' => 0,
-//                'private' => true,
-//            ]);
-//            return $response;
-//        }
+       } else {
+           $response = $this->redirectToRoute('security_login');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
     }
 
 
     #[Route("/Details/{id}", name:"show", methods:["GET"])]
     public function details(Approvisionner $approvisionner, ApprovisionnementRepository $repository): Response
     {
-//        if ($this->get('security.authorization_checker')->isGranted('ROLE_STOCK')) {
+       if ($this->security->isGranted('ROLE_USER')) {
 
             $response = $this->render('approvisionnement/show.html.twig', [
                 'approvisionner' => $approvisionner,
@@ -311,24 +329,24 @@ class ApprovisionnementController extends AbstractController
                 'private' => true,
             ]);
             return $response;
-//        } else {
-//            $response = $this->redirectToRoute('security_login');
-//            $response->setSharedMaxAge(0);
-//            $response->headers->addCacheControlDirective('no-cache', true);
-//            $response->headers->addCacheControlDirective('no-store', true);
-//            $response->headers->addCacheControlDirective('must-revalidate', true);
-//            $response->setCache([
-//                'max_age' => 0,
-//                'private' => true,
-//            ]);
-//            return $response;
-//        }
+       } else {
+           $response = $this->redirectToRoute('security_login');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
     }
 
     #[Route("/Details_print/{id}", name:"show_print", methods:["GET"])]
     public function detailsprint(Approvisionner $approvisionner, ApprovisionnementRepository $repository): Response
     {
-//        if ($this->get('security.authorization_checker')->isGranted('ROLE_STOCK')) {
+       if ($this->security->isGranted('ROLE_USER')) {
 
             $response = $this->render('approvisionnement/show_print.html.twig', [
                 'approvisionner' => $approvisionner,
@@ -343,18 +361,18 @@ class ApprovisionnementController extends AbstractController
                 'private' => true,
             ]);
             return $response;
-//        } else {
-//            $response = $this->redirectToRoute('security_login');
-//            $response->setSharedMaxAge(0);
-//            $response->headers->addCacheControlDirective('no-cache', true);
-//            $response->headers->addCacheControlDirective('no-store', true);
-//            $response->headers->addCacheControlDirective('must-revalidate', true);
-//            $response->setCache([
-//                'max_age' => 0,
-//                'private' => true,
-//            ]);
-//            return $response;
-//        }
+       } else {
+           $response = $this->redirectToRoute('security_login');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
     }
 
 }

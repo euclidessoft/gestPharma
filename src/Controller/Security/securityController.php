@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\User;
 use App\Form\RegistrationType;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use App\Form\UserType;
 use App\Form\changePasswordType;
@@ -25,7 +25,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Doctrine\ORM\EntityManagerInterface;
 
 
-#[Route("/{_locale}")]
+// #[Route("/{_locale}")]
 class securityController extends AbstractController
 {
     public function __construct(private Security $security, private EntityManagerInterface $entityManager)
@@ -34,7 +34,7 @@ class securityController extends AbstractController
 
 
     #[Route("/registration", name:"security_register")]
-    public function new(Request $request, UserPasswordEncoderInterface $encoder, TokenGeneratorInterface $tokenGenerator, \Swift_Mailer $mail)
+    public function new(Request $request, UserPasswordHasherInterface $encoder, TokenGeneratorInterface $tokenGenerator, /*\Swift_Mailer $mail*/)
     {
 //        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
         $manager = $this->entityManager;
@@ -43,7 +43,7 @@ class securityController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $hashpass = $encoder->encodePassword($user, 'PasserPharma');
+            $hashpass = $encoder->hashPassword($employe, $employe->getPassword());
 //                $hashpass = $encoder->encodePassword($user, $user->getPassword());
             //$password = $user->getPassword();
             $user->setPassword($hashpass);
@@ -59,7 +59,7 @@ class securityController extends AbstractController
                     $user->setRoles(['ROLE_ADMIN']);
                     break;
                 }
-                case 'Venduer':
+                case 'Vendeur':
                 {
                     $user->setRoles(['ROLE_USER']);
                     break;
@@ -77,15 +77,15 @@ class securityController extends AbstractController
             $manager->flush();
             $url = $this->generateUrl('security_activation', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
 
-            $message = (new \Swift_Message('Activation compte utilisateur'))
-                ->setFrom('support@gntpharma-cameroun.com')
-                ->setTo($user->getEmail())
-                ->setBody($this->renderView('security/security/mail/active.html.twig', ['url' => $url]), 'text/html');
-//                    ->setBody("Cliquez sur le lien suivant pour activer votre compte utilisasateur " . $url, 'text/html');
+//             $message = (new \Swift_Message('Activation compte utilisateur'))
+//                 ->setFrom('support@gntpharma-cameroun.com')
+//                 ->setTo($user->getEmail())
+//                 ->setBody($this->renderView('security/security/mail/active.html.twig', ['url' => $url]), 'text/html');
+// //                    ->setBody("Cliquez sur le lien suivant pour activer votre compte utilisasateur " . $url, 'text/html');
 
 
-            $mail->send($message);
-            // fin envoie mail
+//             $mail->send($message);
+//             // fin envoie mail
 
             $this->addFlash('notice', 'Utilisateur créé, un message a été envoyé à son adresse mail pour l\'activation du compte');
 
@@ -112,32 +112,32 @@ class securityController extends AbstractController
 //        }
     }
 
-    #[Route("/login", name:"security_login")]
-    public function login(AuthenticationUtils $auth)
-    {
-        $error = $auth->getLastAuthenticationError();
-        $last_user = $auth->getLastUsername();
+    // #[Route("/login", name:"security_login")]
+    // public function login(AuthenticationUtils $auth)
+    // {
+    //     $error = $auth->getLastAuthenticationError();
+    //     $last_user = $auth->getLastUsername();
 
-        $response = $this->render('security/security/login.html.twig', [
-            'error' => $error,
-            'last_user' => $last_user,
-        ]);
-        $response->setSharedMaxAge(0);
-        $response->headers->addCacheControlDirective('no-cache', true);
-        $response->headers->addCacheControlDirective('no-store', true);
-        $response->headers->addCacheControlDirective('must-revalidate', true);
-        $response->setCache([
-            'max_age' => 0,
-            'private' => true,
-        ]);
-        return $response;
-    }
+    //     $response = $this->render('security/security/login.html.twig', [
+    //         'error' => $error,
+    //         'last_user' => $last_user,
+    //     ]);
+    //     $response->setSharedMaxAge(0);
+    //     $response->headers->addCacheControlDirective('no-cache', true);
+    //     $response->headers->addCacheControlDirective('no-store', true);
+    //     $response->headers->addCacheControlDirective('must-revalidate', true);
+    //     $response->setCache([
+    //         'max_age' => 0,
+    //         'private' => true,
+    //     ]);
+    //     return $response;
+    // }
 
-    #[Route("/logout", name:"security_logout")]
-    public function logout()
-    {
+    // #[Route("/logout", name:"security_logout")]
+    // public function logout()
+    // {
 
-    }
+    // }
 
     #[Route("/profile", name:"security_profile")]
     public function profile(SessionInterface $session)
