@@ -26,10 +26,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\SecurityBundle\Security;
+use Doctrine\ORM\EntityManagerInterface;
 
 #[Route("/{_locale}/Stock" , name:"stock_")]
-class StockController extends AbstractController
-{
+class StockController extends 
+ AbstractController
+{   public function __construct(private Security $security, private EntityManagerInterface $entityManager)
+    {
+    }
     #[Route("/", name:"index", methods:["GET"])]
     public function stock(StockRepository $repository): Response
     {
@@ -305,7 +310,7 @@ class StockController extends AbstractController
 //        if ($this->get('security.authorization_checker')->isGranted('ROLE_STOCK')) {
 //
 //            $com = $request->get('commande');
-//            $em = $this->getDoctrine()->getManager();
+//            $em = $this->entityManager;
 //            $commande = $em->getRepository(Commande::class)->find($com);
 //            $produits = $session->get('retour', []);
 //            $retour = new Retour();
@@ -361,7 +366,7 @@ class StockController extends AbstractController
             $peremption = $request->get('peremption');
             $id = $request->get('produit');
             $retour = $request->get('retour');
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->entityManager;
             $approvisionner = new Approvisionner();
             $approvisionner->setUser($this->getUser());
             $em->persist($approvisionner);
@@ -412,7 +417,7 @@ class StockController extends AbstractController
             $lot = $request->get('lot');
             $id = $request->get('produit');
             $retour = $request->get('retour');
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->entityManager;
 
             $produit = $em->getRepository(Produit::class)->find($id);
             $retour = $em->getRepository(RetourProduit::class)->findOneBy(['retour' => $retour, 'produit' => $produit, 'lot' => $lot]);

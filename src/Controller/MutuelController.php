@@ -9,10 +9,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\SecurityBundle\Security;
+use Doctrine\ORM\EntityManagerInterface;
 
 #[Route("/mutuel")]
-class MutuelController extends AbstractController
-{
+class MutuelController extends 
+ AbstractController
+{   public function __construct(private Security $security, private EntityManagerInterface $entityManager)
+    {
+    }
     #[Route("/", name:"mutuel_index", methods:["GET"])]
     public function index(MutuelRepository $mutuelRepository): Response
     {
@@ -29,7 +34,7 @@ class MutuelController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $entityManager->persist($mutuel);
             $entityManager->flush();
 
@@ -57,7 +62,7 @@ class MutuelController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('mutuel_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -72,7 +77,7 @@ class MutuelController extends AbstractController
     public function delete(Request $request, Mutuel $mutuel): Response
     {
         if ($this->isCsrfTokenValid('delete'.$mutuel->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $entityManager->remove($mutuel);
             $entityManager->flush();
         }

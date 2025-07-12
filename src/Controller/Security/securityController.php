@@ -21,18 +21,23 @@ use App\Repository\UserRepository;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Bundle\SecurityBundle\Security;
+use Doctrine\ORM\EntityManagerInterface;
 
 
 #[Route("/{_locale}")]
 class securityController extends AbstractController
 {
+    public function __construct(private Security $security, private EntityManagerInterface $entityManager)
+    {
+    }
 
 
     #[Route("/registration", name:"security_register")]
     public function new(Request $request, UserPasswordEncoderInterface $encoder, TokenGeneratorInterface $tokenGenerator, \Swift_Mailer $mail)
     {
 //        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
-        $manager = $this->getDoctrine()->getManager();
+        $manager = $this->entityManager;
         $user = new User();
         $form = $this->createForm(RegistrationType::class, $user);
         $form->handleRequest($request);
@@ -177,7 +182,7 @@ class securityController extends AbstractController
     {
         if ($this->get('security.authorization_checker')->isGranted('ROLE_CLIENT')) {
             $panier = $session->get("panier", []);
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->entityManager;
             $user = $em->getRepository(User::class)->find($this->getUser()->getId());
             $form = $this->createForm(UserType::class, $user);
             $form->remove('username');
@@ -186,7 +191,7 @@ class securityController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $this->getDoctrine()->getManager()->flush();
+                $this->entityManager->flush();
                 $this->addFlash('notice', 'Profil modifié avec succès');
                 return $this->redirectToRoute('security_profile', ['id' => $user->getId()]);
 
@@ -206,7 +211,7 @@ class securityController extends AbstractController
             return $response;
         } elseif ($this->get('security.authorization_checker')->isGranted('ROLE_BACK')) {
 
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->entityManager;
             $user = $em->getRepository(User::class)->find($this->getUser()->getId());
             $form = $this->createForm(UserType::class, $user);
             $form->remove('username');
@@ -215,7 +220,7 @@ class securityController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $this->getDoctrine()->getManager()->flush();
+                $this->entityManager->flush();
                 $this->addFlash('notice', 'Profil modifié avec succès');
                 return $this->redirectToRoute('security_profile', ['id' => $user->getId()]);
 
@@ -263,7 +268,7 @@ class securityController extends AbstractController
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
 
-                $em = $this->getDoctrine()->getManager();
+                $em = $this->entityManager;
                 $user = $em->getRepository(User::class)->find($this->getUser()->getId());
                 if ($encoder->isPasswordValid($user, $userinit->getTest())) {
                     $newpassword = $encoder->encodePassword($user, $userinit->getPassword());
@@ -304,7 +309,7 @@ class securityController extends AbstractController
 
             $email = $request->request->get('_mail');
 
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->entityManager;
             $user = $em->getRepository(User::class)->findOneByEmail($email);
             if ($user === null) {
                 $this->addFlash('notice', 'Adresse email inconnue');
@@ -419,7 +424,7 @@ class securityController extends AbstractController
         $form->remove('test');
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->entityManager;
             $user = $em->getRepository(User::class)->findOneByResetToken($token);
             if ($user === null) {
                 $this->addFlash('notice', 'Chaine de réinitialisation invalide');
@@ -452,7 +457,7 @@ class securityController extends AbstractController
     public function active(Request $request, string $token)
     {
 
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->entityManager;
         $user = $em->getRepository(User::class)->findOneByResetToken($token);
         if ($user === null) {
             $this->addFlash('notice', 'Chaine d\'activation invalide');
@@ -473,7 +478,7 @@ class securityController extends AbstractController
     public function UserdisableAction(Request $request)
     {
         if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->entityManager;
             //$users = $em->getrepository(User::class)->findBy(array('agence' => $this->getUser()->getAgence()->getId()));
             $user = $em->getrepository(User::class)->find($request->get('usr'));
             if (!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') || $user->getFonction() != 'proprietaire') {
@@ -495,7 +500,7 @@ class securityController extends AbstractController
     {
 
         if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->entityManager;
             //$users = $em->getrepository(User::class)->findBy(array('agence' => $this->getUser()->getAgence()->getId()));
             $user = $em->getrepository(User::class)->find($request->get('usr'));
             if (!$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') || $user->getFonction() != 'proprietaire') {
@@ -525,7 +530,7 @@ class securityController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
 
-                $this->getDoctrine()->getManager()->flush();
+                $this->entityManager->flush();
                 $this->addFlash('notice', 'Modifié avec succès');
                 return $this->redirectToRoute('security_user', ['user' => $user->getId()]);
 
@@ -553,7 +558,7 @@ class securityController extends AbstractController
     public function admin_new(Request $request, UserPasswordEncoderInterface $encoder, TokenGeneratorInterface $tokenGenerator, \Swift_Mailer $mail)
     {
         if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
-            $manager = $this->getDoctrine()->getManager();
+            $manager = $this->entityManager;
             $user = new User();
             $form = $this->createForm(RegistrationType::class, $user);
             $form->handleRequest($request);
@@ -635,7 +640,7 @@ class securityController extends AbstractController
         if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
 
             try {
-                $em = $this->getDoctrine()->getManager();
+                $em = $this->entityManager;
 
                 $user = $em->getrepository(User::class)->find($request->get('usr'));
                 $em->remove($user);

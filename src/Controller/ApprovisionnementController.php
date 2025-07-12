@@ -14,10 +14,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\SecurityBundle\Security;
+use Doctrine\ORM\EntityManagerInterface;
 
 #[Route("/{_locale}/Stock/Approvisionnement" , name:"stock_")]
 class ApprovisionnementController extends AbstractController
 {
+    public function __construct(private Security $security, private EntityManagerInterface $entityManager)
+    {
+    }
 
     #[Route("/Approvisionnement/", name:"appro_index", methods:["GET"])]
     public function index(SessionInterface $session, ApprovisionnementRepository $approvisionnementRepository, ProduitRepository $produitRepository): Response
@@ -232,7 +237,7 @@ class ApprovisionnementController extends AbstractController
 //        if ($this->get('security.authorization_checker')->isGranted('ROLE_STOCK')) {
 //            $produits = $produitRepository->findAll();
             $approv = $session->get("approv", []);
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->entityManager;
             $approvisionner = new  Approvisionner();
 
             if (count($approv) >= 1) {

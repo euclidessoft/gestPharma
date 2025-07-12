@@ -13,10 +13,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Bundle\SecurityBundle\Security;
+use Doctrine\ORM\EntityManagerInterface;
 
 #[Route("/vente")]
-class VenteController extends AbstractController
-{
+class VenteController extends 
+ AbstractController
+{   public function __construct(private Security $security, private EntityManagerInterface $entityManager)
+    {
+    }
     #[Route("/", name:"vente_index", methods:["GET"])]
     public function index(VenteRepository $venteRepository): Response
     {
@@ -28,7 +33,7 @@ class VenteController extends AbstractController
     #[Route("/new", name:"vente_new", methods:["GET","POST"])]
     public function new(Request $request, ProduitRepository $produitRepository,SessionInterface $session): Response
     {
-        $entityManager =$this->getDoctrine()->getManager();
+        $entityManager =$this->entityManager;
         $vente = new Vente();
         $montantvente = 0;
         $form = $this->createForm(VenteType::class, $vente);
@@ -254,7 +259,7 @@ class VenteController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('vente_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -269,7 +274,7 @@ class VenteController extends AbstractController
     public function delete(Request $request, Vente $vente): Response
     {
         if ($this->isCsrfTokenValid('delete'.$vente->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->entityManager;
             $entityManager->remove($vente);
             $entityManager->flush();
         }
