@@ -3,97 +3,44 @@
 namespace App\Entity;
 
 use App\Repository\ProduitRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity(repositoryClass:ProduitRepository::class) ]
+#[ORM\Entity(repositoryClass:ProduitRepository::class)]
 class Produit
 {
-    #[ORM\ManyToOne(targetEntity:"App\Entity\Promotion") ]
-#[ORM\JoinColumn(nullable:true) ]
-    private $promotion;
-
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+     #[ORM\GeneratedValue ]
+     #[ORM\Column(type:"integer")]
+    private $id;
 
-    #[ORM\Column(type:"string", length:255, nullable:true) ]
-    private $reference;
+    #[ORM\Column(type:"string", length:255)]
+    private $designation;
 
-    #[ORM\Column(type:"string", length:255) ]
-     #[Assert\NotBlank(  message : "Champ obligatoire") ]
-    private $desigantion;
-
-    #[ORM\Column(type:"string", length:255, nullable:true) ]
-    private $adresse;
-
-    #[ORM\Column(type:"string", length:255, nullable:true) ]
-    private $telephone;
-
-    #[ORM\Column(type:"string", length:255, nullable:true) ]
-    private $description;
-
-    #[ORM\Column(type:"float") ]
-      #[Assert\NotBlank(  message : "Champ obligatoire") ]
+    #[ORM\Column(type:"integer")]
     private $prix;
 
-    #[ORM\Column(type:"string", length:255, nullable:true) ]
-      #[Assert\NotBlank(  message : "Champ obligatoire") ]
-    private $mincommande;
+    #[ORM\Column(type:"string", length:255, nullable:true)]
+    private $description;
 
-    #[ORM\Column(type:"string", length:255, nullable:true) ]
-      #[Assert\NotBlank(  message : "Champ obligatoire") ]
-    private $fabriquant;
-
-
-    private $quantite;
+    #[ORM\Column(type:"integer", nullable:true)]
     private $lot;
+
+    #[ORM\Column(type:"date", nullable:true)]
     private $peremption;
 
-    #[ORM\Column(type:"float") ]
-      #[Assert\NotBlank(  message : "Champ obligatoire") ]
-    private $prixpublic;
-
-    #[ORM\Column(type:"integer") ]
+    #[ORM\Column(type:"integer")]
     private $stock;
 
-    #[ORM\Column(type:"date") ]
-    private $creation;
-
-    #[ORM\Column(type:"boolean") ]
+    #[ORM\Column(type:"boolean")]
     private $tva;
 
-//    /**
-//     #[\OneToMany(targetEntity:FournisseurProduit::class, mappedBy:"produit")
-//     */
-//    private $fournisseurProduits;
-
-    #[ORM\ManyToMany(targetEntity:"App\Entity\Fournisseur", inversedBy:"produits") ]
-#[ORM\JoinTable(name:"produit_fournisseur") ]
-    private $fournisseurs;
-
-    #[ORM\Column(type:"float") ]
-    private $pght;
-
-    #[ORM\OneToMany(mappedBy: 'produit', targetEntity: PromotionProduit::class)]
-    private Collection $promotionProduits;
-
-    #[ORM\OneToMany(mappedBy: 'produit', targetEntity: CommandeProduit::class)]
-    private Collection $commandeProduits;
-
+    #[ORM\Column(type:"string", length:255)]
+    private $reference;
 
     public function __construct()
     {
         $this->stock = 0;
-        $this->creation = new \Datetime();
         $this->tva = false;
-//        $this->fournisseurProduits = new ArrayCollection();
-        $this->fournisseurs = new ArrayCollection();
-        $this->promotionProduits = new ArrayCollection();
-        $this->commandeProduits = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -101,174 +48,26 @@ class Produit
         return $this->id;
     }
 
-    public function getReference(): ?string
+    public function getDesignation(): ?string
     {
-        return $this->reference;
+        return $this->designation;
     }
 
-    public function setReference(?string $reference): self
+    public function setDesignation(string $designation): self
     {
-        $this->reference = $reference;
+        $this->designation = $designation;
 
         return $this;
     }
 
-    public function getDesigantion(): ?string
-    {
-        return $this->desigantion;
-    }
-
-    public function setDesigantion(string $desigantion): self
-    {
-        $this->desigantion = $desigantion;
-
-        return $this;
-    }
-
-    public function getPrix(): ?float
+    public function getPrix(): ?int
     {
         return $this->prix;
     }
 
-    public function setPrix(float $prix): self
+    public function setPrix(int $prix): self
     {
         $this->prix = $prix;
-
-        return $this;
-    }
-
-    public function getMincommande(): ?string
-    {
-        return $this->mincommande;
-    }
-
-    public function setMincommande(?string $mincommande): self
-    {
-        $this->mincommande = $mincommande;
-
-        return $this;
-    }
-
-    public function getFabriquant(): ?string
-    {
-        return $this->fabriquant;
-    }
-
-    public function setFabriquant(?string $fabriquant): self
-    {
-        $this->fabriquant = $fabriquant;
-
-        return $this;
-    }
-
-    public function getQuantite(): ?int
-    {
-        return $this->quantite;
-    }
-
-    public function setQuantite(int $quantite): self
-    {
-        $this->quantite = $quantite;
-
-        return $this;
-    }
-    public function getLot()
-    {
-        return $this->lot;
-    }
-
-    public function setLot($lot)
-    {
-        $this->lot = $lot;
-
-        return $this;
-    }
-    public function getPeremption()
-    {
-        return $this->peremption;
-    }
-
-    public function setPeremption($peremption)
-    {
-        $this->peremption = $peremption;
-
-        return $this;
-    }
-
-    public function getPrixpublic(): ?float
-    {
-        return $this->prixpublic;
-    }
-
-    public function setPrixpublic(float $prixpublic): self
-    {
-        $this->prixpublic = $prixpublic;
-
-        return $this;
-    }
-
-    public function getStock(): ?int
-    {
-        return $this->stock;
-    }
-
-    public function setStock(int $stock): self
-    {
-        $this->stock = $stock;
-
-        return $this;
-    }
-
-    public function approvisionner(int $quantite): self
-    {
-        $this->stock = $this->stock + $quantite;
-
-        return $this;
-    }
-
-    public function livraison(int $quantite)
-    {
-        $this->stock = $this->stock - $quantite;
-        $res = false;
-        if($this->stock >= 0 ){
-            $res = true;
-        }
-
-        return $res;
-    }
-
-    public function getCreation(): ?\DateTimeInterface
-    {
-        return $this->creation;
-    }
-
-    public function setCreation(\DateTimeInterface $creation): self
-    {
-        $this->creation = $creation;
-
-        return $this;
-    }
-
-    public function getAdresse(): ?string
-    {
-        return $this->adresse;
-    }
-
-    public function setAdresse(?string $adresse): self
-    {
-        $this->adresse = $adresse;
-
-        return $this;
-    }
-
-    public function getTelephone(): ?string
-    {
-        return $this->telephone;
-    }
-
-    public function setTelephone(?string $telephone): self
-    {
-        $this->telephone = $telephone;
 
         return $this;
     }
@@ -285,14 +84,38 @@ class Produit
         return $this;
     }
 
-    public function getPromotion(): ?Promotion
+    public function getLot(): ?int
     {
-        return $this->promotion;
+        return $this->lot;
     }
 
-    public function setPromotion(?Promotion $promotion): self
+    public function setLot(?int $lot): self
     {
-        $this->promotion = $promotion;
+        $this->lot = $lot;
+
+        return $this;
+    }
+
+    public function getPeremption(): ?\DateTimeInterface
+    {
+        return $this->peremption;
+    }
+
+    public function setPeremption(?\DateTimeInterface $peremption): self
+    {
+        $this->peremption = $peremption;
+
+        return $this;
+    }
+
+    public function getStock(): ?int
+    {
+        return $this->stock;
+    }
+
+    public function setStock(int $stock): self
+    {
+        $this->stock = $stock;
 
         return $this;
     }
@@ -309,68 +132,26 @@ class Produit
         return $this;
     }
 
-//    /**
-//     * @return Collection|FournisseurProduit[]
-//     */
-//    public function getFournisseurProduits(): Collection
-//    {
-//        return $this->fournisseurProduits;
-//    }
-//
-//    public function addFournisseurProduit(FournisseurProduit $fournisseurProduit): self
-//    {
-//        if (!$this->fournisseurProduits->contains($fournisseurProduit)) {
-//            $this->fournisseurProduits[] = $fournisseurProduit;
-//            $fournisseurProduit->setProduit($this);
-//        }
-//
-//        return $this;
-//    }
-//
-//    public function removeFournisseurProduit(FournisseurProduit $fournisseurProduit): self
-//    {
-//        if ($this->fournisseurProduits->removeElement($fournisseurProduit)) {
-//            // set the owning side to null (unless already changed)
-//            if ($fournisseurProduit->getProduit() === $this) {
-//                $fournisseurProduit->setProduit(null);
-//            }
-//        }
-//
-//        return $this;
-//    }
-
-    public function getPght(): ?float
+    public function getReference(): ?string
     {
-        return $this->pght;
+        return $this->reference;
     }
 
-    public function setPght(float $pght): self
+    public function setReference(string $reference): self
     {
-        $this->pght = $pght;
+        $this->reference = $reference;
 
         return $this;
     }
 
-    /*  #[return Collection|Fournisseur[]
-     */
-    public function getFournisseurs(): Collection
+    public function livraison(int $quantite)
     {
-        return $this->fournisseurs;
-    }
-
-    public function addFournisseur(Fournisseur $fournisseur): self
-    {
-        if (!$this->fournisseurs->contains($fournisseur)) {
-            $this->fournisseurs[] = $fournisseur;
+        $this->stock = $this->stock - $quantite;
+        $res = false;
+        if($this->stock >= 0 ){
+            $res = true;
         }
 
-        return $this;
-    }
-
-    public function removeFournisseur(Fournisseur $fournisseur): self
-    {
-        $this->fournisseurs->removeElement($fournisseur);
-
-        return $this;
+        return $res;
     }
 }

@@ -1,51 +1,43 @@
-{% extends
-    is_granted('ROLE_ADMIN') ? 'admin.html.twig' :
-    is_granted('ROLE_RH') ? 'rh.html.twig' :
-    is_granted('ROLE_FINANCE') ? 'finance.html.twig' :
-    is_granted('ROLE_STOCK') ? 'stock.html.twig' :
-    is_granted('ROLE_LIVREUR') ? 'livreur.html.twig' :
-    is_granted('ROLE_EMPLOYER') ? 'employe.html.twig' :
-    'layout.html.twig'
-%}
+{% extends 'layout.html.twig' %}
 {% block title %} {{ "Commande"|trans }} - GNT Pharma {% endblock %}
 {% block stock %}active{% endblock %}
 {% block etat_stock %}active{% endblock %}
 
 {% block body %}
-    <div class="container mt-4 fond-7">
+    <div class="container mt-4 fond">
         <h3 class="mt-4 mb-5 text-bold">
-            <i class="fa fa-shopping-cart me-2"></i>
+            <i class="fa fa-shopping-cart mr-2"></i>
             {{ "Etat stock Produits"|trans }}
         </h3>
         <ul class="nav nav-tabs mb-4">
-            {% if is_granted('ROLE_STOCK') %}
+{#            {% if is_granted('ROLE_STOCK') %}#}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('stock_index') }}">
                         {{ 'Disponible'|trans }}</a>
                 </li>
-            {% endif %}
+{#            {% endif %}#}
             <li class="nav-item">
                 <a class="nav-link active" href="#">
-                    {{ 'A surveiller'|trans }}</a>
+                    {{ 'à surveiller'|trans }}</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ path('stock_rupture') }}">
                     {{ 'En rupture'|trans }}</a>
             </li>
-            {% if is_granted('ROLE_STOCK') %}
+{#            {% if is_granted('ROLE_STOCK') %}#}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('stock_peremption') }}">
                         {{ 'Péremption Imminente'|trans }}</a>
                 </li>
-            {% endif %}
+{#            {% endif %}#}
         </ul>
 
-        <table class="table table-success-light table-bordered table-hover table-striped my-3" id="liste">
+        <table class="table table-success-light table-bordered table-hover table-striped w-100" id="liste">
             <thead>
             <tr>
                 <th>{{ 'Référence'|trans }}</th>
                 <th>{{ 'Désignation'|trans }}</th>
-                <th>{{ 'Fabricant'|trans }}</th>
+{#                <th>{{ 'Emplacement'|trans }}</th>#}
                 <th>{{ 'Quantité'|trans }}</th>
 
                 <th>{{ 'Actions'|trans }}</th>
@@ -55,9 +47,9 @@
             {% for produit in produits %}
                 <tr>
                     <td>{{ produit.reference }}</td>
-                    <td>{{ produit.desigantion }}</td>
-                    <td>{{ produit.fabriquant }}</td>
-                    <td>{{ produit.stock|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                    <td>{{ produit.designation }}</td>
+{#                    <td>{{ produit.emplacement ? produit.emplacement.nom : '' }}</td>#}
+                    <td>{{ produit.stock|number_format(0, '' , ' ') }}</td>
                     <td>
                         <a id="{{produit.id }}" onclick="load({{ produit.id }})" class="btn btn-success" href="{{ path('stock_produit_show', {'id': produit.id}) }}">
                             <i class="fa fa-list"></i>
@@ -67,7 +59,10 @@
                     </td>
 
                 </tr>
-
+            {% else %}
+                <tr>
+                    <td colspan="5">no records found</td>
+                </tr>
             {% endfor %}
             </tbody>
         </table>

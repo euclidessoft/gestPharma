@@ -1,21 +1,13 @@
-{% extends
-    is_granted('ROLE_ADMIN') ? 'admin.html.twig' :
-    is_granted('ROLE_RH') ? 'rh.html.twig' :
-    is_granted('ROLE_FINANCE') ? 'finance.html.twig' :
-    is_granted('ROLE_STOCK') ? 'stock.html.twig' :
-    is_granted('ROLE_LIVREUR') ? 'livreur.html.twig' :
-    is_granted('ROLE_EMPLOYER') ? 'employe.html.twig' :
-    'layout.html.twig'
-%}
+{% extends 'layout.html.twig' %}
 {% block title %} {{ "Commande"|trans }} - GNT Pharma {% endblock %}
 {% block stock %}active{% endblock %}
 {% block etat_stock %}active{% endblock %}
 
 
 {% block body %}
-    <div class="col-lg-8 mt-4 pb-4 fond-7">
+    <div class="container mt-4 pb-4 fond">
         <h3 class="mt-4 mb-5 text-bold">
-            <i class="fa-brands fa-product-hunt me-2"></i>
+            <i class="fa-brands fa-product-hunt mr-2"></i>
             {{ "Détails Produit"|trans }}
         </h3>
 
@@ -36,31 +28,15 @@
                 <th>
                     {{'Designation'|trans }}
                 </th>
-                <td>{{ produit.desigantion }}</td>
-                <td rowspan="5" class="text-center text-bolder w-25">{{ produit.stock|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
-            </tr>
-            <tr>
-                <th>{{ 'PGHT'|trans }}</th>
-                <td>{{ produit.pght|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                <td>{{ produit.designation }}</td>
+                <td rowspan="5" class="text-center text-bolder w-25">{{ produit.stock|number_format(0, '' , ' ') }}</td>
             </tr>
             <tr>
                 <th>{{ 'Prix cession'|trans }}</th>
-                <td>{{ produit.prix|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
-            </tr>
-            <tr>
-                <th>{{ 'Prix Public'|trans }}</th>
-                <td>{{ produit.prixpublic|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
-            </tr>
-            <tr>
-                <th>{{ 'Mincommande'|trans }}</th>
-                <td>{{ produit.mincommande }}</td>
-            </tr>
-            <tr>
-                <th>{{ 'Fabriquant'|trans }}</th>
-                <td>{{ produit.fabriquant }}</td>
+                <td>{{ produit.prix }}</td>
             </tr>
 
-            <tr></tr>
+
 
             </tbody>
         </table>
@@ -80,22 +56,22 @@
                 <tr>
                     <td>{{ produit.lot }}</td>
                     <td>{{ produit.peremption|date('d/m/Y') }}</td>
-                    <td>{{ produit.quantite|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                    <td>{{ produit.quantite|number_format(0, '' , ' ') }}</td>
                 </tr>
             {% else %}
             {% endfor %}
             </tbody>
         </table>
 
-        <div class="col-md-4 offset-md-3 mt-4 p-3 fond-7">
-            <div class="centrer gap-3">
+        <div class="col-md-4 offset-md-3 mt-4 py-3 fond-7">
+            <div class="centrer">
 
-                <a id="retour" onclick="load('retour')" class="btn btn-success-light btn-normal" href="{{ path('stock_index') }}">
+                <a id="retour" onclick="load('retour')" class="btn btn-success ml-3" href="{{ path('stock_index') }}">
                     <i class="fa fa-undo"></i>
                     {{ 'Retour'|trans }}
                 </a>
 
-                <a id="print" onclick="load('print')" class="btn btn-success" href="{{ path('stock_produit_show_print', {'id': produit.id}) }}">
+                <a id="print" onclick="load('print')" class="btn btn-success ml-3" href="{{ path('stock_produit_show_print', {'id': produit.id}) }}">
                     <i class="fa fa-print"></i>
                     {{ 'Imprimer'|trans }}
                 </a>

@@ -6,108 +6,85 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
- #[ORM\Entity(repositoryClass: UserRepository::class) ]
- #[ORM\Table(name:"user") ]
- #[ORM\InheritanceType("JOINED") ]
- #[ORM\DiscriminatorColumn(name:"typeuser", type:"string") ]
- #[ORM\DiscriminatorMap([
-    'client' => Client::class,
-    'employe' => Employe::class,
-])]
+#[ORM\Entity(repositoryClass:"App\Repository\UserRepository")]
+#[ORM\Table(name:"user")]
 #[UniqueEntity(
     fields: ['email'],
     message: 'Cet email existe déjà.'
 )]
- class User implements UserInterface, PasswordAuthenticatedUserInterface
+
+class User implements UserInterface
 {
 
     const jobs = [
 
-        'ADMINISTRATEUR' => 'ADMINISTRATEUR',
-        'FINANCE' => 'FINANCE' ,
-        'RH' => 'RH' ,
-        'STOCK' => 'STOCK' ,
-        'LIVREUR' => 'LIVREUR' ,
-        'EMPLOYE' => 'EMPLOYE' ,
+        'Administrateur' => 'Administrateur',
+        'Vendeur' => 'Vendeur' ,
+        'Caissier' => 'Caissier' ,
     ];
 
-   #[ORM\Id]
-    #[ORM\GeneratedValue]
+     #[ORM\Id]
+    #[ORM\GeneratedValue ]
     #[ORM\Column]
-    private ?int $id = null;
+    protected $id;
 
-   #[ORM\Column(type:"string", length:255, nullable:true) ] 
+    #[ORM\Column(type:"string", length:255, nullable:true)]
     private $username;
 
-   #[ORM\Column(type:"string", length:255) ]
-   #[Assert\Length(min:"6", minMessage:"trop court, 6 caracrteres mini")]
+    #[ORM\Column(type:"string", length:255) ]
+     #[Assert\Length(min:"6", minmessage:"trop court, 6 caracrteres mini")]
     private $password;
 
-    #[Assert\EqualTo(propertyPath:"password", message:"non conforme") ]
+    #[Assert\EqualTo(propertyPath:"password", message:"non conforme")]
     public $confirm;
 
     public $test;
 
     #[ORM\Column(type:"string", length:255) ]
-    #[Assert\NotBlank(message:"champ obligatoire") ]
-    #[Assert\Email(message:"email invalide") ]
+     #[Assert\NotBlank(message:"champ obligatoire")]
+     #[Assert\Email(message:"email invalide")]
     private $email;
 
-   #[ORM\Column(type:"string", length:255, nullable:true) ] 
-     #[Assert\NotBlank(message:"champ obligatoire") ]
+    #[ORM\Column(type:"string", length:255, nullable:true)]
+     #[Assert\NotBlank(message:"champ obligatoire")]
     private $prenom;
 
-   #[ORM\Column(type:"string", length:255, nullable:true) ]
-     #[Assert\NotBlank(message:"champ obligatoire") ]
+    #[ORM\Column(type:"string", length:255, nullable:true)]
+     #[Assert\NotBlank(message:"champ obligatoire")]
     private $nom;
 
 
-   #[ORM\Column(type:"string", length:255) ]
-   #[Assert\NotBlank(message:"champ obligatoire")]
-    private $phone;                   
+    #[ORM\Column(type:"string", length:255) ]
+     #[Assert\NotBlank(message:"champ obligatoire")]
+    private $phone;
 
-   #[ORM\Column(type:"string", length:255, nullable:true) ]
-   #[Assert\NotBlank(message:"champ obligatoire")]
+    #[ORM\Column(type:"string", length:255, nullable:true)]
+     #[Assert\NotBlank(message:"champ obligatoire")]
     private $adresse;
 
-   #[ORM\Column(type:"string", length:255) ]
+    #[ORM\Column(type:"string", length:255) ]
     private $fonction;
 
-   #[ORM\Column(type:"array", nullable:true) ] 
+    #[ORM\Column(type:"array", nullable:true)]
     protected $roles = [];
 
-   #[ORM\Column(type:"string", length:255, nullable:true) ] 
+    #[ORM\Column(type:"string", length:255, nullable:true)]
     private $resetToken;
 
-   #[ORM\Column(type:"boolean") ]
+    #[ORM\Column(type:"boolean")]
     private $enabled;
 
-   #[ORM\Column(type:"boolean") ]
+    #[ORM\Column(type:"boolean")]
     private $client;
 
-   #[ORM\Column(type:"boolean") ]
+    #[ORM\Column(type:"boolean")]
     private $livreur;
-
-
-   #[ORM\OneToMany(targetEntity:Transfert::class, mappedBy:"user") ]
-    private $transferts;
-
-   #[ORM\OneToMany(targetEntity:Depense::class, mappedBy:"user") ]
-    private $depenses;
-
-   #[ORM\OneToMany(targetEntity:Message::class, mappedBy:"sender", orphanRemoval:true) ]
-    private $sent;
-
-   #[ORM\OneToMany(targetEntity:MessageRecipient::class, mappedBy:"recipient", orphanRemoval:true) ]
-    private $received;
 
 
     public function __construct()
@@ -115,10 +92,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
         $this->enabled = false;
         $this->client = false;
         $this->livreur = false;
-        $this->transferts = new ArrayCollection();
-        $this->depenses = new ArrayCollection();
-        $this->sent = new ArrayCollection();
-        $this->received = new ArrayCollection();
     }
 
     public function getUsername(): ?string
@@ -232,31 +205,14 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
         return $this->id;
     }
 
-     /**
-     * The public representation of the user (e.g. a username, an email address, etc.)
-     *
-    * @see UserInterface
-     */
-    public function getUserIdentifier(): string
+    public function getRoles(): ?array
     {
-        return (string) $this->email;
+        return $this->roles;
     }
 
-    /**
-    * @see UserInterface
-     */
-    public function getRoles(): array
+    public function setRoles(?array $role): self
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
-    }
-
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
+        $this->roles = $role;
 
         return $this;
     }
@@ -314,117 +270,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
         return $this;
     }
 
-/*    /*  #[return Collection|Transfert[] ] */
-    public function getTransferts(): Collection
-    {
-        return $this->transferts;
-    }
-
-    public function addTransfert(Transfert $transfert): self
-    {
-        if (!$this->transferts->contains($transfert)) {
-            $this->transferts[] = $transfert;
-            $transfert->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTransfert(Transfert $transfert): self
-    {
-        if ($this->transferts->removeElement($transfert)) {
-            // set the owning side to null (unless already changed)
-            if ($transfert->getUser() === $this) {
-                $transfert->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-/*    /*  #[return Collection|Depense[] */
-    public function getDepenses(): Collection
-    {
-        return $this->depenses;
-    }
-
-    public function addDepense(Depense $depense): self
-    {
-        if (!$this->depenses->contains($depense)) {
-            $this->depenses[] = $depense;
-            $depense->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeDepense(Depense $depense): self
-    {
-        if ($this->depenses->removeElement($depense)) {
-            // set the owning side to null (unless already changed)
-            if ($depense->getUser() === $this) {
-                $depense->setUser(null);
-            }
-        }
-
-        return $this;
-    }
 
 
-/*    /*  #[return Collection|MessageRecipient[] */
-    public function getReceived(): Collection
-    {
-        return $this->received;
-    }
-
-    public function addReceived(MessageRecipient $received): self
-    {
-        if (!$this->received->contains($received)) {
-            $this->received[] = $received;
-            $received->setRecipient($this);
-        }
-
-        return $this;
-    }
-
-    public function removeReceived(MessageRecipient $received): self
-    {
-        if ($this->received->removeElement($received)) {
-            // set the owning side to null (unless already changed)
-            if ($received->getRecipient() === $this) {
-                $received->setRecipient(null);
-            }
-        }
-
-        return $this;
-    }
-
-/*   /*  #[return Collection|Message[] */
-    public function getSent(): Collection
-    {
-        return $this->sent;
-    }
-
-    public function addSent(Message $sent): self
-    {
-        if (!$this->sent->contains($sent)) {
-            $this->sent[] = $sent;
-            $sent->setSender($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSent(Message $sent): self
-    {
-        if ($this->sent->removeElement($sent)) {
-            // set the owning side to null (unless already changed)
-            if ($sent->getSender() === $this) {
-                $sent->setSender(null);
-            }
-        }
-
-        return $this;
-    }
 
 }

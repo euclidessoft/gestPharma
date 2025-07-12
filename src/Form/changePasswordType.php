@@ -13,9 +13,9 @@ class changePasswordType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-        ->add('confirm', PasswordType::class,['label' => false, 'attr' => ['placeholder' => 'Confirmation']])
-        ->add('password', PasswordType::class,['label' => false, 'attr' => ['placeholder' => 'Nouveau mot de passe ']])
-        ->add('test', PasswordType::class,['label' => false, 'attr' => ['placeholder' => 'Mot de passe actuel']])// verication mot de passe au changement
+        ->add('confirm', PasswordType::class,['label' => false])
+        ->add('password', PasswordType::class,['label' => false])
+        ->add('test', PasswordType::class,['label' => false])// verication mot de passe au changement
         ;
     }
 

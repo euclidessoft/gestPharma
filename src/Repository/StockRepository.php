@@ -23,8 +23,8 @@ class StockRepository extends ServiceEntityRepository
     {
 
 
-        $query = $this->createQueryBuilder('a')
-            ->groupBy('a.produit');
+        $query = $this->createQueryBuilder('a');
+           // ->groupBy('a.produit');
         return $query->getQuery()
             ->getResult();
     }
@@ -44,6 +44,7 @@ class StockRepository extends ServiceEntityRepository
             ->getQuery();
         return $query->getResult();
     }
+
     // /**
     //  * @return Stock[] Returns an array of Stock objects
     //  */

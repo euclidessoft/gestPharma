@@ -3,27 +3,22 @@
 namespace App\Entity;
 
 use App\Repository\ApprovisionnerRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass:ApprovisionnerRepository::class) ]
+#[ORM\Entity(repositoryClass:ApprovisionnerRepository::class)]
 class Approvisionner
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+     #[ORM\GeneratedValue ]
+     #[ORM\Column(type:"integer")]
+    private $id;
 
-    #[ORM\ManyToOne(targetEntity:"App\Entity\Employe") ]
-     #[ORM\JoinColumn(nullable:false) ]
+    #[ORM\ManyToOne(targetEntity:"App\Entity\User")]
+     #[ORM\JoinColumn(nullable:false)]
     private $user;
 
-    #[ORM\Column(type:"date") ]
+    #[ORM\Column(type:"date")]
     private $date;
-
-    #[ORM\OneToMany(targetEntity:Facture::class, mappedBy:"approvisionner") ]
-    private $factures;
 
     /**
      * Constructor
@@ -31,7 +26,6 @@ class Approvisionner
     public function __construct()
     {
         $this->date = new \Datetime();
-        $this->factures = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -52,43 +46,14 @@ class Approvisionner
         return $this;
     }
 
-    public function getUser(): ?Employe
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(?Employe $user): self
+    public function setUser(?User $user): self
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    /*  #[return Collection|Facture[]
-     */
-    public function getFactures(): Collection
-    {
-        return $this->factures;
-    }
-
-    public function addFacture(Facture $facture): self
-    {
-        if (!$this->factures->contains($facture)) {
-            $this->factures[] = $facture;
-            $facture->setApprovisionner($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFacture(Facture $facture): self
-    {
-        if ($this->factures->removeElement($facture)) {
-            // set the owning side to null (unless already changed)
-            if ($facture->getApprovisionner() === $this) {
-                $facture->setApprovisionner(null);
-            }
-        }
 
         return $this;
     }

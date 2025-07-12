@@ -1,220 +1,1078 @@
 <!DOCTYPE html>
-<html lang="{{ app.request.locale }}">
+<html lang="en">
 <head>
+    <title>Pharma application de gestion de pharmacie</title>
+
+    <!-- Meta -->
     <meta charset="utf-8">
-    <title>
-        {% block title %} GNT Pharma - Leader dans la distribution des produits pharmaceutiques {% endblock %}
-    </title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="keywords" content="GNT Pharma">
-    <meta name="description" content="Leader dans la distribution des produits pharmaceutiques">
-    <meta name="author" content="EUCLIDES">
 
-    <!-- Favicon -->
-    <!--    <link href="images/favicon.ico" rel="icon"> -->
+    <meta name="description" content="Pharma application de gestion de pharmacie">
+    <meta name="author" content="Xiaoying Riley at 3rd Wave Media">
+    <link rel="shortcut icon" href="favicon.ico">
 
-    <!-- Libraries Stylesheet -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.compat.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
-    <link rel="shortcut icon" href="{{ asset('images/gntpharma.jpeg') }}" type="image/x-icon">
-    {% block photobox_css %} {% endblock %}
+    <!-- FontAwesome JS-->
 
-    <!-- Site Stylesheet -->
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-{#    <link href="{{ asset('css/commande.css') }}" rel="stylesheet">#}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <script defer src="{{ asset('assets/plugins/fontawesome/js/all.min.js') }}"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.bootstrap5.css">
+    <!-- App CSS -->
+    <link id="theme-style" rel="stylesheet" href="{{ asset('assets/css/portal.css') }}">
 </head>
 
-<body>
-<!-- Navbar Start -->
-<nav class="navbar navbar-expand-lg navbar-light sticky-top p-0">
-    <a href="{{ path('Accueil') }}" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
-        <h2 class="m-0 logo fw-bold">
-            <i class="fa-solid fa-staff-snake fa-lg me-2"></i>GNT PHARMA
-        </h2>
-    </a>
-    <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#main-nav">
-        <i class="fa fa-bars fa-lg"></i>
-    </button>
-    <div class="collapse navbar-collapse pe-5" id="main-nav">
-        <div class="navbar-nav ms-auto d-flex align-items-center p-4 p-lg-0">
-            <a href="{{ path('Accueil') }}"
-               class="nav-item nav-link {% block home %} {% endblock %}">{{ "Accueil"|trans }}</a>
-            <a href="{{ path('About') }}"
-               class="nav-item nav-link {% block about %} {% endblock %}">{{ "A propos"|trans }}</a>
-            <div class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle {% block metiers %} {% endblock %}"
-                   data-bs-toggle="dropdown" aria-expanded="false">{{ "Nos métiers"|trans }}</a>
-                <div class="dropdown-menu m-0">
-                    <a href="{{ path('Logistique') }}"
-                       class="dropdown-item {% block logistique %} {% endblock %}">{{ "Logistique"|trans }}</a>
-                    <a href="{{ path('Distribution') }}"
-                       class="dropdown-item {% block distribution %} {% endblock %}">{{ "Distribution"|trans }}</a>
-                    <a href="{{ path('Promotion') }}"
-                       class="dropdown-item {% block promotion %} {% endblock %}">{{ "Promotion"|trans }}</a>
-                </div>
-            </div>
-            <a href="{{ path('commande_index') }}"
-               class="nav-item nav-link {% block commande %} {% endblock %}">{{ "Commande"|trans }}</a>
-            <a href="{{ path('Carriere') }}"
-               class="nav-item nav-link {% block carriere %} {% endblock %}">{{ "Carrières"|trans }}</a>
-            <a href="{{ path('Contact') }}"
-               class="nav-item nav-link {% block contact %} {% endblock %}">{{ "Contact"|trans }}</a>
-            <button id="changelang" class="lang-button">
-            </button>
+<body class="app"{% block start %} {% endblock %}>
+<header class="app-header fixed-top">
+    <div class="app-header-inner">
+        <div class="container-fluid py-2">
+            <div class="app-header-content">
+                <div class="row justify-content-between align-items-center">
+                    <div class="col-auto">
+                        <a id="sidepanel-toggler" class="sidepanel-toggler d-inline-block d-xl-none" href="#">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"
+                                 role="img"><title>Menu</title>
+                                <path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10"
+                                      stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path>
+                            </svg>
+                        </a>
+                    </div><!--//col-->
+                    <div class="search-mobile-trigger d-sm-none col">
+                        <i class="search-mobile-trigger-icon fa-solid fa-magnifying-glass"></i>
+                    </div><!--//col-->
+                    <div class="app-search-box col">
+                        <form class="app-search-form">
+                            <input type:"text" placeholder="Search..." name="search" class="form-control search-input">
+                            <button type:"submit" class="btn search-btn btn-primary" value="Search"><i
+                                        class="fa-solid fa-magnifying-glass"></i></button>
+                        </form>
+                    </div><!--//app-search-box-->
+
+                    <div class="app-utilities col-auto">
+                        <div class="app-utility-item app-notifications-dropdown dropdown">
+                            <a class="dropdown-toggle no-toggle-arrow" id="notifications-dropdown-toggle"
+                               data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"
+                               title="Notifications">
+                                <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-bell icon"
+                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2z"/>
+                                    <path fill-rule="evenodd"
+                                          d="M8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+                                </svg>
+                                <span class="icon-badge">3</span>
+                            </a><!--//dropdown-toggle-->
+
+                            <div class="dropdown-menu p-0" aria-labelledby="notifications-dropdown-toggle">
+                                <div class="dropdown-menu-header p-3">
+                                    <h5 class="dropdown-menu-title mb-0">Notifications</h5>
+                                </div><!--//dropdown-menu-title-->
+                                <div class="dropdown-menu-content">
+                                    <div class="item p-3">
+                                        <div class="row gx-2 justify-content-between align-items-center">
+                                            <div class="col-auto">
+                                                <img class="profile-image" src="assets/images/profiles/profile-1.png"
+                                                     alt="">
+                                            </div><!--//col-->
+                                            <div class="col">
+                                                <div class="info">
+                                                    <div class="desc">Amy shared a file with you. Lorem ipsum dolor sit
+                                                        amet, consectetur adipiscing elit.
+                                                    </div>
+                                                    <div class="meta"> 2 hrs ago</div>
+                                                </div>
+                                            </div><!--//col-->
+                                        </div><!--//row-->
+                                        <a class="link-mask" href="notifications.html"></a>
+                                    </div><!--//item-->
+                                    <div class="item p-3">
+                                        <div class="row gx-2 justify-content-between align-items-center">
+                                            <div class="col-auto">
+                                                <div class="app-icon-holder">
+                                                    <svg width="1em" height="1em" viewBox="0 0 16 16"
+                                                         class="bi bi-receipt" fill="currentColor"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd"
+                                                              d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27zm.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0l-.509-.51z"/>
+                                                        <path fill-rule="evenodd"
+                                                              d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5z"/>
+                                                    </svg>
+                                                </div>
+                                            </div><!--//col-->
+                                            <div class="col">
+                                                <div class="info">
+                                                    <div class="desc">You have a new invoice. Proin venenatis interdum
+                                                        est.
+                                                    </div>
+                                                    <div class="meta"> 1 day ago</div>
+                                                </div>
+                                            </div><!--//col-->
+                                        </div><!--//row-->
+                                        <a class="link-mask" href="notifications.html"></a>
+                                    </div><!--//item-->
+                                    <div class="item p-3">
+                                        <div class="row gx-2 justify-content-between align-items-center">
+                                            <div class="col-auto">
+                                                <div class="app-icon-holder icon-holder-mono">
+                                                    <svg width="1em" height="1em" viewBox="0 0 16 16"
+                                                         class="bi bi-bar-chart-line" fill="currentColor"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd"
+                                                              d="M11 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h1V7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7h1V2zm1 12h2V2h-2v12zm-3 0V7H7v7h2zm-5 0v-3H2v3h2z"/>
+                                                    </svg>
+                                                </div>
+                                            </div><!--//col-->
+                                            <div class="col">
+                                                <div class="info">
+                                                    <div class="desc">Your report is ready. Proin venenatis interdum
+                                                        est.
+                                                    </div>
+                                                    <div class="meta"> 3 days ago</div>
+                                                </div>
+                                            </div><!--//col-->
+                                        </div><!--//row-->
+                                        <a class="link-mask" href="notifications.html"></a>
+                                    </div><!--//item-->
+                                    <div class="item p-3">
+                                        <div class="row gx-2 justify-content-between align-items-center">
+                                            <div class="col-auto">
+                                                <img class="profile-image" src="assets/images/profiles/profile-2.png"
+                                                     alt="">
+                                            </div><!--//col-->
+                                            <div class="col">
+                                                <div class="info">
+                                                    <div class="desc">James sent you a new message.</div>
+                                                    <div class="meta"> 7 days ago</div>
+                                                </div>
+                                            </div><!--//col-->
+                                        </div><!--//row-->
+                                        <a class="link-mask" href="notifications.html"></a>
+                                    </div><!--//item-->
+                                </div><!--//dropdown-menu-content-->
+
+                                <div class="dropdown-menu-footer p-2 text-center">
+                                    <a href="notifications.html">View all</a>
+                                </div>
+
+                            </div><!--//dropdown-menu-->
+                        </div><!--//app-utility-item-->
+                        <div class="app-utility-item">
+                            <a href="settings.html" title="Settings">
+                                <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-gear icon"
+                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                          d="M8.837 1.626c-.246-.835-1.428-.835-1.674 0l-.094.319A1.873 1.873 0 0 1 4.377 3.06l-.292-.16c-.764-.415-1.6.42-1.184 1.185l.159.292a1.873 1.873 0 0 1-1.115 2.692l-.319.094c-.835.246-.835 1.428 0 1.674l.319.094a1.873 1.873 0 0 1 1.115 2.693l-.16.291c-.415.764.42 1.6 1.185 1.184l.292-.159a1.873 1.873 0 0 1 2.692 1.116l.094.318c.246.835 1.428.835 1.674 0l.094-.319a1.873 1.873 0 0 1 2.693-1.115l.291.16c.764.415 1.6-.42 1.184-1.185l-.159-.291a1.873 1.873 0 0 1 1.116-2.693l.318-.094c.835-.246.835-1.428 0-1.674l-.319-.094a1.873 1.873 0 0 1-1.115-2.692l.16-.292c.415-.764-.42-1.6-1.185-1.184l-.291.159A1.873 1.873 0 0 1 8.93 1.945l-.094-.319zm-2.633-.283c.527-1.79 3.065-1.79 3.592 0l.094.319a.873.873 0 0 0 1.255.52l.292-.16c1.64-.892 3.434.901 2.54 2.541l-.159.292a.873.873 0 0 0 .52 1.255l.319.094c1.79.527 1.79 3.065 0 3.592l-.319.094a.873.873 0 0 0-.52 1.255l.16.292c.893 1.64-.902 3.434-2.541 2.54l-.292-.159a.873.873 0 0 0-1.255.52l-.094.319c-.527 1.79-3.065 1.79-3.592 0l-.094-.319a.873.873 0 0 0-1.255-.52l-.292.16c-1.64.893-3.433-.902-2.54-2.541l.159-.292a.873.873 0 0 0-.52-1.255l-.319-.094c-1.79-.527-1.79-3.065 0-3.592l.319-.094a.873.873 0 0 0 .52-1.255l-.16-.292c-.892-1.64.902-3.433 2.541-2.54l.292.159a.873.873 0 0 0 1.255-.52l.094-.319z"/>
+                                    <path fill-rule="evenodd"
+                                          d="M8 5.754a2.246 2.246 0 1 0 0 4.492 2.246 2.246 0 0 0 0-4.492zM4.754 8a3.246 3.246 0 1 1 6.492 0 3.246 3.246 0 0 1-6.492 0z"/>
+                                </svg>
+                            </a>
+                        </div><!--//app-utility-item-->
+
+                        <div class="app-utility-item app-user-dropdown dropdown">
+                            <a class="dropdown-toggle" id="user-dropdown-toggle" data-bs-toggle="dropdown" href="#"
+                               role="button" aria-expanded="false"><img src="assets/images/user.png" alt="user profile"></a>
+                            <ul class="dropdown-menu" aria-labelledby="user-dropdown-toggle">
+                                <li><a class="dropdown-item" href="account.html">Account</a></li>
+                                <li><a class="dropdown-item" href="settings.html">Settings</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="login.html">Log Out</a></li>
+                            </ul>
+                        </div><!--//app-user-dropdown-->
+                    </div><!--//app-utilities-->
+                </div><!--//row-->
+            </div><!--//app-header-content-->
+        </div><!--//container-fluid-->
+    </div><!--//app-header-inner-->
+    <div id="app-sidepanel" class="app-sidepanel">
+        <div id="sidepanel-drop" class="sidepanel-drop"></div>
+        <div class="sidepanel-inner d-flex flex-column">
+            <a href="#" id="sidepanel-close" class="sidepanel-close d-xl-none">&times;</a>
+            <div class="app-branding">
+                <a class="app-logo" href="index.html">
+                    <img class="logo-icon me-2" src="{{ asset('assets/images/app-logo.svg') }}" alt="logo">
+                    <span class="logo-text">PHARMA</span></a>
+            </div><!--//app-branding-->
+
+            <nav id="app-nav-main" class="app-nav app-nav-main flex-grow-1">
+                <ul class="app-menu list-unstyled accordion" id="menu-accordion">
+                    <li class="nav-item">
+                        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+                        <a class="nav-link active" href="index.html">
+						        <span class="nav-icon">
+						        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-house-door"
+                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+		  <path fill-rule="evenodd"
+                d="M7.646 1.146a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 .146.354v7a.5.5 0 0 1-.5.5H9.5a.5.5 0 0 1-.5-.5v-4H7v4a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .146-.354l6-6zM2.5 7.707V14H6v-4a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v4h3.5V7.707L8 2.207l-5.5 5.5z"/>
+		  <path fill-rule="evenodd" d="M13 2.5V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/>
+		</svg>
+						         </span>
+                            <span class="nav-link-text">Tableau de bord</span>
+                        </a><!--//nav-link-->
+                    </li>
+
+                    <!--//nav-item-->
+                    <li class="nav-item has-submenu">
+                        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+                        <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse"
+                           data-bs-target="#submenu-2" aria-expanded="false" aria-controls="submenu-1">
+						        <span class="nav-icon">
+						        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+						        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash" viewBox="0 0 16 16">
+  <path d="M8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+  <path d="M0 4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V6a2 2 0 0 1-2-2z"/>
+</svg>
+						         </span>
+                            <span class="nav-link-text">Vente</span>
+                            <span class="submenu-arrow">
+		                             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-down"
+                                          fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+	  <path fill-rule="evenodd"
+            d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+	</svg>
+	                             </span><!--//submenu-arrow-->
+                        </a><!--//nav-link-->
+                        <div id="submenu-2" class="collapse submenu submenu-1" data-bs-parent="#menu-accordion">
+                            <ul class="submenu-list list-unstyled">
+
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="{{ path('vente_new') }}">Facturation</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="account.html">Cloture</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="settings.html">Chiffre d'affaires</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <!--//nav-item-->
+
+                    <li class="nav-item">
+                        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+                        <a class="nav-link" href="{{ path('produit_index') }}">
+						        <span class="nav-icon">
+						        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-card-list"
+                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                  <path fill-rule="evenodd"
+                                        d="M14.5 3h-13a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+                                  <path fill-rule="evenodd"
+                                        d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5z"/>
+                                  <circle cx="3.5" cy="5.5" r=".5"/>
+                                  <circle cx="3.5" cy="8" r=".5"/>
+                                  <circle cx="3.5" cy="10.5" r=".5"/>
+                                </svg>
+						         </span>
+                            <span class="nav-link-text">Produits</span>
+                        </a>
+                        <!--//nav-link-->
+                    </li>
+                    <!--//nav-item-->
+                    <li class="nav-item has-submenu">
+                        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+                        <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse"
+                           data-bs-target="#submenu-1" aria-expanded="false" aria-controls="submenu-1">
+						        <span class="nav-icon">
+						        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+						        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-files"
+                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+	  <path fill-rule="evenodd"
+            d="M4 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4z"/>
+	  <path d="M6 0h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2v-1a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1H4a2 2 0 0 1 2-2z"/>
+	</svg>
+						         </span>
+                            <span class="nav-link-text">Stock</span>
+                            <span class="submenu-arrow">
+		                             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-down"
+                                          fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+	  <path fill-rule="evenodd"
+            d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+	</svg>
+	                             </span><!--//submenu-arrow-->
+                        </a><!--//nav-link-->
+                        <div id="submenu-1" class="collapse submenu submenu-1" data-bs-parent="#menu-accordion">
+                            <ul class="submenu-list list-unstyled">
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="{{ path('stock_index') }}">Etat du stock</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="{{ path('stock_historique') }}">Réaprovisionner</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="account.html">Retour</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <!--//nav-item-->
+                    <li class="nav-item has-submenu">
+                        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+                        <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse"
+                           data-bs-target="#submenu-3" aria-expanded="false" aria-controls="submenu-1">
+						        <span class="nav-icon">
+						        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+						        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-files"
+                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+	  <path fill-rule="evenodd"
+            d="M4 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4z"/>
+	  <path d="M6 0h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2v-1a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1H4a2 2 0 0 1 2-2z"/>
+	</svg>
+						         </span>
+                            <span class="nav-link-text">Commandes</span>
+                            <span class="submenu-arrow">
+		                             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-down"
+                                          fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+	  <path fill-rule="evenodd"
+            d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+	</svg>
+	                             </span><!--//submenu-arrow-->
+                        </a><!--//nav-link-->
+                        <div id="submenu-3" class="collapse submenu submenu-1" data-bs-parent="#menu-accordion">
+                            <ul class="submenu-list list-unstyled">
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="#">Nouvelle commandes</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="#">Historique des commandes</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="account.html">Liste des commandes</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <!--//nav-item-->
+                    <li class="nav-item">
+                        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+                        <a class="nav-link" href="#">
+						        <span class="nav-icon">
+						        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-card-list"
+                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                  <path fill-rule="evenodd"
+                                        d="M14.5 3h-13a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+                                  <path fill-rule="evenodd"
+                                        d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5z"/>
+                                  <circle cx="3.5" cy="5.5" r=".5"/>
+                                  <circle cx="3.5" cy="8" r=".5"/>
+                                  <circle cx="3.5" cy="10.5" r=".5"/>
+                                </svg>
+						         </span>
+                            <span class="nav-link-text">Client</span>
+                        </a>
+                        <!--//nav-link-->
+                    </li>
+                    <!--//nav-item-->
+                    <li class="nav-item">
+                        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+                        <a class="nav-link" href="#">
+						        <span class="nav-icon">
+						        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-card-list"
+                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                  <path fill-rule="evenodd"
+                                        d="M14.5 3h-13a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+                                  <path fill-rule="evenodd"
+                                        d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5z"/>
+                                  <circle cx="3.5" cy="5.5" r=".5"/>
+                                  <circle cx="3.5" cy="8" r=".5"/>
+                                  <circle cx="3.5" cy="10.5" r=".5"/>
+                                </svg>
+						         </span>
+                            <span class="nav-link-text">Médecin</span>
+                        </a>
+                        <!--//nav-link-->
+                    </li>
+                    <!--//nav-item-->
+                        <li class="nav-item">
+                        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+                        <a class="nav-link" href="#">
+						        <span class="nav-icon">
+						        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-card-list"
+                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                  <path fill-rule="evenodd"
+                                        d="M14.5 3h-13a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+                                  <path fill-rule="evenodd"
+                                        d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5z"/>
+                                  <circle cx="3.5" cy="5.5" r=".5"/>
+                                  <circle cx="3.5" cy="8" r=".5"/>
+                                  <circle cx="3.5" cy="10.5" r=".5"/>
+                                </svg>
+						         </span>
+                            <span class="nav-link-text">Spécialité</span>
+                        </a>
+                        <!--//nav-link-->
+                    </li>                    <!--//nav-item-->
+                    <li class="nav-item">
+                        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+                        <a class="nav-link" href="{{ path('mutuel_index') }}">
+						        <span class="nav-icon">
+						        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-card-list"
+                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                  <path fill-rule="evenodd"
+                                        d="M14.5 3h-13a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+                                  <path fill-rule="evenodd"
+                                        d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5z"/>
+                                  <circle cx="3.5" cy="5.5" r=".5"/>
+                                  <circle cx="3.5" cy="8" r=".5"/>
+                                  <circle cx="3.5" cy="10.5" r=".5"/>
+                                </svg>
+						         </span>
+                            <span class="nav-link-text">Mutuelle</span>
+                        </a>
+                        <!--//nav-link-->
+                    </li>
+
+                    <!--//nav-item-->
+                    <li class="nav-item">
+                        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+                        <a class="nav-link" href="#">
+						        <span class="nav-icon">
+						        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-card-list"
+                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                  <path fill-rule="evenodd"
+                                        d="M14.5 3h-13a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+                                  <path fill-rule="evenodd"
+                                        d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5z"/>
+                                  <circle cx="3.5" cy="5.5" r=".5"/>
+                                  <circle cx="3.5" cy="8" r=".5"/>
+                                  <circle cx="3.5" cy="10.5" r=".5"/>
+                                </svg>
+						         </span>
+                            <span class="nav-link-text">Fournisseur</span>
+                        </a>
+                        <!--//nav-link-->
+                    </li>
+
+                    <li class="nav-item">
+                        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+                        <a class="nav-link" href="orders.html">
+						        <span class="nav-icon">
+						        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-card-list"
+                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                  <path fill-rule="evenodd"
+                                        d="M14.5 3h-13a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+                                  <path fill-rule="evenodd"
+                                        d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5z"/>
+                                  <circle cx="3.5" cy="5.5" r=".5"/>
+                                  <circle cx="3.5" cy="8" r=".5"/>
+                                  <circle cx="3.5" cy="10.5" r=".5"/>
+                                </svg>
+						         </span>
+                            <span class="nav-link-text">Avoir</span>
+                        </a>
+                        <!--//nav-link-->
+                    </li>
+                    <!--//nav-item-->
+                    <!--//nav-item-->
+                    <li class="nav-item has-submenu">
+                        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+                        <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse"
+                           data-bs-target="#submenu-4" aria-expanded="false" aria-controls="submenu-2">
+						        <span class="nav-icon">
+						        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+						        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-columns-gap"
+                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+	  <path fill-rule="evenodd"
+            d="M6 1H1v3h5V1zM1 0a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1H1zm14 12h-5v3h5v-3zm-5-1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-5zM6 8H1v7h5V8zM1 7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H1zm14-6h-5v7h5V1zm-5-1a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1h-5z"/>
+	</svg>
+						         </span>
+                            <span class="nav-link-text">Compte</span>
+                            <span class="submenu-arrow">
+		                             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-down"
+                                          fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+	  <path fill-rule="evenodd"
+            d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+	</svg>
+	                             </span><!--//submenu-arrow-->
+                        </a>
+                        <!--//nav-link-->
+                        <div id="submenu-4" class="collapse submenu submenu-2" data-bs-parent="#menu-accordion">
+                            <ul class="submenu-list list-unstyled">
+                                <li class="submenu-item"><a class="submenu-link" href="login.html">Modifier</a></li>
+                                <li class="submenu-item"><a class="submenu-link" href="signup.html">Déconexion</a></li>
+                            </ul>
+                        </div>
+                    </li><!--//nav-item-->
+                </ul><!--//app-menu-->
+            </nav><!--//app-nav-->
+            <div class="app-sidepanel-footer">
+                <nav class="app-nav app-nav-footer">
+                    <ul class="app-menu footer-menu list-unstyled">
+                        <li class="nav-item">
+                            <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+                            <a class="nav-link" href="settings.html">
+							        <span class="nav-icon">
+							            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-gear"
+                                             fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+	  <path fill-rule="evenodd"
+            d="M8.837 1.626c-.246-.835-1.428-.835-1.674 0l-.094.319A1.873 1.873 0 0 1 4.377 3.06l-.292-.16c-.764-.415-1.6.42-1.184 1.185l.159.292a1.873 1.873 0 0 1-1.115 2.692l-.319.094c-.835.246-.835 1.428 0 1.674l.319.094a1.873 1.873 0 0 1 1.115 2.693l-.16.291c-.415.764.42 1.6 1.185 1.184l.292-.159a1.873 1.873 0 0 1 2.692 1.116l.094.318c.246.835 1.428.835 1.674 0l.094-.319a1.873 1.873 0 0 1 2.693-1.115l.291.16c.764.415 1.6-.42 1.184-1.185l-.159-.291a1.873 1.873 0 0 1 1.116-2.693l.318-.094c.835-.246.835-1.428 0-1.674l-.319-.094a1.873 1.873 0 0 1-1.115-2.692l.16-.292c.415-.764-.42-1.6-1.185-1.184l-.291.159A1.873 1.873 0 0 1 8.93 1.945l-.094-.319zm-2.633-.283c.527-1.79 3.065-1.79 3.592 0l.094.319a.873.873 0 0 0 1.255.52l.292-.16c1.64-.892 3.434.901 2.54 2.541l-.159.292a.873.873 0 0 0 .52 1.255l.319.094c1.79.527 1.79 3.065 0 3.592l-.319.094a.873.873 0 0 0-.52 1.255l.16.292c.893 1.64-.902 3.434-2.541 2.54l-.292-.159a.873.873 0 0 0-1.255.52l-.094.319c-.527 1.79-3.065 1.79-3.592 0l-.094-.319a.873.873 0 0 0-1.255-.52l-.292.16c-1.64.893-3.433-.902-2.54-2.541l.159-.292a.873.873 0 0 0-.52-1.255l-.319-.094c-1.79-.527-1.79-3.065 0-3.592l.319-.094a.873.873 0 0 0 .52-1.255l-.16-.292c-.892-1.64.902-3.433 2.541-2.54l.292.159a.873.873 0 0 0 1.255-.52l.094-.319z"/>
+	  <path fill-rule="evenodd"
+            d="M8 5.754a2.246 2.246 0 1 0 0 4.492 2.246 2.246 0 0 0 0-4.492zM4.754 8a3.246 3.246 0 1 1 6.492 0 3.246 3.246 0 0 1-6.492 0z"/>
+	</svg>
+							        </span>
+                                <span class="nav-link-text">Settings</span>
+                            </a><!--//nav-link-->
+                        </li><!--//nav-item-->
+                    </ul><!--//footer-menu-->
+                </nav>
+            </div><!--//app-sidepanel-footer-->
+
+        </div><!--//sidepanel-inner-->
+    </div><!--//app-sidepanel-->
+</header><!--//app-header-->
+
+<div class="app-wrapper">
+
+    <div class="app-content pt-3 p-md-3 p-lg-4">
+        <div class="container-fluid">
+            {% block body %}
+            {% endblock %}
+        </div><!--//container-fluid-->
+    </div><!--//app-content-->
+
+    <footer class="app-footer">
+        <div class="container text-center py-3">
+            <!--/* This template is free as long as you keep the footer attribution link. If you'd like to use the template without the attribution link, you can buy the commercial license via our website: themes.3rdwavemedia.com Thank you for your support. :) */-->
+            <small class="copyright">Designed by
+                <a class="app-link" href="https://euclideservices.com/" target="_blank">Euclides</a></small>
+            <input type:"hidden" id="idtampon"/>
+            <input type:"hidden" id="stocktampon"/>
+
         </div>
-    </div>
-</nav>
-<!-- Navbar End -->
+    </footer><!--//app-footer-->
+
+</div><!--//app-wrapper-->
+
+<!-- Javascript -->
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="{{ asset('assets/plugins/popper.min.js') }}"></script>
+{#<script src="{{ asset('assets/plugins/bootstrap/js/bootstrap.min.js') }}"></script>#}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Charts JS -->
+{#<script src="{{ asset('assets/plugins/chart.js/chart.min.js') }}"></script>#}
+{#<script src="{{ asset('assets/js/index-charts.js') }}"></script>#}
+
+{#<!-- Page Specific JS -->#}
+{#<script src="{{ asset('assets/js/app.js') }}"></script>#}
+
+{#<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>#}
+<script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.0.3/js/dataTables.bootstrap5.js"></script>
 
 
 
-{% block body %}
+<script>
+//     $(document).on('change', '#vente_mutuelle', function(){
+//         let $form = $(this).closest('form');
+//
+// // Simulate form data, but only include the selected value.
+//         let data = {};
+//         data[$(this).attr('name')] = $(this).val();
+// //alert($(this).val())
+// // Submit data via AJAX to the form's action path.
+//         $.post($form.attr('action'), data).then(function (data){
+//             let $input = $(data).find('#vente_service')
+//             $('#vente_service').replaceWith($input)
+//
+//         })
+//
+//
+//     })
+
+{#$(document).on('change', '#vente_Mutuelle', function(){#}
+{#    $.ajax({#}
+{#        type: "POST",#}
+{#        #}{#url: "{{ path('commande_produit_add') }}",#}
+{#        data: { produit : produit , quantite : quant.val() },#}
+{#        success: function (data) {#}
+{#            if (data['id'] == 'ok') {#}
+
+{#        },#}
+{#        error: function () {#}
+{#            alert("{{ 'La requête n’a pas abouti'|trans }}");#}
+{#        }#}
+{#    });#}
+{#    let $form = $(this).closest('form');#}
+{#// Simulate form data, but only include the selected value.#}
+{#    let data = {};#}
+{#    data[$(this).attr('name')] = $(this).val();#}
+{#//alert($(this).val())#}
+{#// Submit data via AJAX to the form's action path.#}
+{#    $.post($form.attr('action'), data).then(function (data){#}
+{#        let $input = $(data).find('#vente_service')#}
+{#        $('#vente_service').replaceWith($input)#}
+{#    })#}
+
+{#})#}
+    $(document).ready(function () {
+        var table = $('#liste').DataTable({
+            responsive: true,
+            pageLength: 100,
+            buttons: [{
+                extend: 'excelHtml5',
+                text: '<i class="fa fa-file-excel fa-lg"></i> Exporter vers Excel',
+                attr: {
+                    class: 'btn btn-shadow btn-green'
+                },
+            }],
+            language: {
+                processing: "{{ 'Traitement en cours...'|trans }}",
+                search: "{{ 'Rechercher'|trans }} :",
+                lengthMenu: "{{ 'Afficher'|trans }} _MENU_ {{ 'élèments'|trans }}",
+                info: "{{ 'Affichage de l\'élement|trans' }} _START_ {{ 'à'|trans }} _END_ {{ 'sur'|trans }} _TOTAL_ {{ 'élèments'|trans }}",
+                infoEmpty: "{{ 'Affichage de l\'élèment 0 à 0 sur 0 élèments'|trans }}",
+                infoFiltered: "({{ 'filtré de'|trans }} _MAX_ {{ 'élèment au total'|trans }})",
+                infoPostFix: "",
+                loadingRecords: "{{ 'Chargement en cours...'|trans }}",
+                zeroRecords: "{{ 'Aucun élèment à afficher'|trans }}",
+                emptyTable: "{{ 'Aucune donnée disponible dans le tableau'|trans }}",
+                paginate: {
+                    first: "{{ 'Premier'|trans }}",
+                    previous: "{{ 'Précédent'|trans }}",
+                    next: "{{ 'Suivant'|trans }}",
+                    last: "{{ 'Dernier'|trans }}"
+                },
+                aria: {
+                    sortAscending: ": {{ 'activer pour trier la colonne par ordre croissant'|trans }}",
+                    sortDescending: ": {{ 'activer pour trier la colonne par ordre décroissant'|trans }}"
+                }
+            }
+
+        });
+       // produits();
+    });
+    function load(id) {
+        $("#"+id).html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
+    }
+    function load_btn(id) {
+        $("#"+id).html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
+        $('#form').submit();
+    }
+    function produits(){
+
+        var fournisseur = $('#commande_fournisseur option:selected').val();
+        if(fournisseur != "") {
+            $('#produits').html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
+            $.ajax({
+                type: "POST",
+                {#url: "{{ path('commande_produits') }}",#}
+                data: {fournisseur: fournisseur},
+                success: function (data) {
+                    if (data.length != 0) {
+
+                        for (var i = 0; i < data.length; i++) {
+                            if (i == 0)
+                                $('#produits').html("<tr><td>" + data[i]['reference'] + "</td><td>" + data[i]['designation'] + "</td><td>" +
+                                    "<!-- Button trigger modal -->\n" +
+                                    "<button id='btn" + data[i]['id'] + "' type:\"button\" class=\"btn btn-success\" data-bs-toggle=\"modal\" data-bs-target='#mod" + data[i]['id'] + "'>\n" +
+                                    "<i class=\"fa fa-plus\"></i>\n" +
+                                    "</button>\n" +
+                                    "\n" +
+                                    "<!-- Modal -->\n" +
+                                    "<div class=\"modal fade\" id='mod" + data[i]['id'] + "' tabindex=\"-1\" aria-labelledby=\"exampleModalLabel\" aria-hidden=\"true\">\n" +
+                                    "  <div class=\"modal-dialog\">\n" +
+                                    "    <div class=\"modal-content\">\n" +
+                                    "      <div class=\"modal-header\">\n" +
+                                    "        <h6 class=\"modal-title fs-5\" id=\"exampleModalLabel\">" + data[i]['designation'] + "</h6>\n" +
+                                    "        <button type:\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button>\n" +
+                                    "      </div>\n" +
+                                    "      <div class=\"modal-body\">\n" +
+                                    "<input type:'number' id='text" + data[i]['id'] + "' class='form-control'>" +
+                                    "      </div>\n" +
+                                    "      <div class=\"modal-footer\">\n" +
+                                    "        <button type:\"button\" class=\"btn btn-secondary\" data-bs-dismiss=\"modal\" id='annuler" + data[i]['id'] + "'>Close</button>\n" +
+                                    "        <button type:\"button\"  id='sub" + data[i]['id'] + "' class=\"btn btn-primary\" onclick='ajouter(" + data[i]['id'] + ")'>{{ 'Ajouter'|trans }}</button>\n" +
+                                    "      </div>\n" +
+                                    "    </div>\n" +
+                                    "  </div>\n" +
+                                    "</div></td></tr>");
+                            else
+                                $('#produits').append("<tr><td>" + data[i]['reference'] + "</td><td>" + data[i]['designation'] + "</td><td>" +
+                                    "<!-- Button trigger modal -->\n" +
+                                    "<button id='btn" + data[i]['id'] + "' type:\"button\" class=\"btn btn-success\" data-bs-toggle=\"modal\" data-bs-target='#mod" + data[i]['id'] + "'>\n" +
+                                    "<i class=\"fa fa-plus\"></i>\n" +
+                                    "</button>\n" +
+                                    "\n" +
+                                    "<!-- Modal -->\n" +
+                                    "<div class=\"modal fade\" id='mod" + data[i]['id'] + "' tabindex=\"-1\" aria-labelledby=\"exampleModalLabel\" aria-hidden=\"true\">\n" +
+                                    "  <div class=\"modal-dialog\">\n" +
+                                    "    <div class=\"modal-content\">\n" +
+                                    "      <div class=\"modal-header\">\n" +
+                                    "        <h6 class=\"modal-title fs-5\" id=\"exampleModalLabel\">" + data[i]['designation'] + "</h6>\n" +
+                                    "        <button type:\"button\" class=\"btn-close\" data-bs-dismiss=\"modal\" aria-label=\"Close\"></button>\n" +
+                                    "      </div>\n" +
+                                    "      <div class=\"modal-body\">\n" +
+                                    "<input type:'number' id='text" + data[i]['id'] + "' class='form-control'>" +
+                                    "      </div>\n" +
+                                    "      <div class=\"modal-footer\">\n" +
+                                    "        <button type:\"button\" class=\"btn btn-secondary\" data-bs-dismiss=\"modal\" id='annuler" + data[i]['id'] + "'>Close</button>\n" +
+                                    "        <button type:\"button\"  id='sub" + data[i]['id'] + "' class=\"btn btn-primary\" onclick='ajouter(" + data[i]['id'] + ")'>{{ 'Ajouter'|trans }}</button>\n" +
+                                    "      </div>\n" +
+                                    "    </div>\n" +
+                                    "  </div>\n" +
+                                    "</div></td></tr>");
+                        }
+
+                    } else {
+                        $('#produits').html("<tr><td colspan='3'>Aucun produit</td></tr>");
+                    }
+                },
+                error: function () {
+                    alert('{{ "La requête n'a pas abouti"|trans }}');
+
+                }
+            });
+        }
+    }
+    /*****Fnc ajout produit*******/
+    {#function ajouter(produit) {#}
+
+    {#    var quant = $("#quant" + produit);#}
+    {#    var numero = $("#numero" + produit);#}
+    {#    var peremp = $("#peremp" + produit);#}
+    {#    // var peremp = new Date($("#peremp" + produit).val());#}
+    {#    if(quant.val() != ""){#}
+    {#        if (quant.val() > 0) {#}
+    {#            $("#sub"+produit).html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");#}
+    {#            $.ajax({#}
+    {#                type: "POST",#}
+    {#                url: "{{ path('stock_appro_add') }}",#}
+    {#                data: {produit: produit, quantite : quant.val() , lot: numero.val() , perem : peremp.val()},#}
+    {#                success: function (data) {#}
+    {#                    if (data['id'] == 'ok') {#}
+    {#                        $('#commander').append(" <tr id='tr" + produit + "'>\n" +#}
+    {#                            "                        <td>" + data['ref'] + "</td>\n" +#}
+    {#                            "                        <td>" + data['designation'] + "</td>\n" +#}
+    {#                            "                        <td class='text-center'>" + data['quantite'] + "</td>\n" +#}
+    {#                            "                        <td> <button class='btn btn-danger mr-2 mb-2'\n" +#}
+    {#                            "                                   title=\"{{ 'Supprimer le produit'|trans}}\" onclick='supprim(" + produit + ")'>\n" +#}
+    {#                            "                                    <i class='fa fa-trash'></i>\n" +#}
+    {#                            "                                </button></td></tr>");#}
+
+    {#                        $("#annuler" + produit).trigger('click');#}
+    {#                        quant.val("");#}
+    {#                        $("#sub"+produit).html("{{ 'Ajouter'|trans }}");#}
+    {#                        $("#btn"+produit).addClass('disabled');#}
+    {#                        $('#valider').removeClass('disabled');#}
+    {#                     } else {#}
+    {#                        $("#annuler" + produit).trigger('click');#}
+    {#                        quant.val("");#}
+    {#                        $("#sub"+produit).html("{{ 'Ajouter'|trans }}");#}
+    {#                        $("#btn"+produit).addClass('disabled');#}
+    {#                        alert(data['id'])#}
+    {#                    }#}
+    {#                },#}
+    {#                error: function () {#}
+    {#                    alert("{{ 'La requête n’a pas abouti'|trans }}");#}
+    {#                }#}
+    {#            });#}
+    {#        } else {#}
+    {#            alert("{{'Veillez bien renseigner la quantité'|trans}}");#}
+    {#        }#}
+    {#    }#}
+    {#    else{#}
+    {#        $("#sub"+produit).html("{{ 'Ajouter'|trans }}");#}
+    {#        alert("{{ 'Veillez bien renseigner la quantite'|trans }}");#}
+    {#    }#}
+    {#}#}
+    function supprim(produit,stock) {
+
+        if (confirm("{{ 'Etes-vous sur de vouloir supprimer?'|trans }}")) {
+            $.ajax({
+                type: "POST",
+                url: "{{ path('commande_produit_delete') }}",
+                data: { produit :produit },
+                success: function (data) {
+                    if (data['id'] == 'ok') {
+                        $("#tr" + produit ).remove();
+                        $('#btn' + produit).removeClass('disabled');
+                        $("#text" + produit).val('');// vider le champ quantite dans modal ajouter
+                        $("#ajouter" + produit).show();// afficher le bouton ajouter
+                        $("#ajouter" + produit).html("<i class=\"fa fa-plus\"></i> {{ 'Ajouter'|trans }}");// afficher le bouton ajouter
+                        $("#total").html(data['total']);// total pour la facturation
+                        $("#td"+produit).html("<input type:'number' id='text"+ produit+"' class='form-control' onfocus='focu("+produit+","+stock+")' onblur='nofocu()' style='width:100px'>");// total pour la facturation
 
 
+                        if (data['nb'] == 0) {
+                            $('#valider').addClass('disabled');
+                        }
+                    }
+                },
+                error: function () {
+                    alert("{{ 'La requête n’a pas abouti'|trans }}");
+                }
+            });
+        }
+    }
+    function fournisseur(id) {// selectionner les fournisseur
+        $.ajax({
+            type: "POST",
+            {#url: "{{ path('commande_produit_fournisseur') }}",#}
+            data: "prod=" + id,
+            success: function (data) {
+                if (data[0]['id'] == 'ok') {
+
+                    for (var i=0; i < data.length; i++) {
+                        var date = new Date(data[i]['peremption']['date']).toLocaleDateString();
+                        // var dd = date.getDay();
+                        // var mm = date.getMonth();
+                        // var yy = date.getFullYear()
+                        if( i == 0) {
+
+                            $('#numerolot'+id).html(" <tr>\n" +
+                                "                                            <td>"+ data[i]['lot']+"</td>\n" +
+                                "                                            <td>"+ date +"</td>\n" +
+                                "                                            <td>"+ data[i]['quantite']+"</td>\n" +
+                                "                                            <td>" +
+                                "<input type:'number' id='"+ Number(data[i]['lot'])+"' class='form-control'/>" +
+                                "</td>\n" +
+                                "                                        </tr>");
+                        }else{
+                            $('#numerolot'+id).append(" <tr>\n" +
+                                "                                            <td>"+ data[i]['lot']+"</td>\n" +
+                                "                                            <td>"+ date +"</td>\n" +
+                                "                                            <td>"+ data[i]['quantite']+"</td>\n" +
+                                "                                            <td>" +
+                                "<input type:'number' id='"+ Number(data[i]['lot'])+"' class='form-control'/>" +
+                                "</td>\n" +
+                                "                                        </tr>");
+                        }
+                    }
+                    // ('#annuler' + id).trigger('click');
+                    // $('#text' + id).val('');
+                    $('#ajouter' + id).html("<i class='fa fa-check'></i> {{ "Valider"|trans }}");
+
+                } else {
+                    $('#numerolot'+id).html(" <tr><td colspan='4'>{{ 'Produit en rupture'|trans }}</td></tr>");
+                    $('#ajouter' + id).html("<i class='fa fa-check'></i> {{ "Valider"|trans }}");
+                    $('#ajouter' + id).addClass('disabled');
+                }
+            },
+            error: function () {
+                alert("{{ "La requête n'a pas abouti"|trans }}");
+            }
+        });
+
+
+    }
+
+    function ajouter_vente(produit, stock) {
+
+        var quant = $("#text" + produit);
+        // var peremp = new Date($("#peremp" + produit).val());
+        if(quant.val() != ""){
+            if (quant.val() > 0 && quant.val() < Number(stock)+1) {
+                $("#sub"+produit).html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
+                $.ajax({
+                    type: "POST",
+                    url: "{{ path('commande_produit_add') }}",
+                    data: { produit : produit , quantite : quant.val() },
+                    success: function (data) {
+                        if (data['id'] == 'ok') {
+                            var tot = Number(data['prix']) * Number(data['quantite']);
+                            $('#commander').append(" <tr id='tr" + produit + "'>\n" +
+                                "                        <td>" + data['designation'] + "</td>\n" +
+                                "                        <td>" + data['quantite'] + "</td>\n" +
+                                "                        <td class='text-center'>" + data['prix'] + "</td>\n" +
+                                "                        <td class='text-center'>" + tot + "</td>\n" +
+                                "                        <td> <button class='btn btn-danger mr-2 mb-2'\n" +
+                                "                                   title=\"{{ 'Supprimer le produit'|trans}}\" onclick='supprim(" + produit + "," + stock + ")'>\n" +
+                                "                                    <i class='fa fa-trash'></i>\n" +
+                                "                                </button></td></tr>");
+
+                            $("#total").html(data['total']);
+                            $("#td"+produit).html(data['quantite']);
+
+                            $("#annuler" + produit).trigger('click');
+                            quant.val("");
+                            $("#sub"+produit).html("{{ 'Ajouter'|trans }}");
+                            $("#btn"+produit).addClass('disabled');
+                            $('#valider').removeClass('disabled');
+                        } else {
+                            $("#annuler" + produit).trigger('click');
+                            quant.val("");
+                            $("#sub"+produit).html("{{ 'Ajouter'|trans }}");
+                            $("#btn"+produit).addClass('disabled');
+                            alert(data['id'])
+                        }
+                    },
+                    error: function () {
+                        alert("{{ 'La requête n’a pas abouti'|trans }}");
+                    }
+                });
+            } else {
+                alert("{{'Veillez verifier la quantité'|trans}} ");
+            }
+        }
+        else{
+            $("#sub"+produit).html("{{ 'Ajouter'|trans }}");
+            alert("{{ 'Veillez bien renseigner la quantite'|trans }}");
+        }
+    }
+
+    //hebergement
+    function focu(id,stock) {
+        $('#idtampon').val(id);
+        $('#stocktampon').val(stock);
+    }
+
+    //hebergement
+    function nofocu() {
+        $('#idtampon').val('');
+        $('#stocktampon').val('');
+    }
+
+    //fonction appuie sur le bouton entrer
+    function entrer() {
+        var reg = new RegExp("^[0-9]+$");
+        var id = $('#idtampon').val();
+        var stock = $('#stocktampon').val();
+        var quantite = $('#text'+id).val();
+        if (reg.test(quantite) && window.event.keyCode == 13) {
+            ajouter_vente(id,stock);
+
+        } //else alert("{{'invalide'|trans }}");
+
+    }
+
+    function app_ajouter(produit) {
+
+        var quant = $("#quant" + produit);
+        var numero = $("#numero" + produit);
+        var peremp = $("#peremp" + produit);
+        // var peremp = new Date($("#peremp" + produit).val());
+        if(quant.val() != "" && numero.val() !="" && peremp.val() != "" && new Date($("#peremp" + produit).val()) > new Date()){
+            if (quant.val() > 0) {
+                $("#ajouter" + produit).html("<i class='fa-solid fa-spinner fa-spin-pulse'></i>");
+                $.ajax({
+                    type: "POST",
+                    {#url: "{{ path('stock_appro_add') }}",#}
+                    data: "prod=" + produit + "&quantite=" + quant.val() + "&lot=" + numero.val() + "&perem=" + peremp.val(),
+                    success: function (data) {
+                        if (data['id'] == 'ok') {
+                            $('#selectprod').append(" <tr id='tr" + produit + numero.val() + "'>\n" +
+                                "                        <td>" + data['ref'] + "</td>\n" +
+                                "                        <td>" + data['designation'] + "</td>\n" +
+                                "                        <td>" + data['lot'] + "</td>\n" +
+                                "                        <td>" + data['peremption'] + "</td>\n" +
+                                "                        <td class='text-center'><span id='changequantite" + produit + "'>" + data['quantite'] + "</span></td>\n" +
+                                "                        <td><span id='btnmodf" + produit + "'>" +
+                                // "<button class='btn btn-success'\n" +
+                                // "                                   title='Supprimer cet article' onclick='modif(" + produit + "," + quant.val() + ")'>\n" +
+                                // "                                    <i class='fa fa-edit'></i>\n" +
+                                // "                                </button></span>\n" +
+                                "                                <button class='btn btn-danger mr-2 mb-2'\n" +
+                                "                                   title=\"{{ 'Supprimer cet article'|trans}}\" onclick='app_supprim(" + produit + ","+ numero.val() +")'>\n" +
+                                "                                    <i class='fa fa-trash'></i>\n" +
+                                "                                </button>\n");
+                            // "<button type:'button' class='btn btn-success mb-2' data-toggle='modal' data-target='#modal" + produit + "'  id='btn" + produit + "'> <i class='fa fa-plus'></i> Lot </button></td></tr>"
+
+                            //$('#btn' + produit).addClass('disabled');
+                            $('#valider1').removeClass('disabled');
+                            $('#valider2').removeClass('disabled');
+                            $("#annuler" + produit).trigger('click');
+                            quant.val("");
+                            numero.val("");
+                            peremp.val("");
+                            $("#ajouter" + produit).html("<i class='fa fa-plus'></i> {{ 'Ajouter'|trans }}");
+                        } else {
+                            alert(data['id']);
+                            $("#ajouter" + produit).html("<i class='fa fa-plus'></i> {{ 'Ajouter'|trans }}");
+                        }
+                    },
+                    error: function () {
+                        alert("{{ 'La requête n’a pas abouti'|trans }}");
+                    }
+                });
+            } else {
+                alert("{{'Veillez bien renseigner la quantité'|trans}}");
+            }
+        }
+        else{
+            alert("{{ 'Veillez bien renseigner tous les champs'|trans }}");
+        }
+    }
+
+    function app_supprim(produit,numero) {
+
+        if (confirm("{{ 'Etes-vous sur de vouloir supprimer?'|trans }}")) {
+            $.ajax({
+                type: "POST",
+                {#url: "{{ path('stock_delete') }}",#}
+                data: "prod=" + produit + "&lot=" + numero,
+                success: function (data) {
+                    if (data['id'] == 'ok') {
+                        $("#tr" + produit + numero).remove();
+                        $('#btn' + produit).removeClass('disabled');
+                        $("#quant" + produit).val('');// vider le champ quantite dans modal ajouter
+                        $("#ajouter" + produit).show();// afficher le bouton ajouter
+                        $("#ajouter" + produit).html("<i class=\"fa fa-plus\"></i> {{ 'Ajouter'|trans }}");// afficher le bouton ajouter
+
+                        $("#modification" + produit).html("");// vider div modification
+                        if (data['nb'] == 0) {
+                            $('#valider1').addClass('disabled');
+                            $('#valider2').addClass('disabled');
+                        }
+                    }
+                },
+                error: function () {
+                    alert("{{ 'La requête n’a pas abouti'|trans }}");
+                }
+            });
+        }
+    }
+
+    function app_modif(produit, quantite) {// fonction declenchement modification
+        $("#quant" + produit).val(quantite);
+        $("#ajouter" + produit).hide();
+        /* remplissage div modification*/
+        $("#modification" + produit).html("<button type:'button' class='btn btn-success ms-3' id='modifier" + produit + "' onclick=modifier(" + produit + ")><i class='fa fa-edit'></i> {{ 'Modifier'|trans }}</button>");
+        $("#btn" + produit).trigger('click');// declenchement modification
+    }
+
+    function app_modifier(produit) {//fonction modification
+        var quant = $("#quant" + produit);
+        if (quant.val() > 0) {
+            $("#modifier" + produit).html("<i class='fa-solid fa-spinner fa-spin-pulse'></i>");
+            $.ajax({
+                type: "POST",
+                {#url: "{{ path('stock_edit') }}",#}
+                data: "prod=" + produit + "&quantite=" + quant.val(),
+                success: function (data) {
+                    if (data['id'] == 'ok') {
+                        $('#changequantite' + produit).html($("#quant" + produit).val());
+                        // $('#btnmodf' + produit).html("<button class='btn btn-success'\n" +
+                        //     "                                   title='Modifier cet article' onclick='modif(" + produit + "," + quant.val() + ")'>\n" +
+                        //     "                                    <i class='fa fa-edit'></i>\n" +
+                        //     "                                </button>");
+                        $("#annuler" + produit).trigger('click');
+                        prdt.val("");
+                    }
+                },
+                error: function () {
+                    alert("{{ 'La requête n’a pas abouti'|trans }}");
+                }
+            });
+        } else {
+            alert("{{'Veillez bien renseigner la quantité'|trans}}");
+        }
+
+    }
+
+    function app_validerappro() {
+        if (confirm("Confirmation validation?")) {
+            {#document.location.href = "{{ path('stock_valider') }}";#}
+        }
+    }
+
+</script>
+
+{% block scripts %}
 {% endblock %}
 
-<!-- Footer Start -->
-<footer class="text-light">
-    <div class="container-fluid footer pt-3">
-        <div class="container py-5">
-            <div class="row g-5">
-                <div class="col-lg-3 col-md-6">
-                    <h4 class="footer-tittle">{{ "Contact"|trans }}</h4>
-                    <p class="mb-2 fw-medium">
-                        <i class="fa fa-map-marker-alt fa-lg me-2 text-secondaire"></i>
-                        BP : 3582 Yaoundé – Cameroun,<br>
-                        <span class="ms-4">NGOUSSO Montée Éleveur</span><br><span class="ms-4">immeuble Sainte Marie</span>
-                    </p>
-                    <p class="mb-2">
-                        <a href="tel:+237621117743" class="footer-link fw-medium">
-                            <i class="fa fa-phone fa-lg me-2 text-secondaire"></i>
-                            +237 69 71 49 4 12
-                        </a>
-                        <a href="tel:+237675247865" class="footer-link fw-medium ms-4">
-
-                            +237 67 52 47 865
-                        </a>
-                    </p>
-                    <p class="mb-2">
-                        <a href="mailto:lnatlantiscameroon@gmail.com" class="footer-link fw-medium">
-                            <i class="fa fa-envelope fa-lg me-2 text-secondaire"></i>
-                            info@gntpharma-cameroun.com
-                        </a>
-
-                    </p>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <h4 class="footer-tittle">{{ "Liens utiles"|trans }}</h4>
-                    <a class="btn btn-link" href="{{ path('About') }}">{{ "A propos"|trans }}</a>
-                    <a class="btn btn-link" href="#">{{ "Actualité et événements"|trans }}</a>
-                    <a class="btn btn-link" href="{{ path('produit_index') }}">{{ "Commande"|trans }}</a>
-                    <a class="btn btn-link" href="{{ path('Contact') }}">{{ "Contact"|trans }}</a>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <h4 class="footer-tittle">{{ "Réseaux sociaux"|trans }}</h4>
-                    <div class="row">
-                        <div class="col-12">
-                            <a class="socialink" href="#">
-                                <span class="socialink-facebook">
-                                    gnt-pharma
-                                </span>
-                                <i class="fab fa-square-facebook fa-2x"></i>
-                            </a>
-                        </div>
-                        <div class="col-12">
-                            <a class="socialink" href="#">
-                                <span class="socialink-twitter">
-                                    gnt-pharma
-                                </span>
-                                <i class="fab fa-twitter fa-2x"></i>
-                            </a>
-                        </div>
-                        <div class="col-12">
-                            <a class="socialink" href="#">
-                                <span class="socialink-instagram">
-                                    gnt-pharma
-                                </span>
-                                <i class="fab fa-instagram fa-2x"></i>
-                            </a>
-                        </div>
-                        <div class="col-12">
-                            <a class="socialink" href="#">
-                                <span class="socialink-youtube">
-                                    gnt-pharma
-                                </span>
-                                <i class="fab fa-youtube fa-2x"></i>
-                            </a>
-                        </div>
-                        <div class="col-12">
-                            <a class="socialink" href="#">
-                                <span class="socialink-linkedin">
-                                    gnt-pharma
-                                </span>
-                                <i class="fab fa-linkedin fa-2x"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <h4 class="footer-tittle">{{ 'Newsletter'|trans }}</h4>
-                    <p class="mb-3">
-                        {{ "Abonnez-vous à notre liste de diffusion pour recevoir les dernières actualités"|trans }}
-                    </p>
-                    <div class="subcriber-box">
-                        <form id="nl-form" class="mc-form">
-                            <div class="newsletter-form">
-                                <div class="input-group mb-3">
-                                    <input type="email" class="form-control" placeholder="Adresse email"
-                                           aria-label="Adresse email" aria-describedby="email">
-                                    <span class="input-group-text" id="email">
-                                        <i class="fa fa-paper-plane"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container-fluid copyright px-0">
-        <div class="d-flex flex-column flex-md-row justify-content-between">
-            <div class="py-4 px-5 text-center text-md-start">
-                <p class="mb-0">&copy; 2023 GNT Pharma, {{ "Tout droits réservés."|trans }}</p>
-            </div>
-            <div class="py-4 px-5 bg-secondaire footer-shape position-relative text-center text-md-end">
-                <p class="mb-0 text-primaire">
-                    Designed By
-                    <a class="fw-bold text-primaire" href="https://euclideservices.com" target="_blank">EUCLIDES</a>
-                </p>
-            </div>
-        </div>
-    </div>
-</footer>
-<!-- Footer End -->
-
-<!-- Back to Top -->
-<a href="#" class="btn btn-lg back-to-top">
-    <i class="fa-solid fa-chevron-up"></i>
-</a>
-
-<!-- JavaScript Libraries -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" async></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js" async></script>
-{% block photobox_js %} {% endblock %}
-{#<script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/noframework.waypoints.min.js" ></script>#}
-{#<script src="{{ asset('libs/counterup/js/counterup.min.js')}}"></script>#}
-
-<!-- Main Javascript -->
-<script src="{{ asset('js/main.min.js') }}"></script>
-{% if app.user != null %}
-{#    <script src="{{ asset('js/commande.min.js') }}"></script>#}
-{% endif %}
-
 </body>
-
 </html>
+
+
+

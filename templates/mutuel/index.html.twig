@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<title>Mutuel index</title>
+
+{% block body %}
+    <h1>Mutuel index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Adresse</th>
+                <th>Telephone</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for mutuel in mutuels %}
+            <tr>
+                <td>{{ mutuel.id }}</td>
+                <td>{{ mutuel.nom }}</td>
+                <td>{{ mutuel.adresse }}</td>
+                <td>{{ mutuel.telephone }}</td>
+                <td>
+                    <a href="{{ path('mutuel_show', {'id': mutuel.id}) }}">show</a>
+                    <a href="{{ path('mutuel_edit', {'id': mutuel.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('mutuel_new') }}">Create new</a>
+{% endblock %}

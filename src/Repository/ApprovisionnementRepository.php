@@ -19,25 +19,6 @@ class ApprovisionnementRepository extends ServiceEntityRepository
         parent::__construct($registry, Approvisionnement::class);
     }
 
-    public function arrivage(array $appro)
-    {
-        $query = $this->createQueryBuilder('a');
-        return $query->where($query->expr()->in('a.approvisionner', $appro))
-            ->groupBy('a.produit')
-            ->getQuery()
-            ->getResult();
-    }
-
-    public function payer()
-    {
-         return $query = $this->createQueryBuilder('a')
-            ->andWhere('a.regler = :con')
-            ->setParameter('con' , false)
-            ->groupBy('a.fournisseur')
-            ->getQuery()
-            ->getResult();
-    }
-
     // /**
     //  * @return Approvisionnement[] Returns an array of Approvisionnement objects
     //  */

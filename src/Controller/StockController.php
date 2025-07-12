@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Album;
 use App\Entity\Approvisionnement;
 use App\Entity\Approvisionner;
-use App\Entity\Avoir;
 use App\Entity\Candidature;
 use App\Entity\Commande;
 use App\Entity\Produit;
@@ -23,24 +22,18 @@ use App\Repository\RetourProduitRepository;
 use App\Repository\RetourRepository;
 use App\Repository\StockRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route("/{_locale}/Stock" , name :"stock_") ]
+#[Route("/{_locale}/Stock" , name:"stock_")]
 class StockController extends AbstractController
 {
-       public function __construct(private Security $security, private EntityManagerInterface $entityManager)
-    {
-    }
-
-#[Route("/", name :"index", methods : ["GET"]) ]
+    #[Route("/", name:"index", methods:["GET"])]
     public function stock(StockRepository $repository): Response
     {
-        if ($this->security->isGranted('ROLE_STOCK')) {
+//        if ($this->get('security.authorization_checker')->isGranted('ROLE_STOCK')) {
 
             $response = $this->render('stock/stock.html.twig', [
                 'stock' => $repository->stock(),
@@ -54,24 +47,24 @@ class StockController extends AbstractController
                 'private' => true,
             ]);
             return $response;
-        } else {
-            $response = $this->redirectToRoute('security_logout');
-            $response->setSharedMaxAge(0);
-            $response->headers->addCacheControlDirective('no-cache', true);
-            $response->headers->addCacheControlDirective('no-store', true);
-            $response->headers->addCacheControlDirective('must-revalidate', true);
-            $response->setCache([
-                'max_age' => 0,
-                'private' => true,
-            ]);
-            return $response;
-        }
+//        } else {
+//            $response = $this->redirectToRoute('security_logout');
+//            $response->setSharedMaxAge(0);
+//            $response->headers->addCacheControlDirective('no-cache', true);
+//            $response->headers->addCacheControlDirective('no-store', true);
+//            $response->headers->addCacheControlDirective('must-revalidate', true);
+//            $response->setCache([
+//                'max_age' => 0,
+//                'private' => true,
+//            ]);
+//            return $response;
+//        }
     }
 
-    #[Route("/Surveiller", name :"surveiller", methods : ["GET"]) ]
+    #[Route("/Surveiller", name:"surveiller", methods:["GET"])]
     public function surveiller(ProduitRepository $repository): Response
     {
-        if ($this->security->isGranted('ROLE_BACK')) {
+//        if ($this->get('security.authorization_checker')->isGranted('ROLE_BACK')) {
 
             $response = $this->render('stock/surveiller.html.twig', [
                 'produits' => $repository->surveil(),
@@ -85,24 +78,24 @@ class StockController extends AbstractController
                 'private' => true,
             ]);
             return $response;
-        } else {
-            $response = $this->redirectToRoute('security_logout');
-            $response->setSharedMaxAge(0);
-            $response->headers->addCacheControlDirective('no-cache', true);
-            $response->headers->addCacheControlDirective('no-store', true);
-            $response->headers->addCacheControlDirective('must-revalidate', true);
-            $response->setCache([
-                'max_age' => 0,
-                'private' => true,
-            ]);
-            return $response;
-        }
+//        } else {
+//            $response = $this->redirectToRoute('security_logout');
+//            $response->setSharedMaxAge(0);
+//            $response->headers->addCacheControlDirective('no-cache', true);
+//            $response->headers->addCacheControlDirective('no-store', true);
+//            $response->headers->addCacheControlDirective('must-revalidate', true);
+//            $response->setCache([
+//                'max_age' => 0,
+//                'private' => true,
+//            ]);
+//            return $response;
+//        }
     }
 
-    #[Route("/Rupture", name :"rupture", methods : ["GET"]) ]
+    #[Route("/Rupture", name:"rupture", methods:["GET"])]
     public function rupture(ProduitRepository $repository): Response
     {
-        if ($this->security->isGranted('ROLE_BACK')) {
+//        if ($this->get('security.authorization_checker')->isGranted('ROLE_BACK')) {
 
             $response = $this->render('stock/rupture.html.twig', [
                 'produits' => $repository->findBy(['stock' => 0]),
@@ -116,24 +109,24 @@ class StockController extends AbstractController
                 'private' => true,
             ]);
             return $response;
-        } else {
-            $response = $this->redirectToRoute('security_logout');
-            $response->setSharedMaxAge(0);
-            $response->headers->addCacheControlDirective('no-cache', true);
-            $response->headers->addCacheControlDirective('no-store', true);
-            $response->headers->addCacheControlDirective('must-revalidate', true);
-            $response->setCache([
-                'max_age' => 0,
-                'private' => true,
-            ]);
-            return $response;
-        }
+//        } else {
+//            $response = $this->redirectToRoute('security_logout');
+//            $response->setSharedMaxAge(0);
+//            $response->headers->addCacheControlDirective('no-cache', true);
+//            $response->headers->addCacheControlDirective('no-store', true);
+//            $response->headers->addCacheControlDirective('must-revalidate', true);
+//            $response->setCache([
+//                'max_age' => 0,
+//                'private' => true,
+//            ]);
+//            return $response;
+//        }
     }
 
-    #[Route("/Peremption", name :"peremption", methods : ["GET"]) ]
+    #[Route("/Peremption", name:"peremption", methods:["GET"])]
     public function peremption(StockRepository $repository): Response
     {
-        if ($this->security->isGranted('ROLE_BACK')) {
+//        if ($this->get('security.authorization_checker')->isGranted('ROLE_BACK')) {
 
             $response = $this->render('stock/peremption.html.twig', [
                 'stocks' => $repository->peremption(),
@@ -147,218 +140,228 @@ class StockController extends AbstractController
                 'private' => true,
             ]);
             return $response;
-        } else {
-            $response = $this->redirectToRoute('security_logout');
-            $response->setSharedMaxAge(0);
-            $response->headers->addCacheControlDirective('no-cache', true);
-            $response->headers->addCacheControlDirective('no-store', true);
-            $response->headers->addCacheControlDirective('must-revalidate', true);
-            $response->setCache([
-                'max_age' => 0,
-                'private' => true,
-            ]);
-            return $response;
-        }
+//        } else {
+//            $response = $this->redirectToRoute('security_logout');
+//            $response->setSharedMaxAge(0);
+//            $response->headers->addCacheControlDirective('no-cache', true);
+//            $response->headers->addCacheControlDirective('no-store', true);
+//            $response->headers->addCacheControlDirective('must-revalidate', true);
+//            $response->setCache([
+//                'max_age' => 0,
+//                'private' => true,
+//            ]);
+//            return $response;
+//        }
     }
 
+//
+//    /**
+//     * @Route("/Retour/", name:"retour", methods:["GET"])
+//     */
+//    public function retour(CommandeRepository $repository, SessionInterface $session): Response
+//    {
+//        if ($this->get('security.authorization_checker')->isGranted('ROLE_STOCK')) {
+//            $session->remove('retour');
+//
+//            $response = $this->render('stock/retour.html.twig', [
+//                'commandes' => $repository->retour(),
+//            ]);
+//            $response->setSharedMaxAge(0);
+//            $response->headers->addCacheControlDirective('no-cache', true);
+//            $response->headers->addCacheControlDirective('no-store', true);
+//            $response->headers->addCacheControlDirective('must-revalidate', true);
+//            $response->setCache([
+//                'max_age' => 0,
+//                'private' => true,
+//            ]);
+//            return $response;
+//        } else {
+//            $response = $this->redirectToRoute('security_logout');
+//            $response->setSharedMaxAge(0);
+//            $response->headers->addCacheControlDirective('no-cache', true);
+//            $response->headers->addCacheControlDirective('no-store', true);
+//            $response->headers->addCacheControlDirective('must-revalidate', true);
+//            $response->setCache([
+//                'max_age' => 0,
+//                'private' => true,
+//            ]);
+//            return $response;
+//        }
+//    }
+//
+//    /**
+//     * @Route("/Retour_index/", name:"retour_index", methods:["GET"])
+//     */
+//    public function retourindex(RetourRepository $repository, SessionInterface $session): Response
+//    {
+//        if ($this->get('security.authorization_checker')->isGranted('ROLE_STOCK')) {
+//            $session->remove('retour');
+//
+//            $response = $this->render('stock/retour_index.html.twig', [
+//                'retours' => $repository->findAll(),
+//            ]);
+//            $response->setSharedMaxAge(0);
+//            $response->headers->addCacheControlDirective('no-cache', true);
+//            $response->headers->addCacheControlDirective('no-store', true);
+//            $response->headers->addCacheControlDirective('must-revalidate', true);
+//            $response->setCache([
+//                'max_age' => 0,
+//                'private' => true,
+//            ]);
+//            return $response;
+//        } else {
+//            $response = $this->redirectToRoute('security_logout');
+//            $response->setSharedMaxAge(0);
+//            $response->headers->addCacheControlDirective('no-cache', true);
+//            $response->headers->addCacheControlDirective('no-store', true);
+//            $response->headers->addCacheControlDirective('must-revalidate', true);
+//            $response->setCache([
+//                'max_age' => 0,
+//                'private' => true,
+//            ]);
+//            return $response;
+//        }
+//    }
+//
+//    /**
+//     * @Route("/Create_Retour_Show/{id}", name:"retour_show", methods:["GET"])
+//     */
+//    public function retour_show(Commande $commande, LivrerProduitRepository $repository, SessionInterface $session): Response
+//    {
+//        $session->remove('retour');
+//
+//        if ($this->get('security.authorization_checker')->isGranted('ROLE_STOCK')) {
+//
+//            $response = $this->render('stock/retour_show.html.twig', [
+//                'commande' => $commande,
+//                'commandeproduits' => $repository->findBy(['commande' => $commande]),
+//                'retour' => $session->get("retour", []),
+//            ]);
+//            $response->setSharedMaxAge(0);
+//            $response->headers->addCacheControlDirective('no-cache', true);
+//            $response->headers->addCacheControlDirective('no-store', true);
+//            $response->headers->addCacheControlDirective('must-revalidate', true);
+//            $response->setCache([
+//                'max_age' => 0,
+//                'private' => true,
+//            ]);
+//            return $response;
+//        } else {
+//            $response = $this->redirectToRoute('security_logout');
+//            $response->setSharedMaxAge(0);
+//            $response->headers->addCacheControlDirective('no-cache', true);
+//            $response->headers->addCacheControlDirective('no-store', true);
+//            $response->headers->addCacheControlDirective('must-revalidate', true);
+//            $response->setCache([
+//                'max_age' => 0,
+//                'private' => true,
+//            ]);
+//            return $response;
+//        }
+//    }
+//
+//
+//    /**
+//     * @Route("/Retour_history_show/{id}", name:"retour_history_show", methods:["GET"])
+//     */
+//    public function retourhistoryshow(Retour $retour, RetourProduitRepository $repository, SessionInterface $session): Response
+//    {
+//
+//        if ($this->get('security.authorization_checker')->isGranted('ROLE_STOCK')) {
+//
+//            $response = $this->render('stock/history_show.html.twig', [
+//                'retour' => $retour,
+//                'retourproduits' => $repository->findBy(['retour' => $retour]),
+//            ]);
+//            $response->setSharedMaxAge(0);
+//            $response->headers->addCacheControlDirective('no-cache', true);
+//            $response->headers->addCacheControlDirective('no-store', true);
+//            $response->headers->addCacheControlDirective('must-revalidate', true);
+//            $response->setCache([
+//                'max_age' => 0,
+//                'private' => true,
+//            ]);
+//            return $response;
+//        } else {
+//            $response = $this->redirectToRoute('security_logout');
+//            $response->setSharedMaxAge(0);
+//            $response->headers->addCacheControlDirective('no-cache', true);
+//            $response->headers->addCacheControlDirective('no-store', true);
+//            $response->headers->addCacheControlDirective('must-revalidate', true);
+//            $response->setCache([
+//                'max_age' => 0,
+//                'private' => true,
+//            ]);
+//            return $response;
+//        }
+//    }
+//
+//    /**
+//     * @Route("/Retour_valider/", name:"retour_valider", methods:["POST"])
+//     */
+//    public function retour_valider(Request $request, SessionInterface $session): Response
+//    {
+//
+//        if ($this->get('security.authorization_checker')->isGranted('ROLE_STOCK')) {
+//
+//            $com = $request->get('commande');
+//            $em = $this->getDoctrine()->getManager();
+//            $commande = $em->getRepository(Commande::class)->find($com);
+//            $produits = $session->get('retour', []);
+//            $retour = new Retour();
+//            $em->persist($retour);
+//            $retour->setCommande($commande);
+//            foreach ($produits as $prod) {
+//                $produit = $em->getRepository(Produit::class)->find($prod['id']);
+//                $retourproduit = new RetourProduit();
+//                $retourproduit->setProduit($produit);
+//                $retourproduit->setRetour($retour);
+//                $retourproduit->setCommande($commande);
+//                $retourproduit->setMotif($prod['motif']);
+//                $retourproduit->setLot($prod['lot']);
+//                $retourproduit->setPeremption(new \Datetime($prod['peremption']));
+//                $retourproduit->setQuantite($prod['quantite']);
+//                $em->persist($retourproduit);
+//                $em->flush();
+//
+//            }
+//            $em->flush();
+//            $this->addFlash('notice', 'Retour enregisté avec succès');
+//            $session->remove('retour');
+//
+//            $res['id'] = 'ok';
+//            $response = new Response();
+//            $response->headers->set('content-type', 'application/json');
+//            $re = json_encode($res);
+//            $response->setContent($re);
+//            return $response;
+//
+//        } else {
+//            $response = $this->redirectToRoute('security_logout');
+//            $response->setSharedMaxAge(0);
+//            $response->headers->addCacheControlDirective('no-cache', true);
+//            $response->headers->addCacheControlDirective('no-store', true);
+//            $response->headers->addCacheControlDirective('must-revalidate', true);
+//            $response->setCache([
+//                'max_age' => 0,
+//                'private' => true,
+//            ]);
+//            return $response;
+//        }
+//    }
 
-    #[Route("/Retour/", name :"retour", methods : ["GET"]) ]
-    public function retour(CommandeRepository $repository, SessionInterface $session): Response
-    {
-        if ($this->security->isGranted('ROLE_STOCK')) {
-            $session->remove('retour');
-
-            $response = $this->render('stock/retour.html.twig', [
-                'commandes' => $repository->retour(),
-            ]);
-            $response->setSharedMaxAge(0);
-            $response->headers->addCacheControlDirective('no-cache', true);
-            $response->headers->addCacheControlDirective('no-store', true);
-            $response->headers->addCacheControlDirective('must-revalidate', true);
-            $response->setCache([
-                'max_age' => 0,
-                'private' => true,
-            ]);
-            return $response;
-        } else {
-            $response = $this->redirectToRoute('security_logout');
-            $response->setSharedMaxAge(0);
-            $response->headers->addCacheControlDirective('no-cache', true);
-            $response->headers->addCacheControlDirective('no-store', true);
-            $response->headers->addCacheControlDirective('must-revalidate', true);
-            $response->setCache([
-                'max_age' => 0,
-                'private' => true,
-            ]);
-            return $response;
-        }
-    }
-
-    #[Route("/Retour_index/", name :"retour_index", methods : ["GET"]) ]
-    public function retourindex(RetourRepository $repository, SessionInterface $session): Response
-    {
-        if ($this->security->isGranted('ROLE_STOCK')) {
-            $session->remove('retour');
-
-            $response = $this->render('stock/retour_index.html.twig', [
-                'retours' => $repository->findAll(),
-            ]);
-            $response->setSharedMaxAge(0);
-            $response->headers->addCacheControlDirective('no-cache', true);
-            $response->headers->addCacheControlDirective('no-store', true);
-            $response->headers->addCacheControlDirective('must-revalidate', true);
-            $response->setCache([
-                'max_age' => 0,
-                'private' => true,
-            ]);
-            return $response;
-        } else {
-            $response = $this->redirectToRoute('security_logout');
-            $response->setSharedMaxAge(0);
-            $response->headers->addCacheControlDirective('no-cache', true);
-            $response->headers->addCacheControlDirective('no-store', true);
-            $response->headers->addCacheControlDirective('must-revalidate', true);
-            $response->setCache([
-                'max_age' => 0,
-                'private' => true,
-            ]);
-            return $response;
-        }
-    }
-
-    #[Route("/Create_Retour_Show/{id}", name :"retour_show", methods : ["GET"]) ]
-    public function retour_show(Commande $commande, LivrerProduitRepository $repository, SessionInterface $session): Response
-    {
-        $session->remove('retour');
-
-        if ($this->security->isGranted('ROLE_STOCK')) {
-
-            $response = $this->render('stock/retour_show.html.twig', [
-                'commande' => $commande,
-                'commandeproduits' => $repository->findBy(['commande' => $commande]),
-                'retour' => $session->get("retour", []),
-            ]);
-            $response->setSharedMaxAge(0);
-            $response->headers->addCacheControlDirective('no-cache', true);
-            $response->headers->addCacheControlDirective('no-store', true);
-            $response->headers->addCacheControlDirective('must-revalidate', true);
-            $response->setCache([
-                'max_age' => 0,
-                'private' => true,
-            ]);
-            return $response;
-        } else {
-            $response = $this->redirectToRoute('security_logout');
-            $response->setSharedMaxAge(0);
-            $response->headers->addCacheControlDirective('no-cache', true);
-            $response->headers->addCacheControlDirective('no-store', true);
-            $response->headers->addCacheControlDirective('must-revalidate', true);
-            $response->setCache([
-                'max_age' => 0,
-                'private' => true,
-            ]);
-            return $response;
-        }
-    }
-
-
-    #[Route("/Retour_history_show/{id}", name :"retour_history_show", methods : ["GET"]) ]
-    public function retourhistoryshow(Retour $retour, RetourProduitRepository $repository, SessionInterface $session): Response
-    {
-
-        if ($this->security->isGranted('ROLE_STOCK')) {
-
-            $response = $this->render('stock/history_show.html.twig', [
-                'retour' => $retour,
-                'retourproduits' => $repository->findBy(['retour' => $retour]),
-            ]);
-            $response->setSharedMaxAge(0);
-            $response->headers->addCacheControlDirective('no-cache', true);
-            $response->headers->addCacheControlDirective('no-store', true);
-            $response->headers->addCacheControlDirective('must-revalidate', true);
-            $response->setCache([
-                'max_age' => 0,
-                'private' => true,
-            ]);
-            return $response;
-        } else {
-            $response = $this->redirectToRoute('security_logout');
-            $response->setSharedMaxAge(0);
-            $response->headers->addCacheControlDirective('no-cache', true);
-            $response->headers->addCacheControlDirective('no-store', true);
-            $response->headers->addCacheControlDirective('must-revalidate', true);
-            $response->setCache([
-                'max_age' => 0,
-                'private' => true,
-            ]);
-            return $response;
-        }
-    }
-
-    #[Route("/Retour_valider/", name :"retour_valider", methods : ["POST"]) ]
-    public function retour_valider(Request $request, SessionInterface $session): Response
-    {
-
-        if ($this->security->isGranted('ROLE_STOCK')) {
-
-            $com = $request->get('commande');
-            $em = $this->entityManager;
-            $commande = $em->getRepository(Commande::class)->find($com);
-            $produits = $session->get('retour', []);
-            $retour = new Retour();
-            $em->persist($retour);
-            $retour->setCommande($commande);
-            foreach ($produits as $prod) {
-                $produit = $em->getRepository(Produit::class)->find($prod['id']);
-                $retourproduit = new RetourProduit();
-                $retourproduit->setProduit($produit);
-                $retourproduit->setRetour($retour);
-                $retourproduit->setCommande($commande);
-                $retourproduit->setMotif($prod['motif']);
-                $retourproduit->setLot($prod['lot']);
-                $retourproduit->setPeremption(new \Datetime($prod['peremption']));
-                $retourproduit->setQuantite($prod['quantite']);
-                $em->persist($retourproduit);
-                $em->flush();
-
-            }
-            $em->flush();
-            $this->addFlash('notice', 'Retour enregisté avec succès');
-            $session->remove('retour');
-
-            $res['id'] = 'ok';
-            $response = new Response();
-            $response->headers->set('content-type', 'application/json');
-            $re = json_encode($res);
-            $response->setContent($re);
-            return $response;
-
-        } else {
-            $response = $this->redirectToRoute('security_logout');
-            $response->setSharedMaxAge(0);
-            $response->headers->addCacheControlDirective('no-cache', true);
-            $response->headers->addCacheControlDirective('no-store', true);
-            $response->headers->addCacheControlDirective('must-revalidate', true);
-            $response->setCache([
-                'max_age' => 0,
-                'private' => true,
-            ]);
-            return $response;
-        }
-    }
-
-    #[Route("/Reapprovisionner/", name :"retour_reapprovisionner", methods : ["POST"]) ]
+    #[Route("/Reapprovisionner/", name:"retour_reapprovisionner", methods:["POST"])]
     public function retour_reapprovisionner(Request $request): Response
     {
 
-        if ($this->security->isGranted('ROLE_ADMIN')) {
+//        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
 
             $quantite = $request->get('quantite');
             $lot = $request->get('lot');
             $peremption = $request->get('peremption');
             $id = $request->get('produit');
             $retour = $request->get('retour');
-            $em = $this->entityManager;
+            $em = $this->getDoctrine()->getManager();
             $approvisionner = new Approvisionner();
             $approvisionner->setUser($this->getUser());
             $em->persist($approvisionner);
@@ -385,31 +388,31 @@ class StockController extends AbstractController
             $response->setContent($re);
             return $response;
 
-        } else {
-            $response = $this->redirectToRoute('security_logout');
-            $response->setSharedMaxAge(0);
-            $response->headers->addCacheControlDirective('no-cache', true);
-            $response->headers->addCacheControlDirective('no-store', true);
-            $response->headers->addCacheControlDirective('must-revalidate', true);
-            $response->setCache([
-                'max_age' => 0,
-                'private' => true,
-            ]);
-            return $response;
-        }
+//        } else {
+//            $response = $this->redirectToRoute('security_logout');
+//            $response->setSharedMaxAge(0);
+//            $response->headers->addCacheControlDirective('no-cache', true);
+//            $response->headers->addCacheControlDirective('no-store', true);
+//            $response->headers->addCacheControlDirective('must-revalidate', true);
+//            $response->setCache([
+//                'max_age' => 0,
+//                'private' => true,
+//            ]);
+//            return $response;
+//        }
     }
 
- #[Route("/Valider_Remboursement/", name :"retour_valider_remboursement", methods : ["POST"]) ]
+ #[Route("/Valider_Remboursement/", name:"retour_valider_remboursement", methods:["POST"])]
     public function retour_valider_remboursement(Request $request): Response
     {
 
-        if ($this->security->isGranted('ROLE_ADMIN')) {
+//        if ($this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
 
 
             $lot = $request->get('lot');
             $id = $request->get('produit');
             $retour = $request->get('retour');
-            $em = $this->entityManager;
+            $em = $this->getDoctrine()->getManager();
 
             $produit = $em->getRepository(Produit::class)->find($id);
             $retour = $em->getRepository(RetourProduit::class)->findOneBy(['retour' => $retour, 'produit' => $produit, 'lot' => $lot]);
@@ -425,69 +428,25 @@ class StockController extends AbstractController
             $response->setContent($re);
             return $response;
 
-        } else {
-            $response = $this->redirectToRoute('security_logout');
-            $response->setSharedMaxAge(0);
-            $response->headers->addCacheControlDirective('no-cache', true);
-            $response->headers->addCacheControlDirective('no-store', true);
-            $response->headers->addCacheControlDirective('must-revalidate', true);
-            $response->setCache([
-                'max_age' => 0,
-                'private' => true,
-            ]);
-            return $response;
-        }
-    }
-
-    #[Route("/Creer_avoir/", name :"retour_creer_avoir", methods : ["POST"]) ]
-    public function retour_avoir(Request $request): Response
-    {
-
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-
-
-
-            $em = $this->entityManager;
-            $retourProduit = $request->get('retour');
-            $RetourProduit = $em->getRepository(RetourProduit::class)->find($retourProduit);
-            $avoir = new Avoir($RetourProduit->getCommande()->getUser(), $this->getUser(), $RetourProduit->getCommande());
-            $avoir->setMontant($RetourProduit->getQuantite() * $RetourProduit->getProduit()->getPrix());
-            $avoir->setRetour($RetourProduit->getRetour());
-
-            $RetourProduit->setValider(true);
-            $RetourProduit->setRembourser(true);
-            $RetourProduit->setAvoir(true);
-
-            $em->persist($RetourProduit);
-            $em->persist($avoir);
-            $em->flush();
-
-            $res['id'] = 'Remboursement accordé';
-            $response = new Response();
-            $response->headers->set('content-type', 'application/json');
-            $re = json_encode($res);
-            $response->setContent($re);
-            return $response;
-
-        } else {
-            $response = $this->redirectToRoute('security_logout');
-            $response->setSharedMaxAge(0);
-            $response->headers->addCacheControlDirective('no-cache', true);
-            $response->headers->addCacheControlDirective('no-store', true);
-            $response->headers->addCacheControlDirective('must-revalidate', true);
-            $response->setCache([
-                'max_age' => 0,
-                'private' => true,
-            ]);
-            return $response;
-        }
+//        } else {
+//            $response = $this->redirectToRoute('security_logout');
+//            $response->setSharedMaxAge(0);
+//            $response->headers->addCacheControlDirective('no-cache', true);
+//            $response->headers->addCacheControlDirective('no-store', true);
+//            $response->headers->addCacheControlDirective('must-revalidate', true);
+//            $response->setCache([
+//                'max_age' => 0,
+//                'private' => true,
+//            ]);
+//            return $response;
+//        }
     }
 
 
-    #[Route("/{id}", name :"produit_show", methods : ["GET"]) ]
+    #[Route("/{id}", name:"produit_show", methods:["GET"])]
     public function produit(Produit $produit, StockRepository $repository): Response
     {
-        if ($this->security->isGranted('ROLE_STOCK')) {
+//        if ($this->get('security.authorization_checker')->isGranted('ROLE_STOCK')) {
 
             $response = $this->render('stock/produit_show.html.twig', [
                 'stock' => $repository->findBy(['produit' => $produit]),
@@ -502,24 +461,24 @@ class StockController extends AbstractController
                 'private' => true,
             ]);
             return $response;
-        } else {
-            $response = $this->redirectToRoute('security_logout');
-            $response->setSharedMaxAge(0);
-            $response->headers->addCacheControlDirective('no-cache', true);
-            $response->headers->addCacheControlDirective('no-store', true);
-            $response->headers->addCacheControlDirective('must-revalidate', true);
-            $response->setCache([
-                'max_age' => 0,
-                'private' => true,
-            ]);
-            return $response;
-        }
+//        } else {
+//            $response = $this->redirectToRoute('security_logout');
+//            $response->setSharedMaxAge(0);
+//            $response->headers->addCacheControlDirective('no-cache', true);
+//            $response->headers->addCacheControlDirective('no-store', true);
+//            $response->headers->addCacheControlDirective('must-revalidate', true);
+//            $response->setCache([
+//                'max_age' => 0,
+//                'private' => true,
+//            ]);
+//            return $response;
+//        }
     }
 
-    #[Route("/print/{id}", name :"produit_show_print", methods : ["GET"]) ]
+    #[Route("/print/{id}", name:"produit_show_print", methods:["GET"])]
     public function produitprint(Produit $produit, StockRepository $repository): Response
     {
-        if ($this->security->isGranted('ROLE_STOCK')) {
+//        if ($this->get('security.authorization_checker')->isGranted('ROLE_STOCK')) {
 
             $response = $this->render('stock/produit_show_print.html.twig', [
                 'stock' => $repository->findBy(['produit' => $produit]),
@@ -534,22 +493,22 @@ class StockController extends AbstractController
                 'private' => true,
             ]);
             return $response;
-        } else {
-            $response = $this->redirectToRoute('security_logout');
-            $response->setSharedMaxAge(0);
-            $response->headers->addCacheControlDirective('no-cache', true);
-            $response->headers->addCacheControlDirective('no-store', true);
-            $response->headers->addCacheControlDirective('must-revalidate', true);
-            $response->setCache([
-                'max_age' => 0,
-                'private' => true,
-            ]);
-            return $response;
-        }
+//        } else {
+//            $response = $this->redirectToRoute('security_logout');
+//            $response->setSharedMaxAge(0);
+//            $response->headers->addCacheControlDirective('no-cache', true);
+//            $response->headers->addCacheControlDirective('no-store', true);
+//            $response->headers->addCacheControlDirective('must-revalidate', true);
+//            $response->setCache([
+//                'max_age' => 0,
+//                'private' => true,
+//            ]);
+//            return $response;
+//        }
     }
 
 
-    #[Route("/add/", name :"retour_add") ]
+    #[Route("/add/", name:"retour_add")]
     public function add(Request $request, ProduitRepository $produitRepository, SessionInterface $session)
     {
         // On récupère le panier actuel
@@ -592,7 +551,7 @@ class StockController extends AbstractController
 
     }
 
-    #[Route("/edit/", name :"edit") ]
+    #[Route("/edit/", name:"edit")]
     public function edit(Request $request, SessionInterface $session)
     {
 
@@ -627,7 +586,7 @@ class StockController extends AbstractController
 
     }
 
-    #[Route("/delete/", name :"retour_delete") ]
+    #[Route("/delete/", name:"retour_delete")]
     public function delete(Request $request, ProduitRepository $repository, SessionInterface $session)
     {
         // On récupère le panier actuel
@@ -656,7 +615,7 @@ class StockController extends AbstractController
         return $response;
     }
 
-    #[Route("/deleteAll/", name :"delete_all") ]
+    #[Route("/deleteAll/", name:"delete_all")]
     public function deleteAll(SessionInterface $session)
     {
         $session->remove("panier");

@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Produit;
-use App\Entity\Fournisseur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -20,11 +19,12 @@ class ProduitRepository extends ServiceEntityRepository
         parent::__construct($registry, Produit::class);
     }
 
+
     public function nouveaute()
     {
         $date = new \Datetime();
         date_sub($date,date_interval_create_from_date_string("30 days"));
-       $creation = date_format($date,"Y-m-d");
+        $creation = date_format($date,"Y-m-d");
 
 
 
@@ -47,35 +47,33 @@ class ProduitRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    public function fournisseur($produits)
+
+    // /**
+    //  * @return Produit[] Returns an array of Produit objects
+    //  */
+    /*
+    public function findByExampleField($value)
     {
-         return $this->createQueryBuilder('a')
-        ->where('a.id IN (:produits)')
-        ->setParameter('produits', $produits)
-        ->getQuery()
-        ->getResult();
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.exampleField = :val')
+            ->setParameter('val', $value)
+            ->orderBy('p.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
     }
+    */
 
-    public function nonAssocier(Fournisseur $fournisseur): array
-{
-    $qb = $this->createQueryBuilder('p');
-
-    return $qb
-        ->where(':fournisseur NOT MEMBER OF p.fournisseurs')
-        ->setParameter('fournisseur', $fournisseur)
-        ->getQuery()
-        ->getResult();
-}
-
-public function reapprovisionnement(): array
-{/** produits avec au moins un fournisseur */
-    return $this->createQueryBuilder('p')
-        ->where('p.fournisseurs IS NOT EMPTY')
-        ->getQuery()
-        ->getResult();
-}
-
-
-
-
+    /*
+    public function findOneBySomeField($value): ?Produit
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.exampleField = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+    */
 }

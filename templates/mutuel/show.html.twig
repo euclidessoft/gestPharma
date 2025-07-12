@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<title>Mutuel</title>
+
+{% block body %}
+    <h1>Mutuel</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ mutuel.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ mutuel.nom }}</td>
+            </tr>
+            <tr>
+                <th>Adresse</th>
+                <td>{{ mutuel.adresse }}</td>
+            </tr>
+            <tr>
+                <th>Telephone</th>
+                <td>{{ mutuel.telephone }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="{{path('service_new', {'mutuel' : mutuel.id})}}"> Nouveau Service</a>
+    
+    <table class="table table-hover">
+    <head>
+        <th>Nom</th>
+         <th>Avantage</th>
+    </head>
+        <tbody>
+        {% for service in mutuel.services %}
+            <tr>
+               
+                <td>{{ service.nom }}</td>
+            </tr>
+            <tr>
+                
+                <td>{{ service.type }}</td>
+            </tr>
+            {% else %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('mutuel_index') }}">back to list</a>
+
+    <a href="{{ path('mutuel_edit', {'id': mutuel.id}) }}">edit</a>
+
+    {{ include('mutuel/_delete_form.html.twig') }}
+{% endblock %}

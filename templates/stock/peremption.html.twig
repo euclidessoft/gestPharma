@@ -1,31 +1,23 @@
-{% extends
-    is_granted('ROLE_ADMIN') ? 'admin.html.twig' :
-    is_granted('ROLE_RH') ? 'rh.html.twig' :
-    is_granted('ROLE_FINANCE') ? 'finance.html.twig' :
-    is_granted('ROLE_STOCK') ? 'stock.html.twig' :
-    is_granted('ROLE_LIVREUR') ? 'livreur.html.twig' :
-    is_granted('ROLE_EMPLOYER') ? 'employe.html.twig' :
-    'layout.html.twig'
-%}
+{% extends 'layout.html.twig' %}
 {% block title %} {{ "Commande"|trans }} - GNT Pharma {% endblock %}
 {% block stock %}active{% endblock %}
 {% block etat_stock %}active{% endblock %}
 
 
 {% block body %}
-    <div class="container mt-4 fond-7">
+    <div class="container mt-4 fond">
         <h3 class="mt-4 mb-5 text-bold">
-            <i class="fa fa-shopping-cart me-2"></i>
+            <i class="fa fa-shopping-cart mr-2"></i>
             {{"Etat stock Produits"|trans}}
         </h3>
         <ul class="nav nav-tabs mb-4">
-{% if is_granted('ROLE_STOCK') %}
+{#{% if is_granted('ROLE_STOCK') %}#}
             <li class="nav-item">
                 <a class="nav-link" href="{{ path('stock_index') }}">
                     {{ 'Disponible'|trans }}
                 </a>
             </li>
-            {% endif %}
+{#            {% endif %}#}
             <li class="nav-item">
                 <a class="nav-link" href="{{ path('stock_surveiller') }}">
                     {{'à surveiller'|trans}}
@@ -36,21 +28,21 @@
                     {{ 'En rupture'|trans }}
                 </a>
             </li>
-            {% if is_granted('ROLE_STOCK') %}
+{#            {% if is_granted('ROLE_STOCK') %}#}
                 <li class="nav-item">
                     <a class="nav-link active" href="#">
                         {{ 'Péremption Imminente'|trans }}
                     </a>
                 </li>
-            {% endif %}
+{#            {% endif %}#}
         </ul>
 
-        <table class="table table-success-light table-bordered table-hover table-striped my-3" id="liste">
+        <table class="table table-success-light table-bordered table-hover table-striped w-100" id="liste">
             <thead>
             <tr>
                 <th>{{ 'Reference'|trans }}</th>
                 <th>{{ 'Désignation'|trans }}</th>
-                <th>{{ 'Fabriquant'|trans }}</th>
+{#                <th>{{ 'Emplacement'|trans }}</th>#}
                 <th>{{'N° Lot'|trans}}</th>
                 <th>{{'Péremption'|trans}}</th>
             </tr>
@@ -59,13 +51,15 @@
             {% for stock in stocks %}
                 <tr>
                     <td>{{ stock.produit.reference }}</td>
-                    <td>{{ stock.produit.desigantion }}</td>
-                    <td>{{ stock.produit.fabriquant }}</td>
+                    <td>{{ stock.produit.designation }}</td>
+{#                    <td>{{ stock.produit.emplacement ?  stock.produit.emplacement.nom : ''}}</td>#}
                     <td>{{ stock.lot }}</td>
                     <td>{{ stock.peremption|date('d/m/Y') }}</td>
                 </tr>
             {% else %}
-
+                <tr>
+                    <td colspan="4">no records found</td>
+                </tr>
             {% endfor %}
             </tbody>
         </table>

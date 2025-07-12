@@ -5,54 +5,47 @@ namespace App\Entity;
 use App\Repository\ApprovisionnementRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass:ApprovisionnementRepository::class) ]
+#[ORM\Entity(repositoryClass:ApprovisionnementRepository::class)]
 class Approvisionnement
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+     #[ORM\GeneratedValue ]
+     #[ORM\Column(type:"integer")]
+    private $id;
 
-    #[ORM\ManyToOne(targetEntity:"App\Entity\Produit") ]
-     #[ORM\JoinColumn(nullable:false) ]
+    #[ORM\ManyToOne(targetEntity:"App\Entity\Produit")]
+     #[ORM\JoinColumn(nullable:false)]
     private $produit;
 
-    #[ORM\ManyToOne(targetEntity:"App\Entity\Approvisionner") ]
-     #[ORM\JoinColumn(nullable:false) ]
+    #[ORM\ManyToOne(targetEntity:"App\Entity\Approvisionner")]
+     #[ORM\JoinColumn(nullable:false)]
     private $approvisionner;
 
-    #[ORM\Column(type:"integer") ]
+    #[ORM\Column(type:"integer")]
     private $quantite;
 
-    #[ORM\Column(type:"date") ]
+    #[ORM\Column(type:"date")]
     private $date;
 
-    #[ORM\Column(type:"integer") ]
+    #[ORM\Column(type:"integer")]
     private $archive;
 
-    #[ORM\Column(type:"string", length:255) ]
+    #[ORM\Column(type:"string", length:255)]
     private $lot;
 
-    #[ORM\Column(type:"date") ]
+    #[ORM\Column(type:"date")]
     private $peremption;
-
-    #[ORM\ManyToOne(targetEntity:Fournisseur::class, inversedBy:"approvisionnements") ]
-    private $fournisseur;
-
-    #[ORM\Column]
-    private ?float $pght = null;
 
     /**
      * Constructor
      */
-    public function __construct(Produit $produit, Approvisionner $approvisionner, $quantite, Fournisseur $fournisseur)
+    public function __construct(Produit $produit, Approvisionner $approvisionner, $quantite)
     {
         $this->date = new \Datetime();
         $this->produit = $produit;
         $this->archive = $produit->getStock();
         $this->approvisionner = $approvisionner;
         $this->quantite = $quantite;
-        $this->fournisseur = $fournisseur;
     }
 
 
@@ -141,30 +134,6 @@ class Approvisionnement
     public function setPeremption(\DateTimeInterface $peremption): self
     {
         $this->peremption = $peremption;
-
-        return $this;
-    }
-
-    public function getFournisseur(): ?Fournisseur
-    {
-        return $this->fournisseur;
-    }
-
-    public function setFournisseur(?Fournisseur $fournisseur): self
-    {
-        $this->fournisseur = $fournisseur;
-
-        return $this;
-    }
-
-    public function getPght(): ?float
-    {
-        return $this->pght;
-    }
-
-    public function setPght(float $pght): static
-    {
-        $this->pght = $pght;
 
         return $this;
     }

@@ -4975,7 +4975,7 @@
                     "bootstrap.php"
                 ],
                 "psr-4": {
-                    "Symfony\\Polyfill\\Intl\\Idn\\": ""
+                    "Symfony\\Polyfill\\Intl\\Id]n\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",

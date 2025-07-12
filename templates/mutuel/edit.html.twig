@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+
+<title>Edit Mutuel</title>
+
+{% block body %}
+    <h1>Edit Mutuel</h1>
+
+    {{ include('mutuel/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('mutuel_index') }}">back to list</a>
+
+    {{ include('mutuel/_delete_form.html.twig') }}
+{% endblock %}

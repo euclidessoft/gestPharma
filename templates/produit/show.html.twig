@@ -1,40 +1,45 @@
-{% extends 'client.html.twig' %}
-{% block title %} {{ "Commande"|trans }} - GNT Pharma {% endblock %}
-{% block produit %}active{% endblock %}
-{% block new_produit %}active{% endblock %}
-
+{% extends 'layout.html.twig' %}
 {% block body %}
-<div class="container mt-4 fond-7">
-    <h3 class="mt-4 mb-5 text-bold">
-        <i class="fa-brands fa-product-hunt me-2"></i>
-        {{ "Détails Produit"|trans }}
-    </h3>
-
+    <div class="col-lg-10 offset-lg-2 mt-4 fond pb-4 pt-3 px-5">
+        <h4 class="mb-3 p-2">
+            <i class="fa-brands fa-product-hunt mr-2"></i>
+            {{ "Détails Produit"|trans }}
+        </h4>
+        <hr class=" mb-5">
     <table class="table table-success-light table-bordered table-hover table-striped w-100">
         <tbody>
-
             <tr>
-                <th>{{ 'Code Produit'|trans }}</th>
+                <th>Reference</th>
                 <td>{{ produit.reference }}</td>
             </tr>
             <tr>
-                <th>{{ 'Désignation'|trans }}</th>
-                <td>{{ produit.desigantion }}</td>
+                <th>Designation</th>
+                <td>{{ produit.designation }}</td>
             </tr>
             <tr>
-                <th>{{ 'Prix'|trans }}</th>
-                <td>{{ produit.prix|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                <th>Prix</th>
+                <td>{{ produit.prix }}</td>
             </tr>
             <tr>
-                <th>{{ 'Commande minimum'|trans }}</th>
-                <td>{{ produit.mincommande }}</td>
+                <th>Description</th>
+                <td>{{ produit.description }}</td>
             </tr>
+{#            <tr>#}
+{#                <th>Quantité</th>#}
+{#                <td>{{ produit.quantite }}</td>#}
+{#            </tr>#}
             <tr>
-                <th>{{ 'Fabricant'|trans }}</th>
-                <td>{{ produit.fabriquant }}</td>
+                <th>Tva</th>
+                <td>{{ produit.tva ? 'Yes' : 'No' }}</td>
             </tr>
         </tbody>
     </table>
 
+        <div class="col-md-3 offset-md-3 pt-3 fond-btn">
+            <div class="text-center">
+                <a href="{{ path('produit_index') }}" class="btn btn-shadow btn-success mb-3">Retour</a>
+            </div>
+        </div>
 </div>
+
 {% endblock %}

@@ -5,28 +5,26 @@ namespace App\Entity;
 use App\Repository\StockRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass:StockRepository::class) ]
+#[ORM\Entity(repositoryClass:StockRepository::class)]
 class Stock
 {
+    #[ORM\Id]
+     #[ORM\GeneratedValue ]
+     #[ORM\Column(type:"integer")]
+    private $id;
 
-    #[ORM\ManyToOne(targetEntity:"App\Entity\Produit") ]
-     #[ORM\JoinColumn(nullable:false) ]
+    #[ORM\ManyToOne(targetEntity:Produit::class)]
+     #[ORM\JoinColumn(nullable:false)]
     private $produit;
 
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column(type:"string", length:255) ]
+    #[ORM\Column(type:"string", length:255)]
     private $lot;
 
-    #[ORM\Column(type:"date") ]
+    #[ORM\Column(type:"date", nullable:true)]
     private $peremption;
 
-    #[ORM\Column(type:"integer") ]
+    #[ORM\Column(type:"integer")]
     private $quantite;
-
 
     /**
      * Constructor
@@ -42,6 +40,18 @@ class Stock
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getProduit(): ?Produit
+    {
+        return $this->produit;
+    }
+
+    public function setProduit(?Produit $produit): self
+    {
+        $this->produit = $produit;
+
+        return $this;
     }
 
     public function getLot(): ?string
@@ -61,7 +71,7 @@ class Stock
         return $this->peremption;
     }
 
-    public function setPeremption(\DateTimeInterface $peremption): self
+    public function setPeremption(?\DateTimeInterface $peremption): self
     {
         $this->peremption = $peremption;
 
@@ -76,18 +86,6 @@ class Stock
     public function setQuantite(int $quantite): self
     {
         $this->quantite = $quantite;
-
-        return $this;
-    }
-
-    public function getProduit(): ?Produit
-    {
-        return $this->produit;
-    }
-
-    public function setProduit(?Produit $produit): self
-    {
-        $this->produit = $produit;
 
         return $this;
     }
