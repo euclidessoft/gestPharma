@@ -59,6 +59,7 @@ class VenteController extends
         if ($this->security->isGranted('ROLE_USER')) {
         $entityManager =$this->entityManager;
         $vente = new Vente();
+        $vente->setUser($this->security->getUser());
         $montantvente = 0;
         $form = $this->createForm(VenteType::class, $vente);
         $form->handleRequest($request);
@@ -137,6 +138,7 @@ class VenteController extends
 
                     $venteProduit = new VenteProduit();
                     $venteProduit->setVente($vente);
+                    $venteProduit->setUser($this->security->getUser());
                     $venteProduit->setPrix($produit->getPrix());
                     $venteProduit->setProduit($produit);
                     $venteProduit->setQuantite($quantite);

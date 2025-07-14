@@ -37,6 +37,10 @@ class Produit
     #[ORM\Column(type:"string", length:255)]
     private $reference;
 
+     #[ORM\ManyToOne(targetEntity: Emplacement::class, inversedBy: 'produits')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Emplacement $emplacement = null;
+
     public function __construct()
     {
         $this->stock = 0;
@@ -144,6 +148,7 @@ class Produit
         return $this;
     }
 
+
     public function livraison(int $quantite)
     {
         $this->stock = $this->stock - $quantite;
@@ -153,5 +158,16 @@ class Produit
         }
 
         return $res;
+    }
+
+      public function getEmplacement(): ?Emplacement
+    {
+        return $this->emplacement;
+    }
+
+    public function setEmplacement(?Emplacement $emplacement): self
+    {
+        $this->emplacement = $emplacement;
+        return $this;
     }
 }

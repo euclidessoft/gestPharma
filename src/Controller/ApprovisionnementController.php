@@ -286,7 +286,7 @@ class ApprovisionnementController extends AbstractController
                 $session->remove("approv");
             }
             $this->addFlash('notice', 'Approvisionnement réussie');
-            $response = $this->redirectToRoute('stock_show_print', ['id' => $approvisionner->getId()]);
+            $response = $this->redirectToRoute('historique', []);
             $response->setSharedMaxAge(0);
             $response->headers->addCacheControlDirective('no-cache', true);
             $response->headers->addCacheControlDirective('no-store', true);
