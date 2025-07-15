@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/upgradegnt.iml" filepath="$PROJECT_DIR$/.idea/upgradegnt.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/gestPharma.iml" filepath="$PROJECT_DIR$/.idea/gestPharma.iml" />
     </modules>
   </component>
 </project>
