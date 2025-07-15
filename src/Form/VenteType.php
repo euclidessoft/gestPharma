@@ -49,7 +49,7 @@ class VenteType extends AbstractType
                 'class' => Service::class,
                 'placeholder' => 'Selectionnez un service *',
                 'label' => false,
-                'choices' => $form->getData() ?  $form->getData()->getServices() : [],
+                'choices' => $form->getData() ?  $form->getData()->getServices()  : [],
             ]);
         });
     }

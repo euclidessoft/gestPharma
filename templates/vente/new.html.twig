@@ -160,15 +160,16 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <table class="w-100 text-bolder">
-        <tr><td class="text-right" style="width: 15%;">Total</td><td style="width: 15%;"  id="totalvente"></td><td class="text-center" colspan="2" style="width: 70%;"><h5>Calcul de la connaie</h5></td></tr>
-        <tr><td class="text-right" style="width: 15%;">Assurance</td><td style="width: 15%;"  id="assurance"></td><td style="width: 20%;">Montant recu</td><td style="width: 50%;"><input type="text" id="recu" onkeyup="rendre()" class="form-control"/></td></tr>
-        <tr><td class="text-right" style="width: 15%;">Net a payer</td><td style="width: 15%;"  id="payer"></td><td style="width: 20%;">Montant a rendre</td><td style="width: 50%;"><h5 id="rendre"></h5></tr>
+        <table class="w-100 fw-bold">
+        <tr><td class="text-right" style="width: 15%;">Total</td><td style="width: 15%;"  id="totalvente"></td><td class="text-center" colspan="2" style="width: 70%;"><h5>Calcul de la monnaie</h5></td></tr>
+        <tr><td class="text-right" style="width: 15%;">Assurance</td><td style="width: 15%;"  id="assurance">0</td><td style="width: 20%;">Montant recu</td><td style="width: 50%;"><input type="number" id="recu" onkeyup="rendre()" class="form-control"/></td></tr>
+        <tr><td class="text-right" style="width: 15%;">Net a payer</td><td style="width: 15%;"><h5 id="payer"></h5></td><td style="width: 20%;">Montant a rendre</td><td style="width: 50%;"><h5 id="rendre"></h5></tr>
+        <input type="hidden" id="netapayer" value="0"/>
         </table>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="valider()">Understood</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{"Annuler"|trans}}</button>
+        <button type="button" class="btn btn-primary" onclick="valider()">{{"Enregistrer"|trans}}</button>
       </div>
     </div>
   </div>
@@ -196,19 +197,48 @@ function valider() {
         if( ($('#vente_mutuel option:selected').val() != "" && $('#vente_service option:selected').val() != "")
             ||( $('#vente_mutuel option:selected').val() == "" && $('#vente_service option:selected').val() == "")) 
         {
-           
+            if ($('#valeurtotal').val() != 0){
                     $("#valider").html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
                     $('#form').submit();
+            }
           
         }else{
             alert("{{'Renseigne le type de couverture medecale'|trans}}");
         }
     }
     function rendre(){
-         $('#rendre').html($('#recu').val() - $('#valeurtotal').val())
+         $('#rendre').html($('#recu').val() - $('#netapayer').val())
     }
     function finalisation_vente(){
         $('#totalvente').html($('#valeurtotal').val())
+        $("#netapayer").val($('#valeurtotal').val())
+        $('#payer').html($('#valeurtotal').val())
+        $('#recu').val("")
+        $('#rendre').html("")
+        $('#assurance').html("0")
+        if($('#vente_mutuel option:selected').val() != "" && $('#vente_service option:selected').val() != ""){
+             $("#assurance").html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>")
+             $.ajax({
+                    type: "POST",
+                    url: "{{ path('assurance') }}",
+                    data: { mutuel : $('#vente_mutuel option:selected').val(), service: $('#vente_service option:selected').val() },
+                    success: function (data) {
+                        if (data['id'] != "") {
+                            var valeur = Number($('#valeurtotal').val()) * Number(data['id']) / 100;
+                            $("#assurance").html("-"+valeur);
+                            $("#assurancetamp").val(valeur)
+                            $("#payer").html(Number($('#valeurtotal').val())-valeur)
+                            $("#netapayer").val(Number($('#valeurtotal').val())-valeur)
+                            
+                        }
+                    },
+                    error: function () {
+                        alert("{{ 'La requête n’a pas abouti'|trans }}");
+                    }
+                });
+                {# alert($('#vente_mutuel option:selected').val()+ "--" + $('#vente_service option:selected').val()) #}
+        }
+
     }
     </script>
 {% endblock %}

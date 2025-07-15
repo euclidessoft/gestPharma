@@ -41,10 +41,9 @@
                     </div><!--//col-->
                     <div class="app-search-box col">
                         <form class="app-search-form">
-                            <input type="text" placeholder="Search..." name="search" class="form-control search-input">
-                            <button type="submit" class="btn search-btn btn-primary" value="Search">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                            </button>
+                            <input type:"text" placeholder="Search..." name="search" class="form-control search-input">
+                            <button type:"submit" class="btn search-btn btn-primary" value="Search"><i
+                                        class="fa-solid fa-magnifying-glass"></i></button>
                         </form>
                     </div><!--//app-search-box-->
 
@@ -884,6 +883,8 @@
 
                             $("#total").html(data['total']);
                             $("#valeurtotal").val(data['total']);
+                            $("#payer").html(data['total']);
+                            $("#netapayer").val(data['total']);
                             $("#td"+produit).html(data['quantite']);
 
                             $("#annuler" + produit).trigger('click');

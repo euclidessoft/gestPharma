@@ -104,6 +104,41 @@ class ServiceController extends
            return $response;
        }
     }
+         #[Route("/assurance", name:"assurance", methods:["GET","POST"])]
+    public function add(Request $request, ServiceRepository $repository)
+    {
+        if ($this->security->isGranted('ROLE_USER')) {
+      
+        if ($request->isXmlHttpRequest()) {// traitement de la requete ajax
+           
+            $mutuel = $request->get('mutuel');
+            $service = $request->get('service');
+
+            $typeservice = $repository->findOneBy(['mutuel' => $mutuel, 'id' => $service])->getType();
+
+            //preparation valeur de retour ajax
+            $res['id'] = $typeservice;
+
+            $response = new Response();
+            $response->headers->set('content-type', 'application/json');
+            $re = json_encode($res);
+            $response->setContent($re);
+            return $response;
+        }
+
+     } else {
+           $response = $this->redirectToRoute('security_logout');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
+    }
 
     #[Route("/{id}", name:"service_show", methods:["GET"])]
     public function show(Service $service): Response
@@ -185,6 +220,7 @@ class ServiceController extends
            return $response;
        }
     }
+  
 
     #[Route("/{id}", name:"service_delete", methods:["POST"])]
     public function delete(Request $request, Service $service): Response
@@ -220,4 +256,6 @@ class ServiceController extends
            return $response;
        }
     }
+
+  
 }

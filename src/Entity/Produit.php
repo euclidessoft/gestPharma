@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ProduitRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass:ProduitRepository::class)]
@@ -18,6 +19,9 @@ class Produit
 
     #[ORM\Column(type:"integer")]
     private $prix;
+
+    #[ORM\Column(type:"integer")]
+    private $prixdachat;
 
     #[ORM\Column(type:"string", length:255, nullable:true)]
     private $description;
@@ -169,5 +173,22 @@ class Produit
     {
         $this->emplacement = $emplacement;
         return $this;
+    }
+
+    public function getPrixdachat(): ?int
+    {
+        return $this->prixdachat;
+    }
+
+    public function setPrixdachat(int $prixdachat): static
+    {
+        $this->prixdachat = $prixdachat;
+
+        return $this;
+    }
+
+    public function isTva(): ?bool
+    {
+        return $this->tva;
     }
 }
