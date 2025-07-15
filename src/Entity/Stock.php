@@ -8,10 +8,10 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass:StockRepository::class)]
 class Stock
 {
-    #[ORM\Id]
-     #[ORM\GeneratedValue ]
-     #[ORM\Column(type:"integer")]
-    private $id;
+      #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity:Produit::class)]
      #[ORM\JoinColumn(nullable:false)]

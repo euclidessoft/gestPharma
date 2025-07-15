@@ -25,6 +25,9 @@ class VenteProduit
     #[ORM\Column(type:"integer")]
     private $prix;
 
+     #[ORM\ManyToOne(targetEntity:User::class)]
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +77,18 @@ class VenteProduit
     public function setPrix(int $prix): self
     {
         $this->prix = $prix;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

@@ -14,7 +14,7 @@
             <div class="col-lg-5 mt-5">
                 {% for message in app.flashes('notice') %}
                     <div class="alert alert-primaire alert-dismissible fade show radius-10 shadow-black">
-                        <button type:"button" class="close" data-dismiss="alert" aria-hidden="true">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
                             &times;
                         </button>
                         {{ message|trans }}
@@ -45,7 +45,7 @@
                             <td>
 
                                 <!-- Button trigger modal -->
-                                <button type:"button"
+                                <button type="button"
                                         class="btn btn-success" {# {% if produit.id in inlist %} disabled {% endif %}" #}
                                         data-bs-toggle="modal" data-bs-target="#modal{{ produit.id }}"
                                         id="btn{{ produit.id }}">
@@ -60,7 +60,7 @@
                                             <div class="modal-header">
                                                 <h4 class="modal-title fs-5" id="exampleModalLabel">
                                                     {{ produit.reference }} {{ produit.designation }}</h4>
-                                                <button type:"button" class="close" data-bs-dismiss="modal"
+                                                <button type="button" class="close" data-bs-dismiss="modal"
                                                         aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
@@ -69,29 +69,29 @@
                                                 <div class="mt-4">
                                                     {{'Renseignez la quantité'|trans}}
                                                     <label for="quant{{ produit.id }}"></label>
-                                                    <input type:"number" class="form-control"
+                                                    <input type="number" class="form-control"
                                                            id="quant{{ produit.id }}">
                                                 </div>
                                                 <div class="mt-4">
                                                     {{ 'Numero lot'|trans }}
                                                     <label for="numero{{ produit.id }}"></label>
-                                                    <input type:"number" class="form-control"
+                                                    <input type="number" class="form-control"
                                                            id="numero{{ produit.id }}">
                                                 </div>
                                                 <div class="mt-4">
                                                     {{ 'Date péremption'|trans}}
                                                     <label for="peremp{{ produit.id }}"></label>
-                                                    <input type:"date" class="form-control"
+                                                    <input type="date" class="form-control"
                                                            id="peremp{{ produit.id }}">
                                                 </div>
 
                                             </div>
                                             <div class="modal-footer px-5 py-4">
-                                                <button type:"button" class="btn btn-secondary" data-dismiss="modal"
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                                                         id="annuler{{ produit.id }}">
                                                     {{ 'Annuler'|trans }}
                                                 </button>
-                                                <button type:"button" class="btn btn-success ms-3"
+                                                <button type="button" class="btn btn-success ms-3"
                                                         id="ajouter{{ produit.id }}"
                                                         onclick="ajouter({{ produit.id }})">
                                                     <i class="fa fa-plus"></i>
@@ -162,7 +162,7 @@
                                     <i class="fa fa-trash"></i>
                                 </button>
 
-{#                                <button type:"button" class="btn btn-success mb-2"#}
+{#                                <button type="button" class="btn btn-success mb-2"#}
 {#                                        data-toggle="modal" data-target="#modal{{ produit['id'] }}"#}
 {#                                        id="btn{{ produit['id'] }}">#}
 {#                                    <i class="fa fa-plus"></i> Lot#}
@@ -222,7 +222,7 @@
                                 "                                   title=\"{{ 'Supprimer cet article'|trans}}\" onclick='supprim(" + produit + ","+ numero.val() +")'>\n" +
                                 "                                    <i class='fa fa-trash'></i>\n" +
                                 "                                </button>\n");
-                               // "<button type:'button' class='btn btn-success mb-2' data-toggle='modal' data-target='#modal" + produit + "'  id='btn" + produit + "'> <i class='fa fa-plus'></i> Lot </button></td></tr>"
+                               // "<button type='button' class='btn btn-success mb-2' data-toggle='modal' data-target='#modal" + produit + "'  id='btn" + produit + "'> <i class='fa fa-plus'></i> Lot </button></td></tr>"
 
                             //$('#btn' + produit).addClass('disabled');
                             $('#valider1').removeClass('disabled');
@@ -283,7 +283,7 @@
             $("#quant" + produit).val(quantite);
             $("#ajouter" + produit).hide();
             /* remplissage div modification*/
-            $("#modification" + produit).html("<button type:'button' class='btn btn-success ms-3' id='modifier" + produit + "' onclick=modifier(" + produit + ")><i class='fa fa-edit'></i> {{ 'Modifier'|trans }}</button>");
+            $("#modification" + produit).html("<button type='button' class='btn btn-success ms-3' id='modifier" + produit + "' onclick=modifier(" + produit + ")><i class='fa fa-edit'></i> {{ 'Modifier'|trans }}</button>");
             $("#btn" + produit).trigger('click');// declenchement modification
         }
 

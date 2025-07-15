@@ -3,15 +3,16 @@
 namespace App\Entity;
 
 use App\Repository\VenteRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass:VenteRepository::class)]
 class Vente
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue ]
+     #[ORM\Id]
+    #[ORM\GeneratedValue]
     #[ORM\Column]
-    private $id;
+    private ?int $id = null;
 
     #[ORM\Column(type:"date")]
     private $date;
@@ -24,6 +25,9 @@ class Vente
 
     #[ORM\ManyToOne(targetEntity:Service::class)]
     private $service;
+    
+    #[ORM\ManyToOne(targetEntity:User::class)]
+    private $user;
 
     #[ORM\Column(type:"integer")]
     private $montant;
@@ -95,6 +99,18 @@ class Vente
     public function setMontant(int $montant): self
     {
         $this->montant = $montant;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

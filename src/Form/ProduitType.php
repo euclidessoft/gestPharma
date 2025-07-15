@@ -3,9 +3,11 @@
 namespace App\Form;
 
 use App\Entity\Produit;
+use App\Entity\Emplacement;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class ProduitType extends AbstractType
 {
@@ -17,6 +19,11 @@ class ProduitType extends AbstractType
             ->add('prix')
             ->add('description')
             ->add('tva')
+            ->add('emplacement', EntityType::class, [
+                    'class' => Emplacement::class,
+                    'choice_label' => 'nom',
+                    'placeholder' => 'Choisir un emplacement',
+                ])
         ;
     }
 

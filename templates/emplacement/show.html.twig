@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<title>Emplacement</title>
+
+{% block body %}
+    <h1>Emplacement</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ emplacement.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ emplacement.nom }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table id="liste" class="table table-success-light table-bordered table-hover table-striped text-center">
+            <thead>
+            <tr>
+                <th>{{ 'Code'|trans }}</th>
+                <th class="text-start">{{ 'Designation'|trans }}</th>
+                <th>{{ 'Prix'|trans }}</th>
+                <th>{{ 'Description'|trans }}</th>
+                <th>{{ 'Tva'|trans }}</th>
+                <th>{{ 'Actions'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for produit in emplacement.produits %}
+                <tr>
+                    <td>{{ produit.reference }}</td>
+                    <td class="text-start">{{ produit.designation }}</td>
+{#                    <td class="text-start">{{ produit.fournisseur[0].adressez }}</td>#}
+                    <td>{{ produit.prix }}</td>
+                    <td>{{ produit.description }}</td>
+                    <td>{{ produit.tva ? 'Yes' : 'No' }}</td>
+                    <td class="text-nowrap">
+                        <a class="btn btn-success" title="{{ 'Voir'|trans }}" href="{{ path('produit_show', {'id': produit.id}) }}">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                        <a class="btn btn-primary" title="{{ 'Modifier'|trans }}" href="{{ path('produit_edit', {'id': produit.id}) }}">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        {{ include('produit/_delete_form.html.twig') }}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="17">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+
+    <a href="{{ path('app_emplacement_index') }}">back to list</a>
+
+    <a href="{{ path('app_emplacement_edit', {'id': emplacement.id}) }}">edit</a>
+
+    {{ include('emplacement/_delete_form.html.twig') }}
+{% endblock %}
