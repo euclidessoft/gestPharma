@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Mutuel;
 use App\Form\MutuelType;
 use App\Repository\MutuelRepository;
+use App\Repository\VenteRepository;
+use App\Repository\FactureRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -103,12 +105,78 @@ class MutuelController extends
     }
 
     #[Route("/{id}", name:"mutuel_show", methods:["GET"])]
-    public function show(Mutuel $mutuel): Response
+    public function show(Mutuel $mutuel, VenteRepository $repository, FactureRepository $facturerepository): Response
     {
         if ($this->security->isGranted('ROLE_USER')) {
        
         $response = $this->render('mutuel/show.html.twig', [
             'mutuel' => $mutuel,
+            'factures' => $facturerepository->findBy(['payer' => false]),
+        ]);
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+    } else {
+           $response = $this->redirectToRoute('security_logout');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
+    }
+
+    #[Route("/NoPayer/{id}", name:"mutuel_payer", methods:["GET"])]
+    public function faturpayer(Mutuel $mutuel, VenteRepository $repository, FactureRepository $facturerepository): Response
+    {
+        if ($this->security->isGranted('ROLE_USER')) {
+       
+        $response = $this->render('mutuel/facturepayer.html.twig', [
+            'mutuel' => $mutuel,
+            'factures' => $facturerepository->findBy(['payer' => false]),
+        ]);
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+    } else {
+           $response = $this->redirectToRoute('security_logout');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
+    }
+
+
+    #[Route("/Vente/{id}", name:"mutuel_vente", methods:["GET"])]
+    public function vente(Mutuel $mutuel, VenteRepository $repository, FactureRepository $facturerepository): Response
+    {
+        if ($this->security->isGranted('ROLE_USER')) {
+       
+        $response = $this->render('mutuel/vente.html.twig', [
+            'mutuel' => $mutuel,
+            'ventes' => $repository->factureMois($mutuel->getId()),
         ]);
            $response->setSharedMaxAge(0);
            $response->headers->addCacheControlDirective('no-cache', true);

@@ -44,6 +44,12 @@ class Vente
     #[ORM\ManyToOne(targetEntity:Banque::class)]
     private $banque;
 
+    #[ORM\Column]
+    private ?bool $payer = null;
+
+    #[ORM\ManyToOne(inversedBy: 'ventes')]
+    private ?Facture $facture = null;
+
     public function __construct()
     {
         //      $this->venteProduits = new ArrayCollection();
@@ -172,6 +178,30 @@ class Vente
     public function setBanque(?Banque $banque): static
     {
         $this->banque = $banque;
+
+        return $this;
+    }
+
+    public function isPayer(): ?bool
+    {
+        return $this->payer;
+    }
+
+    public function setPayer(bool $payer): static
+    {
+        $this->payer = $payer;
+
+        return $this;
+    }
+
+    public function getFacture(): ?Facture
+    {
+        return $this->facture;
+    }
+
+    public function setFacture(?Facture $facture): static
+    {
+        $this->facture = $facture;
 
         return $this;
     }
