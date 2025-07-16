@@ -146,10 +146,11 @@ class VenteController extends
 
                     //$entityManager->flush();
                 }
-                if($vente->getMutuel())// verification prise en charge
-                    $vente->setMontant($montantvente - ($montantvente * $vente->getService()->getType() / 100));
-                else
-                    $vente->setMontant($montantvente);
+                $vente->setMontant($montantvente);
+                if($vente->getMutuel()){// verification prise en charge
+                    
+                    $vente->setCouverture($montantvente * $vente->getService()->getType() / 100);
+                }
                 $entityManager->persist($vente);
                 $entityManager->flush();
                 $session->remove("commande");

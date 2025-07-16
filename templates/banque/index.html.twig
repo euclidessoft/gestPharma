@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<title>Banque index</title>
+
+{% block body %}
+    <h1>Banque index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Adresse</th>
+                <th>Phone</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for banque in banques %}
+            <tr>
+                <td>{{ banque.id }}</td>
+                <td>{{ banque.nom }}</td>
+                <td>{{ banque.adresse }}</td>
+                <td>{{ banque.phone }}</td>
+                <td>
+                    <a href="{{ path('app_banque_show', {'id': banque.id}) }}">show</a>
+                    <a href="{{ path('app_banque_edit', {'id': banque.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_banque_new') }}">Create new</a>
+{% endblock %}

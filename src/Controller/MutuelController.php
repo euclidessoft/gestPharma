@@ -107,7 +107,9 @@ class MutuelController extends
     {
         if ($this->security->isGranted('ROLE_USER')) {
        
-        $response = $this->redirectToRoute('security_logout');
+        $response = $this->render('mutuel/show.html.twig', [
+            'mutuel' => $mutuel,
+        ]);
            $response->setSharedMaxAge(0);
            $response->headers->addCacheControlDirective('no-cache', true);
            $response->headers->addCacheControlDirective('no-store', true);

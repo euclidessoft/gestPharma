@@ -26,21 +26,45 @@
         </tbody>
     </table>
     <a href="{{path('service_new', {'mutuel' : mutuel.id})}}"> Nouveau Service</a>
-    
+    listes des services
     <table class="table table-hover">
     <head>
+    <tr>
         <th>Nom</th>
          <th>Avantage</th>
+         </tr>
     </head>
         <tbody>
         {% for service in mutuel.services %}
             <tr>
                
                 <td>{{ service.nom }}</td>
-            </tr>
-            <tr>
+            
                 
                 <td>{{ service.type }}</td>
+            </tr>
+            {% else %}
+            {% endfor %}
+        </tbody>
+    </table>
+Listes des ventes
+     <table class="table table-hover">
+    <head>
+    <tr>
+        <th>Nom</th>
+         <th>Montant</th>
+         <th>Couverture</th>
+         </tr>
+    </head>
+        <tbody>
+        {% for vente in mutuel.ventes %}
+            <tr>
+               
+                <td>{{ vente.service.nom }}</td>
+           
+                
+                <td>{{ vente.montant|number_format(2, ',' , ' ') }}</td>
+                <td>{{ vente.couverture|number_format(2, ',' , ' ')  }}</td>
             </tr>
             {% else %}
             {% endfor %}

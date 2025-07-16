@@ -6,6 +6,8 @@ use App\Entity\Medecin;
 use App\Entity\Mutuel;
 use App\Entity\Service;
 use App\Entity\Vente;
+use App\Entity\Banque;
+use App\Form\Type\VerserType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -36,6 +38,14 @@ class VenteType extends AbstractType
                 'placeholder' => 'Selectionnez un service',
                 'label' => false,
             ])
+            ->add('type', VerserType::class,array('placeholder' => 'Type de Paiement'))
+            ->add('banque', EntityType::class, [
+                'class' => Banque::class,
+                'choice_label' => 'nom',
+                'placeholder' => 'Selectionnez une banque',
+                'label' => false,
+            ])
+            ->add('numero')
         ;
         $builder->get('mutuel')->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
 
