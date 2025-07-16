@@ -164,9 +164,11 @@
         <tr><td class="text-right" style="width: 15%;">Assurance</td><td style="width: 15%;"  id="assurance">0</td><td style="width: 20%;">Montant recu</td><td style="width: 50%;"><input type="number" id="recu" onkeyup="rendre()" class="form-control"/></td></tr>
         <tr><td class="text-right" style="width: 15%;">Net a payer</td><td style="width: 15%;"><h5 id="payer"></h5></td><td style="width: 20%;">Montant a rendre</td><td style="width: 50%;"><h5 id="rendre"></h5></td></tr>
         <tr><td class="text-right" colspan="3" style="width: 30%;">{{ form_row(form.type, {'attr' : {'onchange' : 'typeversement()'}}) }}</td><td style="width: 70%;"></td></tr>
-        <tr><td class="text-right" colspan="3" style="width: 30%;">{{ form_row(form.banque,{'attr' : {'placeholder':  'Sélectionnez une banque','required':false}}) }}</td><td style="width: 70%;"></td></tr>
-        <tr><td class="text-right" colspan="3" style="width: 30%;">{{ form_row(form.numero) }}{{ form_end(form) }}</td><td style="width: 70%;"></td></tr>
+        <div id="versement">
+        <tr><td class="text-right" colspan="3" style="width: 30%;">{{ form_row(form.banque,{'attr' : {'placeholder':  'Sélectionnez une banque'}}) }}</td><td style="width: 70%;"></td></tr>
+        <tr><td class="text-right" colspan="3" style="width: 30%;">{{ form_row(form.numero,{'label': 'numero transaction','attr' : {'placeholder':  'numero transaction'}}) }}{{ form_end(form) }}</td><td style="width: 70%;"></td></tr>
         <input type="hidden" id="netapayer" value="0"/>
+        </div>
         </table>
       </div>
       <div class="modal-footer">
@@ -252,10 +254,14 @@ function valider() {
         $('#versement').show();
         $('#vente_banque option:selected').val("");
         $('#vente_numero').val('');
+        $('#vente_banque').show();
+         $('#vente_numero').show();
     }else{
         $('#versement').hide();
         $('#vente_banque option:selected').val("");
          $('#vente_numero').val('');
+        $('#vente_banque').hide();
+         $('#vente_numero').hide();
     }
 }
     </script>

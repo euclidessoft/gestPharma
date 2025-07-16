@@ -38,7 +38,7 @@ class VenteType extends AbstractType
                 'placeholder' => 'Selectionnez un service',
                 'label' => false,
             ])
-            ->add('type', VerserType::class,array('placeholder' => 'Type de Paiement'))
+            ->add('type', VerserType::class,)
             ->add('banque', EntityType::class, [
                 'class' => Banque::class,
                 'choice_label' => 'nom',
