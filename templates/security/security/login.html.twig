@@ -1,5 +1,5 @@
-{% extends 'layout.html.twig' %}
-{% block title %} {{ 'Connexion'|trans }} - GNT Pharma {% endblock %}
+{% extends 'security.html.twig' %}
+{% block title %} {{ 'Connexion'|trans }} - PharmaCare {% endblock %}
 {% block body %}
     <div class="col-12">
         {% for message in app.flashes('change') %}
@@ -17,12 +17,74 @@
 
         {% if error %}
             <div role="alert" class="alert alert-danger alert-dismissible fade show mt-4 shadow-5" role="alert">
-                {{ 'Adresse email ou mot de passe incorrecte'|trans }}
+                {{ 'Email ou mot de passe incorrecte'|trans }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         {% endif %}
     </div>
-    <form action="{{ path('security_login') }}" method="POST" class="mt-4" id="form">
+
+    <!-- Formulaire de connexion -->
+    <form action="{{ path('security_login') }}" method="POST" class="mt-5" id="form">
+        <div class="mb-4">
+            <div class="input-group">
+                <span class="input-group-text px-3"><i class="fas fa-envelope"></i></span>
+                <div class="form-floating">
+                    <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control"
+                           autocomplete="username" placeholder="{{ 'Email ou nom d\'utilisateur'|trans }}" required autofocus>
+                    <label for="inputUsername" class="form-label">
+                        <i class="fas fa-user me-2"></i>
+                        {{ "Email ou nom d'utilisateur"|trans }}
+                    </label>
+                </div>
+            </div>
+            <div class="invalid-feedback">
+                {{ "Veuillez entrer un email valide"|trans }}
+            </div>
+        </div>
+
+        <div class="mb-4">
+
+            <div class="input-group">
+                <span class="input-group-text px-3">
+                    <i class="fas fa-lock"></i>
+                </span>
+                <div class="form-floating">
+                    <input type="password" name="password" placeholder="{{ 'Mot de passe'|trans }}" id="inputPassword"
+                           class="form-control" autocomplete="current-password" required>
+                    <label for="inputPassword" class="form-label">
+                        <i class="fas fa-key me-2"></i>Mot de passe
+                    </label>
+                </div>
+                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                        <i class="fas fa-eye" id="toggleIcon"></i>
+                    </button>
+            </div>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            <div class="invalid-feedback">
+                {{ "Le mot de passe est requis"|trans }}
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-12 text-center">
+                <a href="{{ path('security_forgotten_password') }}" class="forgot-password">
+                    {{ 'Mot de passe oublié'|trans }}
+                </a>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 login-btn">
+            <i class="fas fa-sign-in-alt me-2"></i>
+            <span class="btn-text">
+                {{ 'Se connecter'|trans }}
+            </span>
+            <span class="btn-spinner spinner-border spinner-border-sm d-none" role="status">
+                <span class="visually-hidden">Chargement...</span>
+            </span>
+        </button>
+    </form>
+
+    {#<form action="{{ path('security_login') }}" method="POST" class="mt-4" id="form">
         <div class="input-group mb-4">
             <span class="input-group-text"><i class="fa fa-at"></i></span>
             <div class="form-floating">
@@ -47,14 +109,14 @@
             </a>
         </div>
         <div class="mb-4">
-            
+
         </div>
         <button id="valider" type="button" onclick="sub()" class="btn btn-shadow btn-green px-4">
             {{ 'Se connecter'|trans }}
             <i class="fa fa-sign-in-alt"></i>
         </button>
-    </form>
-    <script>
+    </form>#}
+    {#<script>
         document.addEventListener('keydown', function (event) {
             if (event.key === 'Enter') {
                 sub();
@@ -69,6 +131,6 @@
                 alert("{{ 'Veuillez renseignez tous les champs'|trans }}");
             }
         }
-    </script>
+    </script>#}
 
 {% endblock %}

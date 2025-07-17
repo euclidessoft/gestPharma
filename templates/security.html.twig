@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+
+<head>
+    <title> {% block title %} PharmaCare – Votre allié pour une gestion sans faille {% endblock %} </title>
+
+    <!-- Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PharmaCare application de gestion de pharmacie">
+    <meta name="author" content="Jambaar Corporation">
+    {#    <link rel="shortcut icon" href="favicon.ico">#}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ asset('assets/css/login.css') }}" rel="stylesheet">
+</head>
+<body>
+<div class="login-container">
+    <div class="container-fluid h-100">
+        <div class="row h-100 align-items-center justify-content-center">
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="login-card">
+                    <!-- Header avec logo -->
+                    <div class="login-header text-center mb-4">
+                        <div class="logo-container">
+                            <div class="logo-icon">
+                                <i class="fas fa-pills"></i>
+                            </div>
+                            <h1 class="logo-text">PharmaCare</h1>
+                        </div>
+                        <p class="login-subtitle">Votre allié pour une gestion sans faille</p>
+                    </div>
+                    {% block body %}
+
+                    {% endblock %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Décoration de fond -->
+    <div class="bg-decoration">
+        <div class="decoration-item decoration-1">
+            <i class="fas fa-capsules"></i>
+        </div>
+        <div class="decoration-item decoration-2">
+            <i class="fas fa-tablets"></i>
+        </div>
+        <div class="decoration-item decoration-3">
+            <i class="fas fa-prescription-bottle"></i>
+        </div>
+        <div class="decoration-item decoration-4">
+            <i class="fas fa-stethoscope"></i>
+        </div>
+        <div class="decoration-item decoration-5">
+            <i class="fas fa-heartbeat"></i>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ asset('assets/js/login.js') }}"></script>
+</body>
+</html>
