@@ -19,32 +19,30 @@ class VenteRepository extends ServiceEntityRepository
         parent::__construct($registry, Vente::class);
     }
 
-    // /**
-    //  * @return Vente[] Returns an array of Vente objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function factureMoisPrecedent($mutuel)
     {
-        return $this->createQueryBuilder('v')
-            ->andWhere('v.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('v.id', 'ASC')
-            ->setMaxResults(10)
+        $start = new \DateTime('first day of last month');
+        $end = new \DateTime('last day of last month');
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.date BETWEEN :start AND :end')
+            ->andWhere('p.mutuel = :mutuel')
+            ->setParameter('start' , $start)
+            ->setParameter('end' , $end)
+            ->setParameter('mutuel' , $mutuel)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Vente
+    public function factureMois($mutuel)
     {
-        return $this->createQueryBuilder('v')
-            ->andWhere('v.exampleField = :val')
-            ->setParameter('val', $value)
+        $start = new \DateTime('first day of this month');
+        $end = new \DateTime('last day of this month');
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.date BETWEEN :start AND :end')
+            ->andWhere('p.mutuel = :mutuel')
+            ->setParameter('start' , $start)
+            ->setParameter('end' , $end)
+            ->setParameter('mutuel' , $mutuel)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getResult();
     }
-    */
 }

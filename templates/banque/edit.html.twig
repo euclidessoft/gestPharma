@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+
+<title>Edit Banque</title>
+
+{% block body %}
+    <h1>Edit Banque</h1>
+
+    {{ include('banque/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_banque_index') }}">back to list</a>
+
+    {{ include('banque/_delete_form.html.twig') }}
+{% endblock %}

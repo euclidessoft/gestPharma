@@ -12,7 +12,8 @@ class VerserType extends AbstractType
 		$resolver->setDefaults(array(
 						'choices' => array(
 							'Espece' => 'Espece',
-							'Cheque' => 'Cheque',
+							'Orange money' => 'Orange money',
+							'Wave' => 'Wave',
 							'Virement' => 'Virement',
 							)
 						));

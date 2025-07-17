@@ -46,7 +46,7 @@
     </table>
      <ul class="nav nav-tabs mb-4">
             <li class="nav-item">
-                <a class="nav-link active" href="#">
+                <a class="nav-link" href="{{ path('mutuel_show', {'id' : mutuel.id}) }}">
                     {{ 'Facture non payées'|trans }}
                 </a>
             </li>
@@ -56,7 +56,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ path('mutuel_vente', {'id' : mutuel.id}) }}">
+                <a class="nav-link active" href="#">
                     {{ 'Vente du mois en cours'|trans }}
                 </a>
             </li>
@@ -66,22 +66,41 @@
     <head>
     <tr>
         <th>Date</th>
+        <th>Nom</th>
         <th>Numero</th>
-        <th>Montant</th>
-        <th>Action</th>
+        <th>Service</th>
+         <th>Montant</th>
+         <th>Couverture</th>
          </tr>
     </head>
         <tbody>
-        {% for facture in factures %}
+        {% set  montant = 0 %}
+        {% for vente in ventes %}
             <tr>
                
-                <td>{{ facture.date|date('d/m/Y') }}</td>
-                <td>{{ facture.nuemro }}</td>
-                <td>{{ facture.montant|number_format(2, ',' , ' ') }}</td>
-                <td><button type="button" class="btn btn-success"><i class="fa fa-show"></i></button></td>
+                <td>{{ vente.date|date('d/m/Y') }}</td>
+                <td>{{ vente.service.nom }}</td>
+                <td>{{ vente.service.nom }}</td>
+                <td>{{ vente.service.nom }}</td>
+           
+                
+                <td>{{ vente.montant|number_format(2, ',' , ' ') }}</td>
+                <td>{{ vente.couverture|number_format(2, ',' , ' ')  }}</td>
+                {% set montant = montant + vente.couverture %}
             </tr>
             {% else %}
             {% endfor %}
+             <tr>
+               
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+           
+                
+                <td>{{ "Total"|trans }}</td>
+                <td>{{ montant|number_format(2, ',' , ' ')  }}</td>
+            </tr>
         </tbody>
     </table>
 

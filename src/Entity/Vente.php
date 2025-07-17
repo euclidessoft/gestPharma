@@ -29,13 +29,32 @@ class Vente
     #[ORM\ManyToOne(targetEntity:User::class)]
     private $user;
 
-    #[ORM\Column(type:"integer")]
+    #[ORM\Column(type:"float")]
     private $montant;
+
+     #[ORM\Column(type:"float")]
+    private $couverture;
+
+     #[ORM\Column(type:"string", length:255) ]
+    private $type;
+
+    #[ORM\Column(type:"integer", nullable:true) ]
+    private $numero;
+
+    #[ORM\ManyToOne(targetEntity:Banque::class)]
+    private $banque;
+
+    #[ORM\Column]
+    private ?bool $payer = null;
+
+    #[ORM\ManyToOne(inversedBy: 'ventes')]
+    private ?Facture $facture = null;
 
     public function __construct()
     {
         //      $this->venteProduits = new ArrayCollection();
         $this->date = new \DateTime();
+        $this->couverture = 0;
     }
 
     public function getId(): ?int
@@ -91,12 +110,12 @@ class Vente
         return $this;
     }
 
-    public function getMontant(): ?int
+    public function getMontant(): ?float
     {
         return $this->montant;
     }
 
-    public function setMontant(int $montant): self
+    public function setMontant(float $montant): self
     {
         $this->montant = $montant;
 
@@ -111,6 +130,78 @@ class Vente
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getCouverture(): ?float
+    {
+        return $this->couverture;
+    }
+
+    public function setCouverture(?float $couverture): static
+    {
+        $this->couverture = $couverture;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): static
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getNumero(): ?int
+    {
+        return $this->numero;
+    }
+
+    public function setNumero(?int $numero): static
+    {
+        $this->numero = $numero;
+
+        return $this;
+    }
+
+    public function getBanque(): ?Banque
+    {
+        return $this->banque;
+    }
+
+    public function setBanque(?Banque $banque): static
+    {
+        $this->banque = $banque;
+
+        return $this;
+    }
+
+    public function isPayer(): ?bool
+    {
+        return $this->payer;
+    }
+
+    public function setPayer(bool $payer): static
+    {
+        $this->payer = $payer;
+
+        return $this;
+    }
+
+    public function getFacture(): ?Facture
+    {
+        return $this->facture;
+    }
+
+    public function setFacture(?Facture $facture): static
+    {
+        $this->facture = $facture;
 
         return $this;
     }
