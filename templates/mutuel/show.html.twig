@@ -80,6 +80,7 @@
                 <td>{{ facture.montant|number_format(2, ',' , ' ') }}</td>
                 <td>
                 <a href="{{ path('facture_details', {'mutuel' : mutuel.id , 'facture' : facture.id}) }}" type="button" class="btn btn-success"><i class="fa fa-eye"></i></a>
+                <a href="{{ path('facture_paiement', {'mutuel' : mutuel.id , 'facture' : facture.id}) }}" type="button" class="btn btn-success"><i class="fa fa-money-bill"></i></a>
                 </td>
             </tr>
             {% else %}

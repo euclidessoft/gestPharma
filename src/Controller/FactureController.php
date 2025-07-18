@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Facture;
 use App\Entity\Mutuel;
+use App\Entity\Versement;
 use App\Repository\MutuelRepository;
 use App\Repository\VenteRepository;
 use App\Form\FactureForm;
+use App\Form\VersementForm;
 use App\Repository\FactureRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -69,13 +71,124 @@ final class FactureController extends AbstractController
     }
     
     #[Route("/Details/{mutuel}/{facture}", name:"facture_details", methods:["GET"])]
-    public function detail(Mutuel $mutuel, Facture $facture, VenteRepository $repository, FactureRepository $repo): Response
+    public function detail(Mutuel $mutuel, Facture $facture): Response
     {
         if ($this->security->isGranted('ROLE_USER')) {
             
         $response = $this->render('facture/details.html.twig', [
             'mutuel' => $mutuel,
             'facture' => $facture,
+        ]);
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+    } else {
+           $response = $this->redirectToRoute('security_logout');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
+    }
+    
+    #[Route("/Paiement/{mutuel}/{facture}", name:"facture_paiement", methods:["GET", "POST"])]
+    public function paiement(Request $request, Mutuel $mutuel, Facture $facture): Response
+    {
+        if ($this->security->isGranted('ROLE_USER')) {
+             $versement = new Versement();
+            // $credit = new Credit();
+            // $ecriture = new Ecriture();
+            $form = $this->createForm(VersementForm::class, $versement);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+
+                $entityManager = $this->entityManager;
+                if ($versement->getMontant() <= ($facture->getMontant() - $facture->getVersement())) {
+                    $facture->setVersement($facture->getVersement() + $versement->getMontant());// MAJ versement
+                    if ($facture->getVersement() == $facture->getMontant()) {
+
+                        $facture->setPayer(true);
+                        // $credit->setTva($facture->getTva());
+
+                    }
+                    $versement->setUser($this->getUser());
+                    $versement->setfacture($facture);
+                    // if($versement->getType() == 'Espece'){
+
+                    //     $credit->setType('Espece');
+                    //     $credit->setCompte(571);
+
+                    //     $ecriture->setType('Espece');
+                    //     $ecriture->setComptecredit(571);
+                    //     $ecriture->setLibellecomptecredit("Caisse");
+                    // }else{
+                    //     $credit->setType('Banque');
+                    //     $credit->setCompte($versement->getBanque()->getCompte());
+
+                    //     $ecriture->setType('Banque');
+                    //     $ecriture->setComptecredit($versement->getBanque()->getCompte());
+                    //     $ecriture->setLibelleComptecredit($versement->getBanque()->getNom());
+
+
+                    // }
+                    // $credit->setVersement($versement);// ecriture comptable
+                    // $credit->setMontant($versement->getMontant());
+
+                    // $ecriture->setSolde($versement->getMontant());
+                    // $ecriture->setCredit($credit);
+                    // $ecriture->setMontant($versement->getMontant());
+                    // $ecriture->setLibelle('Vente de médicaments');
+                    // $ecriture->setComptedebit($versement->getfacture()->getUser()->getCompte());
+                    // $ecriture->setLibellecomptedebit("Compte Client");
+
+                    $entityManager->persist($versement);
+                    // $entityManager->persist($credit);
+                    // $entityManager->persist($ecriture);
+                    $entityManager->flush();
+                    $this->addFlash('notice', 'Réglement effectué avec succés');
+
+                    $response = $this->redirectToRoute('facture_paiement', ['mutuel' => $mutuel->getId(),'facture' => $facture->getId()], Response::HTTP_SEE_OTHER);
+                    $response->setSharedMaxAge(0);
+                    $response->headers->addCacheControlDirective('no-cache', true);
+                    $response->headers->addCacheControlDirective('no-store', true);
+                    $response->headers->addCacheControlDirective('must-revalidate', true);
+                    $response->setCache([
+                        'max_age' => 0,
+                        'private' => true,
+                    ]);
+                    return $response;
+                } else {
+                    $this->addFlash('danger', 'Vérifier le montant saisi');
+                    // $response = $this->redirectToRoute('facture_paiement', [,'facture' => $facture->getId()], Response::HTTP_SEE_OTHER);
+                    // $response->setSharedMaxAge(0);
+                    // $response->headers->addCacheControlDirective('no-cache', true);
+                    // $response->headers->addCacheControlDirective('no-store', true);
+                    // $response->headers->addCacheControlDirective('must-revalidate', true);
+                    // $response->setCache([
+                    //     'max_age' => 0,
+                    //     'private' => true,
+                    // ]);
+                    // return $response;
+                }
+
+            }
+            
+        $response = $this->render('facture/paiement.html.twig', [
+            'mutuel' => $mutuel,
+            'facture' => $facture,
+            'form' => $form->createView(),
         ]);
            $response->setSharedMaxAge(0);
            $response->headers->addCacheControlDirective('no-cache', true);

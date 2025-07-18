@@ -111,7 +111,7 @@ class MutuelController extends
        
         $response = $this->render('mutuel/show.html.twig', [
             'mutuel' => $mutuel,
-            'factures' => $facturerepository->findBy(['payer' => false]),
+            'factures' => $facturerepository->findBy(['payer' => false, 'mutuel' => $mutuel]),
         ]);
            $response->setSharedMaxAge(0);
            $response->headers->addCacheControlDirective('no-cache', true);
@@ -137,13 +137,13 @@ class MutuelController extends
     }
 
     #[Route("/NoPayer/{id}", name:"mutuel_payer", methods:["GET"])]
-    public function faturpayer(Mutuel $mutuel, VenteRepository $repository, FactureRepository $facturerepository): Response
+    public function faturepayer(Mutuel $mutuel, VenteRepository $repository, FactureRepository $facturerepository): Response
     {
         if ($this->security->isGranted('ROLE_USER')) {
        
         $response = $this->render('mutuel/facturepayer.html.twig', [
             'mutuel' => $mutuel,
-            'factures' => $facturerepository->findBy(['payer' => false]),
+            'factures' => $facturerepository->findBy(['payer' => true, 'mutuel' => $mutuel]),
         ]);
            $response->setSharedMaxAge(0);
            $response->headers->addCacheControlDirective('no-cache', true);

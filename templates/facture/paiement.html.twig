@@ -1,0 +1,200 @@
+{% extends 'layout.html.twig' %}
+{% block body %}
+    <h1>Mutuel:  Paiement facture n: {{ facture.id }} </h1>
+    {% for message in app.flashes('danger') %}
+        <div role="alert" class="alert alert-danger alert-dismissible fade show radius-10 shadow-black">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            {{ message|trans }}
+        </div>
+    {% endfor %}
+
+     {% for message in app.flashes('notice') %}
+        <div role="alert" class="alert alert-success alert-dismissible fade show radius-10 shadow-black">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            {{ message|trans }}
+        </div>
+    {% endfor %}
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ mutuel.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ mutuel.nom }}</td>
+            </tr>
+            <tr>
+                <th>Adresse</th>
+                <td>{{ mutuel.adresse }}</td>
+            </tr>
+            <tr>
+                <th>Telephone</th>
+                <td>{{ mutuel.telephone }}</td>
+            </tr>
+        </tbody>
+    </table>
+    
+     <ul class="nav nav-tabs mb-4">
+            <li class="nav-item">
+                <a class="nav-link active" href="#">
+                    {{ 'Facture non payées'|trans }}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('mutuel_payer', {'id' : mutuel.id}) }}">
+                    {{ 'Facture déja payées'|trans }}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('mutuel_vente', {'id' : mutuel.id}) }}">
+                    {{ 'Vente du mois en cours'|trans }}
+                </a>
+            </li>
+        </ul>
+<div class="container mt-4 mb-5 py-3 fond-7">
+        <div class="centrer">
+            <div class="row">
+                {% if facture.payer == 0 %}
+
+                <button type="button" class="btn btn-success"
+                        data-bs-toggle="modal" data-bs-target="#modal"
+                        id="btn">
+                    <i class="fa fa-money-bill"></i>
+                    {{' Règlement'|trans}}
+                </button>
+                {% endif %}
+
+
+                <div class="modal fade" id="modal" tabindex="-1" tabindex="-1" aria-labelledby="" aria-hidden="true"
+                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered text-center">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                    {{'Règlement'|trans}}
+                                </h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close">
+
+                                </button>
+                            </div>
+                            <div class="modal-body px-5">
+
+                                {# traitement paiement #}
+                                {{ form_start(form, {'attr':{'id': 'form'}}) }}
+                                <div class="form-group mt-2">
+                                    {{ form_errors(form.montant) }}
+                                    <div class="input-group">
+                                        {{ form_widget(form.montant, {'label':false, 'attr' : {'id' : 'nombre', 'placeholder':'Montant'}}) }}
+                                        <input type="hidden" id="tamp"/>
+                                        <input type="hidden" id="tamp1"/>
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">F CFA </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group mt-4">
+                                    {{ form_row(form.type, {'label':false, 'attr' : {'onchange' : 'typeversement()'}}) }}
+                                </div>
+                                <div id="versement">
+                                    <div class="form-group mt-4">
+                                        {{ form_row(form.banque, {'label':false, 'attr' : {'placeholder':'Banque'}}) }}
+                                    </div>
+                                    <div class="form-group mt-4">
+                                        {{ form_row(form.numero, {'label':false, 'attr' : {'placeholder':'Numéro'}}) }}
+                                    </div>
+                                </div>
+                                {{ form_rest(form) }}
+
+                                {# fin paiement#}
+                            </div>
+                            <div class="modal-footer px-5 py-4">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                        id="annuler"><i class="fa fa-undo"></i>
+                                    {{ 'Annuler'|trans }}
+                                </button>
+                                <button type="button" class="btn btn-success ms-3"
+                                        id="ajouter"
+                                        onclick="number()"><i
+                                            class="fa fa-money-bill"></i>
+                                    {{ 'Payer'|trans }}
+                                </button>
+                            </div>
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+    <div class="container mt-4 fond-7">
+        <h3 class="mt-4 mb-5 text-bold">
+            <i class="fa fa-shopping-cart me-2"></i>
+            {{ "Historiques des règlements"|trans }}
+        </h3>
+        <table class="table table-success-light table-bordered table-hover table-striped">
+            <thead>
+            <tr>
+                <th>{{'numero règlement'|trans}}</th>
+                <th>{{'Date'|trans}}</th>
+                <th>{{ 'Montant'|trans }}</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for versement in  facture.versements %}
+                <tr>
+                    <td>{{ versement.id }}</td>
+                    <td>{{ versement.date|date('d/m/Y') }}</td>
+                    <td>{{ versement.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                </tr>
+            {% else %}
+            {% endfor %}
+<tr>
+    <td colspan="2" class="text-end text-nowrap">{{'Total règlement'|trans}}</td>
+    <td>{{ facture.versement|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+</tr>
+            <tr>
+    <td colspan="2" class="text-end">{{ 'Montant Restant'|trans }}</td>
+    <td>{{ (facture.montant - facture.versement)|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+</tr>
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
+{% block scripts %}
+    <script>
+        function number() {
+            var reg = new RegExp("^[0-9]{3,9}$");
+            if (reg.test($('#versement_form_montant').val()) ) {
+                if ($('#versement_form_type option:selected').val() == 'Cheque' || $('#versement_form_type option:selected').val() == 'Virement') {
+                    if ($('#versement_form_montant').val() != '' && $('#versement_form_type').val() != '') {
+                        $('#ajouter').html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
+                        $('#form').submit();
+                    } else alert('{{ 'Veuillez renseigner tous les champs'|trans }}');
+                } else {
+                    if ($('#versement_form_montant').val() != '' && $('#versement_form_type').val() != '') {
+                        $('#ajouter').html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
+                        $('#form').submit();
+                    } else alert('{{ 'Veuillez renseigner tous les champs'|trans }}');
+                }
+            } else alert("{{ 'Nombre compris entre 3 et 9 chiffres'|trans }}");
+
+        }
+        function typeversement() {
+            if ($('#versement_form_type option:selected').val() == 'Cheque' || $('#versement_form_type option:selected').val() == 'Virement') {
+                $('#versement').show();
+                $('#versement_numero').val();
+            } else {
+                $('#versement').hide();
+                $('#versement_numero').val();
+            }
+        }
+    </script>
+{% endblock %}

@@ -50,11 +50,18 @@ class Vente
     #[ORM\ManyToOne(inversedBy: 'ventes')]
     private ?Facture $facture = null;
 
+
+
+    #[ORM\Column(type:"float") ]
+    private $tva;
+
     public function __construct()
     {
         //      $this->venteProduits = new ArrayCollection();
         $this->date = new \DateTime();
         $this->couverture = 0;
+        $this->tva = 0;
+        $this->payer = false;
     }
 
     public function getId(): ?int
@@ -202,6 +209,18 @@ class Vente
     public function setFacture(?Facture $facture): static
     {
         $this->facture = $facture;
+
+        return $this;
+    }
+
+    public function getTva(): ?float
+    {
+        return $this->tva;
+    }
+
+    public function setTva(float $tva): static
+    {
+        $this->tva = $tva;
 
         return $this;
     }

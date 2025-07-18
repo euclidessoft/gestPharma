@@ -31,6 +31,9 @@ class Facture
     #[ORM\Column]
     private ?float $versement = null;
 
+    #[ORM\OneToMany(targetEntity:"App\Entity\Versement", mappedBy:"facture") ]
+    private $versements;
+
     /**
      * @var Collection<int, Vente>
      */
@@ -40,12 +43,18 @@ class Facture
     #[ORM\Column]
     private ?bool $payer = null;
 
+
+    #[ORM\Column(type:"float") ]
+    private $tva;
+
     public function __construct()
     {
         $this->ventes = new ArrayCollection();
         $this->payer = false;
         $this->date = new \DateTime();
         $this->versement = 0;
+        $this->tva = 0;
+        $this->versements = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -151,6 +160,48 @@ class Facture
     public function setVersement(float $versement): static
     {
         $this->versement = $versement;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Versement>
+     */
+    public function getVersements(): Collection
+    {
+        return $this->versements;
+    }
+
+    public function addVersement(Versement $versement): static
+    {
+        if (!$this->versements->contains($versement)) {
+            $this->versements->add($versement);
+            $versement->setFacture($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVersement(Versement $versement): static
+    {
+        if ($this->versements->removeElement($versement)) {
+            // set the owning side to null (unless already changed)
+            if ($versement->getFacture() === $this) {
+                $versement->setFacture(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getTva(): ?float
+    {
+        return $this->tva;
+    }
+
+    public function setTva(float $tva): static
+    {
+        $this->tva = $tva;
 
         return $this;
     }
