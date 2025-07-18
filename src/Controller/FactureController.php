@@ -32,12 +32,15 @@ final class FactureController extends AbstractController
             if(!empty($ventes)){
                 $facture = new Facture();
                 $montant = 0;
+                $tva = 0;
                 foreach($ventes as $vente){
                     $facture->addVente($vente);
                     $montant += $vente->getCouverture();
+                    $tva += $vente->getTva();
 
                 }
                 $facture->setMontant($montant);
+                $facture->setTva($tva);
                 $facture->setMutuel($mutuel);
                 $facture->setMois(date('m'));
                 $this->entityManager->persist($facture);

@@ -28,6 +28,10 @@ class VenteProduit
      #[ORM\ManyToOne(targetEntity:User::class)]
     private $user;
 
+
+    #[ORM\Column(type:"float", nullable : true) ]
+    private $tva;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -89,6 +93,18 @@ class VenteProduit
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getTva(): ?float
+    {
+        return $this->tva;
+    }
+
+    public function setTva(float $tva): static
+    {
+        $this->tva = $tva;
 
         return $this;
     }

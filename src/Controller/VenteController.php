@@ -61,6 +61,7 @@ class VenteController extends
         $vente = new Vente();
         $vente->setUser($this->security->getUser());
         $montantvente = 0;
+        $tva = 0;
         $form = $this->createForm(VenteType::class, $vente);
         $form->handleRequest($request);
 
@@ -93,6 +94,10 @@ class VenteController extends
 
                                 $montantvente = $montantvente + ($quantite * $produit->getPrix());// calcul du montant de la vente
 
+                                if ($produit->getTva() == true) {
+                                    $tva += (($quantite * $produit->getPrix()) * 0.1925);
+                                }
+
                                 if ($stock->getQuantite() == 0) {//suppression produit dans stock
                                     $entityManager->remove($stock);
                                 } else {
@@ -108,6 +113,9 @@ class VenteController extends
                                 $quantite= $quantite - $stock->getQuantite();
 
                                 $montantvente = $montantvente + ($quantite * $produit->getPrix());// calcul du montant de la vente
+                                if ($produit->getTva() == true) {
+                                    $tva += (($quantite * $produit->getPrix()) * 0.1925);
+                                }
 
                                 if ($stock->getQuantite() == 0) {//suppression produit dans stock
                                     $entityManager->remove($stock);
@@ -126,6 +134,9 @@ class VenteController extends
                             $produit->livraison($quantite);
                             $stock->setQuantite($stock->getQuantite() - $quantite);
                             $montantvente = $montantvente + ($quantite * $produit->getPrix());// calcul du montant de la vente
+                            if ($produit->getTva() == true) {
+                                    $tva += (($quantite * $produit->getPrix()) * 0.1925);
+                                }
 
                             //MAJ produit dans stock
                             if ($stock->getQuantite() == 0) {
@@ -137,6 +148,9 @@ class VenteController extends
                     }
 
                     $venteProduit = new VenteProduit();
+                     if ($produit->getTva() == true) {
+                        $venteProduit->setTva(($quantite * $produit->getPrix()) * 0.1925);
+                    }
                     $venteProduit->setVente($vente);
                     $venteProduit->setUser($this->security->getUser());
                     $venteProduit->setPrix($produit->getPrix());
@@ -147,6 +161,7 @@ class VenteController extends
                     //$entityManager->flush();
                 }
                 $vente->setMontant($montantvente);
+                $vente->setTva($tva);
                 if($vente->getMutuel()){// verification prise en charge
                     
                     $vente->setCouverture($montantvente * $vente->getService()->getType() / 100);
