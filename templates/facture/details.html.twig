@@ -22,28 +22,7 @@
             </tr>
         </tbody>
     </table>
-    <a href="{{path('service_new', {'mutuel' : mutuel.id})}}" class="btn btn-success"> Nouveau Service</a>
-    listes des services
-    <table class="table table-hover">
-    <head>
-    <tr>
-        <th>Nom</th>
-         <th>Avantage</th>
-         </tr>
-    </head>
-        <tbody>
-        {% for service in mutuel.services %}
-            <tr>
-               
-                <td>{{ service.nom }}</td>
-            
-                
-                <td>{{ service.type }} %</td>
-            </tr>
-            {% else %}
-            {% endfor %}
-        </tbody>
-    </table>
+    
      <ul class="nav nav-tabs mb-4">
             <li class="nav-item">
                 <a class="nav-link active" href="#">
@@ -62,28 +41,48 @@
             </li>
         </ul>
 
+
+        <h5> details facture n: {{ facture.id }} </h5>
+
      <table class="table table-hover">
     <head>
     <tr>
         <th>Date</th>
+        <th>Nom</th>
         <th>Numero</th>
-        <th>Montant</th>
-        <th>Action</th>
+        <th>Service</th>
+         <th>Montant</th>
+         <th>Couverture</th>
          </tr>
     </head>
         <tbody>
-        {% for facture in factures %}
+        {% set  montant = 0 %}
+        {% for vente in facture.ventes %}
             <tr>
                
-                <td>{{ facture.date|date('d/m/Y') }}</td>
-                <td>{{ facture.id }}</td>
-                <td>{{ facture.montant|number_format(2, ',' , ' ') }}</td>
-                <td>
-                <a href="{{ path('facture_details', {'mutuel' : mutuel.id , 'facture' : facture.id}) }}" type="button" class="btn btn-success"><i class="fa fa-eye"></i></a>
-                </td>
+                <td>{{ vente.date|date('d/m/Y') }}</td>
+                <td>{{ vente.service.nom }}</td>
+                <td>{{ vente.service.nom }}</td>
+                <td>{{ vente.service.nom }}</td>
+           
+                
+                <td>{{ vente.montant|number_format(2, ',' , ' ') }}</td>
+                <td>{{ vente.couverture|number_format(2, ',' , ' ')  }}</td>
+                {% set montant = montant + vente.couverture %}
             </tr>
             {% else %}
             {% endfor %}
+             <tr>
+               
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+           
+                
+                <td>{{ "Total"|trans }}</td>
+                <td>{{ montant|number_format(2, ',' , ' ')  }}</td>
+            </tr>
         </tbody>
     </table>
 

@@ -75,7 +75,7 @@
             <tr>
                
                 <td>{{ facture.date|date('d/m/Y') }}</td>
-                <td>{{ facture.nuemro }}</td>
+                <td>{{ facture.id }}</td>
                 <td>{{ facture.montant|number_format(2, ',' , ' ') }}</td>
             </tr>
         {% else %}

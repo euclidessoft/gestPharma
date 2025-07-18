@@ -28,6 +28,9 @@ class Facture
     #[ORM\Column]
     private ?float $montant = null;
 
+    #[ORM\Column]
+    private ?float $versement = null;
+
     /**
      * @var Collection<int, Vente>
      */
@@ -40,6 +43,9 @@ class Facture
     public function __construct()
     {
         $this->ventes = new ArrayCollection();
+        $this->payer = false;
+        $this->date = new \DateTime();
+        $this->versement = 0;
     }
 
     public function getId(): ?int
@@ -133,6 +139,18 @@ class Facture
     public function setPayer(bool $payer): static
     {
         $this->payer = $payer;
+
+        return $this;
+    }
+
+    public function getVersement(): ?float
+    {
+        return $this->versement;
+    }
+
+    public function setVersement(float $versement): static
+    {
+        $this->versement = $versement;
 
         return $this;
     }
