@@ -98,6 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }, 2000);
                 
             }, 2000);
+            loginForm.submit();
         } else {
             // Afficher les erreurs
             if (!isEmailValid) {
