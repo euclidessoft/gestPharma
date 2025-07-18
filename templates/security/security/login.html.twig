@@ -111,44 +111,12 @@
         <div class="mb-4">
 
         </div>
-        <button id="valider" type="submit" class="btn btn-shadow btn-success px-4">
+        <button id="valider" type="button" onclick="sub()" class="btn btn-shadow btn-green px-4">
             {{ 'Se connecter'|trans }}
             <i class="fa fa-sign-in-alt"></i>
         </button>
-    </form>
-
-    <script>
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                // event.preventDefault(); // Empêche le comportement par défaut du formulaire
-                validateAndSubmit();
-            }
-        });
-
-        $("#form").on('submit', function(e) {
-            e.preventDefault(); // Empêche la soumission normale
-            validateAndSubmit();
-        });
-
-        function validateAndSubmit() {
-            let username = $("#inputUsername").val().trim();
-            let password = $("#inputPassword").val().trim();
-
-            if (password !== '' && username !== '') {
-                $("#valider").html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
-                this.submit(); // Soumet le formulaire
-            } else {
-                alert("{{ 'Veuillez renseignez tous les champs'|trans }}");
-            }
-        }
-    </script>#}
-
-        {#<button id="valider" type="button" onclick="sub()" class="btn btn-shadow btn-success px-4">
-            {{ 'Se connecter'|trans }}
-            <i class="fa fa-sign-in-alt"></i>
-        </button>
-    </form>
-    <script>
+    </form>#}
+    {#<script>
         document.addEventListener('keydown', function (event) {
             if (event.key === 'Enter') {
                 sub();
