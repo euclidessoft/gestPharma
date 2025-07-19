@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProduitRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -45,10 +47,15 @@ class Produit
     #[ORM\JoinColumn(nullable: true)]
     private ?Emplacement $emplacement = null;
 
+    #[ORM\ManyToMany(targetEntity:"App\Entity\Fournisseur", inversedBy:"produits") ]
+#[ORM\JoinTable(name:"produit_fournisseur") ]
+    private $fournisseurs;
+
     public function __construct()
     {
         $this->stock = 0;
         $this->tva = false;
+        $this->fournisseurs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -190,5 +197,29 @@ class Produit
     public function isTva(): ?bool
     {
         return $this->tva;
+    }
+
+    /**
+     * @return Collection<int, Fournisseur>
+     */
+    public function getFournisseurs(): Collection
+    {
+        return $this->fournisseurs;
+    }
+
+    public function addFournisseur(Fournisseur $fournisseur): static
+    {
+        if (!$this->fournisseurs->contains($fournisseur)) {
+            $this->fournisseurs->add($fournisseur);
+        }
+
+        return $this;
+    }
+
+    public function removeFournisseur(Fournisseur $fournisseur): static
+    {
+        $this->fournisseurs->removeElement($fournisseur);
+
+        return $this;
     }
 }
