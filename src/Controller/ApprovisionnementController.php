@@ -85,13 +85,45 @@ class ApprovisionnementController extends AbstractController
         }
     }
 
-    #[Route("/Historique/", name :"historique", methods : ["GET"]) ]
+    #[Route("/Historique_non_Receptionnees/", name :"historique", methods : ["GET"]) ]
     public function historique(CommandeRepository $repository, FournisseurRepository $repo): Response
     {
         if ($this->security->isGranted('ROLE_USER')) {
 
             $response = $this->render('approvisionnement/historique.html.twig', [
-                'approvisionnements' => $repository->findAll(),
+                'approvisionnements' => $repository->findBy(['livrer' => false]),
+                'fournisseurs' => $repo->findAll(),
+            ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        } else {
+            $response = $this->redirectToRoute('security_login');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        }
+    }
+
+    #[Route("/Historique_Receptionnees/", name :"historique_receptionnee", methods : ["GET"]) ]
+    public function nonrecptionnee(CommandeRepository $repository, FournisseurRepository $repo): Response
+    {
+        if ($this->security->isGranted('ROLE_USER')) {
+
+            $response = $this->render('approvisionnement/historique_non.html.twig', [
+                'approvisionnements' => $repository->findBy(['livrer' => true]),
                 'fournisseurs' => $repo->findAll(),
             ]);
             $response->setSharedMaxAge(0);
@@ -278,8 +310,8 @@ class ApprovisionnementController extends AbstractController
 
     }
 
-    #[Route("/valider/{id}", name :"valider") ]
-    public function valider(Fournisseur $fournisseur, SessionInterface $session)
+    #[Route("/valider/{id}", name :"valider_credit") ]
+    public function validercredit(Fournisseur $fournisseur, SessionInterface $session)
     {
         if ($this->security->isGranted('ROLE_USER')) {
             $approv = $session->get("approv", []);
@@ -313,12 +345,79 @@ class ApprovisionnementController extends AbstractController
                     // $i++;
                     $em->flush();
                 }
+                
+                    // $facture = new FactureFournisseur();
+                    // $facture->setMontant($montant);
+                    // $facture->setCommande($commande);
+                    // $facture->setFournisseur($fournisseur);
+                    // $em->persist($facture);
+
+                $em->flush();
+                $session->remove("approv");
+            }
+            $this->addFlash('notice', 'Commande réussie');
+            $response = $this->redirectToRoute('stock_historique');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        } else {
+            $response = $this->redirectToRoute('security_login');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        }
+    }
+
+    #[Route("/validerPayer/{id}", name :"valider_payer") ]
+    public function validerpayer(Fournisseur $fournisseur, SessionInterface $session)
+    {
+        if ($this->security->isGranted('ROLE_USER')) {
+            $approv = $session->get("approv", []);
+            $em = $this->entityManager;
+            $commande = new  commande();
+            $commande->setPayer(true);
+            if (count($approv) >= 1) {
+
+                $commande->setUser($this->getUser());
+                // $em->persist($commande);
+                $montant = 0;
+                $i = 1;
+                foreach ($approv as $ligne) {
+                    $product = explode("/",$ligne);
+                    $id = $product[0];
+                    $quantite= $product[1];
+
+                    $produit = $em->getRepository(Produit::class)->find($id);
+                    
+                    $montant += $produit->getPrixdachat() * $quantite;
+                    // fin facture
+                    $commandeproduit = new CommandeProduit($produit, $commande, $quantite, $produit->getPrixdachat(), $produit->getPrix(), $fournisseur );
+                    
+                    // $$i = new Stock($produit, $lot, $peremption, $quantite);
+                    // $em->persist($$i);
+                    // $archive = $produit->getStock();
+                    // $produit->setStock($archive + $quantite);
+                    // $em->persist($produit);
+                    $commande->setMontant($montant);
+                    $em->persist($commande);
+                    $em->persist($commandeproduit);
+                    // $i++;
+                    $em->flush();
+                }
               
-                    $facture = new FactureFournisseur();
-                    $facture->setMontant($montant);
-                    $facture->setCommande($commande);
-                    $facture->setFournisseur($fournisseur);
-                    $em->persist($facture);
+                   //ecriture comptable de paiement
 
                 $em->flush();
                 $session->remove("approv");
@@ -389,6 +488,73 @@ class ApprovisionnementController extends AbstractController
             $response = $this->render('approvisionnement/show_print.html.twig', [
                 'commande' => $commande,
                 'approvisionnements' => $repository->findBy(['commande' => $commande]),
+            ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        } else {
+            $response = $this->redirectToRoute('security_login');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        }
+    }
+
+     #[Route("/Reception_Commande/{id}", name :"reception", methods : ["GET"]) ]
+    public function reception(Commande $commande, SessionInterface $session, CommandeProduitRepository $CommandeProduitRepository): Response
+    {
+
+        if ($this->security->isGranted('ROLE_USER')) {
+            $produits = [];
+            $commandeproduits = $CommandeProduitRepository->findBy(['commande' => $commande->getId()]);
+            foreach($commandeproduits as $commandeproduit){
+                $produits[] = [
+                    'id' => $commandeproduit->getProduit()->getId(),
+                    'designation' => $commandeproduit->getProduit()->getDesignation(),
+                    'quantite' => $commandeproduit->getQuantite(),
+                ];
+
+            }
+
+            $approv = $session->get("reception", []);
+            $dataPanier = [];
+            $total = 0;
+
+//            foreach ($approv as $commande) {
+//                $dataPanier[] = [
+//                    "produit" => $commande['produit'],
+//                ];
+//            }
+
+            foreach ($approv as $key => $item) {// ffabrication des donnees dans la session pour affichage
+                $ligne = explode("/",$item);
+                $produit = $produitRepository->find($ligne[0]);
+                $dataPanier[]= [
+                 'idtab' => $key,
+                'id' => $ligne[0],
+                'designation' => $produit->getDesignation(),
+                'reference' => $produit->getReference(),
+                'prix' => $produit->getPrixdachat(),
+                'quantite' => $ligne[1],
+                    ];
+            }
+
+            $response = $this->render('approvisionnement/reception.html.twig', [
+                'produits' => $produits,
+                'commande' => $commande,
+                'panier' => $dataPanier,
             ]);
             $response->setSharedMaxAge(0);
             $response->headers->addCacheControlDirective('no-cache', true);

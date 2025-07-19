@@ -8,12 +8,12 @@
     </h4>
       <ul class="nav nav-tabs mb-4">
             <li class="nav-item">
-                <a class="nav-link active" href="#">
-                    {{ 'Non receptionnees'|trans }}
+                <a class="nav-link" href="{{ path('stock_historique') }}">
+                    {{ 'Non eceptionnees'|trans }}
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ path('stock_historique_receptionnee') }}">
+                <a class="nav-link active" href="#">
                     {{ 'Receptionnees'|trans }}
                 </a>
             </li>
@@ -34,7 +34,7 @@
             <th>{{ 'No Appr'|trans }}</th>
             <th class="text-start">{{ 'Utilisateur'|trans }}</th>
             <th>{{ 'Date'|trans }}</th>
-            <th>{{ 'actions'|trans }}</th>
+            <th>{{ 'Détails'|trans }}</th>
         </tr>
         </thead>
         <tbody>
@@ -45,7 +45,7 @@
                 <td>{{ approv.date|date('d/m/Y') }}</td>
                 <td>
                     <a id="{{ approv.id }}" onclick="load({{ approv.id }})" class="btn btn-success" href="{{ path('stock_show', {'id': approv.id}) }}">
-                      <i class="fa fa-eye"></i>
+                        {{ 'Détails'|trans }}
                     </a>
                 </td>
             </tr>

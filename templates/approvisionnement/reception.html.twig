@@ -3,7 +3,7 @@
     <div class="container-fluid mt-4 fond-7">
         <h3 class="mt-4 mb-5 text-bold">
             <i class="fa fa-shop me-2"></i>
-            {{ "Nouvelle Commande chez :"|trans }} {{fournisseur.designation}}
+            {{ "Reception Commande :"|trans }} {{commande.id}}
         </h3>
         <div class="row">
             <div class="col-lg-5 mt-5">
@@ -18,20 +18,20 @@
                     <thead>
                     <tr>
                         <th>{{ 'Désignation'|trans }}</th>
-                        <th>{{ "Prix d'achat"|trans }}</th>
+                        <th>{{ "Quantite Commandee"|trans }}</th>
                         <th></th>
                     </tr>
                     </thead>
                     <tbody>
-                    {% for produit in fournisseur.produits %}
+                    {% for produit in produits %}
                         <tr id="listprod{{ produit.id }}">
                             <td>{{ produit.designation }}</td>
-                            <td>{{ produit.prixdachat }}</td>
+                            <td>{{ produit.quantite }}</td>
                             <td>
                                 <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal{{ produit.id }}"
                                        id="btn{{ produit.id }}" {# onclick="fournisseur({{ produit.id }})"#}>
-                                    <i class="fa fa-plus"></i> {{ 'Ajouter'|trans }}
+                                    <i class="fa fa-plus"></i> {{ 'traitement'|trans }}
                                 </button>
                                 <!-- Modal -->
                                 <div class="modal fade" id="modal{{ produit.id }}" tabindex="-1"
@@ -40,7 +40,7 @@
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h4 class="modal-title fs-5" id="exampleModalLabel">
-                                                    {{ produit.reference }} {{ produit.designation }}</h4>
+                                                    {{ produit.designation }}</h4>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close">
                                                 </button>
@@ -48,12 +48,12 @@
                                             <div class="modal-body px-5">
                                                
                                                 <div class="mt-4">
-                                                    {{'Renseignez la quantité'|trans}}
+                                                    {{'Quantité'|trans}}
                                                     <label for="quant{{ produit.id }}"></label>
                                                     <input type="number" placeholder="Quantite" class="form-control"
                                                            id="quant{{ produit.id }}">
                                                 </div>
-                                                {# <div class="mt-4">
+                                                 <div class="mt-4">
                                                     {{ 'Numero lot'|trans }}
                                                     <label for="numero{{ produit.id }}"></label>
                                                     <input type="text" class="form-control"
@@ -64,7 +64,7 @@
                                                     <label for="peremp{{ produit.id }}"></label>
                                                     <input type="date" class="form-control"
                                                            id="peremp{{ produit.id }}">
-                                                </div> #}
+                                                </div> 
 
                                             </div>
                                             <div class="modal-footer px-5 py-4">
@@ -104,8 +104,7 @@
                     <thead class="text-center">
                     <tr>
                         <th class="text-start">{{ 'Designation'|trans }}</th>
-                        <th class="text-nowrap">{{"Prix d'achat"|trans}}</th>
-                        <th>{{ 'Quantite'|trans }}</th>
+                        <th>{{ 'Quantite Recue'|trans }}</th>
                         <th>{{ 'Actions'|trans }}</th>
                     </tr>
                     </thead>
@@ -113,7 +112,6 @@
                     {% for produit in panier %}
                         <tr id="tr{{ produit['id']}}">
                             <td class="text-start">{{ produit['designation'] }}</td>
-                            <td>{{ produit['prix'] }} </td>
 
                             <td>
                                 <span id="changequantite{{ produit['idtab'] }}">
@@ -173,8 +171,8 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-       <button class="btn btn-success" onclick="validerpayer({{fournisseur.id}})"> Commnade deja paye</button>
-       <button class="btn btn-secondary"  onclick="validercredit({{fournisseur.id}})"> Commnade a credit</button>
+       {# <button class="btn btn-success" onclick="validerpayer({{fournisseur.id}})"> Commnade deja paye</button>
+       <button class="btn btn-secondary"  onclick="validercredit({{fournisseur.id}})"> Commnade a credit</button> #}
       </div>
       
     </div>
