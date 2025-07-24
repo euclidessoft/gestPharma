@@ -54,6 +54,9 @@ class Fournisseur
     #[ORM\OneToMany(targetEntity:FactureFournisseur::class, mappedBy:"fournisseur") ]
     private $factures;
 
+     #[ORM\OneToMany(targetEntity:Fournisseur::class, mappedBy:"fournisseur") ]
+    private $commandes;
+
 
     #[ORM\ManyToMany(targetEntity:"App\Entity\Produit", mappedBy:"fournisseurs") ]
     private $produits;
@@ -67,6 +70,7 @@ class Fournisseur
         $this->produits = new ArrayCollection();
         $this->factures = new ArrayCollection();
         $this->commandeproduits = new ArrayCollection();
+        $this->commandes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -284,6 +288,36 @@ class Fournisseur
             // set the owning side to null (unless already changed)
             if ($commandeproduit->getFournisseur() === $this) {
                 $commandeproduit->setFournisseur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Fournisseur>
+     */
+    public function getCommandes(): Collection
+    {
+        return $this->commandes;
+    }
+
+    public function addCommande(Fournisseur $commande): static
+    {
+        if (!$this->commandes->contains($commande)) {
+            $this->commandes->add($commande);
+            $commande->setFournisseur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommande(Fournisseur $commande): static
+    {
+        if ($this->commandes->removeElement($commande)) {
+            // set the owning side to null (unless already changed)
+            if ($commande->getFournisseur() === $this) {
+                $commande->setFournisseur(null);
             }
         }
 

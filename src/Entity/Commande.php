@@ -42,6 +42,19 @@ class Commande
     #[ORM\OneToMany(targetEntity:FactureFournisseur::class, mappedBy:"commande") ]
     private $factures;
 
+     #[ORM\OneToMany(mappedBy: 'commande', targetEntity: ReceptionProduit::class)]
+    private Collection $receptionProduits;
+
+    #[ORM\OneToMany(mappedBy: 'commande', targetEntity: Reception::class)]
+    private Collection $receptions;
+
+    #[ORM\ManyToOne(targetEntity:Fournisseur::class, inversedBy:"commandes") ]
+    private $fournisseur;
+
+
+    #[ORM\Column(type:"boolean") ]
+    private $reste;
+
     /**
      * Constructor
      */
@@ -52,6 +65,8 @@ class Commande
         $this->livrer = false;
         $this->commandeProduits = new ArrayCollection();
         $this->factures = new ArrayCollection();
+        $this->receptionProduits = new ArrayCollection();
+        $this->receptions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -187,6 +202,90 @@ class Commande
                 $facture->setCommande(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ReceptionProduit>
+     */
+    public function getReceptionProduits(): Collection
+    {
+        return $this->receptionProduits;
+    }
+
+    public function addReceptionProduit(ReceptionProduit $receptionProduit): static
+    {
+        if (!$this->receptionProduits->contains($receptionProduit)) {
+            $this->receptionProduits->add($receptionProduit);
+            $receptionProduit->setCommande($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReceptionProduit(ReceptionProduit $receptionProduit): static
+    {
+        if ($this->receptionProduits->removeElement($receptionProduit)) {
+            // set the owning side to null (unless already changed)
+            if ($receptionProduit->getCommande() === $this) {
+                $receptionProduit->setCommande(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reception>
+     */
+    public function getReceptions(): Collection
+    {
+        return $this->receptions;
+    }
+
+    public function addReception(Reception $reception): static
+    {
+        if (!$this->receptions->contains($reception)) {
+            $this->receptions->add($reception);
+            $reception->setCommande($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReception(Reception $reception): static
+    {
+        if ($this->receptions->removeElement($reception)) {
+            // set the owning side to null (unless already changed)
+            if ($reception->getCommande() === $this) {
+                $reception->setCommande(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getFournisseur(): ?Fournisseur
+    {
+        return $this->fournisseur;
+    }
+
+    public function setFournisseur(?Fournisseur $fournisseur): static
+    {
+        $this->fournisseur = $fournisseur;
+
+        return $this;
+    }
+
+    public function isReste(): ?bool
+    {
+        return $this->reste;
+    }
+
+    public function setReste(bool $reste): static
+    {
+        $this->reste = $reste;
 
         return $this;
     }

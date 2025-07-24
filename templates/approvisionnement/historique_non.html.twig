@@ -9,12 +9,17 @@
       <ul class="nav nav-tabs mb-4">
             <li class="nav-item">
                 <a class="nav-link" href="{{ path('stock_historique') }}">
-                    {{ 'Non eceptionnees'|trans }}
+                    {{ 'Non Receptionnees'|trans }}
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link active" href="#">
                     {{ 'Receptionnees'|trans }}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('stock_reste') }}">
+                    {{ 'Reste à livrer'|trans }}
                 </a>
             </li>
         </ul>
@@ -31,7 +36,7 @@
     <table class="table table-success-light table-bordered table-hover table-striped w-100 text-center my-3" id="liste">
         <thead>
         <tr>
-            <th>{{ 'No Appr'|trans }}</th>
+            <th>{{ 'No Commande'|trans }}</th>
             <th class="text-start">{{ 'Utilisateur'|trans }}</th>
             <th>{{ 'Date'|trans }}</th>
             <th>{{ 'Détails'|trans }}</th>
@@ -44,7 +49,7 @@
                 <td class="text-start">{{ approv.user.prenom }} {{ approv.user.nom }}</td>
                 <td>{{ approv.date|date('d/m/Y') }}</td>
                 <td>
-                    <a id="{{ approv.id }}" onclick="load({{ approv.id }})" class="btn btn-success" href="{{ path('stock_show', {'id': approv.id}) }}">
+                    <a id="{{ approv.id }}" onclick="load({{ approv.id }})" class="btn btn-success" href="{{ path('stock_detail_reception', {'id': approv.id}) }}">
                         {{ 'Détails'|trans }}
                     </a>
                 </td>
@@ -54,29 +59,6 @@
     </table>
 </div>
 
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="staticBackdropLabel">{{"Finalisation de la vente"|trans}}</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-       <select id="fournisseur" class="form-control">
-       <option value="0">Selectionnez Fournisseur</option>
-       {% for fournisseur in fournisseurs %}
-       <option value="{{ fournisseur.id }}"> {{ fournisseur.designation }}</option>
-       {% else %}
-       {% endfor %}
-       </select>
-      </div>
-      <div class="modal-footer">
-        <button type="button" id="annulervente" class="btn btn-secondary" data-bs-dismiss="modal">{{"Annuler"|trans}}</button>
-        <button type="button" class="btn btn-primary" onclick="valider()" id="valid">{{"Enregistrer"|trans}}</button>
-      </div>
-    </div>
-  </div>
-</div>
 {% endblock %}
 {% block scripts %}
 <script>

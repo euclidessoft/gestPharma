@@ -3,6 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Commande;
+use App\Entity\Reception;
+use App\Entity\ReceptionProduit;
+use App\Entity\Reste;
 use App\Entity\CommandeProduit;
 use App\Entity\FactureFournisseur;
 use App\Entity\Fournisseur;
@@ -10,6 +13,7 @@ use App\Entity\Produit;
 use App\Entity\Stock;
 use App\Repository\CommandeProduitRepository;
 use App\Repository\CommandeRepository;
+use App\Repository\ResteRepository;
 use App\Repository\FournisseurRepository;
 use App\Repository\ProduitRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -92,7 +96,6 @@ class ApprovisionnementController extends AbstractController
 
             $response = $this->render('approvisionnement/historique.html.twig', [
                 'approvisionnements' => $repository->findBy(['livrer' => false]),
-                'fournisseurs' => $repo->findAll(),
             ]);
             $response->setSharedMaxAge(0);
             $response->headers->addCacheControlDirective('no-cache', true);
@@ -124,7 +127,37 @@ class ApprovisionnementController extends AbstractController
 
             $response = $this->render('approvisionnement/historique_non.html.twig', [
                 'approvisionnements' => $repository->findBy(['livrer' => true]),
-                'fournisseurs' => $repo->findAll(),
+            ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        } else {
+            $response = $this->redirectToRoute('security_login');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        }
+    }
+
+    #[Route("/Reste/", name :"reste", methods : ["GET"]) ]
+    public function reste(ResteRepository $repository): Response
+    {
+        if ($this->security->isGranted('ROLE_USER')) {
+
+            $response = $this->render('approvisionnement/reste.html.twig', [
+                'approvisionnements' => $repository->findAll(),
             ]);
             $response->setSharedMaxAge(0);
             $response->headers->addCacheControlDirective('no-cache', true);
@@ -188,41 +221,6 @@ class ApprovisionnementController extends AbstractController
 //                $res['id'] = 'no';
 //            }
                 suite:
-            $response = new Response();
-            $response->headers->set('content-type', 'application/json');
-            $re = json_encode($res);
-            $response->setContent($re);
-            return $response;
-        }
-
-    }
-
-    #[Route("/edit/", name :"edit") ]
-    public function edit(Request $request, SessionInterface $session)
-    {
-
-        if ($request->isXmlHttpRequest()) {// traitement de la requete ajax
-            $id = $request->get('prod');// recuperation de id produit
-            $quantite = $request->get('quantite');// recuperation de la quantite commamde
-            $approv = $session->get("approv", []);
-            if (!empty($approv[$id])) {//verification existance produit dans le panier
-
-                $produit = $approv[$id]['produit'];
-                $produit->setQuantite($quantite);
-                $approv[$id]['produit'] = $produit;
-
-                // On sauvegarde dans la session
-                $session->set("approv", $approv);
-
-                $res['id'] = 'ok';
-                $res['panier'] = $quantite;
-
-            } else {
-                $res['id'] = 'no';
-            }
-
-            //$session->set("approv", $approv);
-            $res['id'] = 'ok';
             $response = new Response();
             $response->headers->set('content-type', 'application/json');
             $re = json_encode($res);
@@ -317,6 +315,7 @@ class ApprovisionnementController extends AbstractController
             $approv = $session->get("approv", []);
             $em = $this->entityManager;
             $commande = new  commande();
+            $commande->setFournisseur($fournisseur);
             if (count($approv) >= 1) {
 
                 $commande->setUser($this->getUser());
@@ -387,7 +386,8 @@ class ApprovisionnementController extends AbstractController
             $approv = $session->get("approv", []);
             $em = $this->entityManager;
             $commande = new  commande();
-            $commande->setPayer(true);
+            $commande->setFournisseur($fournisseur);
+            $commande->setPayer(true);//commande payee
             if (count($approv) >= 1) {
 
                 $commande->setUser($this->getUser());
@@ -480,6 +480,70 @@ class ApprovisionnementController extends AbstractController
         }
     }
 
+    #[Route("/Details_Reception/{id}", name :"detail_reception", methods : ["GET"]) ]
+    public function detailsreception(Commande $commande, CommandeProduitRepository $repository): Response
+    {
+        if ($this->security->isGranted('ROLE_USER')) {
+
+            $response = $this->render('approvisionnement/detail_reception.html.twig', [
+                'commande' => $commande,
+                'commandeproduits' => $repository->findBy(['commande' => $commande]),
+            ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        } else {
+            $response = $this->redirectToRoute('security_login');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        }
+    }
+
+    #[Route("/Details_Reste/{id}", name :"details_reste", methods : ["GET"]) ]
+    public function detailsreste(Commande $commande, ResteRepository $repository): Response
+    {
+        if ($this->security->isGranted('ROLE_USER')) {
+
+            $response = $this->render('approvisionnement/detail_reste.html.twig', [
+                'commande' => $commande,
+                'restes' => $repository->findBy(['commande' => $commande->getid()]),
+            ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        } else {
+            $response = $this->redirectToRoute('security_login');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        }
+    }
+
     #[Route("/Details_print/{id}", name :"show_print", methods : ["GET"]) ]
     public function detailsprint(commande $commande, CommandeProduitRepository $repository): Response
     {
@@ -513,7 +577,7 @@ class ApprovisionnementController extends AbstractController
     }
 
      #[Route("/Reception_Commande/{id}", name :"reception", methods : ["GET"]) ]
-    public function reception(Commande $commande, SessionInterface $session, CommandeProduitRepository $CommandeProduitRepository): Response
+    public function reception(Commande $commande, SessionInterface $session, CommandeProduitRepository $CommandeProduitRepository, ProduitRepository $produitRepository): Response
     {
 
         if ($this->security->isGranted('ROLE_USER')) {
@@ -530,7 +594,6 @@ class ApprovisionnementController extends AbstractController
 
             $approv = $session->get("reception", []);
             $dataPanier = [];
-            $total = 0;
 
 //            foreach ($approv as $commande) {
 //                $dataPanier[] = [
@@ -544,10 +607,11 @@ class ApprovisionnementController extends AbstractController
                 $dataPanier[]= [
                  'idtab' => $key,
                 'id' => $ligne[0],
+                'lot' => $ligne[2],
+                'peremption' => $ligne[3],
                 'designation' => $produit->getDesignation(),
-                'reference' => $produit->getReference(),
-                'prix' => $produit->getPrixdachat(),
-                'quantite' => $ligne[1],
+                'recu' => $ligne[1],
+                'commande' => $ligne[4],
                     ];
             }
 
@@ -578,5 +642,392 @@ class ApprovisionnementController extends AbstractController
             return $response;
         }
     }
+
+
+     #[Route("/Reception_Reste/{id}", name :"reception_reste", methods : ["GET"]) ]
+    public function reception_reste(Commande $commande, SessionInterface $session, ResteRepository $resteRepository, ProduitRepository $produitRepository): Response
+    {
+
+        if ($this->security->isGranted('ROLE_USER')) {
+            $produits = [];
+            $restes = $resteRepository->findBy(['commande' => $commande->getId()]);
+            foreach($restes as $reste){
+                $produits[] = [
+                    'id' => $reste->getProduit()->getId(),
+                    'designation' => $reste->getProduit()->getDesignation(),
+                    'quantite' => $reste->getQuantite() - $reste->getQuantitelivre(),
+                ];
+
+            }
+
+            $approv = $session->get("reception", []);
+            $dataPanier = [];
+
+//            foreach ($approv as $commande) {
+//                $dataPanier[] = [
+//                    "produit" => $commande['produit'],
+//                ];
+//            }
+
+            foreach ($approv as $key => $item) {// ffabrication des donnees dans la session pour affichage
+                $ligne = explode("/",$item);
+                $produit = $produitRepository->find($ligne[0]);
+                $dataPanier[]= [
+                 'idtab' => $key,
+                'id' => $ligne[0],
+                'lot' => $ligne[2],
+                'peremption' => $ligne[3],
+                'designation' => $produit->getDesignation(),
+                'recu' => $ligne[1],
+                    ];
+            }
+
+            $response = $this->render('approvisionnement/reception_reste.html.twig', [
+                'produits' => $produits,
+                'commande' => $commande,
+                'panier' => $dataPanier,
+            ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        } else {
+            $response = $this->redirectToRoute('security_login');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        }
+    }
+
+     #[Route("/reception_add/", name :"reception_add") ]
+    public function receptionadd(Request $request, ProduitRepository $produitRepository, FournisseurRepository $fournisseurRepository, SessionInterface $session)
+    {
+        // On récupère le panier actuel
+        $approv = $session->get("reception", []);
+
+//  $id = $request->get('produit');// recuperation de id produit
+//         $chaine = $request->get('chaine');// recuperation de id produit
+//         $livraison = $session->get("traitement", []);
+//         $livraison[$id] = $chaine;
+
+        if ($request->isXmlHttpRequest()) {// traitement de la requete ajax
+            $id = $request->get('prod');// recuperation de id produit
+            $numero = $request->get('lot');// recuperation de id produit
+            $peremption = $request->get('perem');// recuperation de id produit
+            $quantite = $request->get('quantite');// recuperation de la quantite commamde
+            $commande = $request->get('commande');// recuperation de la quantite commamde
+            foreach ($approv as $key => $item) {
+                $ligne = explode("/",$item);
+                if ($ligne[0] == $id && $ligne[2] == $numero) {
+                    $res['id'] = 'Un produit avec les même reference a été ajouté';
+                    goto suite;
+                }
+            }
+            $produit = $produitRepository->find($id); // recuperation de id produit dans la db
+
+            $chaine = $id."/".$quantite."/".$numero."/".$peremption."/".$commande;
+
+            $approv[$id] = $chaine;
+
+            // On sauvegarde dans la session
+            $session->set("reception", $approv);
+            $res['id'] = 'ok';
+            $res['ref'] = $produit->getReference();
+            $res['designation'] = $produit->getDesignation();
+            $res['lot'] = $numero;
+            $res['peremption'] = $peremption;
+            $res['recu'] = $quantite;//$produit->getQuantite();
+            $res['commande'] = $commande;//$produit->getQuantite();
+
+//            } else {
+//                $res['id'] = 'no';
+//            }
+                suite:
+            $response = new Response();
+            $response->headers->set('content-type', 'application/json');
+            $re = json_encode($res);
+            $response->setContent($re);
+            return $response;
+        }
+
+    }
+
+       #[Route("/reste_add/", name :"reste_add") ]
+    public function resteadd(Request $request, ProduitRepository $produitRepository, SessionInterface $session)
+    {
+        // On récupère le panier actuel
+        $approv = $session->get("reception", []);
+
+//  $id = $request->get('produit');// recuperation de id produit
+//         $chaine = $request->get('chaine');// recuperation de id produit
+//         $livraison = $session->get("traitement", []);
+//         $livraison[$id] = $chaine;
+
+        if ($request->isXmlHttpRequest()) {// traitement de la requete ajax
+            $id = $request->get('prod');// recuperation de id produit
+            $numero = $request->get('lot');// recuperation de id produit
+            $peremption = $request->get('perem');// recuperation de id produit
+            $quantite = $request->get('quantite');// recuperation de la quantite commamde
+            foreach ($approv as $key => $item) {
+                $ligne = explode("/",$item);
+                if ($ligne[0] == $id && $ligne[2] == $numero) {
+                    $res['id'] = 'Un produit avec les même reference a été ajouté';
+                    goto suite;
+                }
+            }
+            $produit = $produitRepository->find($id); // recuperation de id produit dans la db
+
+            $chaine = $id."/".$quantite."/".$numero."/".$peremption;
+
+            $approv[$id] = $chaine;
+
+            // On sauvegarde dans la session
+            $session->set("reception", $approv);
+            $res['id'] = 'ok';
+            $res['ref'] = $produit->getReference();
+            $res['designation'] = $produit->getDesignation();
+            $res['lot'] = $numero;
+            $res['peremption'] = $peremption;
+            $res['recu'] = $quantite;//$produit->getQuantite();
+
+//            } else {
+//                $res['id'] = 'no';
+//            }
+                suite:
+            $response = new Response();
+            $response->headers->set('content-type', 'application/json');
+            $re = json_encode($res);
+            $response->setContent($re);
+            return $response;
+        }
+
+    }
+
+     #[Route("/reception_delete/", name :"reception_delete") ]
+    public function reception_delete(Request $request, ProduitRepository $repository, SessionInterface $session)
+    {
+        // On récupère le panier actuel
+        $approv = $session->get("reception", []);
+        $id = $request->get('prod');
+        $numero = $request->get('lot');
+        foreach ($approv as $key => $item) {
+            $ligne = explode("/",$item);
+            if ($ligne[0] == $id && $ligne[2] == $numero) {
+                unset($approv[$key]);
+            }
+        }
+//        $id = $repository->find($request->get('prod'))->getId();
+//        foreach ($approv as $key => $item) {
+//            if ($item['produit']->getId() == $id) {
+//                unset($approv[$id]);
+//            }
+//        }
+        // On sauvegarde dans la session
+        $session->set("reception", $approv);
+        $res['id'] = 'ok';
+        $res['nb'] = count($approv);
+        $response = new Response();
+        $response->headers->set('content-type', 'application/json');
+        $re = json_encode($res);
+        $response->setContent($re);
+        return $response;
+    }
+
+      #[Route("/valider_reception/{commande}/{fournisseur}", name :"reception_valider") ]
+    public function valider(Commande $commande, Fournisseur $fournisseur, CommandeProduitRepository $CommandeProduitRepository, SessionInterface $session)
+    {
+        if ($this->security->isGranted('ROLE_USER')) {
+            $approv = $session->get("reception", []);
+
+            if (count($approv) >= 1) {
+                 $produits = [];
+                $commandeproduits = $CommandeProduitRepository->findBy(['commande' => $commande->getId()]);
+                foreach($commandeproduits as $commandeproduit){
+                    $produits[] = [
+                        'id' => $commandeproduit->getProduit()->getId(),
+                    ];
+
+                }
+                $em = $this->entityManager;
+                $reception = new  Reception();
+                $reception->setCommande($commande);
+                $reception->setFournisseur($fournisseur);
+           
+            
+
+                $reception->setUser($this->getUser());
+                $em->persist($reception);
+                $i = 1;
+                foreach ($produits as $prod) {
+                    if(isset($approv[$prod['id']])){
+                    $ligne = $approv[$prod['id']];
+                    $product = explode("/",$ligne);
+                    $id = $product[0];
+                    $quantite= $product[1];
+                    $lot= $product[2];
+                    $peremption= $product[3];
+                    $quantitecommande= $product[4];
+
+                    $produit = $em->getRepository(Produit::class)->find($id);
+                    // fin facture
+                    $receptionProduit = new ReceptionProduit($produit, $reception, $quantite,$commande, $fournisseur);
+                    $receptionProduit->setLot($lot);
+                    $receptionProduit->setUser($this->getUser());
+                    $receptionProduit->setPrixdachat($produit->getPrixdachat());
+                    $receptionProduit->setPeremption(new \DateTime($peremption));
+                    $$i = new Stock($produit, $lot, $peremption, $quantite);
+                    $em->persist($$i);
+                    $archive = $produit->getStock();
+                    $produit->setStock($archive + $quantite);
+                    $em->persist($produit);
+                    $em->persist($receptionProduit);
+
+                    if($quantite < $quantitecommande){
+                         $reste = new Reste($reception, $commande, $produit, $quantitecommande, $quantite, $fournisseur);
+                        $reste->setPrixdachat($produit->getPrixdachat());
+                        if(!$commande->isPayer()) $reste->setCredit(true) ;
+                        $em->persist($reste);
+                        $commande->setReste(true);
+                    }
+                    $i++;
+                }else{
+                        $produit = $em->getRepository(Produit::class)->find($prod['id']);
+
+                      $reste = new Reste($reception, $commande, $produit, $quantitecommande, 0, $fournisseur);
+                        $reste->setPrixdachat($produit->getPrixdachat());
+                        if(!$commande->isPayer()) $reste->setCredit(true) ;
+                        $em->persist($reste);
+                        $commande->setReste(true);
+                }
+                }
+                if(!$commande->isPayer()){
+                    $facture = new FactureFournisseur();
+                    $facture->setMontant($commande->getMontant());
+                    $facture->setCommande($commande);
+                    $facture->setFournisseur($fournisseur);
+                    $em->persist($facture);
+                }  
+                
+                $commande->setLivrer(true);
+                $em->persist($commande);
+                $em->flush();
+                $session->remove("reception");
+            }
+            $this->addFlash('notice', 'Recpetion réussie');
+            $response = $this->redirectToRoute('stock_index');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        } else {
+            $response = $this->redirectToRoute('security_login');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        }
+    }
+
+      #[Route("/valider_reste/{commande}/{fournisseur}", name :"reste_valider") ]
+    public function valider_reste(Commande $commande, Fournisseur $fournisseur, ResteRepository $resteRepository, SessionInterface $session)
+    {
+        if ($this->security->isGranted('ROLE_USER')) {
+            $approv = $session->get("reception", []);
+
+            if (count($approv) >= 1) {
+                 $produits = [];
+                $em = $this->entityManager;
+                $restes = $resteRepository->findBy(['commande' => $commande->getId()]);
+                foreach($restes as $reste){
+                     $reception = $em->getRepositoty()->findBy(['commande' => $commande, 'fournisseur' => $fournisseur]);
+            
+                
+
+                    $reception->setUser($this->getUser());
+                    $em->persist($reception);
+                    $i = 1;
+                    $id = $reste->getProduit()->getId();
+                   
+                    if(isset($approv[$id])){
+                        $ligne = $approv[$id];
+                        $product = explode("/",$ligne);
+                        $id = $product[0];
+                        $quantite= $product[1];
+                        $lot= $product[2];
+                        $peremption= $product[3];
+
+                        $produit = $em->getRepository(Produit::class)->find($id);
+                        // fin facture
+                        $receptionProduit = new ReceptionProduit($produit, $reception, $quantite, $commande, $fournisseur);
+                        $receptionProduit->setLot($lot);
+                        $receptionProduit->setUser($this->getUser());
+                        $receptionProduit->setPrixdachat($produit->getPrixdachat());
+                        $receptionProduit->setPeremption(new \DateTime($peremption));
+                        $$i = new Stock($produit, $lot, $peremption, $quantite);
+                        $em->persist($$i);
+                        $archive = $produit->getStock();
+                        $produit->setStock($archive + $quantite);
+                        $em->persist($produit);
+                        $em->persist($receptionProduit);
+
+                       
+                            $reste = $resteRepository->findOneBy(['commande' => $commande->getId(), 'produit' => $produit->getId()]);
+                            $em->remove($reste);
+
+                        $i++;
+                    }else{
+                        $this->add('notice','renseignez correctement les produits');
+                    }
+
+                }
+                $em->flush();
+                $session->remove("reception");
+            }
+            $this->addFlash('notice', 'Recpetion réussie');
+            $response = $this->redirectToRoute('stock_index');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        } else {
+            $response = $this->redirectToRoute('security_login');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        }
+    }
+
 
 }

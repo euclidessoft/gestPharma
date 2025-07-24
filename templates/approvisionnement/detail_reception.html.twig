@@ -3,7 +3,7 @@
     <div class="container mt-4 fond-7">
         <h3 class="mt-4 mb-5 text-bold">
             <i class="fa fa-shop me-2"></i>
-            {{ "Détails Commande"|trans }}
+            {{ "Détails Reception"|trans }}
         </h3>
 
         <div class="row justify-content-end">
@@ -13,27 +13,30 @@
                     <tr>
                         <th>{{ 'Numéro'|trans }}</th>
                         <th>{{ 'Date'|trans }}</th>
- s                        <th>{{ 'Utilisateur'|trans }}</th>
+                        <th>{{ 'Fournisseur'|trans }}</th>
+                        <th>{{ 'Utilisateur'|trans }}</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
                         <td>{{ commande.id }}</td>
                         <td>{{ commande.date|date('d/m/Y') }}</td>
+                    <td>{{ commande.fournisseur.designation }} </td>
                         <td>{{ commande.user.prenom }} {{ commande.user.nom }}</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-        {% set total=0 %}
+        <div class="row">
+            <div class="col-lg-6 mt-5">
+            <h5> Commande</h5>
         <table class="table table-success-light table-bordered table-hover table-striped w-100 text-center mt-5">
             <thead>
             <tr>
                 <th>{{ 'Code Produit'|trans }}</th>
                 <th class="text-start">{{ 'Désignation'|trans }}</th>
-                <th>{{'Fournisseur'|trans}}</th>
-                <th>{{'Quantité'|trans}}</th>
+                <th>{{'Quantité Commandée'|trans}}</th>
             </tr>
             </thead>
             <tbody>
@@ -41,8 +44,8 @@
                 <tr>
                     <td> {{ commandeproduit.produit.id }} </td>
                     <td class="text-start">{{ commandeproduit.produit.designation }} </td>
-                    <td>{{ commandeproduit.fournisseur.designation }} </td>
                     <td>{{ commandeproduit.quantite }}</td>
+                    {# <td>{{ reception.quantitelivrer }}</td> #}
 
 
                 </tr>
@@ -54,17 +57,44 @@
             {% endfor %}
             </tbody>
         </table>
+</div>
+<div class="col-lg-6 mt-5">
+ <h5> Reception</h5>
+  <table class="table table-success-light table-bordered table-hover table-striped w-100 text-center mt-5">
+            <thead>
+            <tr>
+                <th>{{ 'Date'|trans }}</th>
+                <th>{{ 'Code Produit'|trans }}</th>
+                <th class="text-start">{{ 'Désignation'|trans }}</th>
+                <th>{{'Quantité Recue'|trans}}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for reception in commande.receptionProduits %}
+                <tr>
+                    <td> {{ reception.date|date('d/m/Y') }} </td>
+                    <td> {{ reception.produit.id }} </td>
+                    <td class="text-start">{{ reception.produit.designation }} </td>
+                    <td>{{ reception.quantite }}</td>
+                    {# <td>{{ reception.quantitelivrer }}</td> #}
 
+
+                </tr>
+
+            {% else %}
+                <tr>
+                    <td colspan="8">{{ 'Aucune commande'|trans }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+</div>
         <div class="col-md-4 offset-md-2 mt-5 mb-5 pt-2 pb-2 fond-7">
             <div class="centrer">
                 <a id="imp{{ commande.id }}" onclick="load('imp'~{{ commande.id }})" href="{{ path('stock_show_print',{ 'id': commande.id}) }}" class="btn btn-success float-end">
                     <i class="fa fa-print"></i>
                     {{ "Imprimer"|trans }}
                 </a>
-                    <a id="rec{{ commande.id }}" onclick="load('rec'~{{ commande.id }})" href="{{ path('stock_reception',{ 'id': commande.id}) }}" class="btn btn-success ms-2">
-                        <i class="fa fa-print"></i>
-                        {{ "Receptionner"|trans }}
-                    </a>
             </div>
         </div>
     </div>

@@ -3,7 +3,7 @@
     <div class="container-fluid mt-4 fond-7">
         <h3 class="mt-4 mb-5 text-bold">
             <i class="fa fa-shop me-2"></i>
-            {{ "Reception Commande :"|trans }} {{commande.id}}
+            {{ "Reception Reste a livrer commande :"|trans }} {{commande.id}}
         </h3>
         <div class="row">
             <div class="col-lg-5 mt-5">
@@ -18,7 +18,7 @@
                     <thead>
                     <tr>
                         <th>{{ 'Désignation'|trans }}</th>
-                        <th>{{ "Quantite Commandee"|trans }}</th>
+                        <th>{{ "Quantite Restante"|trans }}</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -74,7 +74,7 @@
                                                 </button>
                                                 <button type="button" class="btn btn-success ms-3"
                                                         id="ajouter{{ produit.id }}"
-                                                        onclick="ajouter({{ produit.id }},{{ produit.quantite }})">
+                                                        onclick="ajouter({{ produit.id }},{{produit.quantite}})">
                                                     <i class="fa fa-plus"></i>
                                                     {{ 'Ajouter'|trans }}
                                                 </button>
@@ -106,7 +106,6 @@
                         <th class="text-start">{{ 'Designation'|trans }}</th>
                         <th>{{ 'Numero lot'|trans }}</th>
                         <th>{{ 'Peremption'|trans }}</th>
-                        <th>{{ 'Quantite Commandee'|trans }}</th>
                         <th>{{ 'Quantite Recue'|trans }}</th>
                         <th>{{ 'Actions'|trans }}</th>
                     </tr>
@@ -117,7 +116,6 @@
                             <td class="text-start">{{ produit['designation'] }}</td>
                             <td>{{ produit['lot'] }}</td>
                             <td>{{ produit['peremption'] }}</td>
-                            <td>{{ produit['commande'] }}</td>
 
                             <td>
                                 <span id="changequantite{{ produit['idtab'] }}">
@@ -179,19 +177,18 @@
             var peremp = $("#peremp" + produit);
             // var peremp = new Date($("#peremp" + produit).val());
             if(quant.val() != "" && numero.val() !="" && peremp.val() != "" && new Date($("#peremp" + produit).val()) > new Date()){
-            if (quant.val() > 0) {
+            if (quant.val() > 0 && quant.val() >= commande) {
                 $("#ajouter" + produit).html("<i class='fa-solid fa-spinner fa-spin-pulse'></i>");
                 $.ajax({
                     type: "POST",
-                    url: "{{ path('stock_reception_add') }}",
-                    data: "prod=" + produit + "&quantite=" + quant.val() + "&lot=" + numero.val() + "&perem=" + peremp.val()+ "&commande=" + commande,
+                    url: "{{ path('stock_reste_add') }}",
+                    data: "prod=" + produit + "&quantite=" + quant.val() + "&lot=" + numero.val() + "&perem=" + peremp.val(),
                     success: function (data) {
                         if (data['id'] == 'ok') {
                             $('#selectprod').append(" <tr id='tr" + produit + numero.val() + "'>\n" +
                                 "                        <td>" + data['designation'] + "</td>\n" +
                                 "                        <td>" + data['lot'] + "</td>\n" +
                                 "                        <td>" + data['peremption'] + "</td>\n" +
-                                "                        <td>" + data['commande'] + "</td>\n" +
                                 "                        <td class='text-center'><span id='changequantite" + produit + "'>" + data['recu'] + "</span></td>\n" +
                                 "                        <td><span id='btnmodf" + produit + "'>" +
                                 // "<button class='btn btn-success'\n" +
@@ -320,7 +317,7 @@
 
         function valider(commande, fournisseur) {
             if (confirm("Confirmation reception?")) {
-                document.location.href = "/Achat/valider_reception/"+commande+"/"+fournisseur
+                document.location.href = "/Achat/valider_reste/"+commande+"/"+fournisseur
             }
         }
     </script>
