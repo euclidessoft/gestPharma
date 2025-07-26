@@ -1,0 +1,728 @@
+<div class="menu-overlay" id="menu-overlay" onclick="openNav()">
+
+</div>
+<div id="overlay" class="overlay" onclick="closeNav()">
+
+</div>
+{% block javascripts %}
+
+    {#<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js"></script>#}
+    <!-- JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- DataTables Core + Extensions -->
+    <script src="https://cdn.datatables.net/2.3.0/js/dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.0/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/3.0.0/js/responsive.bootstrap5.min.js"></script>
+
+    <!-- PDFMake pour l'export PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <!-- Font Awesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js"></script>
+
+{% endblock %}
+
+
+
+<script>
+
+    function openNav() {
+        document.getElementById("navmenu").style.width = "250px";
+        document.getElementById("closebtn").style.visibility = "visible";
+        document.getElementById("sidenav").style.overflow = "visible";
+        document.getElementById("session").style.visibility = "visible";
+        document.getElementById("overlay").style.visibility = "visible";
+        document.getElementById("menu-overlay").style.visibility = "hidden";
+        if (document.body.clientWidth <= 768) {
+            document.getElementById("navbtn").style.visibility = "hidden";
+        }
+    }
+
+    function closeNav() {
+        document.getElementById("closebtn").style.visibility = "hidden";
+        document.getElementById("sidenav").style.overflow = "hidden";
+        document.getElementById("session").style.visibility = "hidden";
+        document.getElementById("overlay").style.visibility = "hidden";
+        document.getElementById("menu-overlay").style.visibility = "visible";
+        if (document.body.clientWidth <= 768) {
+            document.getElementById("navmenu").style.width = "0px";
+            document.getElementById("navbtn").style.visibility = "visible";
+        } else {
+            document.getElementById("navmenu").style.width = "50px";
+        }
+    }
+
+    if (document.body.clientWidth <= 768) {
+        $('#closebtn').html("<i class='fas fa-times fa-lg'></i>");
+    } else {
+        $('#closebtn').html('<i class="fas fa-arrow-left fa-lg"></i>');
+    }
+
+    //langue systeme
+    function choixlangue() {
+        var url = $(location).attr("href");
+        var index;
+        var langselect = $('#langue option:selected');
+        if (langselect.val() === 'Francais') {
+            url = url.replace("/en/", "/fr/");
+        } else{
+            url = url.replace("/fr/", "/en/");
+        }
+        document.location.href = url;
+    }
+
+    function positionlangue() {
+
+        var url = $(location).attr("href");
+        var fr = url.indexOf("/fr/");
+        var en = url.indexOf("/en/");
+        if (fr !== -1) {
+            $("#langue").html("<option value='Francais'>Français</option><option value='English'>English</option>")
+
+        } else if (en !== -1) {
+            $("#langue").html("<option value='English'>English</option><option value='Francais'>Français</option>")
+
+
+        }
+
+    }
+    function load(id) {
+        let btnRetour = $("#"+id);
+        btnRetour.html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
+        btnRetour.addClass('disabled');
+
+    }
+
+    function deconnexion() {
+        $("#oui").html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
+        document.location.href="{{ path('security_logout') }}";
+    }
+
+    function addprod(id, mincom, st) {// fonction pour ajouter un produit dans le panier
+        var reg = new RegExp("^[0-9]+$");
+        if (reg.test($('#text' + id).val()) && mincom <= $('#text' + id).val()) {
+            if (st >= $('#text' + id).val()) {
+                $('#btn' + id).html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
+                $.ajax({
+                    type: "POST",
+                    url: "{{ path('commande_add') }}",
+                    data: "prod=" + id + "&quantite=" + $('#text' + id).val(),
+                    success: function (data) {
+                        if (data['id'] == 'ok') {
+                            $('#tdprod' + id).html($('#text' + id).val());
+                            $('#gest_panier').html(data['panier']);
+                            $('#btn' + id).html("<i class='fa fa-cart-shopping'></i>");
+                            $('#btn' + id).addClass('disabled');
+                        } else {
+                            alert("{{ 'Vérifier la quantité saisie'|trans }}")
+                        }
+                    },
+                    error: function () {
+                        alert('{{ "La requête n'a pas abouti"|trans }}');
+                    }
+                });
+            } else {
+                var mess = "{{ 'Maximum disponible  ' }}" + st;
+                alert(mess);
+            }
+        } else {
+            var mess = "{{ 'Commande minimun '|trans}}" + mincom;
+            alert(mess);
+        }
+
+    }
+
+
+
+    function nofocu(id) {
+        $('#tampon').val('');
+    }
+
+    //message systeme
+    function advert() {
+        $('#advertiser').trigger('click');
+        return false;
+    }
+
+    //exporter vers excel
+    function allexcel() {
+        $('button').trigger('click');
+        return false;
+
+    }
+
+    //rattraper une operation oublié
+    function rattrapage() {
+        if ($('#datecheck').is(':checked')) {
+            $('#date').show();
+        } else {
+            $('#date').hide();
+        }
+    }
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+            .register('/sw.js')
+            .then(function (registration) {
+                console.log(
+                    'Service Worker registration successful with scope:', registration.scope
+                );
+            })
+            .catch(function (err) {
+                console.log('Service Worker registration failed:', err);
+            });
+    }
+
+    let deferredPrompt;
+    const installButton = document.getElementById("install_button");
+
+    window.addEventListener("beforeinstallprompt", e => {
+        console.log("beforeinstallprompt fired");
+        e.preventDefault();
+        deferredPrompt = e;
+        installButton.hidden = false;
+        installButton.addEventListener("click", installApp);
+    });
+
+    function installApp() {
+        deferredPrompt.prompt();
+        installButton.disabled = true;
+        deferredPrompt.userChoice.then(choiceResult => {
+            if (choiceResult.outcome === "accepté") {
+                console.log("Installation de l'application acceptée");
+                installButton.hidden = true;
+            } else {
+                console.log("Installation de l'application rejetée");
+            }
+            installButton.disabled = false;
+            deferredPrompt = null;
+        });
+    }
+
+    $(document).ready(function () {
+        positionlangue();
+        {# autretext(); // Vérifie l'état au chargement
+        $('#autre').change(autretext); #}
+
+/*
+        var keys = {};
+        $(window).on("keyup keydown", function (e) {
+            keys[e.keyCode] = e.type === 'keydown';
+            if (keys[17] || keys[80]) {
+                e.preventDefault();
+            }
+        });
+        $(window).bind('keydown keypress', 'ctrl+s', function () {
+            $('#save').click();
+            return false;
+        });
+        $(document).bind('contextmenu', false);
+
+        $(window).on(' copy dragstart drop', function (e) {
+            e.preventDefault();
+            return false;
+        });*/
+        initialisationpromo();
+        $('#btnversement').hide();
+        $('#versement').hide();
+        $('#tampon').hide();
+        $('#paiement_form_montant').change(function () {// controle montant paiement
+            var reg = new RegExp("^[0-9]+$");
+            if (reg.test($('#paiement_form_montant').val())) {
+                $('#tamp').val('ok');
+                if ($('#tamp1').val() != '') $('#btnversement').show();
+            } else {
+                $('#tamp').val('');
+                $('#btnversement').hide();
+            }
+        });
+
+        $('#promotion_type').change(function () {//changement type de promotion
+            if ($('#promotion_type option:selected').val() == 'Unités Gratuites') {
+                $('#tranche').show();
+                $('#reduction').hide();
+                $('#promotion_reduction').val('');
+
+            }else if ($('#promotion_type option:selected').val() == 'Réduction') {
+                $('#tranche').hide();
+                $('#reduction').show();
+                $('#promotion_premier').val('');
+                $('#promotion_ugpremier').val('');
+                $('#promotion_deuxieme').val('');
+                $('#promotion_ugdeuxieme').val('');
+                $('#promotion_troisieme').val('');
+                $('#promotion_ugtroisieme').val('');
+            }else{
+                $('#tranche').hide();
+                $('#reduction').hide();
+                $('#promotion_premier').val('');
+                $('#promotion_ugpremier').val('');
+                $('#promotion_deuxieme').val('');
+                $('#promotion_ugdeuxieme').val('');
+                $('#promotion_troisieme').val('');
+                $('#promotion_ugtroisieme').val('');
+                $('#promotion_reduction').val('');
+            }
+        });
+
+    });
+
+    function envoie() {
+        var valider=$('#send');
+        var originalHtml = valider.html();
+        // var originalClasses = valider.attr('class') || '';
+        // alert(originalHtml, originalClasses)
+        valider.addClass("disabled");
+        valider.html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
+        $('#form').submit();
+    }
+    function initialisationpromo() {
+        if ($('#promotion_type option:selected').val() == 'Unités Gratuites') {
+            $('#tranche').show();
+            $('#reduction').hide();
+            $('#promotion_reduction').val('');
+
+        }else if ($('#promotion_type option:selected').val() == 'Réduction') {
+            $('#tranche').hide();
+            $('#reduction').show();
+            $('#promotion_premier').val('');
+            $('#promotion_ugpremier').val('');
+            $('#promotion_deuxieme').val('');
+            $('#promotion_ugdeuxieme').val('');
+            $('#promotion_troisieme').val('');
+            $('#promotion_ugtroisieme').val('');
+        }else{
+            $('#tranche').hide();
+            $('#reduction').hide();
+        }
+    }
+    function promosubmit() {// fonction enregistrement promotion
+        var valider=$('#send');
+        var date1 = new Date($('#promotion_debut').val());
+        var date2 = new Date($('#promotion_fin').val());
+        let premier = $('#promotion_premier').val();
+        let ugpremier = $('#promotion_ugpremier').val();
+        let deuxieme = $('#promotion_deuxieme').val();
+        let ugdeuxieme = $('#promotion_ugdeuxieme').val();
+        let troisieme = $('#promotion_troisieme').val();
+        let ugtroisieme = $('#promotion_ugtroisieme').val();
+        let quatrieme = $('#promotion_quatrieme').val();
+        let ugquatrieme = $('#promotion_ugquatrieme').val();
+        let cinquieme = $('#promotion_cinquieme').val();
+        let ugcinquieme = $('#promotion_ugcinquieme').val();
+        // valider.addClass("disabled");
+        if ($('#promotion_type option:selected').val() == 'Unités Gratuites') {
+
+
+            if($('#promotion_premier').val() != '' &&
+                $('#promotion_ugpremier').val() != '' &&
+                $('#promotion_deuxieme').val() != '' &&
+                $('#promotion_ugdeuxieme').val() != '' &&
+                $('#promotion_troisieme').val() != '' &&
+                $('#promotion_ugtroisieme').val() != '' &&
+                $('#promotion_quatrieme').val() != '' &&
+                $('#promotion_ugquatrieme').val() != '' &&
+                $('#promotion_cinquieme').val() != '' &&
+                $('#promotion_ugcinquieme').val() != '' &&
+                $('#promotion_designation').val() != '' &&
+                date1 != 'Invalid Date' &&
+                date2 != 'Invalid Date' &&
+                date1 >= new Date()) {
+
+                // if(premier >= ugpremier &&
+                //     deuxieme >= ugdeuxieme &&
+                //     troisieme >= ugtroisieme &&
+                //     quatrieme >= ugquatrieme &&
+                //     cinquieme >= ugcinquieme &&
+                //     premier <= deuxieme  &&
+                //     deuxieme <= troisieme &&
+                //     troisieme <= quatrieme &&
+                //     quatrieme <= cinquieme
+                // ) {
+                    valider.html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
+                    $('#form').submit();
+                // }else alert("Veuillez verifier les valeurs de la promotion");
+
+            }else{
+                alert('{{ "Veuillez saisir tous les champs"|trans }}');
+            }
+
+        }else if ($('#promotion_type option:selected').val() == 'Réduction') {
+
+            if($('#promotion_reduction').val() != '' &&
+                $('#promotion_designation').val() != '' &&
+                date1 != 'Invalid Date' &&
+                date2 != 'Invalid Date' &&
+                date1 >= new Date()) {
+                valider.html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
+                $('#form').submit();
+            }else{
+                alert('{{ "Veuillez saisir tous les champs"|trans }}');
+            }
+        }else {
+            alert('{{ "Veuillez saisir tous les champs"|trans }}');
+        }
+    }
+
+    function facture() {
+        $('#decl').trigger('click');
+        return false;
+    }
+
+    //selection d'une ligne de données
+    function trselect(id) {
+        if ($("#" + id).is(':checked')) {
+            $("#tr" + id).css('background', '#c5fbae');
+        } else {
+            $("#tr" + id).css('background', '');
+        }
+    }
+
+    //selection de tous les pelerins
+    function selectAll() {
+        let cocher = $("input[type=checkbox]");
+        if ($("#tous").is(':checked')) {
+            cocher.attr('checked', true);
+            cocher.each(
+                function () {
+                    if ($(this).is(':checked')) {
+
+                    } else {
+                        $(this).trigger('click')
+                    }
+                    trselect($(this).attr("id"));
+                });
+        } else {
+            cocher.attr('checked', false);
+            cocher.each(
+                function () {
+                    if ($(this).is(':checked')) {
+                        $(this).trigger('click')
+                    }
+                    trselect($(this).attr("id"));
+                });
+        }
+    }
+
+    let table = new DataTable('#liste', {
+    // let table = $('#liste').DataTable({
+        responsive: true,
+        pageLength: 100,
+        buttons: [
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: ':not(.noExport)' // exclut toutes les colonnes avec .noExport
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                orientation: 'landscape',
+                pageSize: 'A4',
+                exportOptions: {
+                    columns: ':not(.noExport)'
+                }
+            }
+        ],
+        language: {
+            processing: "{{ 'Traitement en cours...'|trans }}",
+            search: "{{ 'Rechercher'|trans }} :",
+            lengthMenu: "{{ 'Afficher'|trans }} _MENU_ {{'élèments'|trans}}",
+            info: "{{'Affichage de l\'élement'|trans}} _START_ {{'à'|trans}} _END_ {{ 'sur'|trans }} _TOTAL_ {{'élèments'|trans}}",
+            infoEmpty: "{{'Affichage de l\'élèment 0 à 0 sur 0 élèments'|trans}}",
+            infoFiltered: "({{'filtré de'|trans}} _MAX_ {{'élèment au total'|trans}})",
+            infoPostFix: "",
+            loadingRecords: "{{ 'Chargement en cours...'|trans }}",
+            zeroRecords: "{{'Aucun élèment à afficher'|trans}}",
+            emptyTable: "{{'Aucun élèment enregistré'|trans}}",
+            paginate: {
+                first: "{{ 'Premier'|trans }}",
+                previous: "{{'Précédent'|trans}}",
+                next: "{{ 'Suivant'|trans }}",
+                last: "{{ 'Dernier'|trans }}"
+            },
+            aria: {
+                sortAscending: ": {{ 'Trier par ordre croissant'|trans }}",
+                sortDescending: ": {{'Trier par ordre décroissant'|trans}}"
+            }
+        }
+
+    });
+
+    document.getElementById('exportExcel').addEventListener('click', function () {
+        table.button(0).trigger();
+    });
+
+    document.getElementById('exportPdf').addEventListener('click', function () {
+        table.button(1).trigger();
+    });
+
+    let messagerie = new DataTable('#message', {
+
+        responsive: true,
+        pageLength: 50,
+        buttons: [
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: ':not(.noExport)'
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                orientation: 'landscape',
+                pageSize: 'A4',
+                exportOptions: {
+                    columns: ':not(.noExport)'
+                }
+            }
+        ],
+        language: {
+            processing: "{{ 'Traitement en cours...'|trans }}",
+            search: "{{ 'Rechercher'|trans }} :",
+            lengthMenu: "{{ 'Afficher'|trans }} _MENU_ {{'messages'|trans}}",
+            info: "{{'Affichage de message'|trans}} _START_ {{'à'|trans}} _END_ {{ 'sur'|trans }} _TOTAL_ {{'messages'|trans}}",
+            infoEmpty: "{{'Affichage de message 0 à 0 sur 0 message'|trans}}",
+            infoFiltered: "({{'filtré de'|trans}} _MAX_ {{'message au total'|trans}})",
+            infoPostFix: "",
+            loadingRecords: "{{ 'Chargement en cours...'|trans }}",
+            zeroRecords: "{{'Aucun message à afficher'|trans}}",
+            emptyTable: "{{'Aucun message'|trans}}",
+            paginate: {
+                first: "{{ 'Premier'|trans }}",
+                previous: "{{'Précédent'|trans}}",
+                next: "{{ 'Suivant'|trans }}",
+                last: "{{ 'Dernier'|trans }}"
+            },
+            aria: {
+                sortAscending: ": {{ 'activer pour trier la colonne par ordre croissant'|trans }}",
+                sortDescending: ": {{'activer pour trier la colonne par ordre décroissant'|trans}}"
+            }
+        }
+
+    });
+
+    //gestion des tableaux multiples
+    function reponse() {
+        let table = $('table').DataTable({
+
+            responsive: true,
+            "pageLength": 25,
+            buttons: [{
+                extend: 'excelHtml5',
+                text: '<i class="fa fa-file-excel fa-lg"></i> Exporter vers Excel',
+                attr: {
+                    class: 'btn btn-shadow btn-green'
+                },
+            }],
+            language: {
+                processing: "{{ 'Traitement en cours...'|trans }}",
+                search: "{{ 'Rechercher'|trans }} :",
+                lengthMenu: "{{ 'Afficher'|trans }} _MENU_ {{'élèments'|trans}}",
+                info: "{{'Affichage de l\'élement|trans'}} _START_ {{'à'|trans}} _END_ {{ 'sur'|trans }} _TOTAL_ {{'élèments'|trans}}",
+                infoEmpty: "{{'Affichage de l\'élèment 0 à 0 sur 0 élèments'|trans}}",
+                infoFiltered: "({{'filtré de'|trans}} _MAX_ {{'élèment au total'|trans}})",
+                infoPostFix: "",
+                loadingRecords: "{{ 'Chargement en cours...'|trans }}",
+                zeroRecords: "{{'Aucun élèment à afficher'|trans}}",
+                emptyTable: "{{'Aucune donnée disponible dans le tableau'|trans}}",
+                paginate: {
+                    first: "{{ 'Premier'|trans }}",
+                    previous: "{{'Précédent'|trans}}",
+                    next: "{{ 'Suivant'|trans }}",
+                    last: "{{ 'Dernier'|trans }}"
+                },
+                aria: {
+                    sortAscending: ": {{ 'activer pour trier la colonne par ordre croissant'|trans }}",
+                    sortDescending: ": {{'activer pour trier la colonne par ordre décroissant'|trans}}"
+                }
+            }
+
+        });
+    }
+
+    /*****Start Script de conversion le prix en lettre*****/
+
+        // Utilisation de la fonction NumberToLetter
+    var total = document.getElementById("total").innerText;
+    var totalEnLettres = NumberToLetter(total);
+    document.getElementById("conversion").innerHTML = totalEnLettres;
+    function Unite( nombre ){
+        var unite;
+        switch( nombre ){
+            case 0: unite = "zéro";		break;
+            case 1: unite = "un";		break;
+            case 2: unite = "deux";		break;
+            case 3: unite = "trois"; 	break;
+            case 4: unite = "quatre"; 	break;
+            case 5: unite = "cinq"; 	break;
+            case 6: unite = "six"; 		break;
+            case 7: unite = "sept"; 	break;
+            case 8: unite = "huit"; 	break;
+            case 9: unite = "neuf"; 	break;
+        }//fin switch
+        return unite;
+    }//-----------------------------------------------------------------------
+
+    function Dizaine( nombre ){
+        switch( nombre ){
+            case 10: dizaine = "dix"; break;
+            case 11: dizaine = "onze"; break;
+            case 12: dizaine = "douze"; break;
+            case 13: dizaine = "treize"; break;
+            case 14: dizaine = "quatorze"; break;
+            case 15: dizaine = "quinze"; break;
+            case 16: dizaine = "seize"; break;
+            case 17: dizaine = "dix-sept"; break;
+            case 18: dizaine = "dix-huit"; break;
+            case 19: dizaine = "dix-neuf"; break;
+            case 20: dizaine = "vingt"; break;
+            case 30: dizaine = "trente"; break;
+            case 40: dizaine = "quarante"; break;
+            case 50: dizaine = "cinquante"; break;
+            case 60: dizaine = "soixante"; break;
+            case 70: dizaine = "soixante-dix"; break;
+            case 80: dizaine = "quatre-vingt"; break;
+            case 90: dizaine = "quatre-vingt-dix"; break;
+        }//fin switch
+        return dizaine;
+    }//-----------------------------------------------------------------------
+
+    function NumberToLetter( nombre ){
+        var i, j, n, quotient, reste, nb ;
+        var ch
+        var numberToLetter='';
+        //__________________________________
+
+        if(  nombre.toString().replace( / /gi, "" ).length > 15  )	return "dépassement de capacité";
+        if(  isNaN(nombre.toString().replace( / /gi, "" ))  )		return "Nombre non valide";
+
+        nb = parseFloat(nombre.toString().replace( / /gi, "" ));
+        if(  Math.ceil(nb) != nb  )	return  "Nombre avec virgule non géré.";
+
+        n = nb.toString().length;
+        switch( n ){
+            case 1: numberToLetter = Unite(nb); break;
+            case 2: if(  nb > 19  ){
+                quotient = Math.floor(nb / 10);
+                reste = nb % 10;
+                if(  nb < 71 || (nb > 79 && nb < 91)  ){
+                    if(  reste == 0  ) numberToLetter = Dizaine(quotient * 10);
+                    if(  reste == 1  ) numberToLetter = Dizaine(quotient * 10) + "-et-" + Unite(reste);
+                    if(  reste > 1   ) numberToLetter = Dizaine(quotient * 10) + "-" + Unite(reste);
+                }else numberToLetter = Dizaine((quotient - 1) * 10) + "-" + Dizaine(10 + reste);
+            }else numberToLetter = Dizaine(nb);
+                break;
+            case 3: quotient = Math.floor(nb / 100);
+                reste = nb % 100;
+                if(  quotient == 1 && reste == 0   ) numberToLetter = "cent";
+                if(  quotient == 1 && reste != 0   ) numberToLetter = "cent" + " " + NumberToLetter(reste);
+                if(  quotient > 1 && reste == 0    ) numberToLetter = Unite(quotient) + " cents";
+                if(  quotient > 1 && reste != 0    ) numberToLetter = Unite(quotient) + " cent " + NumberToLetter(reste);
+                break;
+            case 4 :  quotient = Math.floor(nb / 1000);
+                reste = nb - quotient * 1000;
+                if(  quotient == 1 && reste == 0   ) numberToLetter = "mille";
+                if(  quotient == 1 && reste != 0   ) numberToLetter = "mille" + " " + NumberToLetter(reste);
+                if(  quotient > 1 && reste == 0    ) numberToLetter = NumberToLetter(quotient) + " mille";
+                if(  quotient > 1 && reste != 0    ) numberToLetter = NumberToLetter(quotient) + " mille " + NumberToLetter(reste);
+                break;
+            case 5 :  quotient = Math.floor(nb / 1000);
+                reste = nb - quotient * 1000;
+                if(  quotient == 1 && reste == 0   ) numberToLetter = "mille";
+                if(  quotient == 1 && reste != 0   ) numberToLetter = "mille" + " " + NumberToLetter(reste);
+                if(  quotient > 1 && reste == 0    ) numberToLetter = NumberToLetter(quotient) + " mille";
+                if(  quotient > 1 && reste != 0    ) numberToLetter = NumberToLetter(quotient) + " mille " + NumberToLetter(reste);
+                break;
+            case 6 :  quotient = Math.floor(nb / 1000);
+                reste = nb - quotient * 1000;
+                if(  quotient == 1 && reste == 0   ) numberToLetter = "mille";
+                if(  quotient == 1 && reste != 0   ) numberToLetter = "mille" + " " + NumberToLetter(reste);
+                if(  quotient > 1 && reste == 0    ) numberToLetter = NumberToLetter(quotient) + " mille";
+                if(  quotient > 1 && reste != 0    ) numberToLetter = NumberToLetter(quotient) + " mille " + NumberToLetter(reste);
+                break;
+            case 7: quotient = Math.floor(nb / 1000000);
+                reste = nb % 1000000;
+                if(  quotient == 1 && reste == 0  ) numberToLetter = "un million";
+                if(  quotient == 1 && reste != 0  ) numberToLetter = "un million" + " " + NumberToLetter(reste);
+                if(  quotient > 1 && reste == 0   ) numberToLetter = NumberToLetter(quotient) + " millions";
+                if(  quotient > 1 && reste != 0   ) numberToLetter = NumberToLetter(quotient) + " millions " + NumberToLetter(reste);
+                break;
+            case 8: quotient = Math.floor(nb / 1000000);
+                reste = nb % 1000000;
+                if(  quotient == 1 && reste == 0  ) numberToLetter = "un million";
+                if(  quotient == 1 && reste != 0  ) numberToLetter = "un million" + " " + NumberToLetter(reste);
+                if(  quotient > 1 && reste == 0   ) numberToLetter = NumberToLetter(quotient) + " millions";
+                if(  quotient > 1 && reste != 0   ) numberToLetter = NumberToLetter(quotient) + " millions " + NumberToLetter(reste);
+                break;
+            case 9: quotient = Math.floor(nb / 1000000);
+                reste = nb % 1000000;
+                if(  quotient == 1 && reste == 0  ) numberToLetter = "un million";
+                if(  quotient == 1 && reste != 0  ) numberToLetter = "un million" + " " + NumberToLetter(reste);
+                if(  quotient > 1 && reste == 0   ) numberToLetter = NumberToLetter(quotient) + " millions";
+                if(  quotient > 1 && reste != 0   ) numberToLetter = NumberToLetter(quotient) + " millions " + NumberToLetter(reste);
+                break;
+            case 10: quotient = Math.floor(nb / 1000000000);
+                reste = nb - quotient * 1000000000;
+                if(  quotient == 1 && reste == 0  ) numberToLetter = "un milliard";
+                if(  quotient == 1 && reste != 0  ) numberToLetter = "un milliard" + " " + NumberToLetter(reste);
+                if(  quotient > 1 && reste == 0   ) numberToLetter = NumberToLetter(quotient) + " milliards";
+                if(  quotient > 1 && reste != 0   ) numberToLetter = NumberToLetter(quotient) + " milliards " + NumberToLetter(reste);
+                break;
+            case 11: quotient = Math.floor(nb / 1000000000);
+                reste = nb - quotient * 1000000000;
+                if(  quotient == 1 && reste == 0  ) numberToLetter = "un milliard";
+                if(  quotient == 1 && reste != 0  ) numberToLetter = "un milliard" + " " + NumberToLetter(reste);
+                if(  quotient > 1 && reste == 0   ) numberToLetter = NumberToLetter(quotient) + " milliards";
+                if(  quotient > 1 && reste != 0   ) numberToLetter = NumberToLetter(quotient) + " milliards " + NumberToLetter(reste);
+                break;
+            case 12: quotient = Math.floor(nb / 1000000000);
+                reste = nb - quotient * 1000000000;
+                if(  quotient == 1 && reste == 0  ) numberToLetter = "un milliard";
+                if(  quotient == 1 && reste != 0  ) numberToLetter = "un milliard" + " " + NumberToLetter(reste);
+                if(  quotient > 1 && reste == 0   ) numberToLetter = NumberToLetter(quotient) + " milliards";
+                if(  quotient > 1 && reste != 0   ) numberToLetter = NumberToLetter(quotient) + " milliards " + NumberToLetter(reste);
+                break;
+            case 13: quotient = Math.floor(nb / 1000000000000);
+                reste = nb - quotient * 1000000000000;
+                if(  quotient == 1 && reste == 0  ) numberToLetter = "un billion";
+                if(  quotient == 1 && reste != 0  ) numberToLetter = "un billion" + " " + NumberToLetter(reste);
+                if(  quotient > 1 && reste == 0   ) numberToLetter = NumberToLetter(quotient) + " billions";
+                if(  quotient > 1 && reste != 0   ) numberToLetter = NumberToLetter(quotient) + " billions " + NumberToLetter(reste);
+                break;
+            case 14: quotient = Math.floor(nb / 1000000000000);
+                reste = nb - quotient * 1000000000000;
+                if(  quotient == 1 && reste == 0  ) numberToLetter = "un billion";
+                if(  quotient == 1 && reste != 0  ) numberToLetter = "un billion" + " " + NumberToLetter(reste);
+                if(  quotient > 1 && reste == 0   ) numberToLetter = NumberToLetter(quotient) + " billions";
+                if(  quotient > 1 && reste != 0   ) numberToLetter = NumberToLetter(quotient) + " billions " + NumberToLetter(reste);
+                break;
+            case 15: quotient = Math.floor(nb / 1000000000000);
+                reste = nb - quotient * 1000000000000;
+                if(  quotient == 1 && reste == 0  ) numberToLetter = "un billion";
+                if(  quotient == 1 && reste != 0  ) numberToLetter = "un billion" + " " + NumberToLetter(reste);
+                if(  quotient > 1 && reste == 0   ) numberToLetter = NumberToLetter(quotient) + " billions";
+                if(  quotient > 1 && reste != 0   ) numberToLetter = NumberToLetter(quotient) + " billions " + NumberToLetter(reste);
+                break;
+        }//fin switch
+        /*respect de l'accord de quatre-vingt*/
+        if(  numberToLetter.substr(numberToLetter.length-"quatre-vingt".length,"quatre-vingt".length) == "quatre-vingt"  ) numberToLetter = numberToLetter + "s";
+
+        return numberToLetter;
+    }//-----------------------------------------------------------------------
+
+    /*****end Script de conversion le prix en lettre*****/
+</script>

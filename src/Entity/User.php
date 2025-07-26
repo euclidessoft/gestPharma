@@ -16,6 +16,12 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
  #[ORM\Entity(repositoryClass: UserRepository::class) ]
  #[ORM\Table(name:"user") ]
+ #[ORM\InheritanceType("JOINED") ]
+ #[ORM\DiscriminatorColumn(name:"typeuser", type:"string") ]
+ #[ORM\DiscriminatorMap([
+    'client' => Client::class,
+    'employe' => Employe::class,
+])]
 #[UniqueEntity(
     fields: ['email'],
     message: 'Cet email existe déjà.'
