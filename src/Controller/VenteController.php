@@ -27,9 +27,50 @@ class VenteController extends
     {
         if ($this->security->isGranted('ROLE_USER')) {
        
-        $response = $this->render('vente/index.html.twig', [
-            'ventes' => $venteRepository->findAll(),
+        $response = $this->render('vente/cloture.html.twig', [
+            'ventes' => $venteRepository->findBy(['cloture' => false, 'user' => $this->getUser()->getId()]),
         ]);
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+         } else {
+           $response = $this->redirectToRoute('security_logout');
+           $response->setSharedMaxAge(0);
+           $response->headers->addCacheControlDirective('no-cache', true);
+           $response->headers->addCacheControlDirective('no-store', true);
+           $response->headers->addCacheControlDirective('must-revalidate', true);
+           $response->setCache([
+               'max_age' => 0,
+               'private' => true,
+           ]);
+           return $response;
+       }
+    }
+
+    #[Route("/Cloturer", name:"vente_cloture", methods:["GET"])]
+    public function Cloture(VenteRepository $venteRepository): Response
+    {
+        if ($this->security->isGranted('ROLE_USER')) {
+            $ventes = $venteRepository->findBy(['cloture' => false, 'user' => $this->getUser()->getId()]);
+            $montant = 0;
+            foreach($ventes as $vente){
+                $vente->setCloture(true);
+                $montant += $vente->getMontant() - $vente->getCouverture();
+                $this->entityManager->persist($vente);
+            }
+
+             $this->entityManager->flush();
+             $this->addFlash('notice','Cloture effectuee avec succes. A bientot!');
+             //ecriture
+
+
+        $response = $this->redirectToRoute('vente_index');
            $response->setSharedMaxAge(0);
            $response->headers->addCacheControlDirective('no-cache', true);
            $response->headers->addCacheControlDirective('no-store', true);

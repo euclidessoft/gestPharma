@@ -242,7 +242,7 @@
                                     <a class="submenu-link" href="{{ path('vente_new') }}">Facturation</a>
                                 </li>
                                 <li class="submenu-item">
-                                    <a class="submenu-link" href="account.html">Cloture</a>
+                                    <a class="submenu-link" href="{{ path('vente_index') }}">Cloture</a>
                                 </li>
                                 <li class="submenu-item">
                                     <a class="submenu-link" href="settings.html">Chiffre d'affaires</a>
@@ -529,7 +529,7 @@
             }
 
         });
-       {# typeversement() #}
+       typeversement()
     });
     function load(id) {
         $("#"+id).html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
@@ -956,6 +956,20 @@
         if (confirm("Confirmation validation?")) {
             {#document.location.href = "{{ path('stock_valider') }}";#}
         }
+    }
+      function typeversement() {
+    if ($('#vente_type option:selected').val() == 'Cheque' || $('#vente_type option:selected').val() == 'Virement') {
+        $('#versement').show();
+        $('#vente_banque option:selected').val("");
+        $('#vente_numero').val('');
+        $('#vente_banque').show();
+         $('#vente_numero').show();
+    }else{
+        $('#versement').hide();
+        $('#vente_banque option:selected').val("");
+         $('#vente_numero').val('');
+        $('#vente_banque').hide();
+         $('#vente_numero').hide();
     }
 
 </script>

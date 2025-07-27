@@ -1,0 +1,99 @@
+{% extends 'layout.html.twig' %}
+{% block body %}
+ {% for message in app.flashes('notice') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message|trans }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+
+<div class="container-fluid fond text-center">
+    <h1>Cloturer Vente</h1>
+
+
+     <table class="table table-hover">
+    <head>
+    <tr>
+        <th>Client</th>
+        <th>Mutuelle</th>
+        <th>Service</th>
+         <th>Montant</th>
+         <th>Couverture</th>
+         </tr>
+    </head>
+        <tbody>
+        {% set  montant = 0 %}
+        {% set  espace = 0 %}
+        {% set  orangemoney = 0 %}
+        {% set  wave = 0 %}
+        {% set  banque = 0 %}
+        {% set  couverture = 0 %}
+        {% for vente in ventes %}
+            <tr>
+                <td>{{ vente.mutuel ? vente.mutuel.nom : ''}}</td>
+                <td>{{ vente.service ?  vente.service.nom : ''}}</td>
+                <td>{{ vente.service ?  vente.service.nom : ''}}</td>
+           
+                
+                <td>{{ vente.montant|number_format(2, ',' , ' ') }}</td>
+                <td>{{ vente.couverture|number_format(2, ',' , ' ')  }}</td>
+                {% set montant = montant + vente.montant %}
+                {% set couverture = couverture + vente.couverture %}
+                {% if vente.type == "Espece"%}
+                    {% set  espace = espace + vente.montant - vente.couverture %}
+                {% elseif vente.type == "Orange money"%}
+                    {% set  orangemoney = orangemoney + vente.montant - vente.couverture %}
+                 {% elseif vente.type == "Wave"%}
+                     {% set  wave = wave + vente.montant - vente.couverture %}
+                {% else %}
+                    {% set  banque = banque + vente.montant - vente.couverture %}
+                {% endif %}
+            </tr>
+            {% else %}
+            {% endfor %}
+             <tr>
+               
+                <td></td>
+                <td></td>
+                <td>{{ "Total"|trans }}</td>
+           
+                
+                <td>{{  montant|number_format(2, ',' , ' ') }}</td>
+                <td>{{ couverture|number_format(2, ',' , ' ')  }}</td>
+            </tr>
+             <tr>
+               
+                <td></td>
+                <td></td>
+                <td  class="text-end">Montant Net</td>
+           
+                
+                <td colspan="2" class="text-center">{{ ( montant - couverture)|number_format(2, ',' , ' ')  }}</td>
+            </tr>
+             <tr>
+               
+                <td> Espece : {{ espace|number_format(2, ',', ' ')}}</td>
+                <td>Orange Money : {{ orangemoney|number_format(2, ',', ' ')}}</td>
+                <td>Wave : {{ wave|number_format(2, ',', ' ')}}</td>
+           
+                
+                <td>Banque : {{ banque|number_format(2, ',', ' ')}}</td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+    {% if ventes|length > 0 %}
+        <button type="button" class="btn btn-success mt-4" onclick="cloture()">cloturer</button>
+    {% endif %}
+
+  </div>
+{% endblock %}
+{% block scripts %}
+<script>
+    function cloture(){
+        if(confirm("{{'voulez-vous vraiment cloturer?'}}")){
+            document.location.href = "{{ path('vente_cloture')}}"
+        }
+    }
+</script>
+{% endblock %}

@@ -249,20 +249,7 @@ function valider() {
         }
 
     }
-    function typeversement() {
-    if ($('#vente_type option:selected').val() == 'Cheque' || $('#vente_type option:selected').val() == 'Virement') {
-        $('#versement').show();
-        $('#vente_banque option:selected').val("");
-        $('#vente_numero').val('');
-        $('#vente_banque').show();
-         $('#vente_numero').show();
-    }else{
-        $('#versement').hide();
-        $('#vente_banque option:selected').val("");
-         $('#vente_numero').val('');
-        $('#vente_banque').hide();
-         $('#vente_numero').hide();
-    }
+  
 }
     </script>
 {% endblock %}
