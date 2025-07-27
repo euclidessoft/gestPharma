@@ -96,6 +96,7 @@ class ApprovisionnementController extends AbstractController
 
             $response = $this->render('approvisionnement/historique.html.twig', [
                 'approvisionnements' => $repository->findBy(['livrer' => false]),
+                'fournisseurs' => $repo->findAll(),
             ]);
             $response->setSharedMaxAge(0);
             $response->headers->addCacheControlDirective('no-cache', true);
@@ -127,6 +128,7 @@ class ApprovisionnementController extends AbstractController
 
             $response = $this->render('approvisionnement/historique_non.html.twig', [
                 'approvisionnements' => $repository->findBy(['livrer' => true]),
+                'fournisseurs' => $repo->findAll(),
             ]);
             $response->setSharedMaxAge(0);
             $response->headers->addCacheControlDirective('no-cache', true);
@@ -152,12 +154,13 @@ class ApprovisionnementController extends AbstractController
     }
 
     #[Route("/Reste/", name :"reste", methods : ["GET"]) ]
-    public function reste(ResteRepository $repository): Response
+    public function reste(ResteRepository $repository, FournisseurRepository $repo): Response
     {
         if ($this->security->isGranted('ROLE_USER')) {
 
             $response = $this->render('approvisionnement/reste.html.twig', [
                 'approvisionnements' => $repository->findAll(),
+                'fournisseurs' => $repo->findAll(),
             ]);
             $response->setSharedMaxAge(0);
             $response->headers->addCacheControlDirective('no-cache', true);
@@ -738,7 +741,7 @@ class ApprovisionnementController extends AbstractController
 
             $chaine = $id."/".$quantite."/".$numero."/".$peremption."/".$commande;
 
-            $approv[$id] = $chaine;
+            $approv[] = $chaine;
 
             // On sauvegarde dans la session
             $session->set("reception", $approv);
@@ -856,6 +859,7 @@ class ApprovisionnementController extends AbstractController
                 foreach($commandeproduits as $commandeproduit){
                     $produits[] = [
                         'id' => $commandeproduit->getProduit()->getId(),
+                        'quantite' => $commandeproduit->getQuantite(),
                     ];
 
                 }
@@ -869,48 +873,46 @@ class ApprovisionnementController extends AbstractController
                 $reception->setUser($this->getUser());
                 $em->persist($reception);
                 $i = 1;
-                foreach ($produits as $prod) {
-                    if(isset($approv[$prod['id']])){
-                    $ligne = $approv[$prod['id']];
-                    $product = explode("/",$ligne);
-                    $id = $product[0];
-                    $quantite= $product[1];
-                    $lot= $product[2];
-                    $peremption= $product[3];
-                    $quantitecommande= $product[4];
+                foreach ($produits as $prod) {// parcour des produit commamdes
+                    $quantitamp = 0;
+                    foreach($approv as $chaine){ // parcour des produits recus
+                        // $ligne = $approv[$prod['id']];
+                        $product = explode("/",$chaine);
+                        $id = $product[0];
+                        $quantite= $product[1];
+                        $lot= $product[2];
+                        $peremption= $product[3];
+                        $quantitecommande= $product[4];
+                        if($id == $prod['id']){
 
-                    $produit = $em->getRepository(Produit::class)->find($id);
-                    // fin facture
-                    $receptionProduit = new ReceptionProduit($produit, $reception, $quantite,$commande, $fournisseur);
-                    $receptionProduit->setLot($lot);
-                    $receptionProduit->setUser($this->getUser());
-                    $receptionProduit->setPrixdachat($produit->getPrixdachat());
-                    $receptionProduit->setPeremption(new \DateTime($peremption));
-                    $$i = new Stock($produit, $lot, $peremption, $quantite);
-                    $em->persist($$i);
-                    $archive = $produit->getStock();
-                    $produit->setStock($archive + $quantite);
-                    $em->persist($produit);
-                    $em->persist($receptionProduit);
+                            $produit = $em->getRepository(Produit::class)->find($id);
+                            // fin facture
+                            $receptionProduit = new ReceptionProduit($produit, $reception, $quantite,$commande, $fournisseur);
+                            $receptionProduit->setLot($lot);
+                            $receptionProduit->setUser($this->getUser());
+                            $receptionProduit->setPrixdachat($produit->getPrixdachat());
+                            $receptionProduit->setPeremption(new \DateTime($peremption));
+                            $$i = new Stock($produit, $lot, $peremption, $quantite);
+                            $em->persist($$i);
+                            $archive = $produit->getStock();
+                            $produit->setStock($archive + $quantite);
+                            $em->persist($produit);
+                            $em->persist($receptionProduit);
+                            $quantitamp += $quantite;
 
-                    if($quantite < $quantitecommande){
-                         $reste = new Reste($reception, $commande, $produit, $quantitecommande, $quantite, $fournisseur);
+                        
+                            $i++;                                                                                                               
+                        }
+                    }
+                    if($quantitamp < $prod['quantite']){// verification de la quantite commandee et celle recue
+                         $reste = new Reste($reception, $commande, $produit, $quantitecommande, $quantitamp, $fournisseur);
                         $reste->setPrixdachat($produit->getPrixdachat());
                         if(!$commande->isPayer()) $reste->setCredit(true) ;
                         $em->persist($reste);
                         $commande->setReste(true);
                     }
-                    $i++;
-                }else{
-                        $produit = $em->getRepository(Produit::class)->find($prod['id']);
+                }
 
-                      $reste = new Reste($reception, $commande, $produit, $quantitecommande, 0, $fournisseur);
-                        $reste->setPrixdachat($produit->getPrixdachat());
-                        if(!$commande->isPayer()) $reste->setCredit(true) ;
-                        $em->persist($reste);
-                        $commande->setReste(true);
-                }
-                }
                 if(!$commande->isPayer()){
                     $facture = new FactureFournisseur();
                     $facture->setMontant($commande->getMontant());

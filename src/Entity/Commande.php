@@ -52,7 +52,7 @@ class Commande
     private $fournisseur;
 
 
-    #[ORM\Column(type:"boolean") ]
+    #[ORM\Column(type:"boolean", nullable:true) ]
     private $reste;
 
     /**

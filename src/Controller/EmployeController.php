@@ -101,25 +101,12 @@ class EmployeController extends AbstractController
                             $employe->setRoles(['ROLE_ADMIN']);
                             break;
                         }
-                    case 'FINANCE': {
-                            $employe->setRoles(['ROLE_FINANCE']);
+                    case 'VENDEUR': {
+                            $employe->setRoles(['ROLE_USER']);
                             break;
                         }
-                    case 'RH': {
-                            $employe->setRoles(['ROLE_RH']);
-                            break;
-                        }
-                    case 'EMPLOYE': {
-                            $employe->setRoles(['ROLE_EMPLOYER']);
-                            break;
-                        }
-                    case 'STOCK': {
-                            $employe->setRoles(['ROLE_STOCK']);
-                            break;
-                        }
-                    case 'LIVREUR': {
-                            $employe->setRoles(['ROLE_LIVREUR']);
-                            $employe->setLivreur(true);
+                    case 'CAISSIER': {
+                            $employe->setRoles(['ROLE_CAISSIE']);
                             break;
                         }
                 }

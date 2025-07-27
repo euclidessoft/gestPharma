@@ -29,20 +29,17 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-6 mt-5">
+            <div class="col-lg-5 mt-5">
             <h5> Commande</h5>
         <table class="table table-success-light table-bordered table-hover table-striped w-100 text-center mt-5">
             <thead>
             <tr>
-                <th>{{ 'Code Produit'|trans }}</th>
                 <th class="text-start">{{ 'Désignation'|trans }}</th>
                 <th>{{'Quantité Commandée'|trans}}</th>
             </tr>
             </thead>
             <tbody>
             {% for commandeproduit in commandeproduits %}
-                <tr>
-                    <td> {{ commandeproduit.produit.id }} </td>
                     <td class="text-start">{{ commandeproduit.produit.designation }} </td>
                     <td>{{ commandeproduit.quantite }}</td>
                     {# <td>{{ reception.quantitelivrer }}</td> #}
@@ -58,14 +55,15 @@
             </tbody>
         </table>
 </div>
-<div class="col-lg-6 mt-5">
+<div class="col-lg-7 mt-5">
  <h5> Reception</h5>
   <table class="table table-success-light table-bordered table-hover table-striped w-100 text-center mt-5">
             <thead>
             <tr>
                 <th>{{ 'Date'|trans }}</th>
-                <th>{{ 'Code Produit'|trans }}</th>
                 <th class="text-start">{{ 'Désignation'|trans }}</th>
+                <th class="text-start">{{ 'Lot'|trans }}</th>
+                <th class="text-start">{{ 'Peremption'|trans }}</th>
                 <th>{{'Quantité Recue'|trans}}</th>
             </tr>
             </thead>
@@ -73,8 +71,9 @@
             {% for reception in commande.receptionProduits %}
                 <tr>
                     <td> {{ reception.date|date('d/m/Y') }} </td>
-                    <td> {{ reception.produit.id }} </td>
                     <td class="text-start">{{ reception.produit.designation }} </td>
+                    <td class="text-start">{{ reception.lot }} </td>
+                    <td class="text-start">{{ reception.peremption|date('d/m/Y') }} </td>
                     <td>{{ reception.quantite }}</td>
                     {# <td>{{ reception.quantitelivrer }}</td> #}
 

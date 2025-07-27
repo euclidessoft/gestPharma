@@ -58,12 +58,41 @@
         </tbody>
     </table>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">{{"Choix Fournisseur"|trans}}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <select id="fournisseur" class="form-control">
+            <option value="0">Selectionnez un fournisseur</option>
+            {% for fournisseur in fournisseurs %}
+                <option value="{{ fournisseur.id }}">{{ fournisseur.designation }}</option>
+            {% else %}
+            {% endfor %}
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{"Annuler"|trans}}</button>
+        <button type="button"  id="valid" class="btn btn-primary" onclick="valider()">{{"Enregistrer"|trans}}</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
 {% block scripts %}
 <script>
 function valider(){
+    if($('#fournisseur option:selected').val() != "0"){
     $("#valid").html("<i class='fa-solid fa-spinner fa-spin-pulse'></i>")
     document.location.href = "/Achat/Commande/"+ $('#fournisseur option:selected').val()
+    }else{
+        alert("{{ 'Selectionnez un fournisseur'|trans}}")
+    }
 }
 </script>
 
