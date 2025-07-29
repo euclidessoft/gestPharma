@@ -10,11 +10,11 @@
 
     <meta name="description" content="Pharma application de gestion de pharmacie">
     <meta name="author" content="Xiaoying Riley at 3rd Wave Media">
-    <link rel="shortcut icon" href="favicon.ico">
+    {#    <link rel="shortcut icon" href="favicon.ico">#}
 
     <!-- Plugins CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/2.2.2/css/dataTables.bootstrap5.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/buttons/3.0.1/css/buttons.bootstrap5.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/responsive/3.0.0/css/responsive.bootstrap5.min.css" rel="stylesheet">
@@ -25,7 +25,7 @@
 
 <body class="app"{% block start %} {% endblock %}>
 <header class="app-header fixed-top">
-    <div class="app-header-inner">
+    {#<div class="app-header-inner">
         <div class="container-fluid py-2">
             <div class="app-header-content">
                 <div class="row justify-content-between align-items-center">
@@ -43,8 +43,8 @@
                     </div><!--//col-->
                     <div class="app-search-box col">
                         <form class="app-search-form">
-                            <input type:"text" placeholder="Search..." name="search" class="form-control search-input">
-                            <button type:"submit" class="btn search-btn btn-primary" value="Search"><i
+                            <input type="text" placeholder="Search..." name="search" class="form-control search-input">
+                            <button type="submit" class="btn search-btn btn-primary" value="Search"><i
                                         class="fa-solid fa-magnifying-glass"></i></button>
                         </form>
                     </div><!--//app-search-box-->
@@ -186,56 +186,204 @@
                 </div><!--//row-->
             </div><!--//app-header-content-->
         </div><!--//container-fluid-->
+    </div><!--//app-header-inner-->#}
+    <div class="app-header-inner">
+        <div class="container-fluid py-2">
+            <div class="app-header-content">
+                <div class="row justify-content-between align-items-center">
+                    <div class="col-auto">
+                        <a id="sidepanel-toggler" class="sidepanel-toggler d-inline-block d-xl-none" href="#">
+                            {#<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"
+                                 role="img"><title>Menu</title>
+                                <path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10"
+                                      stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path>
+                            </svg>#}
+                        </a>
+                    </div><!--//col-->
+                    {#<div class="search-mobile-trigger d-sm-none col">
+                        <i class="search-mobile-trigger-icon fa-solid fa-magnifying-glass"></i>
+                    </div><!--//col-->
+                    <div class="app-search-box col">
+                        <form class="app-search-form">
+                            <input type="text" placeholder="Search..." name="search" class="form-control search-input">
+                            <button type="submit" class="btn search-btn btn-primary" value="Search"><i
+                                        class="fa-solid fa-magnifying-glass"></i></button>
+                        </form>
+                    </div><!--//app-search-box-->
+#}
+                    <div class="app-utilities col-auto">
+                        <div class="app-utility-item app-notifications-dropdown dropdown">
+                            <a class="dropdown-toggle no-toggle-arrow" id="notifications-dropdown-toggle"
+                               data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"
+                               title="Notifications">
+                                <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-bell icon"
+                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2z"/>
+                                    <path fill-rule="evenodd"
+                                          d="M8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+                                </svg>
+                                <span class="icon-badge">3</span>
+                            </a><!--//dropdown-toggle-->
+
+                            <div class="dropdown-menu p-0" aria-labelledby="notifications-dropdown-toggle">
+                                <div class="dropdown-menu-header p-3">
+                                    <h5 class="dropdown-menu-title mb-0">Notifications</h5>
+                                </div><!--//dropdown-menu-title-->
+                                <div class="dropdown-menu-content">
+                                    <div class="item p-3">
+                                        <div class="row gx-2 justify-content-between align-items-center">
+                                            <div class="col-auto">
+                                                <img class="profile-image" src="assets/images/profiles/profile-1.png"
+                                                     alt="">
+                                            </div><!--//col-->
+                                            <div class="col">
+                                                <div class="info">
+                                                    <div class="desc">Amy shared a file with you. Lorem ipsum dolor sit
+                                                        amet, consectetur adipiscing elit.
+                                                    </div>
+                                                    <div class="meta"> 2 hrs ago</div>
+                                                </div>
+                                            </div><!--//col-->
+                                        </div><!--//row-->
+                                        <a class="link-mask" href="notifications.html"></a>
+                                    </div><!--//item-->
+                                    <div class="item p-3">
+                                        <div class="row gx-2 justify-content-between align-items-center">
+                                            <div class="col-auto">
+                                                <div class="app-icon-holder">
+                                                    <svg width="1em" height="1em" viewBox="0 0 16 16"
+                                                         class="bi bi-receipt" fill="currentColor"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd"
+                                                              d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27zm.217 1.338L2 2.118v11.764l.137.274.51-.51a.5.5 0 0 1 .707 0l.646.647.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.646.646.646-.646a.5.5 0 0 1 .708 0l.509.509.137-.274V2.118l-.137-.274-.51.51a.5.5 0 0 1-.707 0L12 1.707l-.646.647a.5.5 0 0 1-.708 0L10 1.707l-.646.647a.5.5 0 0 1-.708 0L8 1.707l-.646.647a.5.5 0 0 1-.708 0L6 1.707l-.646.647a.5.5 0 0 1-.708 0L4 1.707l-.646.647a.5.5 0 0 1-.708 0l-.509-.51z"/>
+                                                        <path fill-rule="evenodd"
+                                                              d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5zm8-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5z"/>
+                                                    </svg>
+                                                </div>
+                                            </div><!--//col-->
+                                            <div class="col">
+                                                <div class="info">
+                                                    <div class="desc">You have a new invoice. Proin venenatis interdum
+                                                        est.
+                                                    </div>
+                                                    <div class="meta"> 1 day ago</div>
+                                                </div>
+                                            </div><!--//col-->
+                                        </div><!--//row-->
+                                        <a class="link-mask" href="notifications.html"></a>
+                                    </div><!--//item-->
+                                    <div class="item p-3">
+                                        <div class="row gx-2 justify-content-between align-items-center">
+                                            <div class="col-auto">
+                                                <div class="app-icon-holder icon-holder-mono">
+                                                    <svg width="1em" height="1em" viewBox="0 0 16 16"
+                                                         class="bi bi-bar-chart-line" fill="currentColor"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd"
+                                                              d="M11 2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h1V7a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7h1V2zm1 12h2V2h-2v12zm-3 0V7H7v7h2zm-5 0v-3H2v3h2z"/>
+                                                    </svg>
+                                                </div>
+                                            </div><!--//col-->
+                                            <div class="col">
+                                                <div class="info">
+                                                    <div class="desc">Your report is ready. Proin venenatis interdum
+                                                        est.
+                                                    </div>
+                                                    <div class="meta"> 3 days ago</div>
+                                                </div>
+                                            </div><!--//col-->
+                                        </div><!--//row-->
+                                        <a class="link-mask" href="notifications.html"></a>
+                                    </div><!--//item-->
+                                    <div class="item p-3">
+                                        <div class="row gx-2 justify-content-between align-items-center">
+                                            <div class="col-auto">
+                                                <img class="profile-image" src="assets/images/profiles/profile-2.png"
+                                                     alt="">
+                                            </div><!--//col-->
+                                            <div class="col">
+                                                <div class="info">
+                                                    <div class="desc">James sent you a new message.</div>
+                                                    <div class="meta"> 7 days ago</div>
+                                                </div>
+                                            </div><!--//col-->
+                                        </div><!--//row-->
+                                        <a class="link-mask" href="notifications.html"></a>
+                                    </div><!--//item-->
+                                </div><!--//dropdown-menu-content-->
+
+                                <div class="dropdown-menu-footer p-2 text-center">
+                                    <a href="notifications.html">View all</a>
+                                </div>
+
+                            </div><!--//dropdown-menu-->
+                        </div><!--//app-utility-item-->
+                        <div class="app-utility-item">
+                            <a href="settings.html" title="Settings">
+                                <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-gear icon"
+                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                          d="M8.837 1.626c-.246-.835-1.428-.835-1.674 0l-.094.319A1.873 1.873 0 0 1 4.377 3.06l-.292-.16c-.764-.415-1.6.42-1.184 1.185l.159.292a1.873 1.873 0 0 1-1.115 2.692l-.319.094c-.835.246-.835 1.428 0 1.674l.319.094a1.873 1.873 0 0 1 1.115 2.693l-.16.291c-.415.764.42 1.6 1.185 1.184l.292-.159a1.873 1.873 0 0 1 2.692 1.116l.094.318c.246.835 1.428.835 1.674 0l.094-.319a1.873 1.873 0 0 1 2.693-1.115l.291.16c.764.415 1.6-.42 1.184-1.185l-.159-.291a1.873 1.873 0 0 1 1.116-2.693l.318-.094c.835-.246.835-1.428 0-1.674l-.319-.094a1.873 1.873 0 0 1-1.115-2.692l.16-.292c.415-.764-.42-1.6-1.185-1.184l-.291.159A1.873 1.873 0 0 1 8.93 1.945l-.094-.319zm-2.633-.283c.527-1.79 3.065-1.79 3.592 0l.094.319a.873.873 0 0 0 1.255.52l.292-.16c1.64-.892 3.434.901 2.54 2.541l-.159.292a.873.873 0 0 0 .52 1.255l.319.094c1.79.527 1.79 3.065 0 3.592l-.319.094a.873.873 0 0 0-.52 1.255l.16.292c.893 1.64-.902 3.434-2.541 2.54l-.292-.159a.873.873 0 0 0-1.255.52l-.094.319c-.527 1.79-3.065 1.79-3.592 0l-.094-.319a.873.873 0 0 0-1.255-.52l-.292.16c-1.64.893-3.433-.902-2.54-2.541l.159-.292a.873.873 0 0 0-.52-1.255l-.319-.094c-1.79-.527-1.79-3.065 0-3.592l.319-.094a.873.873 0 0 0 .52-1.255l-.16-.292c-.892-1.64.902-3.433 2.541-2.54l.292.159a.873.873 0 0 0 1.255-.52l.094-.319z"/>
+                                    <path fill-rule="evenodd"
+                                          d="M8 5.754a2.246 2.246 0 1 0 0 4.492 2.246 2.246 0 0 0 0-4.492zM4.754 8a3.246 3.246 0 1 1 6.492 0 3.246 3.246 0 0 1-6.492 0z"/>
+                                </svg>
+                            </a>
+                        </div><!--//app-utility-item-->
+
+                        <div class="app-utility-item app-user-dropdown dropdown">
+                            <a class="dropdown-toggle" id="user-dropdown-toggle" data-bs-toggle="dropdown" href="#"
+                               role="button" aria-expanded="false"><img src="assets/images/user.png" alt="user profile"></a>
+                            <ul class="dropdown-menu" aria-labelledby="user-dropdown-toggle">
+                                <li><a class="dropdown-item" href="account.html">Account</a></li>
+                                <li><a class="dropdown-item" href="settings.html">Settings</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="{{ path('security_logout') }}">Log Out</a></li>
+                            </ul>
+                        </div><!--//app-user-dropdown-->
+                    </div><!--//app-utilities-->
+                </div><!--//row-->
+            </div><!--//app-header-content-->
+        </div><!--//container-fluid-->
     </div><!--//app-header-inner-->
     <div id="app-sidepanel" class="app-sidepanel">
         <div id="sidepanel-drop" class="sidepanel-drop"></div>
         <div class="sidepanel-inner d-flex flex-column">
             <a href="#" id="sidepanel-close" class="sidepanel-close d-xl-none">&times;</a>
             <div class="app-branding">
-                <a class="app-logo" href="index.html">
+                <a class="app-logo" href="#">
                     <img class="logo-icon me-2" src="{{ asset('assets/images/app-logo.svg') }}" alt="logo">
-                    <span class="logo-text">PHARMA</span></a>
+                    <span class="logo-text">PHARMACARE</span></a>
             </div><!--//app-branding-->
 
             <nav id="app-nav-main" class="app-nav app-nav-main flex-grow-1">
                 <ul class="app-menu list-unstyled accordion" id="menu-accordion">
                     <li class="nav-item">
-                        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
-                        <a class="submenu-link active" href="index.html">
-						        <span class="nav-icon">
-						        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-house-door"
-                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-		  <path fill-rule="evenodd"
-                d="M7.646 1.146a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 .146.354v7a.5.5 0 0 1-.5.5H9.5a.5.5 0 0 1-.5-.5v-4H7v4a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .146-.354l6-6zM2.5 7.707V14H6v-4a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v4h3.5V7.707L8 2.207l-5.5 5.5z"/>
-		  <path fill-rule="evenodd" d="M13 2.5V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/>
-		</svg>
-						         </span>
-                            <span class="submenu-link-text">Tableau de bord</span>
-                        </a><!--//submenu-link-->
+                            <a class="nav-link active" href="#">
+                            <span class="nav-icon">
+                                <i class="fas fa-dashboard fa-lg"></i>
+                             </span>
+                            <span class="nav-link-text">Tableau de bord</span>
+                        </a>
                     </li>
-
-                    <!--//nav-item-->
                     <li class="nav-item has-submenu">
-                        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
-                        <a class="submenu-link submenu-toggle" href="#" data-bs-toggle="collapse"
-                           data-bs-target="#submenu-2" aria-expanded="false" aria-controls="submenu-1">
+                        <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse"
+                           data-bs-target="#submenu-1" aria-expanded="false" aria-controls="submenu-1">
 						        <span class="nav-icon">
-						        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
-						        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cash" viewBox="0 0 16 16">
-  <path d="M8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
-  <path d="M0 4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V6a2 2 0 0 1-2-2z"/>
-</svg>
+                                    <i class="fa-solid fa-shop fa-lg"></i>
 						         </span>
-                            <span class="submenu-link-text">Vente</span>
+                            <span class="nav-link-text">Vente</span>
                             <span class="submenu-arrow">
-		                             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-down"
-                                          fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-	  <path fill-rule="evenodd"
-            d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-	</svg>
-	                             </span><!--//submenu-arrow-->
-                        </a><!--//submenu-link-->
-                        <div id="submenu-2" class="collapse submenu submenu-1" data-bs-parent="#menu-accordion">
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-down"
+                                      fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                </svg>
+                             </span>
+                        </a><!--//nav-link-->
+                        <div id="submenu-1" class="collapse submenu submenu-1" data-bs-parent="#menu-accordion">
                             <ul class="submenu-list list-unstyled">
 
                                 <li class="submenu-item">
@@ -245,478 +393,207 @@
                                     <a class="submenu-link" href="{{ path('vente_index') }}">Cloture</a>
                                 </li>
                                 <li class="submenu-item">
-                                    <a class="submenu-link" href="settings.html">Chiffre d'affaires</a>
+                                    <a class="submenu-link" href="#">Chiffre d'affaires</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
-                <li class="nav-item dropend" title="{{ 'Finance'|trans }}">
-                    <a class="submenu-link submenu-toggle {% block finance %} {% endblock %}" href="#" id="finance"
-                       data-bs-toggle="submenu" aria-haspopup="true" aria-expanded="false">
-                        <div class="icone">
-                            <i class="fa-solid fa-money-bill fa-lg"></i>
-                        </div>
-                        <div class="title">
-                            {{ 'Finance'|trans }}
-                        </div>
-                    </a>
-                    <ul class=" submenu-list" aria-labelledby="finance">
-                        <li class="submenu-item submenu">
-                            <a class="submenu-link submenu-toggle {% block balance %}{% endblock %}" href="#"
-                               id="balance" data-bs-toggle="submenu" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa-solid fa-chart-simple"></i>
-                                {{ 'Balance'|trans }}
-                            </a>
-                            <ul class="submenu-submenu" aria-labelledby="balance">
-                                <li class="submenu-item">
-                                    <a class="submenu-link {% block balance_journaliere %}{% endblock %}"
-                                       href="#" data-bs-toggle="modal" data-bs-target="#rapport">
-                                        <i class="fa-solid fa-chart-simple"></i>
-                                        {{ 'Journalière'|trans }}
-                                    </a>
-                                </li>
-                                <li class="submenu-item">
-                                    <a class="submenu-link {% block balance_date %}{% endblock %}"
-                                       href="{{ path('finance_rapport_date') }}">
-                                        <i class="fa-solid fa-magnifying-glass-chart"></i>
-                                        {{ 'A une date'|trans }}
-                                    </a>
-                                </li>
-                                <li class="submenu-item">
-                                    <a class="submenu-link {% block balance_interval %}{% endblock %}"
-                                       href="{{ path('finance_rapport_interval') }}">
-                                        <i class="fa-solid fa-magnifying-glass-chart"></i>
-                                        {{ 'Dans un interval'|trans }}
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="submenu-item submenu">
-                            <a class="submenu-link submenu-toggle {% block transfert %}{% endblock %}" href="#"
-                               id="transfert" data-bs-toggle="submenu" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa-solid fa-arrow-right-arrow-left"></i>
-                                {{ 'Transfert des fonds'|trans }}
-                            </a>
-                            <ul class="submenu-submenu" aria-labelledby="transfert">
-                                <li class="submenu-item">
-                                    <a class="submenu-link {% block caisse_banque %}{% endblock %}"
-                                       href="{{ path('transfert_caisse') }}">
-                                        <i class="fa-solid fa-cash-register"></i>
-                                        <i class="fa-solid fa-landmark"></i>
-                                        {{ 'Caisse => Banque'|trans }}
-                                    </a>
-                                </li>
-                                <li class="submenu-item">
-                                    <a class="submenu-link {% block banque_caisse %}{% endblock %}"
-                                       href="{{ path('transfert_banque') }}">
-                                        <i class="fa-solid fa-landmark"></i>
-                                        <i class="fa-solid fa-cash-register"></i>
-                                        {{ 'Banque => Caisse'|trans }}
-                                    </a>
-                                </li>
-                                <li class="submenu-item">
-                                    <a class="submenu-link {% block all_transfert %}{% endblock %}"
-                                       href="{{ path('transfert_index') }}">
-                                        <i class="fa-solid fa-money-bill-transfer"></i>
-                                        <i class="fas fa-list"></i>
-                                        {{ 'Tous les transferts'|trans }}
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="submenu-item submenu">
-                            <a class="submenu-link submenu-toggle {% block remboursement %}{% endblock %}" href="#"
-                               id="remboursement" data-bs-toggle="submenu" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa-solid fa-hand-holding-dollar"></i>
-                                {{ 'Remboursements'|trans }}
-                            </a>
-                            <ul class="submenu-submenu" aria-labelledby="remboursement">
-                                <li class="submenu-item">
-                                    <a class="submenu-link {% block choix_remboursement %}{% endblock %}"
-                                       href="{{ path('remboursement_choix') }}">
-                                        <i class="fas fa-money-bill"></i>
-                                        {{ 'Financements'|trans }}
-                                    </a>
-                                </li>
-                                <li class="submenu-item">
-                                    <a class="submenu-link {% block remboursement_avoir %}{% endblock %}"
-                                       href="{{ path('remboursement_avoir_index') }}">
-                                        <i class="fa-solid fa-sack-dollar"></i>
-                                        {{ 'Avoir'|trans }}
-                                    </a>
-                                </li>
-                                <li class="submenu-item">
-                                    <a class="submenu-link {% block all_remboursement %}{% endblock %}"
-                                       href="{{ path('remboursement_index') }}">
-                                        <i class="fas fa-list"></i>
-                                        {{ 'Tous les remboursements'|trans }}
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="submenu-item submenu">
-                            <a class="submenu-link submenu-toggle {% block depense %}{% endblock %}" href="#"
-                               id="depense"
-                               data-bs-toggle="submenu" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa-solid fa-right-from-bracket"></i>
-                                {{ 'Dépense'|trans }}
-                            </a>
-                            <ul class="submenu-submenu" aria-labelledby="depense">
-
-                                <li class="submenu-item">
-                                    <a class="submenu-link  {% block new_depense %}{% endblock %}"
-                                       href="{{ path('depense_new') }}">
-                                        <i class="fas fa-money-bill"></i><i class="fas fa-plus"></i>
-                                        {{ 'Créer une dépense'|trans }}
-                                    </a>
-                                </li>
-                                <li class="submenu-item">
-                                    <a class="submenu-link {% block all_depense %}{% endblock %}"
-                                       href="{{ path('depense_index') }}">
-                                        <i class="fas fa-money-bill"></i><i class="fas fa-list"></i>
-                                        {{ 'Toutes les dépenses'|trans }}
-                                    </a>
-                                </li>
-                                <li class="submenu-item">
-                                    <a class="submenu-link  {% block all_categories %}{% endblock %}"
-                                       href="{{ path('categorie_index') }}">
-                                        <i class="fas fa-money-check"></i><i class="fas fa-plus"></i>
-                                        {{ 'Lignes de dépense'|trans }}
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="submenu-item submenu">
-                            <a class="submenu-link submenu-toggle {% block achat %}{% endblock %}" href="#"
-                               id="paiement_fournisseur"
-                               data-bs-toggle="submenu" aria-haspopup="true" aria-expanded="false">
-                                <i class="fa-solid fa-hospital-user"></i>
-                                {{ 'Paiement fournisseur'|trans }}
-                            </a>
-                            <ul class="submenu-submenu" aria-labelledby="paiement_fournisseur">
-                                <li class="submenu-item">
-                                    <a class="submenu-link {% block new_achat %}{% endblock %}"
-                                       {# href="{{ path('facture_list') }}"> #}>
-                                        <i class="fa-solid fa-receipt"></i>
-                                        {{ 'Factures impayées'|trans }}
-                                    </a>
-                                </li>
-                                <li class="submenu-item">
-                                    <a class="submenu-link {% block all_achat %}{% endblock %}"
-                                       {# href="{{ path('achat_index') }}"> #}>
-                                        <i class="fas fa-list"></i>
-                                        {{ 'Tous les paiements'|trans }}
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="submenu-item submenu">
-                            <a class="submenu-link submenu-toggle {% block salaire %}{% endblock %}" href="#"
-                               id="paiement_salaire"
-                               data-bs-toggle="submenu" aria-haspopup="true" aria-expanded="false">
-                               <i class="fa-solid fa-money-bill-trend-up"></i>
-                                {{ 'Salaire'|trans }}
-                            </a>
-                            <ul class="submenu-submenu" aria-labelledby="paiement_salaire">
-                                <li class="submenu-item">
-                                    <a class="submenu-link {% block Acompte %}{% endblock %}"
-                                       href="{{ path('finance_accompte') }}">
-                                        <i class="fa-solid fa-receipt"></i>
-                                        {{ 'Paiement Accompte'|trans }}
-                                    </a>
-                                </li>
-                                <li class="submenu-item">
-                                    <a class="submenu-link {% block paie_salaire %}{% endblock %}"
-                                       href="{{ path('finance_salaire') }}">
-                                        <i class="fa-solid fa-money-bill-trend-up"></i>
-                                        {{ 'Paiement Salaire'|trans }}
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="submenu-item">
-                            <a class="submenu-link {% block banque %}{% endblock %}" href="{{ path('app_banque_index') }}"
-                               id="banque">
-                                <i class="fa-solid fa-landmark"></i>
-                                {{ 'Banque'|trans }}
-                            </a>
-                        </li>
-                        <li class="submenu-item">
-                            <a class="submenu-link {% block financement %}{% endblock %}"
-                               href="{{ path('financement_index') }}"
-                               id="banque">
-                                <i class="fas fa-money-bills"></i>
-                                {{ 'Financement'|trans }}
-                            </a>
-                        </li>
-                        <li class="submenu-item submenu">
-                            <a class="submenu-link submenu-toggle {% block journal %}{% endblock %}" href="#"
-                               id="paiement_salaire"
-                               data-bs-toggle="submenu" aria-haspopup="true" aria-expanded="false">
-                               <i class="fa-solid fa-money-bill-trend-up"></i>
-                                {{ 'Journal'|trans }}
-                            </a>
-                            <ul class="submenu-submenu" aria-labelledby="paiement_salaire">
-                                <li class="submenu-item">
-                                    <a class="submenu-link {% block comptable %}{% endblock %}"
-                                       href="{{ path('finance_index') }}">
-                                       <i class="fa-solid fa-money-bill-transfer"></i>
-                                        {{ 'Comptable'|trans }}
-                                    </a>
-                                </li>
-                                <li class="submenu-item">
-                                    <a class="submenu-link {% block repartition %}{% endblock %}"
-                                       href="{{ path('finance_journal_repartir') }}">
-                                        <i class="fa fa-share"></i><i class="fa-solid fa-money-bill-transfer"></i>
-                                        {{ 'Repartition Resultat'|trans }}
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                         <li class="submenu-item">
-                            <a class="submenu-link {% block resultat %}{% endblock %}"
-                               href="{{ path('finance_Compteresultat') }}">
-                                <i class="fa-solid fa-money-bill-transfer"></i>
-                                {{ 'Compte Resultat'|trans }}
-                            </a>
-                        </li>
-                        <li class="submenu-item">
-                            <a class="submenu-link {% block bilan %}{% endblock %}"
-                               href="{{ path('finance_bilan') }}">
-                                <i class="fa-solid fa-money-bill-transfer"></i>
-                                {{ 'Bilan'|trans }}
-                            </a>
-                        </li>
-                        <li class="submenu-item">
-                            <a class="submenu-link {% block amortissement %}{% endblock %}"
-                               href="{{ path('finance_immobilisation') }}">
-                                <i class="fa-solid fa-money-bill-trend-up"></i>
-                                {{ 'Amortissement'|trans }}
-                            </a>
-                        </li>
-                        <li class="submenu-item">
-                            <a class="submenu-link {% block affectation %}{% endblock %}"
-                               href="{{ path('finance_repartir') }}">
-                                <i class="fa fa-share"></i><i class="fa-solid  fa-money-bill-transfer"></i>
-                                {{ 'affectation de résultat'|trans }}
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                   
-                <li class="nav-item dropend" title="{{ 'Employés'|trans }}">
-                    <a class="nav-link dropdown-toggle {% block administration %} {% endblock %}" href="#"
-                       id="administration"
-                       data-bs-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">
-                        <div class="icone">
-                            <i class="fas fa-users fa-lg"></i>
-                        </div>
-                        <div class="title">
-                            {{ 'Employés'|trans }}
-                        </div>
-                    </a>
-                    <ul class=" dropdown-menu" aria-labelledby="administration">
-                        <li class="menu-title">Administration</li>
-                        <li class="dropdown-item" title="{{ 'Employés'|trans }}">
-                            <a class="nav-link {% block employe %}{% endblock %}"
-                               href="{{ path('employe_index') }}">
-                                <i class="fa-solid fa-address-card"></i>
-                                {{ 'Employés'|trans }}
-                            </a>
-                        </li>
-                        <li class="dropdown-item" title="{{ 'Contrat'|trans }}">
-                            <a class="nav-link {% block contrat %}{% endblock %}"
-                               href="{{ path('contrat_index') }}">
-                                <i class="fa-solid fa-address-card"></i>
-                                {{ 'Contrat'|trans }}
-                            </a>
-                        </li>
-                        <li class="dropdown-item" title="{{ 'Planning des congés'|trans }}">
-                            <a class="nav-link {% block planning %}{% endblock %}"
-                               href="{{ path('calendrier_index') }}">
-                                <i class="fa-solid fa-calendar-days"></i>
-                                {{ 'Planning des congés'|trans }}
-                            </a>
-                        </li>
-                        {# <li class="dropdown-item" title="{{ 'Configuration'|trans }}">
-                            <a class="nav-link {% block config %}{% endblock %}"
-                               href="{{ path('departement_index') }}">
-                                <i class="fa-solid fa-gears"></i>
-                                {{ 'Configuration'|trans }}
-                            </a>
-                        </li> #}
-                        <li class="menu-title">Discipline</li>
-                        <li class="dropdown-item" title="{{ 'Permissions'|trans }}">
-                            <a class="nav-link {% block permissions %}{% endblock %}"
-                               href="{{ path('conges_employe_index') }}">
-                                <i class="fa-solid fa-user-check"></i>
-                                {{ 'Permissions'|trans }}
-                            </a>
-                        </li>
-                        <li class="dropdown-item" title="{{ 'Absences'|trans }}">
-                            <a class="nav-link {% block absence %}{% endblock %}"
-                               href="{{ path('absence_admin_attente') }}">
-                                <i class="fa fa-user-slash"></i>
-                                {{ 'Absences'|trans }}
-                            </a>
-                        </li>
-                        <li class="dropdown-item" title="{{ 'Demande d\'explication'|trans }}">
-                            <a class="nav-link {% block explications %}{% endblock %}"
-                               href="{{ path('demande_index') }}">
-                                <i class="fa-solid fa-user-pen"></i>
-                                {{ "Demande d'explication"|trans }}
-                            </a>
-                        </li>
-                        <li class="dropdown-item" title="{{ 'Sanctions'|trans }}">
-                            <a class="nav-link {% block sanctions %}{% endblock %}"
-                               href="{{ path('sanction_index') }}">
-                                <i class="fa-solid fa-user-xmark"></i>
-                                {{ 'Sanctions'|trans }}
-                            </a>
-                        </li>
-                        <li class="menu-title">Evaluation</li>
-                        <li class="dropdown-item" title="{{ 'Performance'|trans }}">
-                            <a class="nav-link {% block critere %}{% endblock %}"
-                               href="{{ path('critere_evaluation_index') }}">
-                                <i class="fa-solid fa-chart-simple"></i>
-                                {{ 'Critere'|trans }}
-                            </a>
-                        </li>
-                        <li class="dropdown-item" title="{{ 'Performance'|trans }}">
-                            <a class="nav-link {% block performance %}{% endblock %}"
-                               href="{{ path('evaluation_index') }}">
-                                <i class="fa-solid fa-chart-line"></i>
-                                {{ 'Performance'|trans }}
-                            </a>
-                        </li>
-                        <li class="menu-title">Paie</li>
-
-                        <li class="dropdown-item" title="{{ 'Accompte'|trans }}">
-                            <a class="nav-link {% block accompte %}{% endblock %}"
-                               href="{{ path('app_accompte_index') }}">
-                                <i class="fa-solid fa-money-check-dollar"></i>
-                                {{ 'Accompte'|trans }}
-                            </a>
-                        </li>
-                        <li class="dropdown-item" title="{{ 'Heure Supplementaire'|trans }}">
-                            <a class="nav-link {% block heure_supplementaire %}{% endblock %}"
-                               href="{{ path('heure_suplementaire_index') }}">
-                                <i class="fa-solid fa-money-check-dollar"></i>
-                                {{ 'Heure Supplementaire'|trans }}
-                            </a>
-                        </li>
-                        <li class="dropdown-item" title="{{ 'Fiche de paie'|trans }}">
-                            <a class="nav-link {% block fiche %}{% endblock %}"
-                               href="{{ path('paie_index') }}">
-                                <i class="fa-solid fa-money-check-dollar"></i>
-                                {{ 'Fiche de paie à valider'|trans }}
-                            </a>
-                        </li>
-                        <li class="dropdown-item" title="{{ 'Primes et avantages'|trans }}">
-                            <a class="nav-link {% block prime %}{% endblock %}"
-                               href="{{ path('prime_index') }}">
-                                <i class="fa-solid fa-money-bill-wheat"></i>
-                                {{ 'Primes et avantages'|trans }}
-                            </a>
-                        </li>
-                        <li class="dropdown-item" title="{{ 'Historique des paiements'|trans }}">
-                            <a class="nav-link {% block paie_historique %}{% endblock %}"
-                               href="{{ path('paie_historique') }}">
-                                <i class="fa-solid fa-rectangle-list"></i>
-                                {{ 'Historique des paiements'|trans }}
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                    <li class="nav-item">
-                        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
-                        <a class="submenu-link" href="{{ path('produit_index') }}">
-						       
-                            <span class="submenu-link-text">Produits</span>
-                        </a>
-                        <!--//submenu-link-->
-                    </li>
-                     <li class="nav-item">
-                        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
-                        <a class="submenu-link" href="{{ path('stock_index') }}">
-						       
-                            <span class="submenu-link-text">Stock</span>
-                        </a>
-                        <!--//submenu-link-->
-                    </li>
-                     <li class="nav-item">
-                        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
-                        <a class="submenu-link" href="{{ path('stock_historique') }}">
-						       
-                            <span class="submenu-link-text">Commande</span>
-                        </a>
-                        <!--//submenu-link-->
-                    </li>                   <!--//nav-item-->
-                    <li class="nav-item">
-                        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
-                        <a class="submenu-link" href="{{ path('mutuel_index') }}">
-						        <span class="nav-icon">
-						        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-card-list"
-                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                  <path fill-rule="evenodd"
-                                        d="M14.5 3h-13a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
-                                  <path fill-rule="evenodd"
-                                        d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5z"/>
-                                  <circle cx="3.5" cy="5.5" r=".5"/>
-                                  <circle cx="3.5" cy="8" r=".5"/>
-                                  <circle cx="3.5" cy="10.5" r=".5"/>
-                                </svg>
-						         </span>
-                            <span class="submenu-link-text">Mutuelle</span>
-                        </a>
-                        <!--//submenu-link-->
-                    </li>
-
-                    <!--//nav-item-->
-                    <li class="nav-item">
-                        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
-                        <a class="submenu-link" href="{{ path('app_fournisseur_index')}}">
-						        <span class="nav-icon">
-						        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-card-list"
-                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                  <path fill-rule="evenodd"
-                                        d="M14.5 3h-13a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
-                                  <path fill-rule="evenodd"
-                                        d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5z"/>
-                                  <circle cx="3.5" cy="5.5" r=".5"/>
-                                  <circle cx="3.5" cy="8" r=".5"/>
-                                  <circle cx="3.5" cy="10.5" r=".5"/>
-                                </svg>
-						         </span>
-                            <span class="submenu-link-text">Fournisseur</span>
-                        </a>
-                        <!--//submenu-link-->
-                    </li>
-
-                    <li class="nav-item">
-                        <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
-                        <a class="submenu-link" href="orders.html">
-						        <span class="nav-icon">
-						        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-card-list"
-                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                  <path fill-rule="evenodd"
-                                        d="M14.5 3h-13a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
-                                  <path fill-rule="evenodd"
-                                        d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5z"/>
-                                  <circle cx="3.5" cy="5.5" r=".5"/>
-                                  <circle cx="3.5" cy="8" r=".5"/>
-                                  <circle cx="3.5" cy="10.5" r=".5"/>
-                                </svg>
-						         </span>
-                            <span class="submenu-link-text">Avoir</span>
-                        </a>
-                        <!--//submenu-link-->
-                    </li>
-                    <!--//nav-item-->
-                    <!--//nav-item-->
                     <li class="nav-item has-submenu">
+                        <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse"
+                           data-bs-target="#submenu-2" aria-expanded="false" aria-controls="submenu-2">
+                            <span class="nav-icon">
+                                <i class="fa-solid fa-money-bill fa-lg"></i>
+                            </span>
+                            <span class="nav-link-text">Finance</span>
+                            <span class="submenu-arrow">
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-down"
+                 fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+            </svg>
+        </span>
+                        </a><!--//nav-link-->
+                        <div id="submenu-2" class="collapse submenu submenu-2" data-bs-parent="#menu-accordion">
+                            <ul class="submenu-list list-unstyled">
+                                <li class="submenu-item dropend">
+                                    <a class="nav-link dropdown-toggle " href="#" id="finance"
+                                       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+{#                                    <a class="submenu-link" href="{{ path('vente_new') }}">#}
+                                        <i class="fa-solid fa-chart-simple"></i>
+                                        Balance
+                                    </a>
+                                    <ul class="dropdown-submenu" aria-labelledby="balance">
+                                        <li class="dropdown-item">
+                                            <a class="nav-link "
+                                               href="#" data-bs-toggle="modal" data-bs-target="#rapport">
+                                                <i class="fa-solid fa-chart-simple"></i>
+                                                {{ 'Journalière'|trans }}
+                                            </a>
+                                        </li>
+                                        <li class="dropdown-item">
+                                            <a class="nav-link {% block balance_date %}{% endblock %}"
+                                               href="{{ path('finance_rapport_date') }}">
+                                                <i class="fa-solid fa-magnifying-glass-chart"></i>
+                                                {{ 'A une date'|trans }}
+                                            </a>
+                                        </li>
+                                        <li class="dropdown-item">
+                                            <a class="nav-link {% block balance_interval %}{% endblock %}"
+                                               href="{{ path('finance_rapport_interval') }}">
+                                                <i class="fa-solid fa-magnifying-glass-chart"></i>
+                                                {{ 'Dans un interval'|trans }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="#">Transfert de fonds</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="#">Remboursements</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="#">Dépenses</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="#">Paiement fournisseur</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="#">Salaires</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="{{ path('app_banque_index') }}">Banques</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="{{ path('financement_index') }}">Financement</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="#">Journal</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="{{ path('finance_Compteresultat') }}">Compte de resultat</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="{{ path('finance_bilan') }}">Bilan</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="{{ path('finance_immobilisation') }}">Amortissement</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="{{ path('finance_repartir') }}">Affectation de resultat</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item has-submenu">
+                        <a class="nav-link submenu-toggle" href="#" data-bs-toggle="collapse"
+                           data-bs-target="#submenu-3" aria-expanded="false" aria-controls="submenu-3">
+        <span class="nav-icon">
+            <i class="fas fa-users fa-lg"></i>
+        </span>
+                            <span class="nav-link-text">{{ 'Employés'|trans }}</span>
+                            <span class="submenu-arrow">
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-down"
+                 fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+            </svg>
+        </span>
+                        </a><!--//nav-link-->
+                        <div id="submenu-3" class="collapse submenu submenu-3" data-bs-parent="#menu-accordion">
+                            <ul class="submenu-list list-unstyled">
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="{{ path('employe_index') }}">{{ 'Employés'|trans }}</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="{{ path('contrat_index') }}">{{ 'Contrat'|trans }}</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="{{ path('calendrier_index') }}">{{ 'Planning des congés'|trans }}</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="#">{{ 'Configuration'|trans }}</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="{{ path('conges_employe_index') }}">{{ 'Permissions'|trans }}</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="{{ path('absence_admin_attente') }}">{{ 'Absences'|trans }}</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="{{ path('demande_index') }}">{{ "Demande d'explication"|trans }}</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="{{ path('sanction_index') }}">{{ 'Sanctions'|trans }}</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="#">Evaluation</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="{{ path('app_accompte_index') }}">{{ 'Accompte'|trans }}</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="{{ path('heure_suplementaire_index') }}">{{ 'Heure Supplementaire'|trans }}</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="{{ path('paie_index') }}">{{ 'Fiche de paie à valider'|trans }}</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="{{ path('prime_index') }}">{{ 'Primes et avantages'|trans }}</a>
+                                </li>
+                                <li class="submenu-item">
+                                    <a class="submenu-link" href="{{ path('paie_historique') }}">{{ 'Historique des paiements'|trans }}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('produit_index') }}">
+                            <span class="nav-icon">
+                                <i class="fa-brands fa-product-hunt fa-lg"></i>
+                             </span>
+                            <span class="nav-link-text">Produits</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('stock_index') }}">
+                            <span class="nav-icon">
+                                <i class="fas fa-warehouse fa-lg"></i>
+                             </span>
+                            <span class="nav-link-text">Stock</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('stock_historique') }}">
+                            <span class="nav-icon">
+                                <i class="fa-solid fa-cart-arrow-down fa-lg"></i>
+                             </span>
+                            <span class="nav-link-text">Commande</span>
+                        </a>
+                    </li>
+                   <li class="nav-item">
+                        <a class="nav-link" href="{{ path('mutuel_index') }}">
+                            <span class="nav-icon">
+                                <i class="fa-solid fa-house-medical-flag fa-lg"></i>
+                             </span>
+                            <span class="nav-link-text">Mutuelle</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_fournisseur_index') }}">
+                            <span class="nav-icon">
+                                <i class="fa-solid fa-hospital-user fa-lg"></i>
+                             </span>
+                            <span class="nav-link-text">Fournisseur</span>
+                        </a>
+                    </li>
+
+
+
+
+
+
+                    <!--//nav-item-->
+                    <!--//nav-item-->
+                    {#<li class="nav-item has-submenu">
                         <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
                         <a class="submenu-link submenu-toggle" href="#" data-bs-toggle="collapse"
                            data-bs-target="#submenu-4" aria-expanded="false" aria-controls="submenu-2">
@@ -744,27 +621,21 @@
                                 <li class="submenu-item"><a class="submenu-link" href="signup.html">Déconexion</a></li>
                             </ul>
                         </div>
-                    </li><!--//nav-item-->
+                    </li>#}<!--//nav-item-->
                 </ul><!--//app-menu-->
             </nav><!--//app-nav-->
             <div class="app-sidepanel-footer">
                 <nav class="app-nav app-nav-footer">
                     <ul class="app-menu footer-menu list-unstyled">
                         <li class="nav-item">
-                            <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
-                            <a class="submenu-link" href="settings.html">
-							        <span class="nav-icon">
-							            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-gear"
-                                             fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-	  <path fill-rule="evenodd"
-            d="M8.837 1.626c-.246-.835-1.428-.835-1.674 0l-.094.319A1.873 1.873 0 0 1 4.377 3.06l-.292-.16c-.764-.415-1.6.42-1.184 1.185l.159.292a1.873 1.873 0 0 1-1.115 2.692l-.319.094c-.835.246-.835 1.428 0 1.674l.319.094a1.873 1.873 0 0 1 1.115 2.693l-.16.291c-.415.764.42 1.6 1.185 1.184l.292-.159a1.873 1.873 0 0 1 2.692 1.116l.094.318c.246.835 1.428.835 1.674 0l.094-.319a1.873 1.873 0 0 1 2.693-1.115l.291.16c.764.415 1.6-.42 1.184-1.185l-.159-.291a1.873 1.873 0 0 1 1.116-2.693l.318-.094c.835-.246.835-1.428 0-1.674l-.319-.094a1.873 1.873 0 0 1-1.115-2.692l.16-.292c.415-.764-.42-1.6-1.185-1.184l-.291.159A1.873 1.873 0 0 1 8.93 1.945l-.094-.319zm-2.633-.283c.527-1.79 3.065-1.79 3.592 0l.094.319a.873.873 0 0 0 1.255.52l.292-.16c1.64-.892 3.434.901 2.54 2.541l-.159.292a.873.873 0 0 0 .52 1.255l.319.094c1.79.527 1.79 3.065 0 3.592l-.319.094a.873.873 0 0 0-.52 1.255l.16.292c.893 1.64-.902 3.434-2.541 2.54l-.292-.159a.873.873 0 0 0-1.255.52l-.094.319c-.527 1.79-3.065 1.79-3.592 0l-.094-.319a.873.873 0 0 0-1.255-.52l-.292.16c-1.64.893-3.433-.902-2.54-2.541l.159-.292a.873.873 0 0 0-.52-1.255l-.319-.094c-1.79-.527-1.79-3.065 0-3.592l.319-.094a.873.873 0 0 0 .52-1.255l-.16-.292c-.892-1.64.902-3.433 2.541-2.54l.292.159a.873.873 0 0 0 1.255-.52l.094-.319z"/>
-	  <path fill-rule="evenodd"
-            d="M8 5.754a2.246 2.246 0 1 0 0 4.492 2.246 2.246 0 0 0 0-4.492zM4.754 8a3.246 3.246 0 1 1 6.492 0 3.246 3.246 0 0 1-6.492 0z"/>
-	</svg>
-							        </span>
-                                <span class="submenu-link-text">Settings</span>
-                            </a><!--//submenu-link-->
-                        </li><!--//nav-item-->
+                            <a class="nav-link" href="#">
+                            <span class="nav-icon">
+                                <i class="fas fa-cog fa-lg"></i>
+                             </span>
+                                <span class="nav-link-text">Settings</span>
+                            </a>
+                        </li>
+
                     </ul><!--//footer-menu-->
                 </nav>
             </div><!--//app-sidepanel-footer-->
@@ -817,7 +688,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script> #}
 
 <!-- Font Awesome -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/js/all.min.js"></script>
 
 <!-- Charts JS -->
 {#<script src="{{ asset('assets/plugins/chart.js/chart.min.js') }}"></script>#}
@@ -827,51 +698,49 @@
 {#<script src="{{ asset('assets/js/app.js') }}"></script>#}
 
 
-
-
 <script>
-//     $(document).on('change', '#vente_mutuelle', function(){
-//         let $form = $(this).closest('form');
-//
-// // Simulate form data, but only include the selected value.
-//         let data = {};
-//         data[$(this).attr('name')] = $(this).val();
-// //alert($(this).val())
-// // Submit data via AJAX to the form's action path.
-//         $.post($form.attr('action'), data).then(function (data){
-//             let $input = $(data).find('#vente_service')
-//             $('#vente_service').replaceWith($input)
-//
-//         })
-//
-//
-//     })
+    //     $(document).on('change', '#vente_mutuelle', function(){
+    //         let $form = $(this).closest('form');
+    //
+    // // Simulate form data, but only include the selected value.
+    //         let data = {};
+    //         data[$(this).attr('name')] = $(this).val();
+    // //alert($(this).val())
+    // // Submit data via AJAX to the form's action path.
+    //         $.post($form.attr('action'), data).then(function (data){
+    //             let $input = $(data).find('#vente_service')
+    //             $('#vente_service').replaceWith($input)
+    //
+    //         })
+    //
+    //
+    //     })
 
-{#$(document).on('change', '#vente_Mutuelle', function(){#}
-{#    $.ajax({#}
-{#        type: "POST",#}
-{#        #}{#url: "{{ path('commande_produit_add') }}",#}
-{#        data: { produit : produit , quantite : quant.val() },#}
-{#        success: function (data) {#}
-{#            if (data['id'] == 'ok') {#}
+    {#$(document).on('change', '#vente_Mutuelle', function(){#}
+    {#    $.ajax({#}
+    {#        type: "POST",#}
+    {#        #}{#url: "{{ path('commande_produit_add') }}",#}
+    {#        data: { produit : produit , quantite : quant.val() },#}
+    {#        success: function (data) {#}
+    {#            if (data['id'] == 'ok') {#}
 
-{#        },#}
-{#        error: function () {#}
-{#            alert("{{ 'La requête n’a pas abouti'|trans }}");#}
-{#        }#}
-{#    });#}
-{#    let $form = $(this).closest('form');#}
-{#// Simulate form data, but only include the selected value.#}
-{#    let data = {};#}
-{#    data[$(this).attr('name')] = $(this).val();#}
-{#//alert($(this).val())#}
-{#// Submit data via AJAX to the form's action path.#}
-{#    $.post($form.attr('action'), data).then(function (data){#}
-{#        let $input = $(data).find('#vente_service')#}
-{#        $('#vente_service').replaceWith($input)#}
-{#    })#}
+    {#        },#}
+    {#        error: function () {#}
+    {#            alert("{{ 'La requête n’a pas abouti'|trans }}");#}
+    {#        }#}
+    {#    });#}
+    {#    let $form = $(this).closest('form');#}
+    {#// Simulate form data, but only include the selected value.#}
+    {#    let data = {};#}
+    {#    data[$(this).attr('name')] = $(this).val();#}
+    {#//alert($(this).val())#}
+    {#// Submit data via AJAX to the form's action path.#}
+    {#    $.post($form.attr('action'), data).then(function (data){#}
+    {#        let $input = $(data).find('#vente_service')#}
+    {#        $('#vente_service').replaceWith($input)#}
+    {#    })#}
 
-{#})#}
+    {#})#}
     $(document).ready(function () {
         var table = $('#liste').DataTable({
             responsive: true,
@@ -907,19 +776,22 @@
             }
 
         });
-       typeversement()
+        typeversement()
     });
+
     function load(id) {
-        $("#"+id).html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
+        $("#" + id).html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
     }
+
     function load_btn(id) {
-        $("#"+id).html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
+        $("#" + id).html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
         $('#form').submit();
     }
-    function produits(){
+
+    function produits() {
 
         var fournisseur = $('#commande_fournisseur option:selected').val();
-        if(fournisseur != "") {
+        if (fournisseur != "") {
             $('#produits').html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
             $.ajax({
                 type: "POST",
@@ -992,6 +864,7 @@
             });
         }
     }
+
     /*****Fnc ajout produit*******/
     {#function ajouter(produit) {#}
 
@@ -1043,22 +916,22 @@
     {#        alert("{{ 'Veillez bien renseigner la quantite'|trans }}");#}
     {#    }#}
     {#}#}
-    function supprim(produit,stock) {
+    function supprim(produit, stock) {
 
         if (confirm("{{ 'Etes-vous sur de vouloir supprimer?'|trans }}")) {
             $.ajax({
                 type: "POST",
                 url: "{{ path('commande_produit_delete') }}",
-                data: { produit :produit },
+                data: {produit: produit},
                 success: function (data) {
                     if (data['id'] == 'ok') {
-                        $("#tr" + produit ).remove();
+                        $("#tr" + produit).remove();
                         $('#btn' + produit).removeClass('disabled');
                         $("#text" + produit).val('');// vider le champ quantite dans modal ajouter
                         $("#ajouter" + produit).show();// afficher le bouton ajouter
                         $("#ajouter" + produit).html("<i class=\"fa fa-plus\"></i> {{ 'Ajouter'|trans }}");// afficher le bouton ajouter
                         $("#total").html(data['total']);// total pour la facturation
-                        $("#td"+produit).html("<input type:'number' id='text"+ produit+"' class='form-control' onfocus='focu("+produit+","+stock+")' onblur='nofocu()' style='width:100px'>");// total pour la facturation
+                        $("#td" + produit).html("<input type:'number' id='text" + produit + "' class='form-control' onfocus='focu(" + produit + "," + stock + ")' onblur='nofocu()' style='width:100px'>");// total pour la facturation
 
 
                         if (data['nb'] == 0) {
@@ -1072,6 +945,7 @@
             });
         }
     }
+
     function fournisseur(id) {// selectionner les fournisseur
         $.ajax({
             type: "POST",
@@ -1080,30 +954,30 @@
             success: function (data) {
                 if (data[0]['id'] == 'ok') {
 
-                    for (var i=0; i < data.length; i++) {
+                    for (var i = 0; i < data.length; i++) {
                         var date = new Date(data[i]['peremption']['date']).toLocaleDateString();
                         // var dd = date.getDay();
                         // var mm = date.getMonth();
                         // var yy = date.getFullYear()
-                        if( i == 0) {
+                        if (i == 0) {
 
-                            $('#numerolot'+id).html(" <tr>\n" +
-                                "                                            <td>"+ data[i]['lot']+"</td>\n" +
-                                "                                            <td>"+ date +"</td>\n" +
-                                "                                            <td>"+ data[i]['quantite']+"</td>\n" +
-                                "                                            <td>" +
-                                "<input type:'number' id='"+ Number(data[i]['lot'])+"' class='form-control'/>" +
+                            $('#numerolot' + id).html(" <tr>\n" +
+                                "<td>" + data[i]['lot'] + "</td>\n" +
+                                "<td>" + date + "</td>\n" +
+                                "<td>" + data[i]['quantite'] + "</td>\n" +
+                                "<td>" +
+                                "<input type='number' id='" + Number(data[i]['lot']) + "' class='form-control'/>" +
                                 "</td>\n" +
-                                "                                        </tr>");
-                        }else{
-                            $('#numerolot'+id).append(" <tr>\n" +
-                                "                                            <td>"+ data[i]['lot']+"</td>\n" +
-                                "                                            <td>"+ date +"</td>\n" +
-                                "                                            <td>"+ data[i]['quantite']+"</td>\n" +
-                                "                                            <td>" +
-                                "<input type:'number' id='"+ Number(data[i]['lot'])+"' class='form-control'/>" +
+                                "</tr>");
+                        } else {
+                            $('#numerolot' + id).append(" <tr>\n" +
+                                "<td>" + data[i]['lot'] + "</td>\n" +
+                                "<td>" + date + "</td>\n" +
+                                "<td>" + data[i]['quantite'] + "</td>\n" +
+                                "<td>" +
+                                "<input type='number' id='" + Number(data[i]['lot']) + "' class='form-control'/>" +
                                 "</td>\n" +
-                                "                                        </tr>");
+                                "</tr>");
                         }
                     }
                     // ('#annuler' + id).trigger('click');
@@ -1111,7 +985,7 @@
                     $('#ajouter' + id).html("<i class='fa fa-check'></i> {{ "Valider"|trans }}");
 
                 } else {
-                    $('#numerolot'+id).html(" <tr><td colspan='4'>{{ 'Produit en rupture'|trans }}</td></tr>");
+                    $('#numerolot' + id).html(" <tr><td colspan='4'>{{ 'Produit en rupture'|trans }}</td></tr>");
                     $('#ajouter' + id).html("<i class='fa fa-check'></i> {{ "Valider"|trans }}");
                     $('#ajouter' + id).addClass('disabled');
                 }
@@ -1128,13 +1002,13 @@
 
         var quant = $("#text" + produit);
         // var peremp = new Date($("#peremp" + produit).val());
-        if(quant.val() != ""){
-            if (quant.val() > 0 && quant.val() < Number(stock)+1) {
-                $("#sub"+produit).html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
+        if (quant.val() != "") {
+            if (quant.val() > 0 && quant.val() < Number(stock) + 1) {
+                $("#sub" + produit).html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
                 $.ajax({
                     type: "POST",
                     url: "{{ path('commande_produit_add') }}",
-                    data: { produit : produit , quantite : quant.val() },
+                    data: {produit: produit, quantite: quant.val()},
                     success: function (data) {
                         if (data['id'] == 'ok') {
                             var tot = Number(data['prix']) * Number(data['quantite']);
@@ -1144,7 +1018,7 @@
                                 "                        <td class='text-center'>" + data['prix'] + "</td>\n" +
                                 "                        <td class='text-center'>" + tot + "</td>\n" +
                                 "                        <td> <button class='btn btn-danger mr-2 mb-2'\n" +
-                                "                                   title=\"{{ 'Supprimer le produit'|trans}}\" onclick='supprim(" + produit + "," + stock + ")'>\n" +
+                                "                                   title=\"{{ 'Supprimer le produit'|trans }}\" onclick='supprim(" + produit + "," + stock + ")'>\n" +
                                 "                                    <i class='fa fa-trash'></i>\n" +
                                 "                                </button></td></tr>");
 
@@ -1152,18 +1026,18 @@
                             $("#valeurtotal").val(data['total']);
                             $("#payer").html(data['total']);
                             $("#netapayer").val(data['total']);
-                            $("#td"+produit).html(data['quantite']);
+                            $("#td" + produit).html(data['quantite']);
 
                             $("#annuler" + produit).trigger('click');
                             quant.val("");
-                            $("#sub"+produit).html("{{ 'Ajouter'|trans }}");
-                            $("#btn"+produit).addClass('disabled');
+                            $("#sub" + produit).html("{{ 'Ajouter'|trans }}");
+                            $("#btn" + produit).addClass('disabled');
                             $('#valider').removeClass('disabled');
                         } else {
                             $("#annuler" + produit).trigger('click');
                             quant.val("");
-                            $("#sub"+produit).html("{{ 'Ajouter'|trans }}");
-                            $("#btn"+produit).addClass('disabled');
+                            $("#sub" + produit).html("{{ 'Ajouter'|trans }}");
+                            $("#btn" + produit).addClass('disabled');
                             alert(data['id'])
                         }
                     },
@@ -1172,17 +1046,16 @@
                     }
                 });
             } else {
-                alert("{{'Veillez verifier la quantité'|trans}} ");
+                alert("{{ 'Veillez verifier la quantité'|trans }} ");
             }
-        }
-        else{
-            $("#sub"+produit).html("{{ 'Ajouter'|trans }}");
+        } else {
+            $("#sub" + produit).html("{{ 'Ajouter'|trans }}");
             alert("{{ 'Veillez bien renseigner la quantite'|trans }}");
         }
     }
 
     //hebergement
-    function focu(id,stock) {
+    function focu(id, stock) {
         $('#idtampon').val(id);
         $('#stocktampon').val(stock);
     }
@@ -1198,11 +1071,11 @@
         var reg = new RegExp("^[0-9]+$");
         var id = $('#idtampon').val();
         var stock = $('#stocktampon').val();
-        var quantite = $('#text'+id).val();
+        var quantite = $('#text' + id).val();
         if (reg.test(quantite) && window.event.keyCode == 13) {
-            ajouter_vente(id,stock);
+            ajouter_vente(id, stock);
 
-        } //else alert("{{'invalide'|trans }}");
+        } //else alert("{{ 'invalide'|trans }}");
 
     }
 
@@ -1212,7 +1085,7 @@
         var numero = $("#numero" + produit);
         var peremp = $("#peremp" + produit);
         // var peremp = new Date($("#peremp" + produit).val());
-        if(quant.val() != "" && numero.val() !="" && peremp.val() != "" && new Date($("#peremp" + produit).val()) > new Date()){
+        if (quant.val() != "" && numero.val() != "" && peremp.val() != "" && new Date($("#peremp" + produit).val()) > new Date()) {
             if (quant.val() > 0) {
                 $("#ajouter" + produit).html("<i class='fa-solid fa-spinner fa-spin-pulse'></i>");
                 $.ajax({
@@ -1233,7 +1106,7 @@
                                 // "                                    <i class='fa fa-edit'></i>\n" +
                                 // "                                </button></span>\n" +
                                 "                                <button class='btn btn-danger mr-2 mb-2'\n" +
-                                "                                   title=\"{{ 'Supprimer cet article'|trans}}\" onclick='app_supprim(" + produit + ","+ numero.val() +")'>\n" +
+                                "                                   title=\"{{ 'Supprimer cet article'|trans }}\" onclick='app_supprim(" + produit + "," + numero.val() + ")'>\n" +
                                 "                                    <i class='fa fa-trash'></i>\n" +
                                 "                                </button>\n");
                             // "<button type:'button' class='btn btn-success mb-2' data-toggle='modal' data-target='#modal" + produit + "'  id='btn" + produit + "'> <i class='fa fa-plus'></i> Lot </button></td></tr>"
@@ -1256,15 +1129,14 @@
                     }
                 });
             } else {
-                alert("{{'Veillez bien renseigner la quantité'|trans}}");
+                alert("{{ 'Veillez bien renseigner la quantité'|trans }}");
             }
-        }
-        else{
+        } else {
             alert("{{ 'Veillez bien renseigner tous les champs'|trans }}");
         }
     }
 
-    function app_supprim(produit,numero) {
+    function app_supprim(produit, numero) {
 
         if (confirm("{{ 'Etes-vous sur de vouloir supprimer?'|trans }}")) {
             $.ajax({
@@ -1325,7 +1197,7 @@
                 }
             });
         } else {
-            alert("{{'Veillez bien renseigner la quantité'|trans}}");
+            alert("{{ 'Veillez bien renseigner la quantité'|trans }}");
         }
 
     }
@@ -1335,19 +1207,21 @@
             {#document.location.href = "{{ path('stock_valider') }}";#}
         }
     }
-      function typeversement() {
-    if ($('#vente_type option:selected').val() == 'Cheque' || $('#vente_type option:selected').val() == 'Virement') {
-        $('#versement').show();
-        $('#vente_banque option:selected').val("");
-        $('#vente_numero').val('');
-        $('#vente_banque').show();
-         $('#vente_numero').show();
-    }else{
-        $('#versement').hide();
-        $('#vente_banque option:selected').val("");
-         $('#vente_numero').val('');
-        $('#vente_banque').hide();
-         $('#vente_numero').hide();
+
+    function typeversement() {
+        if ($('#vente_type option:selected').val() == 'Cheque' || $('#vente_type option:selected').val() == 'Virement') {
+            $('#versement').show();
+            $('#vente_banque option:selected').val("");
+            $('#vente_numero').val('');
+            $('#vente_banque').show();
+            $('#vente_numero').show();
+        } else {
+            $('#versement').hide();
+            $('#vente_banque option:selected').val("");
+            $('#vente_numero').val('');
+            $('#vente_banque').hide();
+            $('#vente_numero').hide();
+        }
     }
 
 </script>
