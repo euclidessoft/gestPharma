@@ -1,12 +1,4 @@
-{% extends
-    is_granted('ROLE_ADMIN') ? 'admin.html.twig' :
-    is_granted('ROLE_RH') ? 'rh.html.twig' :
-    is_granted('ROLE_FINANCE') ? 'finance.html.twig' :
-    is_granted('ROLE_STOCK') ? 'stock.html.twig' :
-    is_granted('ROLE_LIVREUR') ? 'livreur.html.twig' :
-    is_granted('ROLE_EMPLOYER') ? 'employe.html.twig' :
-    'layout.html.twig'
-%}
+{% extends 'layout.html.twig' %}
 {% block title %} {{ "Fiche de paie à valider"|trans }} {{ employe.nom }} {{ employe.prenom }} - GNT Pharma{% endblock %}
 {% block paie %}active{% endblock %}
 {% block body %}

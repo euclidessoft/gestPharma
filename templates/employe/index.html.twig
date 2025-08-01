@@ -1,11 +1,4 @@
-{% extends
-    is_granted('ROLE_ADMIN') ? 'admin.html.twig' :
-    is_granted('ROLE_RH') ? 'rh.html.twig' :
-    is_granted('ROLE_FINANCE') ? 'finance.html.twig' :
-    is_granted('ROLE_STOCK') ? 'stock.html.twig' :
-    is_granted('ROLE_LIVREUR') ? 'livreur.html.twig' :
-    is_granted('ROLE_EMPLOYER') ? 'employe.html.twig' :
-    'layout.html.twig' %}
+{% extends 'layout.html.twig' %}
 {% block title %} {{ "Tous les employes"|trans }} - GNT Pharma {% endblock %}
 {% block administration %}active{% endblock %}
 {% block employe %}active{% endblock %}
@@ -39,7 +32,6 @@
                 <th>{{ 'Téléphone'|trans }}</th>
                 <th>{{ 'Email'|trans }}</th>
                 <th>{{ 'Poste'|trans }}</th>
-                <th>{{ 'Département'|trans }}</th>
                 <th>{{ 'Statut'|trans }}</th>
                 <th class="text-center noExport">{{ 'Action'|trans }}</th>
             </tr>
@@ -72,16 +64,13 @@
                 <td data-label="{{ 'Poste'|trans }}">
                     {{ employe.poste ? employe.poste.nom: '' }}
                 </td>
-                <td data-label="{{ 'Département'|trans }}">
-                    {{ employe.poste ? employe.poste.departement.nom: '' }}
-                </td>
                 <td data-label="{{ 'Statut'|trans }}" class="text-center">
                     {{ employe.status ? "Actif"|trans : "Inactif"|trans }}</td>
                 <td data-label="{{ 'Action'|trans }}" class="text-center noExport">
-                    <a href="{{ path('employe_show', {'id': employe.id}) }}" class="btn btn-green" title="{{ "Voir"|trans }}">
+                    <a href="{{ path('employe_show', {'id': employe.id}) }}" class="btn btn-success" title="{{ "Voir"|trans }}">
                         <i class="fa fa-eye"></i>
                     </a>
-                    <a href="{{ path('employe_edit', {'id': employe.id}) }}" class="btn btn-success-light"
+                    <a href="{{ path('employe_edit', {'id': employe.id}) }}" class="btn btn-success"
                        title="{{ "Modifier"|trans }}">
                         <i class="fa fa-edit"></i>
                     </a>
@@ -104,13 +93,13 @@
     </div>
     <div class="container-fluid mt-4 fond-7 mb-5 p-3">
         <div class="centrer gap-3">
-            <button id="exportExcel" class="btn btn-green">
+            <button id="exportExcel" class="btn btn-success">
                 <i class="fa fa-file-excel"></i> Exporter Excel
             </button>
             <button id="exportPdf" class="btn btn-danger">
                 <i class="fa fa-file-pdf"></i> Exporter PDF
             </button>
-            <a href="#" class="btn btn-success-light me-2">
+            <a href="#" class="btn btn-success me-2">
                 <i class="fa fa-print"></i> Imprimer
             </a>
         </div>
