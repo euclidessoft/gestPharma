@@ -11,6 +11,7 @@ use App\Entity\Commande;
 use App\Entity\CommandeProduit;
 use App\Entity\Approvisionnement;
 use App\Entity\Facture;
+use App\Entity\FactureFournisseur;
 use App\Entity\Stock;
 use App\Entity\Accompte;
 use App\Entity\Avoir;
@@ -46,7 +47,7 @@ class FinanceController extends AbstractController
     #[Route("/", name :"index") ]
     public function index(EcritureRepository $repository): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $ecritures = $repository->findAll();
             $caisse = 0;
             $banque = 0;
@@ -91,11 +92,79 @@ class FinanceController extends AbstractController
             return $response;
         }
     }
+    
+    #[Route("/Solde", name :"solde") ]
+    public function solde(EcritureRepository $repository): Response
+    {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            $ecritures = $repository->findAll();
+            $caisse = 0;
+            $wave = 0;
+            $om = 0;
+            $banque = 0;
+            $debitbanque = 0;
+            $debitwave = 0;
+            $debitom = 0;
+            $debitcaisse = 0;
+            foreach ($ecritures as $ecriture) {
+                
+                if($ecriture->getType() != null){
+                    $credit = null;
+                    $debit = null;
+                    if ($ecriture->getCredit() != null) {
+                        $credit = $ecriture->getCredit();
+                        
+                       if( $credit->getType() == 'Espece'){ 
+                            $caisse = $caisse + $credit->getMontant() ;
+                       }elseif( $credit->getType() == 'Wave'){ 
+                            $wave += $credit->getMontant() ;
+                       }elseif( $credit->getType() == 'Orange Money'){ 
+                            $om += $credit->getMontant() ;
+                       }else{ 
+                            $banque = $banque + $credit->getMontant();
+                       }
+                    } else {
+
+                        $debit = $ecriture->getDebit();
+                       if( $debit->getType() == 'Espece'){ 
+                            $debitcaisse += $debit->getMontant() ;
+                       }elseif( $debit->getType() == 'Wave'){ 
+                            $debitwave += $debit->getMontant() ;
+                       }elseif( $debit->getType() == 'Orange Money'){ 
+                            $debitom += $debit->getMontant() ;
+                       }else{ 
+                            $debitbanque += $debit->getMontant();
+                       }
+
+                    }
+                }
+
+            }
+
+            return $this->render('finance/solde.html.twig', [
+                'caisse' => $caisse - $debitcaisse,
+                'wave' => $wave - $debitwave,
+                'om' => $om - $debitom,
+                'banque' => $banque - $debitbanque,
+            ]);
+        } else {
+            $response = $this->redirectToRoute('security_logout');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        }
+    }
 
     #[Route("/JournalBanque/{banque}", name :"journal_banque") ]
     public function journalbanque(EcritureRepository $repository, Banque $banque, Solde $solde): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $ecritures = $repository->findAll();
 
             $caisse = 0;
@@ -147,7 +216,7 @@ class FinanceController extends AbstractController
     #[Route("/JournalCompte/{compte}", name :"journal_compte") ]
     public function journalCompte(EcritureRepository $repository, $compte): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $ecritures = $repository->findAll();
 
             $caisse = 0;
@@ -202,7 +271,7 @@ class FinanceController extends AbstractController
     #[Route("/Brouillard", name :"brouyard") ]
     public function brouyard(EcritureRepository $repository): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $ecritures = $repository->brouyard();
             $ouverture = $repository->ouverture();
             $caisse = 0;
@@ -274,7 +343,7 @@ class FinanceController extends AbstractController
     #[Route("/Brouillard_print", name :"brouyard_print") ]
     public function brouyard_print(EcritureRepository $repository): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $ecritures = $repository->brouyard();
             $ouverture = $repository->ouverture();
             $caisse = 0;
@@ -346,7 +415,7 @@ class FinanceController extends AbstractController
     #[Route("/BrouillardCaisse", name :"brouyard_caisse") ]
     public function brouyardCaisse(EcritureRepository $repository): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $ecritures = $repository->brouyardcaisse();
             $ouverture = $repository->ouverturecaisse();
             $caisse = 0;
@@ -405,7 +474,7 @@ class FinanceController extends AbstractController
     #[Route("/BrouillardCaisse_print", name :"brouyard_caisse_print") ]
     public function brouyardCaisse_print(EcritureRepository $repository): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $ecritures = $repository->brouyardcaisse();
             $ouverture = $repository->ouverturecaisse();
             $caisse = 0;
@@ -464,7 +533,7 @@ class FinanceController extends AbstractController
     #[Route("/BrouillardBanque", name :"brouyard_banque") ]
     public function brouyardBanque(EcritureRepository $repository): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $ecritures = $repository->brouyardbanque();
             $ouverture = $repository->ouverturebanque();
             $banque = 0;
@@ -525,7 +594,7 @@ class FinanceController extends AbstractController
     #[Route("/BrouillardBanque_print", name :"brouyard_banque_print") ]
     public function brouyardBanque_print(EcritureRepository $repository): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $ecritures = $repository->brouyardbanque();
             $ouverture = $repository->ouverturebanque();
             $banque = 0;
@@ -586,7 +655,7 @@ class FinanceController extends AbstractController
     #[Route("/LienDayBrouyard", name :"day_brouyard_lien") ]
     public function liendaybrouyard(Request $request)
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $date1 = $request->get('date1');
             $lien = $this->generateUrl('finance_day_brouyard', ['jour' => $date1]);
             $res['ok'] = $lien;
@@ -613,7 +682,7 @@ class FinanceController extends AbstractController
     #[Route("/DayRepport/", name :"rapport_date") ]
     public function rapportdate()
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
 
             return $this->render('finance/rapport_date.html.twig');
         } else {
@@ -633,7 +702,7 @@ class FinanceController extends AbstractController
     #[Route("/DayBrouyard/{jour}", name :"day_brouyard") ]
     public function daybrouyard(Request $request, $jour)
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $repository = $this->entityManager->getRepository(Ecriture::class);
             $ecritures = $repository->daybrouyard($jour);
             $ouverture = $repository->ouvertureplace($jour);
@@ -707,7 +776,7 @@ class FinanceController extends AbstractController
     #[Route("/DayBrouyard_print/{jour}", name :"day_brouyard_print") ]
     public function daybrouyard_print(Request $request, $jour)
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $repository = $this->entityManager->getRepository(Ecriture::class);
             $ecritures = $repository->daybrouyard($jour);
             $ouverture = $repository->ouvertureplace($jour);
@@ -781,7 +850,7 @@ class FinanceController extends AbstractController
     #[Route("/LienDayBrouyardCaisse", name :"day_brouyard_lien_caisse") ]
     public function liendaybrouyardaisse(Request $request)
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $date1 = $request->get('date1');
             $lien = $this->generateUrl('finance_day_brouyard_caisse', ['jour' => $date1]);
             $res['ok'] = $lien;
@@ -808,7 +877,7 @@ class FinanceController extends AbstractController
     #[Route("/DayBrouyardCaisse/{jour}", name :"day_brouyard_caisse") ]
     public function daybrouyardcaisse(Request $request, $jour)
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $repository = $this->entityManager->getRepository(Ecriture::class);
             $ecritures = $repository->daybrouyardcaisse($jour);
             $ouverture = $repository->ouvertureplacecaisse($jour);
@@ -873,7 +942,7 @@ class FinanceController extends AbstractController
     #[Route("/DayBrouyardCaisse_print/{jour}", name :"day_brouyard_caisse_print") ]
     public function daybrouyardcaisse_print(Request $request, $jour)
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $repository = $this->entityManager->getRepository(Ecriture::class);
             $ecritures = $repository->daybrouyardcaisse($jour);
             $ouverture = $repository->ouvertureplacecaisse($jour);
@@ -938,7 +1007,7 @@ class FinanceController extends AbstractController
     #[Route("/LienDayBrouyardBanque", name :"day_brouyard_lien_banque") ]
     public function liendaybrouyarbanque(Request $request)
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $date1 = $request->get('date1');
             $lien = $this->generateUrl('finance_day_brouyard_banque', ['jour' => $date1]);
             $res['ok'] = $lien;
@@ -966,7 +1035,7 @@ class FinanceController extends AbstractController
     #[Route("/DayBrouyardBanque/{jour}", name :"day_brouyard_banque") ]
     public function daybrouyardbanque(Request $request, $jour)
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $repository = $this->entityManager->getRepository(Ecriture::class);
             $ecritures = $repository->daybrouyardbanque($jour);
             $ouverture = $repository->ouvertureplacebanque($jour);
@@ -1031,7 +1100,7 @@ class FinanceController extends AbstractController
     #[Route("/DayBrouyardBanque_print/{jour}", name :"day_brouyard_banque_print") ]
     public function daybrouyardbanque_print(Request $request, $jour)
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $repository = $this->entityManager->getRepository(Ecriture::class);
             $ecritures = $repository->daybrouyardbanque($jour);
             $ouverture = $repository->ouvertureplacebanque($jour);
@@ -1097,7 +1166,7 @@ class FinanceController extends AbstractController
     #[Route("/IntervalRepport/", name :"rapport_interval") ]
     public function rapportinterval()
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
 
             return $this->render('finance/rapport_interval.html.twig');
         } else {
@@ -1117,7 +1186,7 @@ class FinanceController extends AbstractController
     #[Route("/LienDaysBrouyard", name :"days_brouyard_lien") ]
     public function liendaysbrouyard(Request $request)
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $date1 = $request->get('date1');
             $date2 = $request->get('date2');
             $lien = $this->generateUrl('finance_days_brouyard', ['date1' => $date1, 'date2' => $date2]);
@@ -1146,7 +1215,7 @@ class FinanceController extends AbstractController
     #[Route("/DaysBrouyard/{date1}/{date2}", name :"days_brouyard") ]
     public function daysbrouyard(Request $request, $date1, $date2)
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
 
             $repository = $this->entityManager->getRepository(Ecriture::class);
             $ecritures = $repository->plage($date1, $date2);
@@ -1222,7 +1291,7 @@ class FinanceController extends AbstractController
     #[Route("/DaysBrouyard_print/{date1}/{date2}", name :"days_brouyard_print") ]
     public function daysbrouyard_print(Request $request, $date1, $date2)
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
 
             $repository = $this->entityManager->getRepository(Ecriture::class);
             $ecritures = $repository->plage($date1, $date2);
@@ -1298,7 +1367,7 @@ class FinanceController extends AbstractController
     #[Route("/LienDaysBrouyardCaisse", name :"days_brouyard_lien_caisse") ]
     public function liendaysbrouyardcaisse(Request $request)
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $date1 = $request->get('date1');
             $date2 = $request->get('date2');
             $lien = $this->generateUrl('finance_days_brouyard_caisse', ['date1' => $date1, 'date2' => $date2]);
@@ -1327,7 +1396,7 @@ class FinanceController extends AbstractController
     #[Route("/DaysBrouyardCaisse/{date1}/{date2}", name :"days_brouyard_caisse") ]
     public function daysbrouyardcaisse(Request $request, $date1, $date2)
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
 
             $repository = $this->entityManager->getRepository(Ecriture::class);
             $ecritures = $repository->plagecaisse($date1, $date2);
@@ -1390,7 +1459,7 @@ class FinanceController extends AbstractController
     #[Route("/DaysBrouyardCaisse_print/{date1}/{date2}", name :"days_brouyard_caisse_print") ]
     public function daysbrouyardcaisse_print(Request $request, $date1, $date2)
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
 
             $repository = $this->entityManager->getRepository(Ecriture::class);
             $ecritures = $repository->plagecaisse($date1, $date2);
@@ -1454,7 +1523,7 @@ class FinanceController extends AbstractController
     #[Route("/LienDaysBrouyardBanque", name :"days_brouyard_lien_banque") ]
     public function liendaysbrouyardbanque(Request $request)
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $date1 = $request->get('date1');
             $date2 = $request->get('date2');
             $lien = $this->generateUrl('finance_days_brouyard_banque', ['date1' => $date1, 'date2' => $date2]);
@@ -1483,7 +1552,7 @@ class FinanceController extends AbstractController
     #[Route("/DaysBrouyardBanque/{date1}/{date2}", name :"days_brouyard_banque") ]
     public function daysbrouyardbanque(Request $request, $date1, $date2)
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
 
             $repository = $this->entityManager->getRepository(Ecriture::class);
             $ecritures = $repository->plagebanque($date1, $date2);
@@ -1560,7 +1629,7 @@ class FinanceController extends AbstractController
     #[Route("/DaysBrouyardBanque_print/{date1}/{date2}", name :"days_brouyard_banque_print") ]
     public function daysbrouyardbanque_print(Request $request, $date1, $date2)
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
 
             $repository = $this->entityManager->getRepository(Ecriture::class);
             $ecritures = $repository->plagebanque($date1, $date2);
@@ -1628,7 +1697,7 @@ class FinanceController extends AbstractController
     #[Route("/Salaire", name :"salaire", methods : ["GET"]) ]
     public function salaire(PaieRepository $paieRepository): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $paie = $paieRepository->findBy(['payer' => false]);
             
             $response = $this->render('finance/salaire.html.twig', [
@@ -1661,7 +1730,7 @@ class FinanceController extends AbstractController
     #[Route("/payer", name :"payer", methods : ["POST"]) ]
     public function payer(PaieRepository $paieRepository, Solde $solde, Request $request): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             
             $entityManager = $this->entityManager;
             $paie = $paieRepository->find($request->get('paie'));
@@ -2093,7 +2162,7 @@ class FinanceController extends AbstractController
     #[Route("/payerTous", name :"payerTous", methods : ["POST"]) ]
     public function payertous(PaieRepository $paieRepository, Solde $solde, Request $request): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
 
             $entityManager = $this->entityManager;
             $montant = $request->get('montant');
@@ -2533,7 +2602,7 @@ class FinanceController extends AbstractController
     #[Route("/Accompte", name :"accompte", methods : ["GET"]) ]
     public function accompte(AccompteRepository $repository): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $accomptes = $repository->findBy(['verser' => false]);
             
             $response = $this->render('finance/accompte.html.twig', [
@@ -2566,7 +2635,7 @@ class FinanceController extends AbstractController
     #[Route("/payeraccompte", name :"payeraccompte", methods : ["POST"]) ]
     public function payeraccompte(Solde $solde, Request $request): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $debit = new Debit();
             $ecriture = new Ecriture();
             $entityManager = $this->entityManager;
@@ -2645,7 +2714,7 @@ class FinanceController extends AbstractController
     #[Route("/CompteResultat", name :"Compteresultat", methods : ["POST", "GET"]) ]
     public function CompteResultat(Amortissement $amortis, Request $request, CommandeRepository $repository, CommandeProduitRepository $CommandeProduitRepository, ApprovisionnementRepository $Approrepository, PaieRepository $paieRepository): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $commandes = $repository->findBy(['suivi' => true, 'payer' => true ]);// achat deja paye
             $credits = $repository->findBy(['suivi' => true, 'payer' => false, 'livraison' => true, 'credit' => true ]);// achat a credit deja livree
             // $creditavances = $repository->creditAvance();// achat a credit non livrer avec avance recu
@@ -2949,7 +3018,7 @@ class FinanceController extends AbstractController
     #[Route("/Bilan", name :"bilan", methods : ["POST", "GET"]) ]
     public function bilan(Amortissement $amortis, Solde $solde, Request $request, EcritureRepository $repository): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             
             $ecritures = $repository->findAll();
             $caisse = 0;
@@ -2980,7 +3049,7 @@ class FinanceController extends AbstractController
             $stockfinal = 0;
             $stocks = $this->entityManager->getRepository(Stock::class)->findAll();
             foreach($stocks as $stock){
-                $stockfinal += $stock->getQuantite() * $stock->getProduit()->getPght();
+                $stockfinal += $stock->getQuantite() * $stock->getProduit()->getPrixdachat();
                 //$approvs = $Approrepository->findBy(['produit' => $stock->getProduit()->getId()]);
 
             }
@@ -3162,11 +3231,8 @@ class FinanceController extends AbstractController
             }
             
 
-            $detteavoir = 0;
-            $avoirs = $this->entityManager->getRepository(Avoir::class)->findAll();
-            foreach($avoirs as $avoir){    
-                $detteavoir += $avoir->getMontant(); 
-            }
+             $detteavoir = 0;
+             $avanceclient = 0;
 
             // capital
             $capital = 0;
@@ -3190,69 +3256,47 @@ class FinanceController extends AbstractController
                 }   
             }
 
-            // avance client
-            $avanceclient = 0;
-            $commandes = $this->entityManager->getRepository(Commande::class)->findBy(['suivi' => true, 'payer' => true, 'livraison' => false ]);// achat deja paye
-            foreach($commandes as $commande){
-               
-                    $commandeproduits = $this->entityManager->getRepository(CommandeProduit::class)->findBy(['commande' => $commande->getId()]);
-                    foreach($commandeproduits as $commandeproduit){
-                        $stoc = $this->entityManager->getRepository(Stock::class)->findOneBy(['produit' => $commandeproduit->getProduit()->getId()]);
-                        if(!empty($stoc)){
-                            $quant = $stoc->getQuantite() - $commandeproduit->getQuantite();
-                            if($quant < 0){
-                                $avanceclient += -1 * $commandeproduit->getSession() * $quant;// -1 * la quatite 
-                            }else{
-                                $avanceclient += $commandeproduit->getQuantite() * $commandeproduit->getSession();
-                            }
-                        }else{
-                            $avanceclient += $commandeproduit->getQuantite() * $commandeproduit->getSession();
-                        }
-                    }
-                    
-                
-            }
             
 
-            $restes = $this->entityManager->getRepository(LivrerReste::class)->findBy(['credit' => false]);
-            foreach($restes as $reste){    
-                $stoc = $this->entityManager->getRepository(Stock::class)->find($reste->getProduit());
-                if(!empty($stoc)){
-                    $quant = $stoc->getQuantite() - ($reste->getQuantite() - $reste->getQuantitelivre());
-                    if($quant < 0){
-                        $avanceclient += -1 * $$reste->getProduit()->getPght() * $quant;// -1 * la quatite 
-                    }
-                }else{
-                    $avanceclient += ($reste->getQuantite() - $reste->getQuantitelivre()) * $reste->getProduit()->getPght();
-                }    
-            }
+            // $restes = $this->entityManager->getRepository(Reste::class)->findBy(['credit' => false]);
+            // foreach($restes as $reste){    
+            //     $stoc = $this->entityManager->getRepository(Stock::class)->find($reste->getProduit());
+            //     if(!empty($stoc)){
+            //         $quant = $stoc->getQuantite() - ($reste->getQuantite() - $reste->getQuantitelivre());
+            //         if($quant < 0){
+            //             $avanceclient += -1 * $$reste->getProduit()->getPght() * $quant;// -1 * la quatite 
+            //         }
+            //     }else{
+            //         $avanceclient += ($reste->getQuantite() - $reste->getQuantitelivre()) * $reste->getProduit()->getPght();
+            //     }    
+            // }
 
 
-            $creditavances = $this->entityManager->getRepository(Commande::class)->creditAvance();// achat a credit non livrer avec avance recu
-            foreach($creditavances as $creditavance){
+            // $creditavances = $this->entityManager->getRepository(Commande::class)->creditAvance();// achat a credit non livrer avec avance recu
+            // foreach($creditavances as $creditavance){
                
              
-                $avanceclient += $creditavance->getVersement();
+            //     $avanceclient += $creditavance->getVersement();
                 
-            }
-            // fin avance client
+            // }
+            // // fin avance client
 
             // creaces clients
             $creance= 0;
-            $credits = $this->entityManager->getRepository(Commande::class)->findBy(['suivi' => true, 'payer' => false, 'livraison' => true, 'credit' => true ]);// achat a credit
-            foreach($credits as $credit){
-               $rest = 0;
-                $restes = $this->entityManager->getRepository(LivrerReste::class)->findby(['commande' => $credit]);
-                foreach($restes as $reste){
-                    $rest += ($reste->getQuantite()- $reste->getQuantitelivre()) * $reste->getSession();
-                }
-                $creance = $creance + $credit->getMontant() - $credit->getVersement() - $rest;
+            // $credits = $this->entityManager->getRepository(Commande::class)->findBy(['suivi' => true, 'payer' => false, 'livraison' => true, 'credit' => true ]);// achat a credit
+            // foreach($credits as $credit){
+            //    $rest = 0;
+            //     $restes = $this->entityManager->getRepository(LivrerReste::class)->findby(['commande' => $credit]);
+            //     foreach($restes as $reste){
+            //         $rest += ($reste->getQuantite()- $reste->getQuantitelivre()) * $reste->getSession();
+            //     }
+            //     $creance = $creance + $credit->getMontant() - $credit->getVersement() - $rest;
                 
-            }
+            // }
 
             // dtte fournisseur
             $dettefournisseur = 0;
-            $factures = $this->entityManager->getRepository(Facture::class)->findBy(['payer' => false]);
+            $factures = $this->entityManager->getRepository(FactureFournisseur::class)->findBy(['payer' => false]);
             foreach($factures as $facture){    
                
                     $dettefournisseur += $facture->getMontant();
@@ -3328,9 +3372,9 @@ class FinanceController extends AbstractController
     public function ResultatInterne()
     {
         
-        if ($this->security->isGranted('ROLE_FINANCE')) {
-            $commandes = $this->entityManager->getRepository(Commande::class)->findBy(['suivi' => true, 'payer' => true ]);// achat deja paye
-            $credits = $this->entityManager->getRepository(Commande::class)->findBy(['suivi' => true, 'payer' => false, 'livraison' => true, 'credit' => true ]);// achat a credit
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            $commandes = $this->entityManager->getRepository(Commande::class)->findBy([ 'payer' => true ]);// achat deja paye
+            $credits = $this->entityManager->getRepository(Commande::class)->findBy(['payer' => false, 'livrer' => true]);// achat a credit
             // $creditavances = $this->entityManager->getRepository(Commande::class)->creditAvance();// achat a credit non livrer avec avance recu
             $vente = 0;
             $achat = 0;
@@ -3656,7 +3700,7 @@ class FinanceController extends AbstractController
     #[Route("/Amortissement/{depense}", name :"amortissement", methods : ["POST", "GET"]) ]
     public function amortissement(Depense $depense): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             
            // Informations de l'immobilisation
         $valeurAquisition = $depense->getMontant(); // en FCFA
@@ -3737,7 +3781,7 @@ class FinanceController extends AbstractController
     #[Route("/Immobilisation/", name :"immobilisation", methods : ["POST", "GET"]) ]
     public function immobilisation(): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             
            // Informations de l'immobilisation
         $depenses = $this->entityManager->getRepository(Depense::class)->findAll();
@@ -3865,7 +3909,7 @@ class FinanceController extends AbstractController
     #[Route("/repartir/", name :"repartir", methods : ["POST", "GET"]) ]
     public function repartir(Request $request): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $resultat = $this->ResultatInterne();
             $entityManager = $this->entityManager;
             $banques = $entityManager->getRepository(Banque::class)->findAll();
@@ -4178,7 +4222,7 @@ class FinanceController extends AbstractController
     #[Route("/journalRepartir/", name :"journal_repartir", methods : ["POST", "GET"]) ]
     public function Journalrepartir(Request $request): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $resultat = $this->ResultatInterne();
             $entityManager = $this->entityManager;
             
@@ -4215,7 +4259,7 @@ class FinanceController extends AbstractController
     #[Route("/RepartirNegatif/", name :"repartir_negatif", methods : ["POST", "GET"]) ]
     public function repartinegatif(Request $request): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $resultat = $this->ResultatInterne();
             $entityManager = $this->entityManager;
             

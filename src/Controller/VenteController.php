@@ -3,6 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Vente;
+use App\Entity\Ecriture;
+use App\Entity\Debit;
+use App\Entity\Credit;
 use App\Entity\VenteProduit;
 use App\Entity\Stock;
 use App\Form\VenteType;
@@ -58,17 +61,113 @@ class VenteController extends
     {
         if ($this->security->isGranted('ROLE_USER')) {
             $ventes = $venteRepository->findBy(['cloture' => false, 'user' => $this->getUser()->getId()]);
-            $montant = 0;
+           $caisse = 0;
+            $wave = 0;
+            $om = 0;
+            $banque = 0;
             foreach($ventes as $vente){
                 $vente->setCloture(true);
-                $montant += $vente->getMontant() - $vente->getCouverture();
+                if( $vente->getType() == 'Espece'){ 
+                    $caisse += $vente->getMontant()- $vente->getCouverture() ;
+                }
+                elseif( $vente->getType() == 'Wave'){ 
+                    $wave += $vente->getMontant()- $vente->getCouverture() ;
+                }
+                elseif( $vente->getType() == 'Orange Money'){ 
+                    $om += $vente->getMontant()- $vente->getCouverture() ;
+                }
+                else{ 
+                    $banque += $vente->getMontant()- $vente->getCouverture();
+                }
                 $this->entityManager->persist($vente);
             }
 
-             $this->entityManager->flush();
-             $this->addFlash('notice','Cloture effectuee avec succes. A bientot!');
+             
              //ecriture
+             if($caisse != 0){
+                $creditcaisse = new Credit();
+                $creditcaisse->setMontant($caisse); 
+                $creditcaisse->setCompte("571");
+                $creditcaisse->setType('Espece');
 
+
+                $ecriturecaisse = new Ecriture();
+                $ecriturecaisse->setComptecredit("571");
+                $ecriturecaisse->setLibellecomptecredit("Caisse");
+                $ecriturecaisse->setComptedebit("700");
+                $ecriturecaisse->setType("Espece");
+                $ecriturecaisse->setCredit($creditcaisse);
+                $ecriturecaisse->setLibellecomptedebit("Vente de medicaments");
+                $ecriturecaisse->setSolde($caisse);
+                $ecriturecaisse->setMontant($caisse);
+                $ecriturecaisse->setLibelle("Vente de medicaments en especes");
+                
+                $this->entityManager->persist($creditcaisse);
+                $this->entityManager->persist($ecriturecaisse);
+             }
+             if($om != 0){
+                $creditom = new Credit();
+                $creditom->setMontant($om); 
+                $creditom->setCompte("521");
+                $creditom->setType('Orange Money');
+                
+                $ecritureom = new Ecriture();
+                $ecritureom->setComptecredit("521");
+                $ecritureom->setLibellecomptecredit("Orange Money");
+                $ecritureom->setComptedebit("700");
+                $ecritureom->setType("Orange Money");
+                $ecritureom->setCredit($creditom);
+                $ecritureom->setLibellecomptedebit("Vente de medicaments");
+                $ecritureom->setSolde($om);
+                $ecritureom->setMontant($om);
+                $ecritureom->setLibelle("Vente de medicaments par Orange money");
+                
+                $this->entityManager->persist($creditom);
+                $this->entityManager->persist($ecritureom);
+             }
+             if($wave != 0){
+                 $creditwave = new Credit();
+                $creditwave->setMontant($wave); 
+                $creditwave->setCompte("522");
+                $creditwave->setType('Wave');
+
+                $ecriturewave = new Ecriture();
+                $ecriturewave->setComptecredit("522");
+                $ecriturewave->setLibellecomptecredit("Wave");
+                $ecriturewave->setComptedebit("700");
+                $ecriturecwvae->setType("Wave");
+                $ecriturecaisse->setCredit($creditwave);
+                $ecriturewave->setLibellecomptedebit("Vente de medicaments");
+                $ecriturewave->setSolde($wave);
+                $ecriturewave->setMontant($wave);
+                $ecriturewave->setLibelle("Vente de medicaments par Wave");
+                
+                $this->entityManager->persist($creditwave);
+                $this->entityManager->persist($ecriturewave);
+             }
+             if($banque != 0){
+                 $creditbanque = new Credit();
+                $creditbanque->setMontant($banque); 
+                $creditbanque->setCompte("523");
+                $creditbanque->setType('Banque');
+
+                $ecriturebanque = new Ecriture();
+                $ecriturebanque->setComptecredit("523");
+                $ecriturebanque->setLibellecomptecredit("anque");
+                $ecriturebanque->setComptedebit("700");
+                $ecriturecaisse->setType("Banque");
+                $ecriturecaisse->setCredit($creditbanque);
+                $ecriturebanque->setLibellecomptedebit("Vente de medicaments");
+                $ecriturebanque->setSolde($banque);
+                $ecriturebanque->setMontant($banque);
+                $ecriturebanque->setLibelle("Vente de medicaments par virement banquaire");
+                
+                $this->entityManager->persist($creditbanque);
+                $this->entityManager->persist($ecriturebanque);
+             }
+
+            $this->entityManager->flush();
+             $this->addFlash('notice','Cloture effectuee avec succes. A bientot!');
 
         $response = $this->redirectToRoute('vente_index');
            $response->setSharedMaxAge(0);

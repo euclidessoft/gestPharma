@@ -17,13 +17,9 @@ class Credit
      #[ORM\JoinColumn(nullable:true) ]
     private $financement;
 
-    #[ORM\ManyToOne(targetEntity:Paiement::class) ]
+    #[ORM\ManyToOne(targetEntity:Vente::class) ]
      #[ORM\JoinColumn(nullable:true) ]
-    private $paiement;
-
-    #[ORM\ManyToOne(targetEntity:Versement::class) ]
-     #[ORM\JoinColumn(nullable:true) ]
-    private $versement;
+    private $vente;
 
     #[ORM\Column(type:"float", nullable:true) ]
     private $tva;
@@ -67,30 +63,6 @@ class Credit
     public function setFinancement(?Financement $financement = null): self
     {
         $this->financement = $financement;
-
-        return $this;
-    }
-
-    public function getPaiement(): ?Paiement
-    {
-        return $this->paiement;
-    }
-
-    public function setPaiement(?Paiement $paiement = null): self
-    {
-        $this->paiement = $paiement;
-
-        return $this;
-    }
-
-    public function getVersement(): ?Versement
-    {
-        return $this->versement;
-    }
-
-    public function setVersement(?Versement $versement = null): self
-    {
-        $this->versement = $versement;
 
         return $this;
     }

@@ -22,7 +22,7 @@ class PrimeController extends AbstractController
     #[Route("/", name :"prime_index", methods : ["GET"]) ]
     public function index(PrimeRepository $primeRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             
             $response = $this->render('prime/admin/index.html.twig', [
                 'primes' => $primeRepository->findAll(),
@@ -87,7 +87,7 @@ class PrimeController extends AbstractController
     #[Route("/new", name :"prime_new", methods : ["GET","POST"]) ]
     public function new(Request $request): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $prime = new Prime();
             $form = $this->createForm(PrimeType::class, $prime);
             $form->handleRequest($request);
@@ -140,7 +140,7 @@ class PrimeController extends AbstractController
     #[Route("/{id}", name :"prime_show", methods : ["GET"]) ]
     public function show(Prime $prime): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
            
             $response = $this->render('prime/admin/show.html.twig', [
                 'prime' => $prime,
@@ -171,7 +171,7 @@ class PrimeController extends AbstractController
     #[Route("/{id}/edit", name :"prime_edit", methods : ["GET","POST"]) ]
     public function edit(Request $request, Prime $prime): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $form = $this->createForm(PrimeType::class, $prime);
             $form->handleRequest($request);
 
@@ -220,7 +220,7 @@ class PrimeController extends AbstractController
     #[Route("/{id}", name :"prime_delete", methods : ["POST"]) ]
     public function delete(Request $request, Prime $prime): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             if ($this->isCsrfTokenValid('delete' . $prime->getId(), $request->request->get('_token'))) {
                 $entityManager = $this->entityManager;
                 $entityManager->remove($prime);

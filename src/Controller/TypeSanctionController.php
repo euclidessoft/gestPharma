@@ -22,7 +22,7 @@ class TypeSanctionController extends AbstractController
 #[Route("/", name :"type_sanction_index", methods : ["GET"]) ]
     public function index(TypeSanctionRepository $typeSanctionRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return $this->render('type_sanction/index.html.twig', [
                 'type_sanctions' => $typeSanctionRepository->findAll(),
             ]);
@@ -43,7 +43,7 @@ class TypeSanctionController extends AbstractController
     #[Route("/new", name :"type_sanction_new", methods : ["GET","POST"]) ]
     public function new(Request $request): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $typeSanction = new TypeSanction();
             $form = $this->createForm(TypeSanctionType::class, $typeSanction);
             $form->handleRequest($request);
@@ -77,7 +77,7 @@ class TypeSanctionController extends AbstractController
     #[Route("/{id}", name :"type_sanction_show", methods : ["GET"]) ]
     public function show(TypeSanction $typeSanction): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return $this->render('type_sanction/show.html.twig', [
                 'type_sanction' => $typeSanction,
             ]);
@@ -98,7 +98,7 @@ class TypeSanctionController extends AbstractController
     #[Route("/{id}/edit", name :"type_sanction_edit", methods : ["GET","POST"]) ]
     public function edit(Request $request, TypeSanction $typeSanction): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $form = $this->createForm(TypeSanctionType::class, $typeSanction);
             $form->handleRequest($request);
 
@@ -129,7 +129,7 @@ class TypeSanctionController extends AbstractController
     #[Route("/{id}", name :"type_sanction_delete", methods : ["POST"]) ]
     public function delete(Request $request, TypeSanction $typeSanction): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             if ($this->isCsrfTokenValid('delete' . $typeSanction->getId(), $request->request->get('_token'))) {
                 $entityManager = $this->entityManager;
                 $entityManager->remove($typeSanction);

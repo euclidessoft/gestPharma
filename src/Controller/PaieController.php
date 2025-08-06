@@ -38,7 +38,7 @@ class PaieController extends AbstractController
     #[Route("/", name :"paie_index") ]
     public function index(): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $entityManager = $this->entityManager;
             $employes = $entityManager->getRepository(Employe::class)->findBy(['status' => true]);
             $paies = [];
@@ -108,7 +108,7 @@ class PaieController extends AbstractController
     #[Route("/Bulletin", name :"paie_bulletin", methods : ["GET"]) ]
     public function bulletin(): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $bulletins = $this->paieService->bulletin();
 
             $nbrjoursmois = new \DateTime();
@@ -147,7 +147,7 @@ class PaieController extends AbstractController
     #[Route("/Imprimer/Bulletin", name :"print_bulletin") ]
     public function printBulletin(PaieRepository $repository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $bulletins = $repository->findBy(['mois' => date('m'), 'payer' => false]);
          
             $response = $this->render('paie/admin/bulletin_print.html.twig', [
@@ -179,7 +179,7 @@ class PaieController extends AbstractController
     #[Route("/new", name :"paie_new", methods : ["POST","GET"]) ]
     public function new(Request $request, PrimeRepository $primeRepository, HeureSuplementaireRepository $heureSuplementaireRepository, RetenueRepository $retenueRepository): Response
     {// validation de tous les buletins de salaire
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $entityManager = $this->entityManager;
             $startOfMonth = new \DateTime('01-' . date('m') . '-' . date('Y'));
             $endOfMonth = new \DateTime('last day of this month');
@@ -566,7 +566,7 @@ class PaieController extends AbstractController
     #[Route("/Historique", name :"paie_historique", methods : ["GET","POST"]) ]
     public function historique(Request $request, PaieRepository $paieRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $form = $this->createForm(FiltreBulletinType::class);
             $form->handleRequest($request);
             $paie = [];
@@ -616,7 +616,7 @@ class PaieController extends AbstractController
     #[Route("/HistoriqueMois", name :"paie_historique_mois_en_cours", methods : ["GET"]) ]
     public function historiqueMonthCurent(PaieRepository $paieRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
         $paie = $paieRepository->findPaieCurrentMonth();
            
             $response = $this->render('paie/admin/historique_mois_encours.html.twig', [
@@ -649,7 +649,7 @@ class PaieController extends AbstractController
     #[Route("/Historique/Bulletin", name :"paie_historique_bulletin", methods : ["GET"]) ]
     public function historiqueBulletin(PaieRepository $paieRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $paie = $paieRepository->findAll();
             $detailsRetenues = [];
 
@@ -733,7 +733,7 @@ class PaieController extends AbstractController
     #[Route("/Historique_print/{id}", name :"paie_historique_show_print", methods : ["GET"]) ]
     public function historiqueShow_print(Paie $paie): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
               $indemnite = json_decode($paie->getIndemnite(), true);
 
             // dd($paie->getIndemnite());
@@ -769,7 +769,7 @@ class PaieController extends AbstractController
     #[Route("Details_print/{id}", name :"paie_show_rint", methods : ["GET"]) ]
     public function show_print(int $id, PrimeRepository $primeRepository, HeureSuplementaireRepository $heureSuplementaireRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $entityManager = $this->entityManager;
             $startOfMonth = new \DateTime('01-' . date('m') . ('-') . date('Y'));
             $endOfMonth = new \DateTime('last day of this month');
@@ -856,7 +856,7 @@ class PaieController extends AbstractController
     #[Route("Details/{id}", name :"paie_show", methods : ["GET"]) ]
     public function show(int $id, PrimeRepository $primeRepository, HeureSuplementaireRepository $heureSuplementaireRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $entityManager = $this->entityManager;
             $startOfMonth = new \DateTime('01-' . date('m') . ('-') . date('Y'));
             $endOfMonth = new \DateTime('last day of this month');
@@ -967,7 +967,7 @@ class PaieController extends AbstractController
     #[Route("/valider/{id}", name :"paie_valider", methods : ["POST","GET"]) ]
     public function valider(int $id, PrimeRepository $primeRepository, HeureSuplementaireRepository $heureSuplementaireRepository): Response
     {// validation d'un seul buletin de salaire
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $entityManager = $this->entityManager;
             $startOfMonth = new \DateTime('01-' . date('m') . ('-') . date('Y'));
             $endOfMonth = new \DateTime('last day of this month');
@@ -1395,7 +1395,7 @@ class PaieController extends AbstractController
     #[Route("/Paiement/Details/{id}", name :"mes_bulletin_details", methods : ["GET"]) ]
     public function paimentDetails(Paie $paie): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $detailsRetenues = json_decode($paie->getDetailsRetenues(), true); // Si tu as stocké en JSON, décode-le en tableau associatif
 
            

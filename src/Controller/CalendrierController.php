@@ -22,7 +22,7 @@ class CalendrierController extends AbstractController
     #[Route("/", name :"calendrier_index", methods : ["GET"]) ]
     public function index(CalendrierRepository $calendrierRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return $this->render('calendrier/index.html.twig', [
                 'calendriers' => $calendrierRepository->findAll(),
             ]);
@@ -64,7 +64,7 @@ class CalendrierController extends AbstractController
     #[Route("/new", name :"calendrier_new", methods : ["GET","POST"]) ]
     public function new(Request $request): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $calendrier = new Calendrier();
             $form = $this->createForm(CalendrierType::class, $calendrier);
             $form->handleRequest($request);
@@ -97,7 +97,7 @@ class CalendrierController extends AbstractController
     #[Route("/{id}", name :"calendrier_show", methods : ["GET"]) ]
     public function show(Calendrier $calendrier): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return $this->render('calendrier/show.html.twig', [
                 'calendrier' => $calendrier,
             ]);
@@ -118,7 +118,7 @@ class CalendrierController extends AbstractController
     #[Route("/{id}/edit", name :"calendrier_edit", methods : ["GET","POST"]) ]
     public function edit(Request $request, Calendrier $calendrier): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $form = $this->createForm(CalendrierType::class, $calendrier);
             $form->handleRequest($request);
 
@@ -149,7 +149,7 @@ class CalendrierController extends AbstractController
     #[Route("/{id}", name :"calendrier_delete", methods : ["POST"]) ]
     public function delete(Request $request, Calendrier $calendrier): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             if ($this->isCsrfTokenValid('delete' . $calendrier->getId(), $request->request->get('_token'))) {
                 $entityManager = $this->entityManager;
                 $entityManager->remove($calendrier);

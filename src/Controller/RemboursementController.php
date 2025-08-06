@@ -39,7 +39,7 @@ class RemboursementController extends AbstractController
     #[Route("/Avoir_list", name :"remboursement_avoir_index", methods : ["GET"]) ]
     public function avoir_list(AvoirRepository $avoirRepository, SessionInterface $session): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return $this->render('remboursement/avoir_list.html.twig', [
                 'avoirs' => $avoirRepository->findby(['rebourser' => false]),
 

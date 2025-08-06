@@ -22,7 +22,7 @@ class PrimePerformanceController extends AbstractController
 #[Route("/", name :"prime_performance_index", methods : ["GET"]) ]
     public function index(PrimePerformanceRepository $primePerformanceRepository): Response
     {
-         if ($this->security->isGranted('ROLE_RH')) {
+         if ($this->security->isGranted('ROLE_ADMIN')) {
        
         $response = $this->render('prime_performance/index.html.twig', [
             'prime_performances' => $primePerformanceRepository->findBy(['paye' => false]),
@@ -53,7 +53,7 @@ class PrimePerformanceController extends AbstractController
     #[Route("/paye", name :"prime_performance_paye", methods : ["GET"]) ]
     public function paye(PrimePerformanceRepository $primePerformanceRepository): Response
     {
-         if ($this->security->isGranted('ROLE_RH')) {
+         if ($this->security->isGranted('ROLE_ADMIN')) {
         
         $response = $this->render('prime_performance/paye.html.twig', [
             'prime_performances' => $primePerformanceRepository->findBy(['paye' => true]),
@@ -84,7 +84,7 @@ class PrimePerformanceController extends AbstractController
     #[Route("/new", name :"prime_performance_new", methods : ["GET","POST"]) ]
     public function new(Request $request): Response
     {
-         if ($this->security->isGranted('ROLE_RH')) {
+         if ($this->security->isGranted('ROLE_ADMIN')) {
         $primePerformance = new PrimePerformance();
         $form = $this->createForm(PrimePerformanceType::class, $primePerformance);
         $form->handleRequest($request);
@@ -138,7 +138,7 @@ class PrimePerformanceController extends AbstractController
     #[Route("/{id}", name :"prime_performance_show", methods : ["GET"]) ]
     public function show(PrimePerformance $primePerformance): Response
     {
-         if ($this->security->isGranted('ROLE_RH')) {
+         if ($this->security->isGranted('ROLE_ADMIN')) {
        
         $response = $this->render('prime_performance/show.html.twig', [
             'prime_performance' => $primePerformance,
@@ -169,7 +169,7 @@ class PrimePerformanceController extends AbstractController
     #[Route("/{id}/edit", name :"prime_performance_edit", methods : ["GET","POST"]) ]
     public function edit(Request $request, PrimePerformance $primePerformance): Response
     {
-         if ($this->security->isGranted('ROLE_RH') && !$primePerformance->isPaye()) {
+         if ($this->security->isGranted('ROLE_ADMIN') && !$primePerformance->isPaye()) {
         $form = $this->createForm(PrimePerformanceType::class, $primePerformance);
         $form->handleRequest($request);
 
@@ -220,7 +220,7 @@ class PrimePerformanceController extends AbstractController
     #[Route("/{id}", name :"prime_performance_delete", methods : ["POST"]) ]
     public function delete(Request $request, PrimePerformance $primePerformance): Response
     {
-         if ($this->security->isGranted('ROLE_RH')) {
+         if ($this->security->isGranted('ROLE_ADMIN')) {
         if ($this->isCsrfTokenValid('delete'.$primePerformance->getId(), $request->request->get('_token')) && !$primePerformance->isPaye()) {
             $entityManager = $this->entityManager;
             $entityManager->remove($primePerformance);

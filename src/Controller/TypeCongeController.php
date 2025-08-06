@@ -22,7 +22,7 @@ class TypeCongeController extends AbstractController
 #[Route("/", name :"type_conge_index", methods : ["GET"]) ]
     public function index(TypeCongeRepository $typeCongeRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return $this->render('type_conge/index.html.twig', [
                 'type_conges' => $typeCongeRepository->findAll(),
             ]);
@@ -43,7 +43,7 @@ class TypeCongeController extends AbstractController
     #[Route("/new", name :"type_conge_new", methods : ["GET","POST"]) ]
     public function new(Request $request): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $typeConge = new TypeConge();
             $form = $this->createForm(TypeCongeType::class, $typeConge);
             $form->handleRequest($request);
@@ -77,7 +77,7 @@ class TypeCongeController extends AbstractController
     #[Route("/{id}", name :"type_conge_show", methods : ["GET"]) ]
     public function show(TypeConge $typeConge): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return $this->render('type_conge/show.html.twig', [
                 'type_conge' => $typeConge,
             ]);
@@ -98,7 +98,7 @@ class TypeCongeController extends AbstractController
     #[Route("/{id}/edit", name :"type_conge_edit", methods : ["GET","POST"]) ]
     public function edit(Request $request, TypeConge $typeConge): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $form = $this->createForm(TypeCongeType::class, $typeConge);
             $form->handleRequest($request);
 
@@ -129,7 +129,7 @@ class TypeCongeController extends AbstractController
     #[Route("/{id}", name :"type_conge_delete", methods : ["POST"]) ]
     public function delete(Request $request, TypeConge $typeConge): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             if ($this->isCsrfTokenValid('delete' . $typeConge->getId(), $request->request->get('_token'))) {
                 $entityManager = $this->entityManager;
                 $entityManager->remove($typeConge);

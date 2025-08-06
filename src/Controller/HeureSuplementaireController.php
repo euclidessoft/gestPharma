@@ -22,7 +22,7 @@ class HeureSuplementaireController extends AbstractController
     #[Route("/", name :"heure_suplementaire_index", methods : ["GET"]) ]
     public function index(HeureSuplementaireRepository $heureSuplementaireRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
            
             $response = $this->render('heure_suplementaire/admin/index.html.twig', [
                 'heure_suplementaires' => $heureSuplementaireRepository->findBy(['paye' => false]),
@@ -53,7 +53,7 @@ class HeureSuplementaireController extends AbstractController
     #[Route("/paye", name :"heure_suplementaire_paye", methods : ["GET"]) ]
     public function paye(HeureSuplementaireRepository $heureSuplementaireRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
            
             $response = $this->render('heure_suplementaire/admin/paye.html.twig', [
                 'heure_suplementaires' => $heureSuplementaireRepository->findBy(['paye' => true]),
@@ -118,7 +118,7 @@ class HeureSuplementaireController extends AbstractController
     #[Route("/new", name :"heure_suplementaire_new", methods : ["GET","POST"]) ]
     public function new(Request $request): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $heureSuplementaire = new HeureSuplementaire();
             $form = $this->createForm(HeureSuplementaireType::class, $heureSuplementaire);
             $form->handleRequest($request);
@@ -177,7 +177,7 @@ class HeureSuplementaireController extends AbstractController
     #[Route("/{id}", name :"heure_suplementaire_show", methods : ["GET"]) ]
     public function show(HeureSuplementaire $heureSuplementaire): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
            
             $response = $this->render('heure_suplementaire/admin/show.html.twig', [
                 'heure_suplementaire' => $heureSuplementaire,
@@ -208,7 +208,7 @@ class HeureSuplementaireController extends AbstractController
     #[Route("/{id}/edit", name :"heure_suplementaire_edit", methods : ["GET","POST"]) ]
     public function edit(Request $request, HeureSuplementaire $heureSuplementaire): Response
     {
-        if ($this->security->isGranted('ROLE_RH') && !$heureSuplementaire->isPaye()) {
+        if ($this->security->isGranted('ROLE_ADMIN') && !$heureSuplementaire->isPaye()) {
             $form = $this->createForm(HeureSuplementaireType::class, $heureSuplementaire);
             $form->handleRequest($request);
 
@@ -258,7 +258,7 @@ class HeureSuplementaireController extends AbstractController
     #[Route("/{id}", name :"heure_suplementaire_delete", methods : ["POST"]) ]
     public function delete(Request $request, HeureSuplementaire $heureSuplementaire): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             if ($this->isCsrfTokenValid('delete' . $heureSuplementaire->getId(), $request->request->get('_token')) && !$heureSuplementaire->isPaye()) {
                 $entityManager = $this->entityManager;
                 $entityManager->remove($heureSuplementaire);

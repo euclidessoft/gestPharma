@@ -26,7 +26,7 @@ class DemandeExplicationController extends AbstractController
     #[Route("/", name :"demande_index") ]
     public function index(DemandeExplicationRepository $demandeExplicationRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $demandes = $demandeExplicationRepository->findAll();
             return $this->render('demande_explication/admin/index.html.twig', [
                 'demandes' => $demandes,
@@ -48,7 +48,7 @@ class DemandeExplicationController extends AbstractController
     #[Route("/new", name :"explication_new", methods : ["GET","POST"]) ]
     public function new(Request $request, Security $security): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $demande = new DemandeExplication();
             $form = $this->createForm(DemandeExplicationType::class, $demande);
             $form->handleRequest($request);
@@ -107,7 +107,7 @@ class DemandeExplicationController extends AbstractController
     public function show(DemandeExplication $demandeExplications): Response
     {
 
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $reponses = $demandeExplications->getReponseExplications();
             $status = [];
             foreach ($demandeExplications->getEmploye() as $employe) {
@@ -142,7 +142,7 @@ class DemandeExplicationController extends AbstractController
     #[Route("/{id}/reponse/{employeId}", name :"demande_explication_reponse", methods : ["GET"]) ]
     public function reponse(DemandeExplication $demandeExplication, $employeId): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $employe = null;
             foreach ($demandeExplication->getEmploye() as $emp) {
                 if ($emp->getId() == $employeId) {

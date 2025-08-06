@@ -22,7 +22,7 @@ final class AccompteController extends AbstractController
     #[Route(name: 'app_accompte_index', methods: ['GET'])]
     public function index(AccompteRepository $accompteRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
        
         $response = $this->render('accompte/index.html.twig', [
             'accomptes' => $accompteRepository->findBy(['paye' => false], ['id' => 'DESC']),
@@ -53,7 +53,7 @@ final class AccompteController extends AbstractController
     #[Route('/paye', name: 'app_accompte_paye', methods: ['GET'])]
     public function paye(AccompteRepository $accompteRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
        
         $response = $this->render('accompte/paye.html.twig', [
             'accomptes' => $accompteRepository->findBy(['paye' => true], ['id' => 'DESC']),
@@ -84,7 +84,7 @@ final class AccompteController extends AbstractController
     #[Route('/new', name: 'app_accompte_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
         $accompte = new Accompte();
         $form = $this->createForm(AccompteForm::class, $accompte);
         $form->handleRequest($request);
@@ -146,7 +146,7 @@ final class AccompteController extends AbstractController
     #[Route('/{id}', name: 'app_accompte_show', methods: ['GET'])]
     public function show(Accompte $accompte): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
        
         $response = $this->render('accompte/show.html.twig', [
             'accompte' => $accompte,
@@ -177,7 +177,7 @@ final class AccompteController extends AbstractController
     #[Route('/{id}/edit', name: 'app_accompte_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Accompte $accompte, EntityManagerInterface $entityManager): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {// && !$accompte->getVerser()
+        if ($this->security->isGranted('ROLE_ADMIN')) {// && !$accompte->getVerser()
            
 
                 $form = $this->createForm(AccompteForm::class, $accompte);
@@ -238,7 +238,7 @@ final class AccompteController extends AbstractController
     #[Route('/{id}', name: 'app_accompte_delete', methods: ['POST'])]
     public function delete(Request $request, Accompte $accompte, EntityManagerInterface $entityManager): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
         if ($this->isCsrfTokenValid('delete'.$accompte->getId(), $request->getPayload()->getString('_token')) && !$accompte->getVerser()) {
             $entityManager->remove($accompte);
             $entityManager->flush();

@@ -104,7 +104,7 @@ class PanierController extends AbstractController
             return $response;
 
         }
-        else if ($this->security->isGranted('ROLE_FINANCE')) {
+        else if ($this->security->isGranted('ROLE_ADMIN')) {
 
             $response = $this->render('commande/admin/dashbord_finance.html.twig', [
                 'vente' => $repository->ventemensuel(),
@@ -168,7 +168,7 @@ class PanierController extends AbstractController
             return $response;
 
         }
-        elseif ($this->security->isGranted('ROLE_RH')) {
+        elseif ($this->security->isGranted('ROLE_ADMIN')) {
 
             $response = $this->render('dashboard/rh.html.twig', [
                 'user' => $this->getUser(),

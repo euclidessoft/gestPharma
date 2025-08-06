@@ -22,7 +22,7 @@ class CritereEvaluationController extends AbstractController
     #[Route("/", name :"critere_evaluation_index", methods : ["GET"]) ]
     public function index(CritereEvaluationRepository $critereEvaluationRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return $this->render('critere_evaluation/index.html.twig', [
                 'critere_evaluations' => $critereEvaluationRepository->findAll(),
             ]);
@@ -43,7 +43,7 @@ class CritereEvaluationController extends AbstractController
     #[Route("/new", name :"critere_evaluation_new", methods : ["GET","POST"]) ]
     public function new(Request $request): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $critereEvaluation = new CritereEvaluation();
             $form = $this->createForm(CritereEvaluationType::class, $critereEvaluation);
             $form->handleRequest($request);
@@ -77,7 +77,7 @@ class CritereEvaluationController extends AbstractController
     #[Route("/{id}", name :"critere_evaluation_show", methods : ["GET"]) ]
     public function show(CritereEvaluation $critereEvaluation): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return $this->render('critere_evaluation/show.html.twig', [
                 'critere_evaluation' => $critereEvaluation,
             ]);
@@ -98,7 +98,7 @@ class CritereEvaluationController extends AbstractController
     #[Route("/{id}/edit", name :"critere_evaluation_edit", methods : ["GET","POST"]) ]
     public function edit(Request $request, CritereEvaluation $critereEvaluation): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $form = $this->createForm(CritereEvaluationType::class, $critereEvaluation);
             $form->handleRequest($request);
 
@@ -129,7 +129,7 @@ class CritereEvaluationController extends AbstractController
     #[Route("/{id}", name :"critere_evaluation_delete", methods : ["POST"]) ]
     public function delete(Request $request, CritereEvaluation $critereEvaluation): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             if ($this->isCsrfTokenValid('delete' . $critereEvaluation->getId(), $request->request->get('_token'))) {
                 $entityManager = $this->entityManager;
                 $entityManager->remove($critereEvaluation);

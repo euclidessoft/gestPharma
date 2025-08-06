@@ -22,7 +22,7 @@ class FormationController extends AbstractController
     #[Route("/", name :"formation_index", methods : ["GET"]) ]
     public function index(FormationRepository $formationRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return $this->render('formation/index.html.twig', [
                 'formations' => $formationRepository->findAll(),
             ]);
@@ -44,7 +44,7 @@ class FormationController extends AbstractController
     #[Route("/new", name :"formation_new", methods : ["GET","POST"]) ]
     public function new(Request $request): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $formation = new Formation();
             $form = $this->createForm(FormationType::class, $formation);
             $form->handleRequest($request);
@@ -78,7 +78,7 @@ class FormationController extends AbstractController
     #[Route("/{id}", name :"formation_show", methods : ["GET"]) ]
     public function show(Formation $formation): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return $this->render('formation/show.html.twig', [
                 'formation' => $formation,
             ]);
@@ -99,7 +99,7 @@ class FormationController extends AbstractController
     #[Route("/{id}/edit", name :"formation_edit", methods : ["GET","POST"]) ]
     public function edit(Request $request, Formation $formation): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $form = $this->createForm(FormationType::class, $formation);
             $form->handleRequest($request);
 
@@ -130,7 +130,7 @@ class FormationController extends AbstractController
     #[Route("/{id}", name :"formation_delete", methods : ["POST"]) ]
     public function delete(Request $request, Formation $formation): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             if ($this->isCsrfTokenValid('delete' . $formation->getId(), $request->request->get('_token'))) {
                 $entityManager = $this->entityManager;
                 $entityManager->remove($formation);

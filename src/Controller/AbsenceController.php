@@ -32,7 +32,7 @@ class AbsenceController extends AbstractController
     #[Route("/", name:"absence_index", methods:["GET"]) ]
     public function index(AbsenceRepository $absenceRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $absences = $absenceRepository->findBy([], ['dateAbsence' => 'DESC']);
 
            
@@ -65,7 +65,7 @@ class AbsenceController extends AbstractController
     #[Route("/new", name :"absence_new", methods : ["GET","POST"]) ]
     public function new(Request $request, AbsenceRepository $absenceRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $absence = new Absence();
             $form = $this->createForm(AbsenceType::class, $absence);
             $form->handleRequest($request);
@@ -289,7 +289,7 @@ class AbsenceController extends AbstractController
     #[Route("/{id}/confirmer", name :"absence_confirmer", methods : ["GET", "POST"]) ]
     public function confirmer(Request $request, Absence $absence, Security $security)
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $entityManager = $this->entityManager;
             $responsable = $security->getUser();
 
@@ -328,7 +328,7 @@ class AbsenceController extends AbstractController
     #[Route("/{id}/refuser", name :"absence_refuser", methods : ["GET","POST"]) ]
     public function refuser(Request $request, Absence $absence, Security $security): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $decision = new Decision();
 
             $form = $this->createForm(DecisionType::class, $decision);
@@ -523,7 +523,7 @@ class AbsenceController extends AbstractController
     #[Route("/Suivi/Admin/Attente", name :"absence_admin_attente") ]
     public function attente(Security $security, AbsenceRepository $absenceRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $employe = $security->getUser();
             $absences = $absenceRepository->adminAttente();
            

@@ -22,7 +22,7 @@ class SanctionController extends AbstractController
 #[Route("/", name :"sanction_index", methods : ["GET"]) ]
     public function index(SanctionRepository $sanctionRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return $this->render('sanction/admin/index.html.twig', [
                 'sanctions' => $sanctionRepository->findAll(),
             ]);
@@ -66,7 +66,7 @@ class SanctionController extends AbstractController
     #[Route("/new", name :"sanction_new", methods : ["GET","POST"]) ]
     public function new(Request $request): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $sanction = new Sanction();
             $form = $this->createForm(SanctionType::class, $sanction);
             $form->handleRequest($request);
@@ -129,7 +129,7 @@ class SanctionController extends AbstractController
     #[Route("/{id}", name :"sanction_show", methods : ["GET"]) ]
     public function show(Sanction $sanction): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return $this->render('sanction/admin/show.html.twig', [
                 'sanction' => $sanction,
             ]);
@@ -150,7 +150,7 @@ class SanctionController extends AbstractController
     #[Route("/{id}/edit", name :"sanction_edit", methods : ["GET","POST"]) ]
     public function edit(Request $request, Sanction $sanction): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $form = $this->createForm(SanctionType::class, $sanction);
             $form->handleRequest($request);
 
@@ -181,7 +181,7 @@ class SanctionController extends AbstractController
     #[Route("/{id}", name :"sanction_delete", methods : ["POST"]) ]
     public function delete(Request $request, Sanction $sanction): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             if ($this->isCsrfTokenValid('delete' . $sanction->getId(), $request->request->get('_token'))) {
                 $entityManager = $this->entityManager;
                 $entityManager->remove($sanction);

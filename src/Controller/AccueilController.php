@@ -16,4 +16,10 @@ final class AccueilController extends AbstractController
     {
         return $this->redirectToRoute('vente_new');
     }
+    
+    #[Route('/Testmenu', name: 'accueil', methods: ['GET'])]
+    public function test(): Response
+    {
+        return $this->render('test/test.html.twig');
+    }
 }

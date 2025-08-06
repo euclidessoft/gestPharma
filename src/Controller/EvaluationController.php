@@ -26,7 +26,7 @@ class EvaluationController extends AbstractController
     #[Route("/", name :"evaluation_index", methods : ["GET"]) ]
     public function index(EvaluationRepository $evaluationRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return $this->render('evaluation/index.html.twig', [
                 'evaluations' => $evaluationRepository->findAll(),
             ]);
@@ -47,7 +47,7 @@ class EvaluationController extends AbstractController
     #[Route("/new", name :"evaluation_new", methods : ["GET","POST"]) ]
     public function new(Request $request): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $criteres = $this->entityManager->getRepository(CritereEvaluation::class)->findAll();
             $employes = $this->entityManager->getRepository(Employe::class)->findAll();
 
@@ -134,7 +134,7 @@ class EvaluationController extends AbstractController
     #[Route("/{id}", name :"evaluation_show", methods : ["GET"]) ]
     public function show(Evaluation $evaluation): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return $this->render('evaluation/show.html.twig', [
                 'evaluation' => $evaluation,
             ]);
@@ -176,7 +176,7 @@ class EvaluationController extends AbstractController
     #[Route("/{id}/edit", name :"evaluation_edit", methods : ["GET","POST"]) ]
     public function edit(Request $request, Evaluation $evaluation): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $form = $this->createForm(EvaluationType::class, $evaluation);
             $form->handleRequest($request);
 
@@ -207,7 +207,7 @@ class EvaluationController extends AbstractController
     #[Route("/{id}", name :"evaluation_delete", methods : ["POST"]) ]
     public function delete(Request $request, Evaluation $evaluation): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             if ($this->isCsrfTokenValid('delete' . $evaluation->getId(), $request->request->get('_token'))) {
 //                $entityManager = $this->getDoctrine()->getManager();
                 $this->entityManager->remove($evaluation);

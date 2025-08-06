@@ -25,7 +25,7 @@ class PosteController extends AbstractController
     #[Route("/", name :"poste_index", methods : ["GET"]) ]
     public function index(PosteRepository $posteRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return $this->render('poste/index.html.twig', [
                 'postes' => $posteRepository->findAll(),
             ]);
@@ -46,7 +46,7 @@ class PosteController extends AbstractController
     #[Route("/new", name :"poste_new", methods : ["GET","POST"]) ]
     public function new(Request $request): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $poste = new Poste();
             $form = $this->createForm(PosteType::class, $poste);
             $form->handleRequest($request);
@@ -80,7 +80,7 @@ class PosteController extends AbstractController
     #[Route("/{id}", name :"poste_show", methods : ["GET"]) ]
     public function show(Poste $poste, EntityManagerInterface $entityManager): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $employes = $entityManager->getRepository(Employe::class)->findBy(['poste' => $poste]);
             $attribuer = $poste->getEmployes()->isEmpty();
             $unique = $poste->getType() == 'unique';
@@ -109,7 +109,7 @@ class PosteController extends AbstractController
     #[Route("/{id}/attribuer", name :"poste_attribuer", methods : ["GET","POST"]) ]
     public function attribuerEmployes(Poste $poste, Request $request, EntityManagerInterface $entityManager): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $employes = $entityManager->getRepository(Employe::class)->findBy(['poste' => null]);
             if ($request->isMethod('POST')) {
                 //Recuperation des employe selectionner
@@ -171,7 +171,7 @@ class PosteController extends AbstractController
     #[Route("/{id}/edit", name :"poste_edit", methods : ["GET","POST"]) ]
     public function edit(Request $request, Poste $poste): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $form = $this->createForm(PosteType::class, $poste);
             $form->handleRequest($request);
 
@@ -202,7 +202,7 @@ class PosteController extends AbstractController
     #[Route("/{id}", name :"poste_delete", methods : ["POST"]) ]
     public function delete(Request $request, Poste $poste): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             try{
             if ($this->isCsrfTokenValid('delete' . $poste->getId(), $request->request->get('_token'))) {
                 $entityManager = $this->entityManager;

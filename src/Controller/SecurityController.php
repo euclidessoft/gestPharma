@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
-// #[Route("/{_locale}") ]
+ #[Route("/{_locale}") ]
 class SecurityController extends AbstractController
 {
     #[Route(path: '/login', name: 'security_login')]

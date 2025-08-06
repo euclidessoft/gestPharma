@@ -9,6 +9,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass:DepenseRepository::class) ]
 class Depense
 {
+    #[ORM\ManyToOne(targetEntity:Categorie::class, inversedBy:"depenses") ]
+     #[Assert\NotBlank(message: "Champ obligatoire") ]
+    private $categorie;
+
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -166,6 +171,18 @@ class Depense
     public function setBanque(?Banque $banque): self
     {
         $this->banque = $banque;
+
+        return $this;
+    }
+
+    public function getCategorie(): ?Categorie
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(?Categorie $categorie): static
+    {
+        $this->categorie = $categorie;
 
         return $this;
     }

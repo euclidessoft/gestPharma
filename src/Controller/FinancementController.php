@@ -25,7 +25,7 @@ class FinancementController extends AbstractController
     #[Route("/", name :"financement_index", methods : ["GET"]) ]
     public function index(FinancementRepository $financementRepository): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return $this->render('financement/index.html.twig', [
                 'financements' => $financementRepository->findAll(),
             ]);
@@ -46,7 +46,7 @@ class FinancementController extends AbstractController
     #[Route("/Choix_Financement", name :"financement_choix", methods : ["GET"]) ]
     public function choix(): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return $this->render('financement/choix_financement.html.twig');
         } else {
             $response = $this->redirectToRoute('security_logout');
@@ -65,7 +65,7 @@ class FinancementController extends AbstractController
     #[Route("/new", name :"financement_apport", methods : ["GET","POST"]) ]
     public function apport(Request $request): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $financement = new Financement();
 
             $form = $this->createForm(FinancementType::class, $financement);
@@ -146,7 +146,7 @@ class FinancementController extends AbstractController
     #[Route("/Pret", name :"financement_pret", methods : ["GET","POST"]) ]
     public function pret(Request $request): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $financement = new Financement();
 
             $form = $this->createForm(FinancementBanqueType::class, $financement);
@@ -211,7 +211,7 @@ class FinancementController extends AbstractController
     #[Route("/{id}", name :"financement_show", methods : ["GET"]) ]
     public function show(Financement $financement): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return $this->render('financement/show.html.twig', [
                 'financement' => $financement,
             ]);
@@ -232,7 +232,7 @@ class FinancementController extends AbstractController
     #[Route("/{id}/edit", name :"financement_edit", methods : ["GET","POST"]) ]
     public function edit(Request $request, Financement $financement): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $form = $this->createForm(FinancementType::class, $financement);
             $form->handleRequest($request);
 
@@ -263,7 +263,7 @@ class FinancementController extends AbstractController
     #[Route("/{id}", name :"financement_delete", methods : ["POST"]) ]
     public function delete(Request $request, Financement $financement): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             if ($this->isCsrfTokenValid('delete' . $financement->getId(), $request->request->get('_token'))) {
                 $entityManager = $this->entityManager;
                 $entityManager->remove($financement);

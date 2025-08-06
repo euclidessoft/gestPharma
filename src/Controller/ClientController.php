@@ -23,7 +23,7 @@ class ClientController extends AbstractController
     #[Route("/", name :"client_index") ]
     public function index(EntityManagerInterface $entityManager): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $client = $entityManager->getRepository(Client::class)->findAll();
             return $this->render('client/index.html.twig', [
                 'client' => $client,
@@ -46,7 +46,7 @@ class ClientController extends AbstractController
     #[Route("/new", name :"client_new", methods : ["GET","POST"]) ]
     public function new(Request $request, UserPasswordHasherInterface $encoder, TokenGeneratorInterface $tokenGenerator): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $client = new Client();
             $form = $this->createForm(ClientType::class, $client);
             $form->handleRequest($request);
@@ -98,7 +98,7 @@ class ClientController extends AbstractController
     #[Route("/{id}/edit", name :"client_edit", methods : ["GET","POST"]) ]
     public function edit(Request $request, Client $client): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
 
             $form = $this->createForm(ClientType::class, $client);
             

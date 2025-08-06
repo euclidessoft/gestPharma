@@ -27,7 +27,7 @@ class EmployeController extends AbstractController
     #[Route("/", name :"employe_index", methods : ["GET"]) ]
     public function index(EntityManagerInterface $entityManager)
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $employe = $entityManager->getRepository(Employe::class)->findAll();
             return $this->render('employe/index.html.twig', [
                 'employes' => $employe,
@@ -50,7 +50,7 @@ class EmployeController extends AbstractController
     #[Route("/manage", name :"employe_manage", methods : ["GET"]) ]
     public function manage(EntityManagerInterface $entityManager)
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $employe = $entityManager->getRepository(Employe::class)->findAll();
             return $this->render('employe/manage.html.twig', [
                 'employes' => $employe,
@@ -73,7 +73,7 @@ class EmployeController extends AbstractController
     #[Route("/new", name :"employe_new", methods : ["GET","POST"]) ]
     public function new(Request $request, UserPasswordHasherInterface $encoder, EntityManagerInterface $entityManager): Response
     {
-        // if ($this->security->isGranted('ROLE_RH')) {
+        // if ($this->security->isGranted('ROLE_ADMIN')) {
 
             $employe = new Employe();
             $form = $this->createForm(EmployeType::class, $employe);
@@ -177,7 +177,7 @@ class EmployeController extends AbstractController
     #[Route("/{id}/toggle-status", name :"employe_toggle_status", methods : ["POST"]) ]
     public function toggleStatus(Request $request, Employe $employe, EntityManagerInterface $entityManager): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             //verification du token csrf
             if (!$this->isCsrfTokenValid('toggle' . $employe->getId(), $request->request->get('_token'))) {
                 $this->addFlash('notice', 'Token CSRF invalide');
@@ -214,7 +214,7 @@ class EmployeController extends AbstractController
     #[Route("/config", name :"employe_congif", methods : ["GET"]) ]
     public function config()
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return $this->render('employe/config.html.twig');
         } else {
             $response = $this->redirectToRoute('security_logout');

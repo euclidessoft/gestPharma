@@ -22,7 +22,7 @@ class ContratController extends AbstractController
     #[Route("/", name :"contrat_index", methods : ["GET"]) ]
     public function index(ContratRepository $contratRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return $this->render('contrat/admin/index.html.twig', [
                 'contrats' => $contratRepository->findAll(),
             ]);
@@ -67,7 +67,7 @@ class ContratController extends AbstractController
     #[Route("/new", name :"contrat_new", methods : ["GET","POST"]) ]
     public function new(Request $request): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $contrat = new Contrat();
             $form = $this->createForm(ContratType::class, $contrat);
             $form->handleRequest($request);
@@ -117,7 +117,7 @@ class ContratController extends AbstractController
     #[Route("Print/{contrat}", name :"contrat_print", methods : ["GET"]) ]
     public function print(Contrat $contrat): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return $this->render('contrat/admin/contrat_print.html.twig', [
                 'contrat' => $contrat,
             ]);
@@ -138,7 +138,7 @@ class ContratController extends AbstractController
     #[Route("/{id}", name :"contrat_show", methods : ["GET"]) ]
     public function show(Contrat $contrat): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return $this->render('contrat/admin/show.html.twig', [
                 'contrat' => $contrat,
             ]);
@@ -159,7 +159,7 @@ class ContratController extends AbstractController
     #[Route("/{id}/edit", name :"contrat_edit", methods : ["GET","POST"]) ]
     public function edit(Request $request, Contrat $contrat): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $form = $this->createForm(ContratType::class, $contrat);
             $form->handleRequest($request);
 
@@ -190,7 +190,7 @@ class ContratController extends AbstractController
     #[Route("/{id}", name :"contrat_delete", methods : ["POST"]) ]
     public function delete(Request $request, Contrat $contrat): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             if ($this->isCsrfTokenValid('delete' . $contrat->getId(), $request->request->get('_token'))) {
                 $entityManager = $this->entityManager;
                 $entityManager->remove($contrat);

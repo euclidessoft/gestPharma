@@ -23,7 +23,7 @@ class CongeController extends AbstractController
     #[Route("/All", name :"conges_admin_index") ]
     public function demandeAdmin(Security $security, CongesRepository $congesRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $conges = $congesRepository->findAll();
             return $this->render('conge/admin/all.html.twig', [
                 'conges' => $conges,
@@ -102,7 +102,7 @@ class CongeController extends AbstractController
     #[Route("/Suivi", name :"conges_admin_suivi") ]
     public function traitementAdmin(Security $security, CongesRepository $congesRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $entityManager = $this->entityManager;
             $query = $entityManager->createQuery(
                 'SELECT c FROM App\Entity\Conges c WHERE c.status IS NULL OR c.confirmer IS NULL'
@@ -178,7 +178,7 @@ class CongeController extends AbstractController
     #[Route("/Accepter", name :"conge_admin_accepter") ]
     public function accepterAdmin(Security $security, CongesRepository $congesRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $entityManager = $this->entityManager;
             $employe = $security->getUser();
             $conges = $congesRepository->findBy(['status' => true]);
@@ -203,7 +203,7 @@ class CongeController extends AbstractController
     #[Route("/Refuser", name :"conge_admin_refuser") ]
     public function refuserAdmin(Security $security, CongesRepository $congesRepository): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $entityManager = $this->entityManager;
             $employe = $security->getUser();
             $conges = $congesRepository->findBy(['status' => false]);
@@ -268,7 +268,7 @@ class CongeController extends AbstractController
     #[Route("/{id}/approuve", name :"conge_approuve", methods : ["GET", "POST"]) ]
     public function approuver(Request $request, Conges $conges): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
 
             $conges->setDateDebutAccorder($conges->getDateDebut());
             $conges->setDateFinAccorder($conges->getDateFin());
@@ -325,7 +325,7 @@ class CongeController extends AbstractController
     #[Route("/{id}/rejeter", name :"conge_rejeter", methods : ["GET", "POST"]) ]
     public function rejeter(Request $request, Conges $conges): Response
     {
-        if ($this->security->isGranted('ROLE_RH')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $entityManager = $this->entityManager;
 
             if ($this->isCsrfTokenValid('rejeter' . $conges->getId(), $request->request->get('_token'))) {

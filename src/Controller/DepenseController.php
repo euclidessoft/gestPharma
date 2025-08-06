@@ -26,7 +26,7 @@ class DepenseController extends AbstractController
     #[Route("/", name :"depense_index", methods : ["GET"]) ]
     public function index(DepenseRepository $depenseRepository): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return $this->render('depense/index.html.twig', [
                 'depenses' => $depenseRepository->findAll(),
             ]);
@@ -47,7 +47,7 @@ class DepenseController extends AbstractController
     #[Route("/new", name :"depense_new", methods : ["GET","POST"]) ]
     public function new(Request $request, Solde $solde): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $depense = new Depense();
             $debit = new Debit();
             $ecriture = new Ecriture();
@@ -125,7 +125,7 @@ class DepenseController extends AbstractController
     #[Route("/{id}", name :"depense_show", methods : ["GET"]) ]
     public function show(Depense $depense): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             return $this->render('depense/show.html.twig', [
                 'depense' => $depense,
             ]);
@@ -146,7 +146,7 @@ class DepenseController extends AbstractController
     #[Route("/{id}/edit", name :"depense_edit", methods : ["GET","POST"]) ]
     public function edit(Request $request, Depense $depense): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             $form = $this->createForm(DepenseType::class, $depense);
             $form->handleRequest($request);
 
@@ -177,7 +177,7 @@ class DepenseController extends AbstractController
     #[Route("/{id}", name :"depense_delete", methods : ["POST"]) ]
     public function delete(Request $request, Depense $depense): Response
     {
-        if ($this->security->isGranted('ROLE_FINANCE')) {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
             if ($this->isCsrfTokenValid('delete' . $depense->getId(), $request->request->get('_token'))) {
 //                $entityManager = $this->getDoctrine()->getManager();
                 $this->entityManager->remove($depense);
