@@ -1,39 +1,47 @@
-<!DOCTYPE html>
-
-<title>Banque index</title>
-
+{% extends
+   
+    'layout.html.twig'
+%}
+{% block title %} {{ "Banques"|trans }} - PharmaCare {% endblock %}
+{% block finance %}active{% endblock %}
+{% block banque %}active{% endblock %}
+{% block all_banque %}active{% endblock %}
 {% block body %}
-    <h1>Banque index</h1>
+<div class="col-lg-6 mt-4 fond-7">
+    <h3 class="mt-4 mb-5 text-bold">
+        <i class="fa fa-money-bill me-2"></i>
+        {{ "Liste des banques"|trans }}
+    </h3>
+     {% for message in app.flashes('notice') %}
+            <div role="alert" class="alert alert-success alert-dismissible fade show radius-10 shadow-black">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                {{ message|trans }}
+            </div>
+        {% endfor %}
 
-    <table class="table">
+    <a href="{{ path('app_banque_new') }}" class="btn btn-success mb-4"><i class="fas fa-plus"></i> Ajouter banque</a>
+    
+    <table class="table table-success-light table-bordered table-hover table-striped my-3" id="liste">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Nom</th>
-                <th>Adresse</th>
-                <th>Phone</th>
-                <th>actions</th>
+                <th>{{('Nº Compte'|trans)}}</th>
+                <th>{{('Nom'|trans)}}</th>
+                <th>{{('Actions'|trans)}}</th>
             </tr>
         </thead>
         <tbody>
         {% for banque in banques %}
             <tr>
-                <td>{{ banque.id }}</td>
-                <td>{{ banque.nom }}</td>
-                <td>{{ banque.adresse }}</td>
-                <td>{{ banque.phone }}</td>
-                <td>
-                    <a href="{{ path('app_banque_show', {'id': banque.id}) }}">show</a>
-                    <a href="{{ path('app_banque_edit', {'id': banque.id}) }}">edit</a>
+                <td data-label="{{('Nº Compte'|trans)}}">{{ banque.compte }}</td>
+                <td data-label="{{('Nom'|trans)}}">{{ banque.nom }}</td>
+                <td data-label="{{('Actions'|trans)}}">
+                    <a id="{{ banque.id }}" onclick="load({{banque.id}})" href="{{ path('finance_journal_banque', { banque : banque.id })}}" class="btn btn-success"><i class="fas fa-eye"></i></a>
+                    <a href="{{ path('banque_edit', {'id': banque.id}) }}" class="btn btn-success-light"><i class="fas fa-edit"></i></a>
+                    {{ include('banque/_delete_form.html.twig') }}
                 </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_banque_new') }}">Create new</a>
 {% endblock %}

@@ -2,14 +2,21 @@
 
 namespace App\Controller;
 
+use App\Entity\Achat;
+use App\Entity\Debit;
+use App\Entity\Ecriture;
 use App\Entity\Facture;
+use App\Entity\FactureFournisseur;
 use App\Entity\Mutuel;
+use App\Complement\Solde;
 use App\Entity\Versement;
 use App\Repository\MutuelRepository;
 use App\Repository\VenteRepository;
 use App\Form\FactureForm;
 use App\Form\VersementForm;
+use App\Form\AchatType;
 use App\Repository\FactureRepository;
+use App\Repository\FactureFournisseurRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -245,6 +252,37 @@ final class FactureController extends AbstractController
         ]);
     }
 
+
+    #[Route("/Commande_Facture_list", name :"facture_list", methods : ["GET"]) ]
+    public function listfacture(FactureFournisseurRepository $repository): Response
+    {
+         if ($this->security->isGranted('ROLE_USER')) {
+            $response = $this->render('facture/facture_list.html.twig', [
+                'facturefournisseurs' => $repository->findBy(['payer' => false]),
+            ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+         } else {
+            $response = $this->redirectToRoute('security_login');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        }
+    }
+
     #[Route('/{id}', name: 'app_facture_show', methods: ['GET'])]
     public function show(Facture $facture): Response
     {
@@ -281,4 +319,133 @@ final class FactureController extends AbstractController
 
         return $this->redirectToRoute('app_facture_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
+
+    #[Route("/PayeCommande/{facture}", name :"payer_commande", methods : ["GET","POST"]) ]
+    public function payecommande(Request $request,FactureFournisseur $facture, Solde $solde): Response
+    {
+        if ($this->security->isGranted('ROLE_USER')) {
+            $achat = new Achat();
+            $achat->setMontant($facture->getMontant());
+            $achat->setFournisseur($facture->getFournisseur());
+            $debit = new Debit();
+            $ecriture = new Ecriture();
+            $form = $this->createForm(AchatType::class, $achat);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                
+                    $entityManager = $this->entityManager;
+                    $achat->setUser($this->getUser());
+                    $montant = 0;
+                    if($achat->getType() == 'Espece'){
+                        $montant = $solde->montantcaisse($entityManager, 571);
+                        $achat->setCompte($achat->getFournisseur()->getCompte());
+
+                        $debit->setType('Espece');
+                        $debit->setCompte(571);
+
+                        $ecriture->setType('Espece');
+                        $ecriture->setComptecredit($achat->getFournisseur()->getCompte());
+                        $ecriture->setLibellecomptecredit($achat->getFournisseur()->getDesignation());
+                        $ecriture->setComptedebit(571);
+                        $ecriture->setLibellecomptedebit("Caisse");
+                    }
+                    elseif($achat->getType() == 'Orange Money'){
+                        $montant = $solde->montantcaisse($entityManager, 571);
+                        $achat->setCompte($achat->getFournisseur()->getCompte());
+
+                        $debit->setType('Orange Money');
+                        $debit->setCompte('521');
+
+                        $ecriture->setType('Orange Money');
+                        $ecriture->setComptecredit($achat->getFournisseur()->getCompte());
+                        $ecriture->setLibellecomptecredit($achat->getFournisseur()->getDesignation());
+                        $ecriture->setComptedebit('521');
+                        $ecriture->setLibellecomptedebit("Orange Money");
+                    }elseif($achat->getType() == 'Wave'){
+                        $montant = $solde->montantcaisse($entityManager, 571);
+                        $achat->setCompte($achat->getFournisseur()->getCompte());
+
+                        $debit->setType('Wave');
+                        $debit->setCompte('522');
+
+                        $ecriture->setType('Wave');
+                        $ecriture->setComptecredit($achat->getFournisseur()->getCompte());
+                        $ecriture->setLibellecomptecredit($achat->getFournisseur()->getDesignation());
+                        $ecriture->setComptedebit('522');
+                        $ecriture->setLibellecomptedebit("Wave");
+                    }
+                    else{
+                        $montant = $solde->montantbanque($entityManager, $achat->getBanque()->getCompte());//sole compte
+                        $achat->setType('Banque');
+                        $achat->setCompte($achat->getFournisseur()->getCompte());
+
+                        $debit->setType('Banque');
+                        $debit->setMontant($achat->getMontant());
+                        $debit->setCompte($achat->getBanque()->getCompte());
+
+                        $ecriture->setType('Banque');
+                        $ecriture->setComptecredit($achat->getFournisseur()->getCompte());
+                        $ecriture->setLibellecomptecredit("Fournisseur");
+                        $ecriture->setComptedebit($achat->getBanque()->getCompte());
+                        $ecriture->setLibelleComptedebit($achat->getBanque()->getNom());
+                    }
+                    if($achat->getMontant() <= $montant) {
+                        $debit->setAchat($achat);
+                        $debit->setMontant($achat->getMontant());
+                        $facture->setPayer(true);
+
+                        $ecriture->setDebit($debit);
+                        $ecriture->setSolde(-$achat->getMontant());
+                        $ecriture->setMontant($achat->getMontant());
+                        $ecriture->setLibelle('Achat chez '. $achat->getFournisseur()->getDesignation());
+                        $entityManager->persist($achat);
+                        $entityManager->persist($debit);
+                        $entityManager->persist($ecriture);
+                        $entityManager->persist($facture);
+                        $entityManager->flush();
+                        $response = $this->redirectToRoute('achat_index', [], Response::HTTP_SEE_OTHER);
+                        $response->setSharedMaxAge(0);
+                        $response->headers->addCacheControlDirective('no-cache', true);
+                        $response->headers->addCacheControlDirective('no-store', true);
+                        $response->headers->addCacheControlDirective('must-revalidate', true);
+                        $response->setCache([
+                            'max_age' => 0,
+                            'private' => true,
+                        ]);
+                        return $response;
+                    }else{
+                        $this->addFlash('notice', 'Montant non disponible');
+                    }   
+                }
+        
+            $response = $this->render('facture/new.html.twig', [
+                'achat' => $achat,
+                'form' => $form->createView(),
+            ]);
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+         } else {
+            $response = $this->redirectToRoute('security_login');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        }
+    }
+
 }

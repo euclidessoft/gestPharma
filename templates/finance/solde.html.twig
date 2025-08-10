@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}{{ 'Journal comptable'|trans }} - GNT Pharma{% endblock %}
+{% block title %}{{ 'Journal comptable'|trans }} - PharmaCare{% endblock %}
 
 {% block finance %}active{% endblock %}
 
@@ -9,22 +9,19 @@
 
 {% block body %}
 
-    <div class="col-lg-11 mt-5 mb-5 fond">
-        <h3 class="mt-4 text-bold">
-            <i class="fas fa-money-bill fa-lg"></i><i class="fas fa-hourglass-half"></i>
-            {{ 'Solde'|trans }}
-        </h3>
-        {% for message in app.session.flashbag.get('notice') %}
-            <div role="alert" class="alert alert-danger alert-dismissible fade show radius-10 shadow-black mt-5 mb-5">
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">&times;</button>
-                {{ message|trans }}
-            </div>
-        {% endfor %}
+   
+       
         <div class="col-lg-12 fond mt-5">
             <h4 class="mt-4">
                 <i class="fa fa-money-bill-wave"></i>
                 {{ 'Soldes'|trans }}
             </h4>
+            {% for message in app.session.flashbag.get('notice') %}
+                 <div role="alert" class="alert alert-danger alert-dismissible fade show radius-10 shadow-black mt-5 mb-5">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-hidden="true">&times;</button>
+                {{ message|trans }}
+            </div>
+        {% endfor %}
             <div class="row">
 
                 <div class="col-lg-12">
@@ -88,8 +85,5 @@
                 </div>
             </div>
         </div>
-
-      
-    </div>
 
 {% endblock %}

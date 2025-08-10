@@ -1,0 +1,47 @@
+{% extends 'layout.html.twig' %}
+{% block title %} {{ "Commande"|trans }} - Pharmacare {% endblock %}
+{% block finance %}active{% endblock %}
+{% block achat %}active{% endblock %}
+{% block new_achat %}active{% endblock %}
+
+{% block body %}
+    <div class="col-lg-8 mt-4 fond">
+        <h3 class="mt-4 mb-5 text-bold">
+            <i class="fa fa-shop me-2"></i>
+            {{ "Liste des factures impayes"|trans }}
+        </h3>
+        {% for message in app.flashes('notice') %}
+            <div role="alert" class="alert alert-success alert-dismissible fade show radius-10 shadow-black">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                {{ message|trans }}
+            </div>
+        {% endfor %}
+
+        <table class="table table-success-light table-bordered table-hover table-striped w-100 text-center" id="liste">
+            <thead>
+            <tr>
+                <th>{{ 'No Appr'|trans }}</th>
+                <th>{{ 'Date'|trans }}</th>
+                <th class="text-start">{{ 'Fournisseur'|trans }}</th>
+                <th class="text-center">{{ 'Montant'|trans }}</th>
+                <th>{{ 'Détails'|trans }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for facture in facturefournisseurs %}
+                <tr>
+                    <td>{{ facture.commande.id }}</td>
+                    <td>{{ facture.commande.date|date('d/m/Y') }}</td>
+                    <td class="text-start">{{ facture.fournisseur ? facture.fournisseur.designation : '' }}</td>
+                    <td class="text-start">{{ facture.montant|number_format(2, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }}</td>
+                    <td>
+                        <a id="{{ facture.id }}" onclick="load({{ facture.id }})" class="btn btn-success" href="{{ path('payer_commande', {'facture': facture.id}) }}">
+                            {{ 'Payer'|trans }}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

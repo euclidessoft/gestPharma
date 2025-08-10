@@ -1,16 +1,16 @@
 {% extends 'layout.html.twig' %}
-{% block title %} {{ "Commande"|trans }} - GNT Pharma {% endblock %}
+{% block title %} {{ "Commande"|trans }} - PharmaCare {% endblock %}
 {% block finance %}active{% endblock %}
 {% block depense %}active{% endblock %}
 {% block all_depense %}active{% endblock %}
 {% block body %}
-    <div class="container mt-4 fond-7">
+    <div class="container mt-4 fond">
         <h3 class="mt-4 mb-5 text-bold">
             <i class="fa fa-money-bill me-2"></i>
             {{ "Listes des depenses"|trans }}
         </h3>
 
-
+<a href="{{ path('depense_new')}}" class="btn btn-success m-b-3"><i class="fa fa-plus"></i> Nouvelle Depense</a>
         <table class="table table-success-light table-bordered table-hover table-striped my-3" id="liste">
             <thead>
             <tr>

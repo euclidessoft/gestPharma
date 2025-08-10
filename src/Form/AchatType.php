@@ -16,7 +16,6 @@ class AchatType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('montant')
             ->add('type', VerserType::class,array('placeholder' => 'Type de Paiement'))
             ->add('banque',EntityType::class, [
                 'class' => Banque::class,

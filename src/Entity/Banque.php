@@ -22,6 +22,9 @@ class Banque
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $phone = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $compte = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +62,18 @@ class Banque
     public function setPhone(?string $phone): static
     {
         $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getCompte(): ?string
+    {
+        return $this->compte;
+    }
+
+    public function setCompte(string $compte): static
+    {
+        $this->compte = $compte;
 
         return $this;
     }
