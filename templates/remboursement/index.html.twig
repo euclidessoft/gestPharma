@@ -9,7 +9,10 @@
         <i class="fa fa-money-bill me-2"></i>
         {{ "Listes des Remboursements"|trans }}
     </h3>
-
+ <a class="btn btn-success mb-5" href="{{ path('remboursement_banque') }}">
+        <i class="fas fa-money-bills"></i><i class="fa fa-plus"></i>
+        {{ 'Nouveau Remboursement'|trans }}
+    </a>
 
     <table class="table table-success-light table-bordered table-hover table-striped my-3" id="liste">
         <thead>

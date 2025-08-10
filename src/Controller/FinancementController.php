@@ -80,6 +80,7 @@ class FinancementController extends AbstractController
                 $credit->setMontant($financement->getMontant());
 
                 // $financement->setCompte('1651' . str_pad($financement->getCompte(), 2, '0', STR_PAD_LEFT));
+                $financement->setCompte('1651');
                 $financement->setLibellecompte("Apport Exploitant");
                 if ($financement->getType() == 'Espece') {
                     $credit->setCompte(571);
@@ -93,16 +94,43 @@ class FinancementController extends AbstractController
                     $ecriture->setComptedebit($financement->getCompte());
                     $ecriture->setLibellecomptedebit($financement->getLibellecompte());
 
+                } elseif ($financement->getType() == 'Orange Money') {
+                    $credit->setCompte(522);
+                    $credit->setType('Orange Money');
+
+
+                    $ecriture->setCredit($credit);
+                    $ecriture->setType('Orange Money');
+                    $ecriture->setComptecredit(522);
+                    $ecriture->setLibellecomptecredit("Orange Money");
+                    $ecriture->setComptedebit(1651);
+                    $ecriture->setLibellecomptedebit($financement->getLibellecompte());
+
+                }elseif ($financement->getType() == 'Wave') {
+                    $credit->setCompte(523);
+                    $credit->setType('Wave');
+
+
+                    $ecriture->setCredit($credit);
+                    $ecriture->setType('Wave');
+                    $ecriture->setComptecredit(523);
+                    $ecriture->setLibellecomptecredit("Wave");
+                    $ecriture->setComptedebit(1651);
+                    $ecriture->setLibellecomptedebit($financement->getLibellecompte());
+
                 } else {
                     $financement->setType('Banque');
-                    $credit->setCompte($financement->getBanque()->getCompte());
+                    // $credit->setCompte($financement->getBanque()->getCompte());
+                    $credit->setCompte("521");
                     $credit->setType('Banque');
 
 
                     $ecriture->setCredit($credit);
                     $ecriture->setType('Banque');
-                    $ecriture->setComptecredit($financement->getBanque()->getCompte());
-                    $ecriture->setLibellecomptecredit($financement->getBanque()->getNom());
+                    // $ecriture->setComptecredit($financement->getBanque()->getCompte());
+                    $ecriture->setComptecredit("521");
+                    // $ecriture->setLibellecomptecredit($financement->getBanque()->getNom());
+                    $ecriture->setLibellecomptecredit("Banque");
                     $ecriture->setComptedebit($financement->getCompte());
                     $ecriture->setLibellecomptedebit($financement->getLibellecompte());
                 }
@@ -160,20 +188,24 @@ class FinancementController extends AbstractController
                 $credit->setMontant($financement->getMontant());
                 // $num = $financement->getCompte();
                 // $financement->setCompte('162' . str_pad($num, 2, '0', STR_PAD_LEFT));
+                $financement->setCompte('162');
                 $financement->setLibellecompte("Pret Bancaire");
                 // $financement->setCompteinteret('674' . str_pad($num, 2, '0', STR_PAD_LEFT));
                 $financement->setApport(false);
                 $financement->setType('Banque');
 
-                $credit->setCompte($financement->getBanque()->getCompte());
+                // $credit->setCompte($financement->getBanque()->getCompte());
+                $credit->setCompte("521");
                 $credit->setType('Banque');
 
 
                 $ecriture = new Ecriture();
                 $ecriture->setCredit($credit);
                 $ecriture->setType('Banque');
-                $ecriture->setComptecredit($financement->getBanque()->getCompte());
-                $ecriture->setLibellecomptecredit($financement->getBanque()->getNom());
+                // $ecriture->setComptecredit($financement->getBanque()->getCompte());
+                $ecriture->setComptecredit("521");
+                // $ecriture->setLibellecomptecredit($financement->getBanque()->getNom());
+                $ecriture->setLibellecomptecredit("Banque");
                 $ecriture->setComptedebit($financement->getCompte());
                 $ecriture->setLibellecomptedebit($financement->getLibellecompte());
 

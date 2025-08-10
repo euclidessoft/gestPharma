@@ -15,17 +15,17 @@ class FinancementBanqueType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('compte')
+            // ->add('compte')
             ->add('motif')
             ->add('montant')
             ->add('taux')
-            ->add('banque',EntityType::class,[
-                'class' => Banque::class,
-                'choice_label' => "nom",
-                'placeholder' => "Sélectionnez une banque",
-                'required' => true,
-            ])
-            ->add('numero')
+            // ->add('banque',EntityType::class,[
+            //     'class' => Banque::class,
+            //     'choice_label' => "nom",
+            //     'placeholder' => "Sélectionnez une banque",
+            //     'required' => true,
+            // ])
+            // ->add('numero')
             ->add('duree')
         ;
     }

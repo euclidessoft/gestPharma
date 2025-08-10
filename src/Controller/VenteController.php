@@ -108,11 +108,11 @@ class VenteController extends
              if($om != 0){
                 $creditom = new Credit();
                 $creditom->setMontant($om); 
-                $creditom->setCompte("521");
+                $creditom->setCompte("523");
                 $creditom->setType('Orange Money');
                 
                 $ecritureom = new Ecriture();
-                $ecritureom->setComptecredit("521");
+                $ecritureom->setComptecredit("523");
                 $ecritureom->setLibellecomptecredit("Orange Money");
                 $ecritureom->setComptedebit("700");
                 $ecritureom->setType("Orange Money");
@@ -148,11 +148,11 @@ class VenteController extends
              if($banque != 0){
                  $creditbanque = new Credit();
                 $creditbanque->setMontant($banque); 
-                $creditbanque->setCompte("523");
+                $creditbanque->setCompte("521");
                 $creditbanque->setType('Banque');
 
                 $ecriturebanque = new Ecriture();
-                $ecriturebanque->setComptecredit("523");
+                $ecriturebanque->setComptecredit("521");
                 $ecriturebanque->setLibellecomptecredit("anque");
                 $ecriturebanque->setComptedebit("700");
                 $ecriturebanque->setType("Banque");

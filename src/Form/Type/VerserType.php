@@ -14,7 +14,7 @@ class VerserType extends AbstractType
 							'Espece' => 'Espece',
 							'Orange money' => 'Orange money',
 							'Wave' => 'Wave',
-							'Virement' => 'Virement',
+							'Banque' => 'Banque',
 							)
 						));
 	}

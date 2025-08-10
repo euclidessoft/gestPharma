@@ -31,6 +31,12 @@ class TransfertController extends AbstractController
         ]);
     }
 
+     #[Route("/Choix_transfert", name :"transfert_choix", methods : ["GET","POST"]) ]
+    public function financementChoix(Request $request): Response
+    {
+        return $this->render('transfert/choix_transfert.html.twig');
+    }
+
     #[Route("/caisse", name :"transfert_caisse", methods : ["GET","POST"]) ]
     public function caisse(Request $request, Solde $solde): Response
     {

@@ -15,7 +15,6 @@ class FinancementType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('compte')
             ->add('motif')
             ->add('montant')
             ->add('Type', VerserType::class,array('placeholder' => 'Type de Financement'))
