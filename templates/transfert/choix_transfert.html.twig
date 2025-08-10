@@ -4,66 +4,68 @@
 {% block transfert %}active{% endblock %}
 
 {% block body %}
-    <div class="container_paiement  mt-4 fond text-center">
-        <h3 class="mt-4 mb-5 text-bold">
-            <i class="fa-solid fa-money-bill me-2"></i>
+    <div class="col-lg-8 mt-4 fond p-3">
+    <h4 class="mb-5 text-bold">
+         <i class="fa-solid fa-money-bill me-2"></i>
             {{ 'Créer un transfert de fonds'|trans }}
-        </h3>
+    </h4>
         <div class="row">
-            <div class="col-md-12">
-                <div class="row justify-content-center">
-                    <div class="col-lg-4">
-                            <div class="p-3 rounded border border-green avoir">
-                                <div class="text-green textavoir text-center py-3 rounded-top"> 
-                                     <h5>Source</h5>
-                                </div>
-                            </div>
-                            
+            <div class="col-md-4 offset-md-2">
+                <div class="col-lg-12">
+                                <div class="p-3 rounded border border-green avoir">
+                                    <div class="text-green textavoir text-center py-3 rounded-top"> 
+                                        <h5>Source</h5>
+                                    </div>
+                 <div class="col-lg-12">
+                       <select id="source" class="form-select mt-3">
+                            <option value="0">Selectionnez la source</option>
+                            <option value="Caisse">Caisse</option>
+                            <option value="Wave">Wave</option>
+                            <option value="Orange Money">Orange Money</option>
+                            <option value="Banque">Banque</option>
+                        </select>
                     </div>
-                    <div class="col-lg-4">
-                            <div class="p-3 rounded border border-green avoir">
-                                <div class="text-green textavoir text-center py-3 rounded-top border-green">
-                                    <h5>Destination</h5>
                                 </div>
-                            </div>
-                            
+                                
+                        </div>
+                
                     </div>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="row justify-content-center">
-                    <div class="col-lg-4">
-                        <a href="{{ path('remboursement_espece') }}">
-                            <div class="p-3 rounded border border-green avoir">
-                                <div class="text-green textavoir text-center py-3 rounded-top"> 
-                                     <i class="fa-solid fa-cash-register fa-3x"></i>
-                                     <i class="fa fa-arrow-right fa-3x"></i>
-                                        <i class="fa-solid fa-landmark fa-3x"></i>
-                                </div>
-                                <div class="text-bold text-green textavoir text-center py-3 rounded-bottom">
-                                    {{'Caisse vers Banque'|trans}}
-                                </div>
-                            </div>
-                        </a>
+            <div class="col-md-4">
+              <div class="col-lg-12">
+                                <div class="p-3 rounded border border-green avoir">
+                                    <div class="text-green textavoir text-center py-3 rounded-top"> 
+                                        <h5>Destination</h5>
+                                    </div>
+                               
+                 <div class="col-lg-12">
+                       <select id="destination" class="form-select mt-3">
+                            <option value="0">Selectionnez la destination</option>
+                            <option value="Caisse"><i class="fa-solid fa-cash-register"></i> Caisse</option>
+                            <option value="Wave">Wave</option>
+                            <option value="Orange Money">Orange Money</option>
+                            <option value="Banque">Banque</option>
+                        </select>
                     </div>
-                    <div class="col-lg-4">
-                        <a href="{{ path('remboursement_banque') }}">
-                            <div class="p-3 rounded border border-green avoir">
-                                <div class="text-green textavoir text-center py-3 rounded-top border-green">
-                                        <i class="fa-solid fa-landmark fa-3x"></i>
-                                     <i class="fa fa-arrow-right fa-3x"></i>
-                                    <i class="fa-solid fa-cash-register fa-3x"></i>
-                                </div>
-                                <div class="text-green textavoir text-bold text-center py-3 rounded-bottom">
-                                    {{'Banque vers Caisse'|trans}}
-                                </div>
-                            </div>
-                        </a>
                     </div>
-                </div>
+                     </div>
+                                
+                        </div>
+             <div class="col-md-2">
             </div>
         </div>
+        <div class="row mb-5 pb-5">
+        <div class="col-md-8 offset-md-2 justify-content-center"> 
+             <div class="form-floating">
+                 <input type="number" class="form-control mt-4" placeholder="Montant" id="montant" />
+                 <label for="montant" class="form-label required">Montant *</label>
+            </div>
+            <button class="btn btn-success mt-4" >valider</button>
+            </div>
+        </div>
+                
 
     </div>
+
+    
 
 {% endblock %}
