@@ -135,8 +135,8 @@ class VenteController extends
                 $ecriturewave->setComptecredit("522");
                 $ecriturewave->setLibellecomptecredit("Wave");
                 $ecriturewave->setComptedebit("700");
-                $ecriturecwvae->setType("Wave");
-                $ecriturecaisse->setCredit($creditwave);
+                $ecriturewave->setType("Wave");
+                $ecriturewave->setCredit($creditwave);
                 $ecriturewave->setLibellecomptedebit("Vente de medicaments");
                 $ecriturewave->setSolde($wave);
                 $ecriturewave->setMontant($wave);
@@ -155,8 +155,8 @@ class VenteController extends
                 $ecriturebanque->setComptecredit("523");
                 $ecriturebanque->setLibellecomptecredit("anque");
                 $ecriturebanque->setComptedebit("700");
-                $ecriturecaisse->setType("Banque");
-                $ecriturecaisse->setCredit($creditbanque);
+                $ecriturebanque->setType("Banque");
+                $ecriturebanque->setCredit($creditbanque);
                 $ecriturebanque->setLibellecomptedebit("Vente de medicaments");
                 $ecriturebanque->setSolde($banque);
                 $ecriturebanque->setMontant($banque);
