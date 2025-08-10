@@ -8,7 +8,7 @@
 
 {% block body %}
 
-    <div class="col-lg-6 mt-5 mb-5 pb-lg-5 fond-7">
+    <div class="col-lg-6 mt-5 mb-5 pb-lg-5 fond">
         <h3 class="mt-4 text-bold">
             <i class="fa-solid fa-magnifying-glass-chart"></i>
             {{ 'Rapport à une date'|trans }}
@@ -28,7 +28,7 @@
                     </div>
 
                     <button data-bs-toggle="modal" data-bs-target="#jour"
-                            class="btn btn-shadow btn-td btn-green mt-2 mb-n1 float-right disabled" id="daybtn">
+                            class="btn btn-shadow btn-td btn-success mt-2 mb-n1 float-right disabled" id="daybtn">
                         <i class="fa fa-check-circle"></i>
                         {{ 'Valider'|trans }}
                     </button>
@@ -48,7 +48,7 @@
                                     <div class="col-12 mt-5 mb-4">
                                         <div class="centrer">
                                             <div class="row">
-                                                <button type="button" class="btn btn-shadow btn-green me-3"
+                                                <button type="button" class="btn btn-shadow btn-success me-3"
                                                         onclick="daycaisse()">
                                                     &emsp;
                                                     <i class="fa fa-cash-register fa-lg"></i>
@@ -62,7 +62,7 @@
                                                     {{ 'Banque'|trans }}
                                                     &emsp;
                                                 </button>
-                                                <button type="button" class="btn btn-shadow btn-success-light"
+                                                <button type="button" class="btn btn-shadow btn-success"
                                                         onclick="day()">
                                                     &emsp;
                                                     <!-- <i class="fa fa-university fa-lg"></i> -->

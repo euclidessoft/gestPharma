@@ -5,7 +5,7 @@
 
 {% block body %}
 
-    <div class="container mt-5 mb-5 fond-7">
+    <div class="container mt-5 mb-5 fond">
         <h3 class="mt-4 mb-5 text-bold">
             <i class="fa fa-comments"></i>
             {{ "Messagerie"|trans }}
@@ -24,14 +24,14 @@
                     <div class="col-12 mb-4">
                         {{ form_row(form.message, {'attr': {'placeholder': 'Ecrivez votre message ici *', 'rows': '10'}, 'label': 'Message'}) }}
                     </div>
-                    <div class="col-md-6 offset-md-3 my-4 p-3 fond-7">
+                    <div class="col-md-6 offset-md-3 my-4 p-3 fond">
                         <div class="centrer gap-3">
-                            <button type="button" class="btn btn-green" data-bs-toggle="modal"
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal"
                                     data-bs-target="#destinataire">
                                 <i class="fa fa-user"></i>
                                 {{ "Destinataire"|trans }}
                             </button>
-                            <a href="{{ path("received") }}" class="btn btn-success-light">
+                            <a href="{{ path("received") }}" class="btn btn-success">
                                 <i class="fa fa-undo"></i>
                                 {{ 'Annuler'|trans }}
                             </a>
@@ -85,12 +85,12 @@
     #}
                                 </div>
                                 <div class="modal-footer centrer">
-                                    <button type="submit" class="btn btn-green btn-normal me-3"
+                                    <button type="submit" class="btn btn-success btn-normal me-3"
                                             id="send" {#onclick="envoie()"#}>
                                         <i class="fa-solid fa-paper-plane"></i>
                                         {{ 'Envoyer'|trans }}
                                     </button>
-                                    <button type="button" class="btn btn-success-light" data-bs-dismiss="modal">
+                                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">
                                         <i class="fa fa-undo"></i>
                                         {{ 'Annuler'|trans }}
                                     </button>

@@ -3,7 +3,7 @@
 {% block paie %}active{% endblock %}
 {% block prime %}active{% endblock %}
 {% block body %}
-    <div class="container mt-4 fond-7 pb-5 pt-3 px-5">
+    <div class="container mt-4 fond pb-5 pt-3 px-5">
         <h4 class="text-bold mb-5">
             <i class="fa-solid fa-gears fa-lg"></i>
             {{ 'Liste des primes'|trans }}
@@ -27,7 +27,7 @@
                     <td>{{ prime.montant }}</td>
                     <td>{{ prime.description }}</td>
                     <td>
-                        <a href="{{ path('prime_edit', {'id': prime.id}) }}" class="btn btn-success-light"><i class="fas fa-edit"></i></a>
+                        <a href="{{ path('prime_edit', {'id': prime.id}) }}" class="btn btn-success"><i class="fas fa-edit"></i></a>
                     </td>
                 </tr>
             {% else %}

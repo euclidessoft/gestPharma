@@ -8,14 +8,14 @@
         </div>
     {% else %}
         {% if bulletins|length > 0 %}
-            <div class="col-8 fond-7 my-5">
+            <div class="col-8 fond my-5">
                 <div class="centrer gap-3">
                     <!-- Bouton pour valider tous les bulletins -->
-                   <button class="btn btn-green" onclick="valider()" id="valider">
+                   <button class="btn btn-success" onclick="valider()" id="valider">
                         <i class="fa fa-save"></i>
                         {{ "Valider tous les bulletins"|trans }}
                     </button>
-                    <a href="{{ path('paie_index') }}" class="btn btn-success-light">
+                    <a href="{{ path('paie_index') }}" class="btn btn-success">
                         <i class="fa fa-undo"></i>
                         {{ "Retour"|trans }}
                     </a>
@@ -24,7 +24,7 @@
         {% endif %}
         {% for bulletin in bulletins %}
             {% set employe = bulletin.employe %}
-             <div class="col-8 fond-7 my-5">
+             <div class="col-8 fond my-5">
         <div class="row" style="border-bottom: 2px solid #039c4f;padding-bottom: 10px;">
             <div class="col-2 p-0">
                 <img src="{{ asset('images/gnt.png') }}" alt="Logo" class="w-100">
@@ -663,14 +663,14 @@
     </div>
         {% endfor %}
         {% if bulletins|length > 0 %}
-            <div class="col-8 fond-7 my-5">
+            <div class="col-8 fond my-5">
                 <div class="centrer gap-3">
                     <!-- Bouton pour valider tous les bulletins -->
-                    <button class="btn btn-green" onclick="valider()" id="valider1">
+                    <button class="btn btn-success" onclick="valider()" id="valider1">
                         <i class="fa fa-save"></i>
                         {{ "Valider tous les bulletins"|trans }}
                     </button>
-                    <a href="{{ path('paie_index') }}" class="btn btn-success-light">
+                    <a href="{{ path('paie_index') }}" class="btn btn-success">
                         <i class="fa fa-undo"></i>
                         {{ "Retour"|trans }}
                     </a>

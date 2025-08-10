@@ -8,7 +8,7 @@
 
 {% block body %}
 
-  <div class="col-lg-5 offset-lg-2 mt-4 fond-7 pb-5 pt-3 px-5">
+  <div class="col-lg-5 offset-lg-2 mt-4 fond pb-5 pt-3 px-5">
     <h4 class="mb-5">
         <i class="fa fa-share"></i>
         {{ 'Repartition resultat'|trans }}
@@ -81,10 +81,10 @@
                 <input type="hidden" id="nombre" value="0"/>
              </div>
              
-              <div class="col-md-8 offset-md-2 mt-4 pt-3 fond-7">
+              <div class="col-md-8 offset-md-2 mt-4 pt-3 fond">
                     <div class="centrer">
                
-                        <button  type="button"  class="btn btn-shadow btn-green btn-normal mb-3 me-3" id="send" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        <button  type="button"  class="btn btn-shadow btn-success btn-normal mb-3 me-3" id="send" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                             <i class="fa fa-share"></i>
                             {{ 'Affecter'|trans }}
                         </button>
@@ -112,17 +112,17 @@
          </form>
       </div>
       <div class="modal-footer">
-        <button type="button" id="annulervente" class="btn btn-success-light" data-bs-dismiss="modal">{{"Annuler"|trans}}</button>
+        <button type="button" id="annulervente" class="btn btn-success" data-bs-dismiss="modal">{{"Annuler"|trans}}</button>
         <button type="button" class="btn btn-success" onclick="valider()">{{"Enregistrer"|trans}}</button>
       </div>
     </div>
   </div>
 </div>
 {% else %}
-<div class="col-md-8 offset-md-2 mt-4 pt-3 fond-7">
+<div class="col-md-8 offset-md-2 mt-4 pt-3 fond">
                     <div class="centrer">
                
-                        <a href="{{ path('finance_repartir_negatif')}}" class="btn btn-shadow btn-green btn-normal mb-3 me-3" id="send" onlcik="load('send')">
+                        <a href="{{ path('finance_repartir_negatif')}}" class="btn btn-shadow btn-success btn-normal mb-3 me-3" id="send" onlcik="load('send')">
                             <i class="fa fa-share"></i>
                             {{ 'Repporter'|trans }}
                         </a>

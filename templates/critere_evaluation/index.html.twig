@@ -2,7 +2,7 @@
 {% block evaluation %}active{% endblock %}
 {% block critere %}active{% endblock %}
 {% block body %}
-    <div class="col-lg-6 mt-4 fond-7">
+    <div class="col-lg-6 mt-4 fond">
         <h3 class="mt-4 mb-5 text-bold">
             <i class="fa fa-money-bill me-2"></i>
             {{ "Liste des critères d'évaluation"|trans }}
@@ -22,7 +22,7 @@
                 <td>{{ critere_evaluation.nom }}</td>
                 <td>{{ critere_evaluation.description }}</td>
                 <td>
-                    <a href="{{ path('critere_evaluation_edit', {'id': critere_evaluation.id}) }}" class="btn btn-success-light"><i class="fas fa-edit"></i></a>
+                    <a href="{{ path('critere_evaluation_edit', {'id': critere_evaluation.id}) }}" class="btn btn-success"><i class="fas fa-edit"></i></a>
                 </td>
             </tr>
         {% endfor %}

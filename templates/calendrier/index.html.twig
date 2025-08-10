@@ -2,7 +2,7 @@
 {% block administration %}active{% endblock %}
 {% block planning %}active{% endblock %}
 {% block body %}
-    <div class="col-lg-8 mt-4 fond-7">
+    <div class="col-lg-8 mt-4 fond">
         <h3 class="mt-4 mb-5 text-bold">
             <i class="fa fa-money-bill me-2"></i>
             {{ "Planning des congés"|trans }}
@@ -28,7 +28,7 @@
                     <td>{{ calendrier.dateDebut ? calendrier.dateDebut|date('d/m/Y') : '' }}</td>
                     <td>{{ calendrier.dateFin ? calendrier.dateFin|date('d/m/Y') : '' }}</td>
                     <td>
-                        <a href="{{ path('calendrier_edit', {'id': calendrier.id}) }}" class="btn btn-success-light"><i
+                        <a href="{{ path('calendrier_edit', {'id': calendrier.id}) }}" class="btn btn-success"><i
                                     class="fas fa-edit"></i></a>
                         {{ include('calendrier/_delete_form.html.twig') }}
                     </td>

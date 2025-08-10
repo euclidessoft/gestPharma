@@ -5,7 +5,7 @@
 {% block body %}
 
 
-<div class="container mt-4 fond-7 pb-5 pt-3 px-5">
+<div class="container mt-4 fond pb-5 pt-3 px-5">
     <h4 class="text-bold mb-5">
         <i class="fa-solid fa-gears fa-lg"></i>
         {{ 'Configuration du système'|trans }}
@@ -55,7 +55,7 @@
                 <td data-label="Nom">{{ type_conge.nom }}</td>
                 <td data-label="Description">{{ type_conge.description }}</td>
                 <td data-label="Actions">
-                    <a href="{{ path('type_conge_edit', {'id': type_conge.id}) }}" class="btn btn-success-light"><i class="fas fa-edit"></i></a>
+                    <a href="{{ path('type_conge_edit', {'id': type_conge.id}) }}" class="btn btn-success"><i class="fas fa-edit"></i></a>
                     {{ include('type_conge/_delete_form.html.twig') }}
                 </td>
             </tr>

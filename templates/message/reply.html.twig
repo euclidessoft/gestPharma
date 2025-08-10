@@ -5,7 +5,7 @@
 
 {% block body %}
 
-    <div class="container mt-5 mb-5 fond-7">
+    <div class="container mt-5 mb-5 fond">
         <h3 class="mt-4 mb-5 text-bold">
             <i class="fa fa-comments"></i>
             {{ "Messagerie"|trans }}
@@ -21,15 +21,15 @@
                     <div class="col-12 mb-4">
                         {{ form_row(form.content, {'attr': {'placeholder': 'Ecrivez votre réponse ici *', 'rows': '10'}, 'label': false}) }}
                     </div>
-                    <div class="col-md-3 offset-md-3 mt-4 pt-3 fond-7 d-table">
+                    <div class="col-md-3 offset-md-3 mt-4 pt-3 fond d-table">
                         <div class="centrer">
-                            <button type="submit" class="btn btn-shadow btn-green btn-normal mb-3 me-3" id="send"
+                            <button type="submit" class="btn btn-shadow btn-success btn-normal mb-3 me-3" id="send"
                                     onclick="envoie()">
                                 <i class="fa-solid fa-paper-plane"></i>
                                 {{ 'Envoyer'|trans }}
                             </button>
 
-                            <a href="{{ path("received") }}" class="btn btn-shadow btn-success-light btn-normal mb-3">
+                            <a href="{{ path("received") }}" class="btn btn-shadow btn-success btn-normal mb-3">
                                 <i class="fa fa-undo"></i>
                                 {{ 'Annuler'|trans }}
                             </a>

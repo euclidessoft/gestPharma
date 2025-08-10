@@ -1,7 +1,7 @@
 {% extends 'layout.html.twig' %}
 
 {% block body %}
-<div class="col-lg-6 mt-4 p-3 fond-7">
+<div class="col-lg-6 mt-4 p-3 fond">
     <h4 class="mt-4 mb-5 text-bold">
         <i class="fa-brands fa-product-hunt me-2"></i>
         {{ "Détails Produit"|trans }}
@@ -35,7 +35,7 @@
             </tr>
     </table>
 
-    <div class="col-md-7 offset-md-3 mt-4 p-3 fond-7">
+    <div class="col-md-7 offset-md-3 mt-4 p-3 fond">
         <div class="centrer gap-3">
             <a class="btn btn-success" href="{{ path('produit_edit', {'id': produit.id}) }}">
                 <i class="fa fa-edit"></i> Modifier
@@ -49,7 +49,7 @@
     </div>
 
 </div>
-<div class="col-lg-6 mt-4 mb-5 p-3 fond-7">
+<div class="col-lg-6 mt-4 mb-5 p-3 fond">
     <h4 class="mt-4 mb-5 text-bold">
         <i class="fa-brands fa-product-hunt me-2"></i>
         {{ "Fournisseurs ayant ce produit"|trans }}

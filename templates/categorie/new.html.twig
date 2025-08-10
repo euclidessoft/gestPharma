@@ -5,17 +5,17 @@
 {% block new_categorie %}active{% endblock %}
 
 {% block body %}
-<div class="col-lg-5 offset-lg-2 mt-4 fond-7 pb-5 pt-3 px-5">
+<div class="col-lg-5 offset-lg-2 mt-4 fond pb-5 pt-3 px-5">
     <h4 class="mb-5">
         <i class="fa-solid fa-credit-card"></i><i class="fa fa-plus me-2"></i>
         {{ 'Nouvelle ligne'|trans }}
     </h4>
 
     {{ include('categorie/_form.html.twig') }}
-    <div class="col-md-3 offset-md-3 mt-4 pt-3 fond-7">
+    <div class="col-md-3 offset-md-3 mt-4 pt-3 fond">
         <div class="centrer">
             {#                <div class="row">#}
-            <button type="button" class="btn btn-shadow btn-green btn-normal mb-3 me-3" id="send"
+            <button type="button" class="btn btn-shadow btn-success btn-normal mb-3 me-3" id="send"
                     onclick="envoie()">
                 <i class="fa fa-save"></i>
                 {{ 'Enregistrer'|trans }}

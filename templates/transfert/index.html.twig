@@ -4,7 +4,7 @@
 {% block transfert %}active{% endblock %}
 {% block all_transfert %}active{% endblock %}
 {% block body %}
-<div class="container mt-4 fond-7">
+<div class="container mt-4 fond">
     <h3 class="mt-4 mb-5 text-bold">
         <i class="fa fa-money-bill me-2"></i>
         {{ "Listes des transfert"|trans }}
@@ -34,7 +34,7 @@
                 <td>{{ transfert.destination }}</td>
                 <td>
                     <!-- <a id="{{ transfert.id}}" onclick="load({{ transfert.id }})" href="{{ path('transfert_show', {'id': transfert.id}) }}" class="btn btn-success"><i class="fas fa-eye"></i></a> -->
-                    <a href="{{ path('transfert_edit', {'id': transfert.id}) }}" class="btn btn-success-light"><i class="fas fa-edit"></i></a>
+                    <a href="{{ path('transfert_edit', {'id': transfert.id}) }}" class="btn btn-success"><i class="fas fa-edit"></i></a>
                     {{ include('transfert/_delete_form.html.twig' )}}
                 </td>
             </tr>

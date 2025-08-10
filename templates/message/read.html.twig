@@ -5,7 +5,7 @@
 
 {% block body %}
 
-    <div class="container mt-5 mb-5 fond-7">
+    <div class="container mt-5 mb-5 fond">
         <h3 class="mt-4 mb-5 text-bold">
             <i class="fa fa-comments"></i>
             {{ "Messagerie"|trans }}
@@ -25,7 +25,7 @@
                 <div class="tab-content" id="v-pills-tabContent">
                     <div class="row bg-success-light p-2 radius-10 shadow-black mb-5">
                         <div class="col-2 centrer">
-                            <a href="{{ path("received") }}" class="btn btn-success-light"
+                            <a href="{{ path("received") }}" class="btn btn-success"
                                title="{{ 'Retour à la boîte de réception'|trans }}">
                                 <i class="fa-solid fa-chevron-left fa-lg"></i>
                                 {{ "Retour"|trans }}

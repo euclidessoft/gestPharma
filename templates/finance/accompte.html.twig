@@ -4,7 +4,7 @@
 {% block accompte %}active{% endblock %}
 
 {% block body %}
-    <div class="col-lg-10 mt-4 fond-7">
+    <div class="col-lg-10 mt-4 fond">
         <h3 class="mt-4 mb-5 text-bold">
             <i class="fa fa-money-bill me-2"></i>
             {{ "En attente de paiement"|trans }}
@@ -41,7 +41,7 @@
                     <td>{{ accompte.date|date('d/m/Y') }}</td>
                     <td>{{ accompte.montant|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} FCFA</td>
                     <td>
-                        <button type="button" class="btn btn-green" data-bs-toggle="modal" data-bs-target="#modal{{ accompte.id }}" id="btn{{ accompte.id }}">
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal{{ accompte.id }}" id="btn{{ accompte.id }}">
                             <i class="fa fa-plus"></i>
                             {{ 'Payer'|trans }}
                         </button>
@@ -69,12 +69,12 @@
 
                                     </div>
                                     <div class="modal-footer px-5 py-4">
-                                        <button type="button" class="btn btn-green me-3"  id="valider{{ accompte.id }}"
+                                        <button type="button" class="btn btn-success me-3"  id="valider{{ accompte.id }}"
                                                 onclick="payerOne({{ accompte.id }})">
                                             <i class="fa fa-save"></i>
                                             {{ 'Valider'|trans }}
                                         </button>
-                                        <button type="button" class="btn btn-success-light" data-bs-dismiss="modal"
+                                        <button type="button" class="btn btn-success" data-bs-dismiss="modal"
                                                 id="annuler{{ accompte.id }}">
                                             <i class="fa-solid fa-rotate-left"></i>
                                             {{ 'Annuler'|trans }}

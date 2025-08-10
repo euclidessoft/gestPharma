@@ -5,7 +5,7 @@
 {% block employe %}active{% endblock %}
 
 {% block body %}
-    <div class="container my-5 fond-7">
+    <div class="container my-5 fond">
         <h3 class="mt-2 mb-5 text-bold">
             <i class="fa fa-id-card"></i>
             {{ "Information de l'employé"|trans }}
@@ -180,13 +180,13 @@
                 </table>
             </div>
         </div>
-        <div class="col-lg-3 fond-7 my-4">
+        <div class="col-lg-3 fond my-4">
             <div class="centrer gap-3">
                 <a href="{{ path('employe_edit', {'id': employe.id}) }}" class="btn btn-success">
                     <i class="fa fa-edit"></i>
                     {{ "Modifier"|trans }}
                 </a>
-                <a href="{{ path('employe_index') }}" class="btn btn-success-light">
+                <a href="{{ path('employe_index') }}" class="btn btn-success">
                     <i class="fa fa-undo"></i>
                     {{ "Retour"|trans }}
                 </a>

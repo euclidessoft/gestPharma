@@ -4,7 +4,7 @@
 {% block employe %}active{% endblock %}
 {% block all_employe %}active{% endblock %}
 {% block body %}
-    <div class="container-fluid mt-4 fond-7 mb-5">
+    <div class="container-fluid mt-4 fond mb-5">
         <h3 class="mt-4 mb-5 text-bold">
             <i class="fa fa-users me-2"></i>
             {{ "Tous les employes"|trans }}
@@ -16,7 +16,7 @@
             </div>
         {% endfor %}
         {% if is_granted('ROLE_RH') %}
-            <a href="{{ path('employe_new') }}" class="btn btn-green mb-4">
+            <a href="{{ path('employe_new') }}" class="btn btn-success mb-4">
                 <i class="fa fa-plus"></i>
                 {{ "Ajouter employé"|trans }}
             </a>
@@ -91,7 +91,7 @@
         </table>
 
     </div>
-    <div class="container-fluid mt-4 fond-7 mb-5 p-3">
+    <div class="container-fluid mt-4 fond mb-5 p-3">
         <div class="centrer gap-3">
             <button id="exportExcel" class="btn btn-success">
                 <i class="fa fa-file-excel"></i> Exporter Excel

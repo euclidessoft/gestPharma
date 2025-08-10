@@ -1,6 +1,6 @@
 {% extends 'layout.html.twig' %}
 {% block body %}
-    <div class="container mt-4 fond-7">
+    <div class="container mt-4 fond">
         <h3 class="mt-4 mb-5 text-bold">
             <i class="fa fa-shop me-2"></i>
             {{ "Détails Commande"|trans }}
@@ -55,7 +55,7 @@
             </tbody>
         </table>
 
-        <div class="col-md-4 offset-md-2 mt-5 mb-5 pt-2 pb-2 fond-7">
+        <div class="col-md-4 offset-md-2 mt-5 mb-5 pt-2 pb-2 fond">
             <div class="centrer">
                 <a id="imp{{ commande.id }}" onclick="load('imp'~{{ commande.id }})" href="{{ path('stock_show_print',{ 'id': commande.id}) }}" class="btn btn-success float-end">
                     <i class="fa fa-print"></i>

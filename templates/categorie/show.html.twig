@@ -1,7 +1,7 @@
 {% extends 'layout.html.twig' %}
 
 {% block body %}
-<div class="col-lg-6 mt-4 pb-4 fond-7">
+<div class="col-lg-6 mt-4 pb-4 fond">
     <h3 class="mt-4 mb-5 text-bold">
         <i class="fa-brands fa-product-hunt me-2"></i>
         {{ "Détails catégorie"|trans }}
@@ -20,11 +20,11 @@
         </tbody>
     </table>
 
-    <div class="col-md-4 offset-md-3 mt-4 py-3 fond-7">
+    <div class="col-md-4 offset-md-3 mt-4 py-3 fond">
         <div class="centrer">
 {#            <a class="btn btn-success me-3" href="{{ path('categorie_edit', {'id': categorie.id}) }}">#}
 {#                <i class="fa fa-edit"></i> Modifier</a>#}
-            <a id="{{ categorie.id }}" onclick="load({{ categorie.id }})" class="btn btn-success-light text-green" href="{{ path('categorie_index') }}">
+            <a id="{{ categorie.id }}" onclick="load({{ categorie.id }})" class="btn btn-success text-green" href="{{ path('categorie_index') }}">
                 <i class="fa fa-undo"></i>
                 {{ 'Retour'|trans }}
             </a>

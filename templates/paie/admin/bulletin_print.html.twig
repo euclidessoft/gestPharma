@@ -12,7 +12,7 @@
         
         {% for paie in bulletins %}
           {% set employe = paie.employe %}
-    <div class="container fond-7 mb-5" style="page-break-after: always;">
+    <div class="container fond mb-5" style="page-break-after: always;">
         <div class="row" style="border-bottom: 2px solid #039c4f;padding-bottom: 10px;">
             <div class="col-2 p-0">
                 <img src="{{ asset('images/gnt.png') }}" alt="Logo" class="w-100">
@@ -40,7 +40,7 @@
             Bulletin de Paie
         </h3>
         <p class="text-center mb-5">
-            {{ paie.mois.nom|trans }} {{ 'now'|date('Y') }} <a href="{{ path('paie_new') }}" class="btn btn-green">
+            {{ paie.mois.nom|trans }} {{ 'now'|date('Y') }} <a href="{{ path('paie_new') }}" class="btn btn-success">
                         <i class="fa fa-save"></i>
                         {{ "Valider tous les bulletins"|trans }}
                     </a>

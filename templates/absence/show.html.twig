@@ -1,7 +1,7 @@
 {% extends 'layout.html.twig' %}
 
 {% block body %}
-<div class="col-lg-8 mt-4 fond-7">
+<div class="col-lg-8 mt-4 fond">
     <h3 class="mt-4 mb-5 text-bold text-center">
         <i class="fa fa-user-clock me-2"></i>
         {{ "Détails de l'absence"|trans }}
@@ -83,7 +83,7 @@
         </div>
     </div>
     <div class="text-center py-4">
-        <a href="{{ path('absence_suivi') }}" class="btn btn-success-light">
+        <a href="{{ path('absence_suivi') }}" class="btn btn-success">
             <i class="fa fa-arrow-left"></i> {{ 'Retour'|trans }}
         </a>
         {% for decision in absence.decisions %}

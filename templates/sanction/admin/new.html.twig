@@ -5,7 +5,7 @@
 
 {% block body %}
 
-    <div class="col-lg-4 offset-lg-4 my-4 fond-7 p-5 pt-4">
+    <div class="col-lg-4 offset-lg-4 my-4 fond p-5 pt-4">
         <h4 class="mb-5">
             <i class="fa fa-user-xmark"></i><i class="fa fa-plus"></i>
             {{ 'Nouvelle Sanction'|trans }}
@@ -20,9 +20,9 @@
 
         {{ include('sanction/admin/_form.html.twig') }}
     </div>
-    <div class="col-lg-4 offset-lg-4 my-4 p-3 fond-7">
+    <div class="col-lg-4 offset-lg-4 my-4 p-3 fond">
         <div class="centrer gap-3">
-            <button type="button" class="btn btn-shadow btn-green btn-normal" id="send"
+            <button type="button" class="btn btn-shadow btn-success btn-normal" id="send"
                     onclick="envoie()">
                 <i class="fa fa-save"></i>
                 {{ 'Enregistrer'|trans }}

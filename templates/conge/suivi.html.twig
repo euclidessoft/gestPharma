@@ -7,7 +7,7 @@
 
 {% block body %}
 
-<div class="container mt-4 fond-7">
+<div class="container mt-4 fond">
     <h3 class="mt-4 mb-5 text-bold">
         <i class="fas fa-calendar-alt me-2"></i>
         {{ "Mes demandes de permission en cours"|trans }}
@@ -78,7 +78,7 @@
                         <a href="{{ path('conge_confirmer', {'id': conge.id }) }}" class="btn btn-success btn-sm">
                             <i class="fa fa-check"></i> {{ "Confirmer"|trans }}
                         </a>
-                        <a href="{{ path('conge_decliner', {'id': conge.id }) }}" class="btn btn-success-light btn-sm">
+                        <a href="{{ path('conge_decliner', {'id': conge.id }) }}" class="btn btn-success btn-sm">
                             <i class="fas fa-times"></i> {{ "decliner"|trans }}
                         </a>
                     {% endif %}

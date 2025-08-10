@@ -4,7 +4,7 @@
 {% block paie_salaire %}active{% endblock %}
 
 {% block body %}
-    <div class="col-lg-10 mt-4 fond-7">
+    <div class="col-lg-10 mt-4 fond">
         <h3 class="mt-4 mb-5 text-bold">
             <i class="fa fa-money-bill me-2"></i>
             {{ "En attente de paiement"|trans }}
@@ -50,7 +50,7 @@
                     <td>{{ paie.totalChargeEmploye|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} FCFA</td>
                     <td>{{ paie.totalchargepatronal|number_format(0, app.request.locale == 'fr' ? ',' : '.', app.request.locale == 'fr' ? ' ' : ',') }} FCFA</td>
                     <td>
-                        <button type="button" class="btn btn-green" data-bs-toggle="modal" data-bs-target="#modal{{ paie.id }}" id="btn{{ paie.id }}">
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal{{ paie.id }}" id="btn{{ paie.id }}">
                             <i class="fa fa-plus"></i>
                             {{ 'Payer'|trans }}
                         </button>
@@ -79,12 +79,12 @@
 
                                     </div>
                                     <div class="modal-footer px-5 py-4">
-                                        <button type="button" class="btn btn-green me-3"  id="valider{{ paie.id }}"
+                                        <button type="button" class="btn btn-success me-3"  id="valider{{ paie.id }}"
                                                 onclick="payerOne({{ paie.id }})">
                                             <i class="fa fa-save"></i>
                                             {{ 'Valider'|trans }}
                                         </button>
-                                        <button type="button" class="btn btn-success-light" data-bs-dismiss="modal"
+                                        <button type="button" class="btn btn-success" data-bs-dismiss="modal"
                                                 id="annuler{{ paie.id }}">
                                             <i class="fa-solid fa-rotate-left"></i>
                                             {{ 'Annuler'|trans }}
@@ -123,7 +123,7 @@
                    
                 </th>
                 <th>
-                    <button type="button" class="btn btn-green" data-bs-toggle="modal" data-bs-target="#modal_tous" id="tous">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal_tous" id="tous">
                         <i class="fa fa-plus"></i>
                         {{ 'Payer tous'|trans }}
                     </button>
@@ -160,12 +160,12 @@
 
                 </div>
                 <div class="modal-footer px-5 py-4">
-                    <button type="button" class="btn btn-green me-3"  id="validertous"
+                    <button type="button" class="btn btn-success me-3"  id="validertous"
                             onclick="payerTous()">
                         <i class="fa fa-save"></i>
                         {{ 'Valider'|trans }}
                     </button>
-                    <button type="button" class="btn btn-success-light" data-bs-dismiss="modal" id="annulertous">
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal" id="annulertous">
                         <i class="fa-solid fa-rotate-left"></i>
                         {{ 'Annuler'|trans }}
                     </button>

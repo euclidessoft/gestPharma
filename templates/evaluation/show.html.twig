@@ -1,7 +1,7 @@
 {% extends 'layout.html.twig' %}
 
 {% block body %}
-<div class="container pt-5 mt-5 fond-7">
+<div class="container pt-5 mt-5 fond">
     <div class="mb-4">
         <h3>Informations sur l'Employé</h3>
         <p><strong>Matricule :</strong> {{ evaluation.employe.matricule }}</p>
@@ -42,7 +42,7 @@
         <h4>Moyenne des notes : {{ evaluation.moyenne ? evaluation.moyenne|number_format(2) : 'Non calculée' }}</h4>
     </div>
     <div class="my-4 text-center">
-        <a href="{{ path('evaluation_index') }}" class="btn btn-success-light">Retour à la liste</a>
+        <a href="{{ path('evaluation_index') }}" class="btn btn-success">Retour à la liste</a>
     </div>
 </div>
 {% endblock %}

@@ -4,7 +4,7 @@
 {% block remboursement %}active{% endblock %}
 {% block all_remboursement %}active{% endblock %}
 {% block body %}
-<div class="container mt-4 fond-7">
+<div class="container mt-4 fond">
     <h3 class="mt-4 mb-5 text-bold">
         <i class="fa fa-money-bill me-2"></i>
         {{ "Listes des Remboursements"|trans }}
@@ -32,7 +32,7 @@
                 <td>{{ remboursement.banque ?  remboursement.banque.nom : remboursement.type }}</td>
                 <td>
                     <!-- <a title="{{ 'Voir'|trans }}" id="{{ remboursement.id }}" onclick="load({{ remboursement.id }})" href="{{ path('remboursement_show', {'id': remboursement.id}) }}" class="btn btn-success"><i class="fas fa-eye"></i></a> -->
-                    <a title="{{ 'Modifier'|trans }}" href="{{ path('remboursement_edit', {'id': remboursement.id}) }}" class="btn btn-success-light"><i class="fas fa-edit"></i></a>
+                    <a title="{{ 'Modifier'|trans }}" href="{{ path('remboursement_edit', {'id': remboursement.id}) }}" class="btn btn-success"><i class="fas fa-edit"></i></a>
                     {{ include('remboursement/_delete_form.html.twig') }}
                 </td>
             </tr>

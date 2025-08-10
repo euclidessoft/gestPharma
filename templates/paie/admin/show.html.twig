@@ -3,7 +3,7 @@
 {% block paie %}active{% endblock %}
 {% block body %}
 
-    <div class="col-8 fond-7 my-5">
+    <div class="col-8 fond my-5">
         <div class="row" style="border-bottom: 2px solid #039c4f;padding-bottom: 10px;">
             <div class="col-2 p-0">
                 <img src="{{ asset('images/gnt.png') }}" alt="Logo" class="w-100">
@@ -646,14 +646,14 @@
             </div>
         </div>
     </div>
-    <div class="col-8 fond-7 my-5">
+    <div class="col-8 fond my-5">
         <div class="centrer gap-3">
-            <a href="{{ path('paie_valider', {'id': employe.id }) }}" class="btn btn-green">
+            <a href="{{ path('paie_valider', {'id': employe.id }) }}" class="btn btn-success">
                 <i class="fa fa-save"></i>
                 {{ "Valider"|trans }}
             </a>
             <a id="annule" onclick="load('annule')" href="{{ path('paie_index') }}"
-               class="btn btn-shadow btn-normal btn-success-light">
+               class="btn btn-shadow btn-normal btn-success">
                 <i class="fa fa-undo"></i>
                 {{ 'Retour'|trans }}
             </a>
