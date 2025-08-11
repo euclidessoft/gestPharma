@@ -8,6 +8,28 @@ use App\Entity\Ecriture;
 
 class Solde
 {
+    public function montant($em, $compte){
+
+
+
+        $credits = $em->getRepository(Ecriture::class)->findby(['comptecredit' => $compte]);
+        $debits = $em->getRepository(Ecriture::class)->findby(['comptedebit' => $compte]);
+        $caisse = 0;
+        $debitcaisse = 0;
+        foreach($credits as $ecriture) {
+            $caisse = $caisse + $ecriture->getMontant();
+
+        }
+        foreach($debits as $ecriture) {
+            $debitcaisse = $debitcaisse + $ecriture->getMontant();
+
+        }
+
+        $result = $caisse - $debitcaisse;
+        return $result;
+
+    }
+    
     public function montantcaisse($em, $compte){
 
 

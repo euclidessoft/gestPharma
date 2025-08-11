@@ -31,10 +31,97 @@ class TransfertController extends AbstractController
         ]);
     }
 
-     #[Route("/Choix_transfert", name :"transfert_choix", methods : ["GET","POST"]) ]
-    public function financementChoix(Request $request): Response
+     #[Route("/New", name :"transfert_new", methods : ["GET","POST"]) ]
+    public function new(Request $request, Solde $solde): Response
     {
-        return $this->render('transfert/choix_transfert.html.twig');
+         if ($this->security->isGranted('ROLE_ADMIN')) {
+          
+             if ($request->isMethod('POST')) {
+
+                 $entityManager = $this->entityManager;
+                 $source = $request->request->get('source');
+                 $destination = $request->request->get('destination');
+                 $montant = $request->request->get('montant');
+                
+                $fond = $solde->montant($entityManager, $this->Compte($source));
+                if($montant <= $fond){
+
+                    $transfert = new Transfert();
+                    $transfert->setMontant($montant);
+                    $transfert->setSource($source);
+                    $transfert->setDestination($destination);
+                    $transfert->setUser($this->getUser());
+                    $debit = new Debit();
+                    $debit->setTransfert($transfert);
+                    $debit->setType($source);
+                    $debit->setCompte($this->Compte($source));
+                    $debit->setMontant($transfert->getMontant());
+                    $debitecriture = new Ecriture();
+                    $debitecriture->setDebit($debit);
+                    $debitecriture->setType($source);
+                    $debitecriture->setLibelle("Transfert ".$source." → ".$destination);
+                    $debitecriture->setSolde(-$transfert->getMontant());
+                    $debitecriture->setMontant($transfert->getMontant());
+                    $debitecriture->setComptedebit($this->Compte($source));
+                    $debitecriture->setLibellecomptedebit($source);
+                    $debitecriture->setComptecredit($this->Compte($destination));
+                    $debitecriture->setLibellecomptecredit($destination);
+
+
+                    $credit = new Credit();
+                    $credit->setTransfert($transfert);
+                    $credit->setType($destination);
+                    $credit->setCompte($this->Compte($destination));
+                    $credit->setMontant($transfert->getMontant());
+
+                    $creditecriture = new Ecriture();
+                    $creditecriture->setCredit($credit);
+                    $creditecriture->setType($destination);
+                    $creditecriture->setLibelle("Transfert ".$source." → ".$destination);
+                    $creditecriture->setSolde($transfert->getMontant());
+                    $creditecriture->setMontant($transfert->getMontant());
+                    $creditecriture->setComptedebit($this->Compte($source));
+                    $creditecriture->setLibellecomptedebit($source);
+                    $creditecriture->setComptecredit($this->Compte($destination));
+                    $creditecriture->setLibellecomptecredit($destination);
+
+
+                    $entityManager->persist($transfert);
+                    $entityManager->persist($debit);
+                    $entityManager->persist($credit);
+                    $entityManager->persist($debitecriture);
+                    $entityManager->persist($creditecriture);
+                    $entityManager->flush();
+
+                    $this->addFlash('notice', 'transfert reussi');
+                    return $this->redirectToRoute('transfert_index', [], Response::HTTP_SEE_OTHER);
+                }else{
+                    $this->addFlash('notice', 'Montant non disponible dans le compte source');
+                }
+            }
+
+            $response = $this->render('transfert/new.html.twig');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+         } else {
+            $response = $this->redirectToRoute('security_logout');
+            $response->setSharedMaxAge(0);
+            $response->headers->addCacheControlDirective('no-cache', true);
+            $response->headers->addCacheControlDirective('no-store', true);
+            $response->headers->addCacheControlDirective('must-revalidate', true);
+            $response->setCache([
+                'max_age' => 0,
+                'private' => true,
+            ]);
+            return $response;
+        }
     }
 
     #[Route("/caisse", name :"transfert_caisse", methods : ["GET","POST"]) ]
@@ -210,6 +297,18 @@ class TransfertController extends AbstractController
         }
 
         return $this->redirectToRoute('transfert_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    private function Compte($compte){
+        $retour = 0;
+        switch($compte){
+            case "Espece":{ $retour = "571"; break;}
+            case "Orange Money":{ $retour = "523"; break;}
+            case "Wave":{ $retour = "522"; break;}
+            case "Banque":{ $retour = "521"; break;}
+
+        }
+        return $retour;
     }
 
 }

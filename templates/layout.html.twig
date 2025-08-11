@@ -1287,6 +1287,20 @@
         $('#form').submit();
     }
 
+     function transfertFond() {// transfert de fonds
+        if ($('#source option:selected').val() != "0"  && $('#destination option:selected').val() != "0") {
+                if ($('#source option:selected').val() != $('#destination option:selected').val() && $("#montant").val() != "") {
+
+                        $("#form").submit();
+                }else {
+                    alert("{{'Verifiez montant ainsi que source et destination'|trans}}");
+                }
+            
+        } else {
+            alert("{{'Selectionnez la source et la destination'}}");
+        }
+    }
+
 </script>
 
 {% block scripts %}
