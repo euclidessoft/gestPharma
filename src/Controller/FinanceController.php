@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Complement\Amortissement;
 use App\Complement\Solde;
+use App\Complement\Compte;
 use App\Entity\Banque;
 use App\Entity\Reserve;
 use App\Entity\Repport;
@@ -1728,18 +1729,18 @@ class FinanceController extends AbstractController
     }
 
     #[Route("/payer", name :"payer", methods : ["POST"]) ]
-    public function payer(PaieRepository $paieRepository, Solde $solde, Request $request): Response
+    public function payer(PaieRepository $paieRepository, Solde $solde, Compte $compte, Request $request): Response
     {
         if ($this->security->isGranted('ROLE_ADMIN')) {
             
             $entityManager = $this->entityManager;
             $paie = $paieRepository->find($request->get('paie'));
-            $banque = $entityManager->getRepository(Banque::class)->find($request->get('banque'));
+            // $banque = $entityManager->getRepository(Banque::class)->find($request->get('banque'));
 
 
             $montant = 0;
 
-            $montant = $solde->montantbanque($entityManager, $banque->getCompte());
+            $montant = $solde->montant($entityManager, $compte->Compte($request->get('banque')));
             $montantapayer = $paie->getBrut() + $paie->getTotalchargepatronal();
 
             if ($montantapayer <= $montant) {
@@ -1926,17 +1927,17 @@ class FinanceController extends AbstractController
             $entityManager->persist($cpviel);
 
             $debitinet = new Debit();
-            $debitinet->setCompte($banque->getCompte());
-            $debitinet->setType('Banque');
+            $debitinet->setCompte($compte->Compte($request->get('banque')));
+            $debitinet->setType($request->get('banque'));
             $debitinet->setSalaire($paieSalaire);
             $debitinet->setMontant($paie->getSalaireNet());
 
             $ecritureinet = new Ecriture();
-            $ecritureinet->setType('Banque');
+            $ecritureinet->setType($request->get('banque'));
             $ecritureinet->setComptecredit("422100");
             $ecritureinet->setLibellecomptecredit("Salaire Net");
-            $ecritureinet->setComptedebit($banque->getCompte());
-            $ecritureinet->setLibellecomptedebit($banque->getNom());
+            $ecritureinet->setComptedebit($compte->Compte($request->get('banque')));
+            $ecritureinet->setLibellecomptedebit($request->get('banque'));
             $ecritureinet->setDebit($debitinet);
             $ecritureinet->setSolde(-$paie->getSalaireNet());
             $ecritureinet->setMontant($paie->getSalaireNet());
@@ -1945,17 +1946,17 @@ class FinanceController extends AbstractController
             $entityManager->persist($ecritureinet);
 
             $debitallocation = new Debit();
-            $debitallocation->setCompte($banque->getCompte());
-            $debitallocation->setType('Banque');
+            $debitallocation->setCompte($compte->Compte($request->get('banque')));
+            $debitallocation->setType($request->get('banque'));
             $debitallocation->setSalaire($paieSalaire);
             $debitallocation->setMontant($paie->getAllocation());
 
             $ecritureallocation = new Ecriture();
-            $ecritureallocation->setType('Banque');
+            $ecritureallocation->setType($request->get('banque'));
             $ecritureallocation->setComptecredit("431100");
             $ecritureallocation->setLibellecomptecredit("ALLOCATION FAM");
-            $ecritureallocation->setComptedebit($banque->getCompte());
-            $ecritureallocation->setLibellecomptedebit($banque->getNom());
+            $ecritureallocation->setComptedebit($compte->Compte($request->get('banque')));
+            $ecritureallocation->setLibellecomptedebit($request->get('banque'));
             $ecritureallocation->setDebit($debitallocation);
             $ecritureallocation->setSolde(-$paie->getAllocation());
             $ecritureallocation->setMontant($paie->getAllocation());
@@ -1964,17 +1965,17 @@ class FinanceController extends AbstractController
             $entityManager->persist($ecritureallocation);
 
             $debittav = new Debit();
-            $debittav->setCompte($banque->getCompte());
-            $debittav->setType('Banque');
+            $debittav->setCompte($compte->Compte($request->get('banque')));
+            $debittav->setType($request->get('banque'));
             $debittav->setSalaire($paieSalaire);
             $debittav->setMontant($paie->getTav());
 
             $ecrituretav = new Ecriture();
-            $ecrituretav->setType('Banque');
+            $ecrituretav->setType($request->get('banque'));
             $ecrituretav->setComptecredit("431200");
             $ecrituretav->setLibellecomptecredit("ACCIDENT DE TRAVAIL");
-            $ecrituretav->setComptedebit($banque->getCompte());
-            $ecrituretav->setLibellecomptedebit($banque->getNom());
+            $ecrituretav->setComptedebit($compte->Compte($request->get('banque')));
+            $ecrituretav->setLibellecomptedebit($request->get('banque'));
             $ecrituretav->setDebit($debittav);
             $ecrituretav->setSolde(-$paie->getTav());
             $ecrituretav->setMontant($paie->getTav());
@@ -1983,17 +1984,17 @@ class FinanceController extends AbstractController
             $entityManager->persist($ecrituretav);
 
             $debitpvid = new Debit();
-            $debitpvid->setCompte($banque->getCompte());
-            $debitpvid->setType('Banque');
+            $debitpvid->setCompte($compte->Compte($request->get('banque')));
+            $debitpvid->setType($request->get('banque'));
             $debitpvid->setSalaire($paieSalaire);
             $debitpvid->setMontant($paie->getVieil() + $paie->getCpvieil());
 
             $ecriturepvid = new Ecriture();
-            $ecriturepvid->setType('Banque');
+            $ecriturepvid->setType($request->get('banque'));
             $ecriturepvid->setComptecredit("431300");
             $ecriturepvid->setLibellecomptecredit("PVID/ SAL + PATR");
-            $ecriturepvid->setComptedebit($banque->getCompte());
-            $ecriturepvid->setLibellecomptedebit($banque->getNom());
+            $ecriturepvid->setComptedebit($compte->Compte($request->get('banque')));
+            $ecriturepvid->setLibellecomptedebit($request->get('banque'));
             $ecriturepvid->setDebit($debitpvid);
             $ecriturepvid->setSolde(-($paie->getVieil() + $paie->getCpvieil()));
             $ecriturepvid->setMontant($paie->getVieil() + $paie->getCpvieil());
@@ -2002,17 +2003,17 @@ class FinanceController extends AbstractController
             $entityManager->persist($ecriturepvid);
 
             $debitirpp = new Debit();
-            $debitirpp->setCompte($banque->getCompte());
-            $debitirpp->setType('Banque');
+            $debitirpp->setCompte($compte->Compte($request->get('banque')));
+            $debitirpp->setType($request->get('banque'));
             $debitirpp->setSalaire($paieSalaire);
             $debitirpp->setMontant($paie->getIrpp());
 
             $ecritureirpp = new Ecriture();
-            $ecritureirpp->setType('Banque');
+            $ecritureirpp->setType($request->get('banque'));
             $ecritureirpp->setComptecredit("447210");
             $ecritureirpp->setLibellecomptecredit("IRPP");
-            $ecritureirpp->setComptedebit($banque->getCompte());
-            $ecritureirpp->setLibellecomptedebit($banque->getNom());
+            $ecritureirpp->setComptedebit($compte->Compte($request->get('banque')));
+            $ecritureirpp->setLibellecomptedebit($request->get('banque'));
             $ecritureirpp->setDebit($debitirpp);
             $ecritureirpp->setSolde(-$paie->getIrpp());
             $ecritureirpp->setMontant($paie->getIrpp());
@@ -2021,17 +2022,17 @@ class FinanceController extends AbstractController
             $entityManager->persist($ecritureirpp);
 
             $debiticac = new Debit();
-            $debiticac->setCompte($banque->getCompte());
-            $debiticac->setType('Banque');
+            $debiticac->setCompte($compte->Compte($request->get('banque')));
+            $debiticac->setType($request->get('banque'));
             $debiticac->setSalaire($paieSalaire);
             $debiticac->setMontant($paie->getCa());
 
             $ecritureicac = new Ecriture();
-            $ecritureicac->setType('Banque');
+            $ecritureicac->setType($request->get('banque'));
             $ecritureicac->setComptecredit("447220");
             $ecritureicac->setLibellecomptecredit("CAC");
-            $ecritureicac->setComptedebit($banque->getCompte());
-            $ecritureicac->setLibellecomptedebit($banque->getNom());
+            $ecritureicac->setComptedebit($compte->Compte($request->get('banque')));
+            $ecritureicac->setLibellecomptedebit($request->get('banque'));
             $ecritureicac->setDebit($debiticac);
             $ecritureicac->setSolde(-$paie->getCa());
             $ecritureicac->setMontant($paie->getCa());
@@ -2040,17 +2041,17 @@ class FinanceController extends AbstractController
             $entityManager->persist($ecritureicac);
 
             $debitfoncier = new Debit();
-            $debitfoncier->setCompte($banque->getCompte());
-            $debitfoncier->setType('Banque');
+            $debitfoncier->setCompte($compte->Compte($request->get('banque')));
+            $debitfoncier->setType($request->get('banque'));
             $debitfoncier->setSalaire($paieSalaire);
             $debitfoncier->setMontant($paie->getFoncier());
 
             $ecriturefoncier = new Ecriture();
-            $ecriturefoncier->setType('Banque');
+            $ecriturefoncier->setType($request->get('banque'));
             $ecriturefoncier->setComptecredit("447230");
             $ecriturefoncier->setLibellecomptecredit("CFC /SALARIAL");
-            $ecriturefoncier->setComptedebit($banque->getCompte());
-            $ecriturefoncier->setLibellecomptedebit($banque->getNom());
+            $ecriturefoncier->setComptedebit($compte->Compte($request->get('banque')));
+            $ecriturefoncier->setLibellecomptedebit($request->get('banque'));
             $ecriturefoncier->setDebit($debitfoncier);
             $ecriturefoncier->setSolde(-$paie->getFoncier());
             $ecriturefoncier->setMontant($paie->getFoncier());
@@ -2059,17 +2060,17 @@ class FinanceController extends AbstractController
             $entityManager->persist($ecriturefoncier);
 
             $debitlocal = new Debit();
-            $debitlocal->setCompte($banque->getCompte());
-            $debitlocal->setType('Banque');
+            $debitlocal->setCompte($compte->Compte($request->get('banque')));
+            $debitlocal->setType($request->get('banque'));
             $debitlocal->setSalaire($paieSalaire);
             $debitlocal->setMontant($paie->getLocal());
 
             $ecriturelocal = new Ecriture();
-            $ecriturelocal->setType('Banque');
+            $ecriturelocal->setType($request->get('banque'));
             $ecriturelocal->setComptecredit("447240");
             $ecriturelocal->setLibellecomptecredit("TAXE DE DEVELOPPEMENT LOC");
-            $ecriturelocal->setComptedebit($banque->getCompte());
-            $ecriturelocal->setLibellecomptedebit($banque->getNom());
+            $ecriturelocal->setComptedebit($compte->Compte($request->get('banque')));
+            $ecriturelocal->setLibellecomptedebit($request->get('banque'));
             $ecriturelocal->setDebit($debitlocal);
             $ecriturelocal->setSolde(-$paie->getLocal());
             $ecriturelocal->setMontant($paie->getLocal());
@@ -2078,17 +2079,17 @@ class FinanceController extends AbstractController
             $entityManager->persist($ecriturelocal);
 
             $debitcrtv = new Debit();
-            $debitcrtv->setCompte($banque->getCompte());
-            $debitcrtv->setType('Banque');
+            $debitcrtv->setCompte($compte->Compte($request->get('banque')));
+            $debitcrtv->setType($request->get('banque'));
             $debitcrtv->setSalaire($paieSalaire);
             $debitcrtv->setMontant($paie->getCrtv());
 
             $ecriturelcrtv = new Ecriture();
-            $ecriturelcrtv->setType('Banque');
+            $ecriturelcrtv->setType($request->get('banque'));
             $ecriturelcrtv->setComptecredit("447250");
             $ecriturelcrtv->setLibellecomptecredit("REDEVANCE AUDIO VIS");
-            $ecriturelcrtv->setComptedebit($banque->getCompte());
-            $ecriturelcrtv->setLibellecomptedebit($banque->getNom());
+            $ecriturelcrtv->setComptedebit($compte->Compte($request->get('banque')));
+            $ecriturelcrtv->setLibellecomptedebit($request->get('banque'));
             $ecriturelcrtv->setDebit($debitcrtv);
             $ecriturelcrtv->setSolde(-$paie->getCrtv());
             $ecriturelcrtv->setMontant($paie->getCrtv());
@@ -2097,17 +2098,17 @@ class FinanceController extends AbstractController
             $entityManager->persist($ecriturelcrtv);
 
             $debitcpfoncier = new Debit();
-            $debitcpfoncier->setCompte($banque->getCompte());
-            $debitcpfoncier->setType('Banque');
+            $debitcpfoncier->setCompte($compte->Compte($request->get('banque')));
+            $debitcpfoncier->setType($request->get('banque'));
             $debitcpfoncier->setSalaire($paieSalaire);
             $debitcpfoncier->setMontant($paie->getCpfoncier() + $paie->getFne());
 
             $ecriturelcpfocncier = new Ecriture();
-            $ecriturelcpfocncier->setType('Banque');
+            $ecriturelcpfocncier->setType($request->get('banque'));
             $ecriturelcpfocncier->setComptecredit("442100");
             $ecriturelcpfocncier->setLibellecomptecredit("FNE + CFC/PATRONALE");
-            $ecriturelcpfocncier->setComptedebit($banque->getCompte());
-            $ecriturelcpfocncier->setLibellecomptedebit($banque->getNom());
+            $ecriturelcpfocncier->setComptedebit($compte->Compte($request->get('banque')));
+            $ecriturelcpfocncier->setLibellecomptedebit($request->get('banque'));
             $ecriturelcpfocncier->setDebit($debitcpfoncier);
             $ecriturelcpfocncier->setSolde(-($paie->getCpfoncier() + $paie->getFne()));
             $ecriturelcpfocncier->setMontant($paie->getCpfoncier() + $paie->getFne());
@@ -2120,7 +2121,7 @@ class FinanceController extends AbstractController
                 $paieSalaire->setUser($this->getUser());
                 $paieSalaire->setMontant($paie->getSalaireNet());
                 $paieSalaire->setEmploye($paie->getEmploye());
-                $paieSalaire->setCompte($banque->getCompte());
+                $paieSalaire->setCompte($compte->Compte($request->get('banque')));
                 $entityManager->persist($paieSalaire);
                 $paie->setPayer(true);
                 $paie->setDatepaye(new \DateTime());

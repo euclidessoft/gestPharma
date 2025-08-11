@@ -9,6 +9,8 @@
             <i class="fa fa-money-bill me-2"></i>
             {{ "En attente de paiement"|trans }}
         </h3>
+         <a href="{{ path('paie_historique_mois_en_cours') }}" class="btn btn-success float-right"> Historique Paiements</a>
+         
         {% for message in app.flashes('notice') %}
             <div role="alert" class="alert alert-success alert-dismissible fade show radius-10 shadow-black">
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -67,13 +69,13 @@
                                     </div>
                                     <div class="modal-body px-5">
                                         <div class="mt-4">
-                                            <label for="banque{{ paie.id }}"></label>
-                                            <select class="form-control" id="banque{{ paie.id }}">
-                                                <option value="0">Selectionnez une banque</option>
-                                                {% for banque in banques  %}
-                                                <option value="{{ banque.id }}">{{ banque.nom }}</option>
-                                                {% else %}
-                                                {% endfor %}
+                                            <label for="banque"></label>
+                                            <select class="form-select" id="banque">
+                                                <option value="0">Selectionnez un moyen de paiement</option>
+                                                <option value="Espece">{{ "Espece"|trans }}</option>
+                                                <option value="Orange Money">{{ "Orange Money"|trans }}</option>
+                                                <option value="Wave">{{ "Wave"|trans }}</option>
+                                                <option value="Banque">{{ "Banque"|trans }}</option>
                                             </select>
                                         </div>
 
@@ -148,12 +150,12 @@
                 <div class="modal-body px-5">
                     <div class="mt-4">
                         <label for="{#mois{{ mois.id }}#}"></label>
-                        <select class="form-control" id="banquetous">
-                            <option value="0">Selectionnez une banque</option>
-                            {% for banque in banques  %}
-                                <option value="{{ banque.id }}">{{ banque.nom }}</option>
-                            {% else %}
-                            {% endfor %}
+                        <select class="form-select" id="banquetous">
+                            <option value="0">Selectionnez un moyen de paiement</option>
+                                                <option value="Espece">{{ "Espece"|trans }}</option>
+                                                <option value="Orange Money">{{ "Orange Money"|trans }}</option>
+                                                <option value="Wave">{{ "Wave"|trans }}</option>
+                                                <option value="Banque">{{ "Banque"|trans }}</option>
 
                         </select>
                     </div>
@@ -176,7 +178,7 @@
     {% block scripts %}
         <script>
             function payerOne(id) {
-                var banque = $("#banque"+id+" option:selected");
+                var banque = $("#banque option:selected");
                 if(banque.val() != "0") {
                     if (confirm("{{ 'Voulez-vous vraiement effetuer le paiement' }}")) {
                         $("#btn" + id).html("<i class='fa-solid fa-spinner fa-spin-pulse fa-lg'></i>");
