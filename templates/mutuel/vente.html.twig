@@ -1,8 +1,13 @@
 {% extends 'layout.html.twig' %}
 {% block body %}
-    <h1>Mutuel</h1>
-
-    <table class="table">
+    <div class="col-lg-12 mt-4 fond p-3">
+    <h4 class="mb-5 text-bold">
+        <i class="fa-solid fa-house-medical-flag fa-lg"></i> 
+            {{ 'Infos Assureur'|trans }}
+    </h4>
+     <a class="btn btn-success" href="{{ path('mutuel_index') }}"><i class="fa fa-arrow-left"></i> Retour</a> 
+     {{ include('mutuel/_delete_form.html.twig') }}
+    <table class="table table-hover">
         <tbody>
             <tr>
                 <th>Id</th>
@@ -22,7 +27,7 @@
             </tr>
         </tbody>
     </table>
-    <a href="{{path('service_new', {'mutuel' : mutuel.id})}}" class="btn btn-success"> Nouveau Service</a>
+    <a href="{{path('service_new', {'mutuel' : mutuel.id})}}" class="btn btn-success"><i class="fa fa-plus"></i> Nouveau Service</a>
     listes des services
     <table class="table table-hover">
     <head>
@@ -103,8 +108,5 @@
             </tr>
         </tbody>
     </table>
-
-    <a href="{{ path('mutuel_index') }}">back to list</a>
-
-    <a href="{{ path('mutuel_edit', {'id': mutuel.id}) }}">edit</a>
+</div>
 {% endblock %}

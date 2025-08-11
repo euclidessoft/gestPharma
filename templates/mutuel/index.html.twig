@@ -1,10 +1,14 @@
 {% extends 'layout.html.twig' %}
 {% block body %}
-
-    <table class="table">
+ <div class="col-lg-8 mt-4 fond p-3">
+    <h4 class="mb-5 text-bold">
+        <i class="fa-solid fa-house-medical-flag fa-lg"></i> 
+            {{ 'Liste des Assureurs'|trans }}
+    </h4>
+    <a class="btn btn-success" href="{{ path('mutuel_new') }}"><i class="fa fa-plus"></i><i class="fa-solid fa-house-medical-flag"></i>   Nouvel Assureur</a>
+    <table class="table table-hover">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Nom</th>
                 <th>Adresse</th>
                 <th>Telephone</th>
@@ -14,13 +18,12 @@
         <tbody>
         {% for mutuel in mutuels %}
             <tr>
-                <td>{{ mutuel.id }}</td>
                 <td>{{ mutuel.nom }}</td>
                 <td>{{ mutuel.adresse }}</td>
                 <td>{{ mutuel.telephone }}</td>
                 <td>
-                    <a href="{{ path('mutuel_show', {'id': mutuel.id}) }}">show</a>
-                    <a href="{{ path('mutuel_edit', {'id': mutuel.id}) }}">edit</a>
+                    <a class="btn btn-success" href="{{ path('mutuel_show', {'id': mutuel.id}) }}"><i class="fa fa-eye"></i> Details</a>
+                    <a class="btn btn-success"  href="{{ path('mutuel_edit', {'id': mutuel.id}) }}"><i class="fa fa-edit"></i> Modifier</a>
                 </td>
             </tr>
         {% else %}
@@ -30,6 +33,7 @@
         {% endfor %}
         </tbody>
     </table>
+    </div>
 
-    <a href="{{ path('mutuel_new') }}">Create new</a>
+    
 {% endblock %}

@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\SecurityBundle\Security;
 use Doctrine\ORM\EntityManagerInterface;
 
-#[Route("/mutuel")]
+#[Route("/Assurance")]
 class MutuelController extends 
  AbstractController
 {   public function __construct(private Security $security, private EntityManagerInterface $entityManager)
